@@ -124,13 +124,9 @@ interface NumberField extends BaseField {
   successes: number
 }
 
-interface EnumField extends BaseField {
-  value: string
-}
-
 type Stat = NumberStat | BooleanStat
 
-type Field = NumberField | BooleanField | EnumField
+type Field = NumberField | BooleanField
 type GraphableField = {
   // 2018orwil
   event: string
@@ -220,7 +216,7 @@ export const getEventMatchTeamReports = (
 interface StatDescription {
   statName: string
   statKey: string
-  type: 'boolean' | 'number' | 'enum'
+  type: 'boolean' | 'number'
 }
 
 interface Schema {

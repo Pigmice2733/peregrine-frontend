@@ -60,10 +60,6 @@ type Data = {
         attempted: boolean
         succeeded: boolean
         statName: string
-      }
-    | {
-        value: string
-        statName: string
       })[]
   auto: (
     | {
@@ -74,10 +70,6 @@ type Data = {
     | {
         attempted: boolean
         succeeded: boolean
-        statName: string
-      }
-    | {
-        value: string
         statName: string
       })[]
 }
@@ -109,10 +101,6 @@ type Data = {
         attempted: boolean
         succeeded: boolean
         statName: string
-      }
-    | {
-        value: string
-        statName: string
       })[]
   auto: (
     | {
@@ -123,10 +111,6 @@ type Data = {
     | {
         attempted: boolean
         succeeded: boolean
-        statName: string
-      }
-    | {
-        value: string
         statName: string
       })[]
 }[]
@@ -392,12 +376,12 @@ type Data = {
   teleop: {
     statName: string
     statKey: string
-    type: "number" | "boolean" | "enum"
+    type: "number" | "boolean"
   }[]
   auto: {
     statName: string
     statKey: string
-    type: "number" | "boolean" | "enum"
+    type: "number" | "boolean"
   }[]
 }
 ```
