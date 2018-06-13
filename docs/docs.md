@@ -401,6 +401,8 @@ type Data = (
 
 ## `GET`
 
+Webhook but only for ranking points and match score
+
 ### Response
 
 ```ts
@@ -545,6 +547,8 @@ type Data = {
 
 ## `GET`
 
+Anyone can view anyone's stars
+
 ### Response
 
 ```ts
@@ -554,6 +558,8 @@ type Data = string[]
 # `/users/{userId}`
 
 ## `GET`
+
+Anyone can view any user
 
 ### Response
 
@@ -567,6 +573,8 @@ type Data = {
 
 
 ## `PUT`
+
+Only admins can modify other users
 
 ### Request
 
@@ -589,6 +597,8 @@ type Data = {}
 
 ## `DELETE`
 
+Only admins can delete other users
+
 ### Response
 
 ```ts
@@ -598,6 +608,10 @@ type Data = {}
 # `/users`
 
 ## `POST`
+
+Anyone can create a user. For admins, the user will be created
+immediately, for non-admins, the user won't be created immediately
+and it will be added to the user request queue
 
 ### Request
 
@@ -614,11 +628,13 @@ type Data = {
 ### Response
 
 ```ts
-type Data = number
+type Data = number | false
 ```
 
 
 ## `GET`
+
+Anyone can view the list of users
 
 ### Response
 

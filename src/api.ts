@@ -239,14 +239,22 @@ interface UserInfo {
   admin?: true
 }
 
+// Anyone can create a user. For admins, the user will be created
+// immediately, for non-admins, the user won't be created immediately
+// and it will be added to the user request queue
 export const createUser = (user: EditableUser) =>
-  postRequest<number>(`/users`, user)
+  postRequest<number | false>(`/users`, user)
+// Anyone can view the list of users
 export const getUsers = () => getRequest<UserInfo[]>(`/users`)
+// Anyone can view any user
 export const getUser = (userId: number) =>
   getRequest<UserInfo>(`/users/${userId}`)
+// Anyone can view anyone's stars
 export const getStarredEvents = (userId: number) =>
   getRequest<string[]>(`/users/${userId}/stars`)
+// Only admins can modify other users
 export const modifyUser = (userId: number, user: EditableUser) =>
   putRequest<{}>(`/users/${userId}`, user)
+// Only admins can delete other users
 export const deleteUser = (userId: number) =>
   deleteRequest<{}>(`/users/${userId}`)
