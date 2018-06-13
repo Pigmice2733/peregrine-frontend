@@ -55,54 +55,30 @@ type Data = {
         attempts: number
         successes: number
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         attempted: boolean
         succeeded: boolean
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         value: string
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       })[]
   auto: (
     | {
         attempts: number
         successes: number
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         attempted: boolean
         succeeded: boolean
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         value: string
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       })[]
 }
 ```
@@ -128,54 +104,30 @@ type Data = {
         attempts: number
         successes: number
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         attempted: boolean
         succeeded: boolean
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         value: string
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       })[]
   auto: (
     | {
         attempts: number
         successes: number
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         attempted: boolean
         succeeded: boolean
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       }
     | {
         value: string
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       })[]
 }[]
 ```
@@ -190,7 +142,7 @@ type Data = {
 type Data = {
   alliance: "red" | "blue"
   team: string
-  teleop:
+  teleop: (
     | {
         attempts: {
           max: number
@@ -208,8 +160,8 @@ type Data = {
         // total
         successes: number
         statName: string
-      }
-  auto:
+      })[]
+  auto: (
     | {
         attempts: {
           max: number
@@ -227,7 +179,7 @@ type Data = {
         // total
         successes: number
         statName: string
-      }
+      })[]
 }[]
 ```
 
@@ -274,7 +226,7 @@ type Data = null
 ```ts
 type Data = {
   team: string
-  teleop:
+  teleop: (
     | {
         attempts: {
           max: number
@@ -292,8 +244,8 @@ type Data = {
         // total
         successes: number
         statName: string
-      }
-  auto:
+      })[]
+  auto: (
     | {
         attempts: {
           max: number
@@ -311,7 +263,7 @@ type Data = {
         // total
         successes: number
         statName: string
-      }
+      })[]
 }[]
 ```
 
@@ -349,22 +301,22 @@ type Data = {
   modeName: string
   stats: (
     | {
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
         attempts: number
         successes: number
         statName: string
+      }
+    | {
         // 2018orwil
         event: string
         // qm1
         match: string
-      }
-    | {
         attempted: boolean
         succeeded: boolean
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       })[]
 }[]
 ```
@@ -378,30 +330,28 @@ type Data = {
 ```ts
 type Data = (
   | {
+      // 2018orwil
+      event: string
+      // qm1
+      match: string
       attempts: number
       successes: number
       statName: string
+    }
+  | {
       // 2018orwil
       event: string
       // qm1
       match: string
-    }
-  | {
       attempted: boolean
       succeeded: boolean
       statName: string
-      // 2018orwil
-      event: string
-      // qm1
-      match: string
     })[]
 ```
 
 # `/event/{eventKey}/teams`
 
 ## `GET`
-
-Webhook but only for ranking points and match score
 
 ### Response
 
@@ -473,22 +423,22 @@ type Data = {
   modeName: string
   stats: (
     | {
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
         attempts: number
         successes: number
         statName: string
+      }
+    | {
         // 2018orwil
         event: string
         // qm1
         match: string
-      }
-    | {
         attempted: boolean
         succeeded: boolean
         statName: string
-        // 2018orwil
-        event: string
-        // qm1
-        match: string
       })[]
 }[]
 ```
@@ -502,7 +452,7 @@ type Data = {
 ```ts
 type Data = {
   team: string
-  teleop:
+  teleop: (
     | {
         attempts: {
           max: number
@@ -520,8 +470,8 @@ type Data = {
         // total
         successes: number
         statName: string
-      }
-  auto:
+      })[]
+  auto: (
     | {
         attempts: {
           max: number
@@ -539,7 +489,7 @@ type Data = {
         // total
         successes: number
         statName: string
-      }
+      })[]
 }
 ```
 

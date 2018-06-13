@@ -6,6 +6,8 @@ type PeregrineResponse<T> =
       error: string
     }
 
+// Webhook but only for ranking points and match score
+
 const getRequest = <T extends any>(
   path: string,
   { authenticated = false }: { authenticated?: boolean } = {}
@@ -81,8 +83,6 @@ export const getEventMatches = (eventKey: string) =>
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
   getRequest<MatchInfo>(`/event/${eventKey}/match/${matchKey}/info`)
 
-// Webhook but only for ranking points and match score
-
 export const getEventTeams = (eventKey: string) =>
   getRequest<string[]>(`/event/${eventKey}/teams`)
 
@@ -94,10 +94,6 @@ interface BaseStat {
 // a field is the details of something specific that happened during a match
 interface BaseField {
   statName: string
-  // 2018orwil
-  event: string
-  // qm1
-  match: string
 }
 
 interface BooleanStat extends BaseStat {
@@ -135,7 +131,12 @@ interface EnumField extends BaseField {
 type Stat = NumberStat | BooleanStat
 
 type Field = NumberField | BooleanField | EnumField
-type GraphableField = NumberField | BooleanField
+type GraphableField = {
+  // 2018orwil
+  event: string
+  // qm1
+  match: string
+} & (NumberField | BooleanField)
 
 type TeamTeleopStats = GraphableField[]
 type TeamAutoStats = {
@@ -145,8 +146,8 @@ type TeamAutoStats = {
 
 interface TeamStats {
   team: string
-  teleop: Stat
-  auto: Stat
+  teleop: Stat[]
+  auto: Stat[]
 }
 
 interface TeamStatsWithAlliance extends TeamStats {
