@@ -49,7 +49,7 @@ interface BasicEventInfo {
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
 export const starEvent = (eventKey: string, starred: boolean) =>
-  putRequest<{}>(`/event/${eventKey}/star`, starred)
+  putRequest<null>(`/event/${eventKey}/star`, starred)
 
 interface EventInfo extends BasicEventInfo {
   webcasts: {
@@ -203,7 +203,10 @@ export const submitReport = (
   team: string,
   report: SubmittedReport
 ) =>
-  putRequest<{}>(`/event/${eventKey}/match/${matchKey}/reports/${team}`, report)
+  putRequest<null>(
+    `/event/${eventKey}/match/${matchKey}/reports/${team}`,
+    report
+  )
 
 export const getEventMatchTeamReports = (
   eventKey: string,
@@ -254,7 +257,7 @@ export const getStarredEvents = (userId: number) =>
   getRequest<string[]>(`/users/${userId}/stars`)
 // Only admins can modify other users
 export const modifyUser = (userId: number, user: EditableUser) =>
-  putRequest<{}>(`/users/${userId}`, user)
+  putRequest<null>(`/users/${userId}`, user)
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>
-  deleteRequest<{}>(`/users/${userId}`)
+  deleteRequest<null>(`/users/${userId}`)
