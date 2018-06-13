@@ -75,7 +75,6 @@ interface MatchInfo {
   time: string
   // example: qm3
   key: string
-  starred?: false
 }
 
 export const getEventMatches = (eventKey: string) =>

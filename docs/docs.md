@@ -41,7 +41,6 @@ type Data = {
   time: string
   // example: qm3
   key: string
-  starred?: false
 }
 ```
 
@@ -248,7 +247,6 @@ type Data = {
   time: string
   // example: qm3
   key: string
-  starred?: false
 }[]
 ```
 
@@ -335,7 +333,6 @@ type Data = {
     time: string
     // example: qm3
     key: string
-    starred?: false
   }
   rank: number
   // ranking score
