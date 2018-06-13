@@ -32,7 +32,7 @@ const promiseRules = {
   'promise/no-new-statics': 'error',
   'promise/no-return-in-finally': 'error',
   'promise/valid-params': 'error'
-  // 'promise/prefer-await-to-then': 'error'
+  'promise/prefer-await-to-then': 'error'
 }
 
 module.exports = {
@@ -59,7 +59,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:unicorn/recommended',
     'plugin:array-func/recommended'
-    // 'plugin:jsx-a11y/recommended'
+    'plugin:jsx-a11y/recommended'
   ],
   plugins: [
     'react',
@@ -69,7 +69,7 @@ module.exports = {
     'import',
     'promise',
     'array-func'
-    // 'jsx-a11y'
+    'jsx-a11y'
   ],
   rules: Object.assign(
     reactRules,
