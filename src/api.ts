@@ -10,27 +10,27 @@ type PeregrineResponse<T> =
 
 const getRequest = <T extends any>(
   path: string,
-  { authenticated = false }: { authenticated?: boolean } = {}
+  { authenticated = false }: { authenticated?: boolean } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const deleteRequest = <T extends any>(
   path: string,
-  { authenticated = false }: { authenticated?: boolean } = {}
+  { authenticated = false }: { authenticated?: boolean } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const putRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {}
+  { authenticated = false }: { authenticated?: boolean } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const postRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {}
+  { authenticated = false }: { authenticated?: boolean } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
@@ -155,7 +155,7 @@ export const getEventStats = (eventKey: string) =>
 
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
-    `/event/${eventKey}/match/${matchKey}/stats`
+    `/event/${eventKey}/match/${matchKey}/stats`,
   )
 
 interface EventTeamInfo {
@@ -198,18 +198,18 @@ export const submitReport = (
   eventKey: string,
   matchKey: string,
   team: string,
-  report: SubmittedReport
+  report: SubmittedReport,
 ) =>
   putRequest<null>(
     `/event/${eventKey}/match/${matchKey}/reports/${team}`,
-    report
+    report,
   )
 
 export const getEventMatchTeamReports = (
   eventKey: string,
   matchKey: string,
   team: string,
-  report: SubmittedReport
+  report: SubmittedReport,
 ) =>
   getRequest<Report[]>(`/event/${eventKey}/match/${matchKey}/reports/${team}`)
 

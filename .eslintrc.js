@@ -1,6 +1,6 @@
 const tsRules = {
   'typescript/no-unused-vars': 'error',
-  'no-undef': 'off' // ts handles this
+  'no-undef': 'off', // ts handles this
 }
 
 const reactRules = {
@@ -9,11 +9,11 @@ const reactRules = {
   'no-unused-vars': ['error', { varsIgnorePattern: '^h$' }],
   'react/display-name': 'off', // annoying
   'react/require-render-return': 'off', // buggy, doens't work with render props
-  'react/no-deprecated': 'off' // preact !== react
+  'react/no-deprecated': 'off', // preact !== react
 }
 
 const unicornRules = {
-  'unicorn/prefer-spread': 'off'
+  'unicorn/prefer-spread': 'off',
 }
 
 const importRules = {
@@ -22,7 +22,7 @@ const importRules = {
   'import/no-namespace': 'error',
   // 'import/order': 'error' // broken for now, copies file contents over and over
   'import/newline-after-import': 'error',
-  'import/no-named-default': 'error'
+  'import/no-named-default': 'error',
 }
 
 const promiseRules = {
@@ -31,35 +31,35 @@ const promiseRules = {
   'promise/no-nesting': 'error',
   'promise/no-new-statics': 'error',
   'promise/no-return-in-finally': 'error',
-  'promise/valid-params': 'error'
-  'promise/prefer-await-to-then': 'error'
+  'promise/valid-params': 'error',
+  'promise/prefer-await-to-then': 'error',
 }
 
 module.exports = {
   env: {
     browser: true,
-    es6: true
+    es6: true,
   },
   parser: 'typescript-eslint-parser',
   parserOptions: {
-    sourceType: 'module'
+    sourceType: 'module',
   },
   settings: {
     react: {
-      pramga: 'h'
+      pramga: 'h',
     },
     'import/resolver': {
       node: true,
-      'eslint-import-resolver-typescript': true
-    }
+      'eslint-import-resolver-typescript': true,
+    },
   },
   extends: [
     'eslint:recommended',
     'plugin:jest/recommended',
     'plugin:react/recommended',
     'plugin:unicorn/recommended',
-    'plugin:array-func/recommended'
-    'plugin:jsx-a11y/recommended'
+    'plugin:array-func/recommended',
+    'plugin:jsx-a11y/recommended',
   ],
   plugins: [
     'react',
@@ -68,14 +68,14 @@ module.exports = {
     'unicorn',
     'import',
     'promise',
-    'array-func'
-    'jsx-a11y'
+    'array-func',
+    'jsx-a11y',
   ],
   rules: Object.assign(
     reactRules,
     tsRules,
     unicornRules,
     importRules,
-    promiseRules
-  )
+    promiseRules,
+  ),
 }
