@@ -57,7 +57,7 @@ interface EventInfo extends BasicEventInfo {
   webcasts: {
     type: 'twitch' | 'youtube'
     url: string
-  }
+  }[]
   location: {
     name: string
     lat: number

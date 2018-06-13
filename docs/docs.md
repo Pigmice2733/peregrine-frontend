@@ -9,7 +9,7 @@ type Data = {
   webcasts: {
     type: "twitch" | "youtube"
     url: string
-  }
+  }[]
   location: {
     name: string
     lat: number
