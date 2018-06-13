@@ -176,14 +176,13 @@ export const getTeamAutoModes = (team: string) =>
   get<string[]>(`/team/${team}/automodes`)
 
 interface SubmittedReport {
-  teleop: GraphableField[]
-  auto: GraphableField[]
+  teleop: Field[]
+  auto: Field[]
 }
 
 interface Report extends SubmittedReport {
   reporter: string
   reporterId: string
-  team: string
 }
 
 export const submitReport = (
@@ -193,8 +192,16 @@ export const submitReport = (
   report: SubmittedReport
 ) => put<{}>(`/event/${eventKey}/match/${matchKey}/reports/${team}`, report)
 
+export const getEventMatchTeamReports = (
+  eventKey: string,
+  matchKey: string,
+  team: string,
+  report: SubmittedReport
+) => get<Report[]>(`/event/${eventKey}/match/${matchKey}/reports/${team}`)
+
 interface StatDescription {
   statName: string
+  statKey: string
   type: 'boolean' | 'number' | 'enum'
 }
 

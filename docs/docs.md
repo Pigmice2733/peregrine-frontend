@@ -71,6 +71,14 @@ type Data = {
         event: string
         // qm1
         match: string
+      }
+    | {
+        value: string
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
       })[]
   auto: (
     | {
@@ -90,6 +98,14 @@ type Data = {
         event: string
         // qm1
         match: string
+      }
+    | {
+        value: string
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
       })[]
 }
 ```
@@ -99,6 +115,72 @@ type Data = {
 
 ```ts
 type Data = {}
+```
+
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  reporter: string
+  reporterId: string
+  teleop: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
+      }
+    | {
+        value: string
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
+      })[]
+  auto: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
+      }
+    | {
+        value: string
+        statName: string
+        // 2018orwil
+        event: string
+        // qm1
+        match: string
+      })[]
+}[]
 ```
 
 # `/event/{eventKey}/match/{matchKey}/stats`
@@ -364,10 +446,12 @@ type Data = {
 type Data = {
   teleop: {
     statName: string
+    statKey: string
     type: "number" | "boolean" | "enum"
   }[]
   auto: {
     statName: string
+    statKey: string
     type: "number" | "boolean" | "enum"
   }[]
 }
