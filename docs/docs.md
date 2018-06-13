@@ -111,7 +111,7 @@ type Data = {
 ### Response
 
 ```ts
-type Data = {}
+type Data = null
 ```
 
 
@@ -262,7 +262,7 @@ type Data = boolean
 ### Response
 
 ```ts
-type Data = {}
+type Data = null
 ```
 
 # `/event/{eventKey}/stats`
@@ -591,7 +591,7 @@ type Data = {
 ### Response
 
 ```ts
-type Data = {}
+type Data = null
 ```
 
 
@@ -602,7 +602,7 @@ Only admins can delete other users
 ### Response
 
 ```ts
-type Data = {}
+type Data = null
 ```
 
 # `/users`
