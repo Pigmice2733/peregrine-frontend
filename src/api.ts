@@ -40,8 +40,6 @@ interface BasicEventInfo {
   startDate: string
   // UTC date
   endDate: string
-  // Only if user is logged in
-  starred?: false
   location: {
     lat: number
     lon: number
@@ -246,6 +244,8 @@ export const createUser = (user: EditableUser) =>
 export const getUsers = () => getRequest<UserInfo[]>(`/users`)
 export const getUser = (userId: number) =>
   getRequest<UserInfo>(`/users/${userId}`)
+export const getStarredEvents = (userId: number) =>
+  getRequest<string[]>(`/users/${userId}/stars`)
 export const modifyUser = (userId: number, user: EditableUser) =>
   putRequest<{}>(`/users/${userId}`, user)
 export const deleteUser = (userId: number) =>

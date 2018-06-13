@@ -22,8 +22,6 @@ type Data = {
   startDate: string
   // UTC date
   endDate: string
-  // Only if user is logged in
-  starred?: false
 }
 ```
 
@@ -424,8 +422,6 @@ type Data = {
   startDate: string
   // UTC date
   endDate: string
-  // Only if user is logged in
-  starred?: false
   location: {
     lat: number
     lon: number
@@ -543,6 +539,16 @@ type Data = {
         statName: string
       }
 }
+```
+
+# `/users/{userId}/stars`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = string[]
 ```
 
 # `/users/{userId}`
