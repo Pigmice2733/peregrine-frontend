@@ -547,3 +547,82 @@ type Data = {
       }
 }
 ```
+
+# `/users/{userId}`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  username: string
+  name: string
+  admin?: true
+}
+```
+
+
+## `PUT`
+
+### Request
+
+```ts
+type Data = {
+  username: string
+  name: string
+  password: string
+  admin?: boolean
+}
+```
+
+
+### Response
+
+```ts
+type Data = {}
+```
+
+
+## `DELETE`
+
+### Response
+
+```ts
+type Data = {}
+```
+
+# `/users`
+
+## `POST`
+
+### Request
+
+```ts
+type Data = {
+  username: string
+  name: string
+  password: string
+  admin?: boolean
+}
+```
+
+
+### Response
+
+```ts
+type Data = number
+```
+
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  username: string
+  name: string
+  admin?: true
+}[]
+```

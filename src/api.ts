@@ -6,13 +6,26 @@ type PeregrineResponse<T> =
       error: string
     }
 
-const get = <T extends any>(
+const getRequest = <T extends any>(
   path: string,
   { authenticated = false }: { authenticated?: boolean } = {}
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
-const put = <T extends any>(
+const deleteRequest = <T extends any>(
+  path: string,
+  { authenticated = false }: { authenticated?: boolean } = {}
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+const putRequest = <T extends any>(
+  path: string,
+  data: any,
+  { authenticated = false }: { authenticated?: boolean } = {}
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+const postRequest = <T extends any>(
   path: string,
   data: any,
   { authenticated = false }: { authenticated?: boolean } = {}
@@ -35,10 +48,10 @@ interface BasicEventInfo {
   }
 }
 
-export const getEvents = () => get<BasicEventInfo[]>('/events')
+export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
 export const starEvent = (eventKey: string, starred: boolean) =>
-  put<{}>(`/event/${eventKey}/star`, starred)
+  putRequest<{}>(`/event/${eventKey}/star`, starred)
 
 interface EventInfo extends BasicEventInfo {
   webcasts: {
@@ -53,7 +66,7 @@ interface EventInfo extends BasicEventInfo {
 }
 
 export const getEventInfo = (eventKey: string) =>
-  get<EventInfo>(`/event/${eventKey}/info`)
+  getRequest<EventInfo>(`/event/${eventKey}/info`)
 
 interface MatchInfo {
   redAlliance: string[]
@@ -66,15 +79,15 @@ interface MatchInfo {
 }
 
 export const getEventMatches = (eventKey: string) =>
-  get<MatchInfo[]>(`/event/${eventKey}/matches`)
+  getRequest<MatchInfo[]>(`/event/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
-  get<MatchInfo>(`/event/${eventKey}/match/${matchKey}/info`)
+  getRequest<MatchInfo>(`/event/${eventKey}/match/${matchKey}/info`)
 
 // Webhook but only for ranking points and match score
 
 export const getEventTeams = (eventKey: string) =>
-  get<string[]>(`/event/${eventKey}/teams`)
+  getRequest<string[]>(`/event/${eventKey}/teams`)
 
 // a stat is a summary representation of a field
 interface BaseStat {
@@ -144,10 +157,12 @@ interface TeamStatsWithAlliance extends TeamStats {
 }
 
 export const getEventStats = (eventKey: string) =>
-  get<TeamStats[]>(`/event/${eventKey}/stats`)
+  getRequest<TeamStats[]>(`/event/${eventKey}/stats`)
 
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
-  get<TeamStatsWithAlliance[]>(`/event/${eventKey}/match/${matchKey}/stats`)
+  getRequest<TeamStatsWithAlliance[]>(
+    `/event/${eventKey}/match/${matchKey}/stats`
+  )
 
 interface EventTeamInfo {
   // only if they have future matches
@@ -158,22 +173,22 @@ interface EventTeamInfo {
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
-  get<EventTeamInfo>(`/event/${eventKey}/team/${team}/info`)
+  getRequest<EventTeamInfo>(`/event/${eventKey}/team/${team}/info`)
 
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
-  get<TeamTeleopStats>(`/event/${eventKey}/team/${team}/stats/teleop`)
+  getRequest<TeamTeleopStats>(`/event/${eventKey}/team/${team}/stats/teleop`)
 
 export const getEventTeamAutoStats = (eventKey: string, team: string) =>
-  get<TeamAutoStats>(`/event/${eventKey}/team/${team}/stats/auto`)
+  getRequest<TeamAutoStats>(`/event/${eventKey}/team/${team}/stats/auto`)
 
 export const getTeamTeleopStats = (team: string) =>
-  get<TeamStats>(`/team/${team}/stats/teleop`)
+  getRequest<TeamStats>(`/team/${team}/stats/teleop`)
 
 export const getTeamAutoStats = (team: string) =>
-  get<TeamAutoStats>(`/team/${team}/stats/auto`)
+  getRequest<TeamAutoStats>(`/team/${team}/stats/auto`)
 
 export const getTeamAutoModes = (team: string) =>
-  get<string[]>(`/team/${team}/automodes`)
+  getRequest<string[]>(`/team/${team}/automodes`)
 
 interface SubmittedReport {
   teleop: Field[]
@@ -190,14 +205,16 @@ export const submitReport = (
   matchKey: string,
   team: string,
   report: SubmittedReport
-) => put<{}>(`/event/${eventKey}/match/${matchKey}/reports/${team}`, report)
+) =>
+  putRequest<{}>(`/event/${eventKey}/match/${matchKey}/reports/${team}`, report)
 
 export const getEventMatchTeamReports = (
   eventKey: string,
   matchKey: string,
   team: string,
   report: SubmittedReport
-) => get<Report[]>(`/event/${eventKey}/match/${matchKey}/reports/${team}`)
+) =>
+  getRequest<Report[]>(`/event/${eventKey}/match/${matchKey}/reports/${team}`)
 
 interface StatDescription {
   statName: string
@@ -210,4 +227,27 @@ interface Schema {
   auto: StatDescription[]
 }
 
-export const getSchema = () => get<Schema>(`/schema`)
+export const getSchema = () => getRequest<Schema>(`/schema`)
+
+interface EditableUser {
+  username: string
+  name: string
+  password: string
+  admin?: boolean
+}
+
+interface UserInfo {
+  username: string
+  name: string
+  admin?: true
+}
+
+export const createUser = (user: EditableUser) =>
+  postRequest<number>(`/users`, user)
+export const getUsers = () => getRequest<UserInfo[]>(`/users`)
+export const getUser = (userId: number) =>
+  getRequest<UserInfo>(`/users/${userId}`)
+export const modifyUser = (userId: number, user: EditableUser) =>
+  putRequest<{}>(`/users/${userId}`, user)
+export const deleteUser = (userId: number) =>
+  deleteRequest<{}>(`/users/${userId}`)
