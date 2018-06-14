@@ -502,6 +502,7 @@ type Data = {
   username: string
   name: string
   admin?: true
+  verified: boolean
 }
 ```
 
@@ -545,9 +546,9 @@ type Data = null
 
 ## `POST`
 
-Anyone can create a user. For admins, the user will be created
-immediately, for non-admins, the user won't be created immediately
-and it will be added to the user request queue
+Anyone can create a user. For admins the users will be verified automatically
+for non-admins or non-authenticated users the user will not be verified and
+will require admin approval
 
 ### Request
 
@@ -579,5 +580,6 @@ type Data = {
   username: string
   name: string
   admin?: true
+  verified: boolean
 }[]
 ```
