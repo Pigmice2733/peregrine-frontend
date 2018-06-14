@@ -508,6 +508,7 @@ type Data = {
 
 ## `PUT`
 
+Anyone can modify themselves
 Only admins can modify other users
 
 ### Request
@@ -531,6 +532,7 @@ type Data = null
 
 ## `DELETE`
 
+Anyone can delete themselves
 Only admins can delete other users
 
 ### Response

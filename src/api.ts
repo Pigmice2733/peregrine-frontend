@@ -252,9 +252,11 @@ export const getUser = (userId: number) =>
 // Anyone can view anyone's stars
 export const getStarredEvents = (userId: number) =>
   getRequest<string[]>(`/users/${userId}/stars`)
+// Anyone can modify themselves
 // Only admins can modify other users
 export const modifyUser = (userId: number, user: EditableUser) =>
   putRequest<null>(`/users/${userId}`, user)
+// Anyone can delete themselves
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`/users/${userId}`)
