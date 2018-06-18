@@ -15,6 +15,7 @@ type Data = {
     lat: number
     lon: number
   }
+  // from TBA short name
   name: string
   district?: string
   week?: number
@@ -351,6 +352,7 @@ type Data = string[]
 
 ```ts
 type Data = {
+  // from TBA short name
   name: string
   district?: string
   week?: number

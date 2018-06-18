@@ -35,7 +35,8 @@ const postRequest = <T extends any>(
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 interface BasicEventInfo {
-  name: string // from TBA short name
+  // from TBA short name
+  name: string
   district?: string
   week?: number
   // UTC date
