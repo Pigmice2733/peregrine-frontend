@@ -125,6 +125,10 @@ type Data = {
 
 ## `GET`
 
+stats for the teams in a match
+these stats describe a team's performance in all matches at this event,
+not just this match
+
 ### Response
 
 ```ts

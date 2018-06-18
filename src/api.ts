@@ -156,6 +156,9 @@ interface TeamStatsWithAlliance extends TeamStats {
 export const getEventStats = (eventKey: string) =>
   getRequest<TeamStats[]>(`/event/${eventKey}/stats`)
 
+// stats for the teams in a match
+// these stats describe a team's performance in all matches at this event,
+// not just this match
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
     `/event/${eventKey}/match/${matchKey}/stats`,
