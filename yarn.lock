@@ -3137,9 +3137,21 @@ postcss-html@^0.23.6:
   dependencies:
     htmlparser2 "^3.9.2"
 
+postcss-html@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/postcss-html/-/postcss-html-0.28.0.tgz#3dd0f5b5d7f886b8181bf844396d43a7898162cb"
+  dependencies:
+    htmlparser2 "^3.9.2"
+
 postcss-less@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/postcss-less/-/postcss-less-1.1.5.tgz#a6f0ce180cf3797eeee1d4adc0e9e6d6db665609"
+  dependencies:
+    postcss "^5.2.16"
+
+postcss-less@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-less/-/postcss-less-2.0.0.tgz#5d190b8e057ca446d60fe2e2587ad791c9029fb8"
   dependencies:
     postcss "^5.2.16"
 
@@ -3169,6 +3181,13 @@ postcss-load-plugins@^2.3.0:
 postcss-markdown@^0.23.6:
   version "0.23.7"
   resolved "https://registry.yarnpkg.com/postcss-markdown/-/postcss-markdown-0.23.7.tgz#7e3a398794295c425e51e4f0abdee6d13ad3d134"
+  dependencies:
+    remark "^9.0.0"
+    unist-util-find-all-after "^1.0.2"
+
+postcss-markdown@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/postcss-markdown/-/postcss-markdown-0.28.0.tgz#99d1c4e74967af9e9c98acb2e2b66df4b3c6ed86"
   dependencies:
     remark "^9.0.0"
     unist-util-find-all-after "^1.0.2"
@@ -3380,6 +3399,10 @@ postcss-svgo@^2.1.1:
     postcss "^5.0.14"
     postcss-value-parser "^3.2.3"
     svgo "^0.7.0"
+
+postcss-syntax@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/postcss-syntax/-/postcss-syntax-0.28.0.tgz#e17572a7dcf5388f0c9b68232d2dad48fa7f0b12"
 
 postcss-syntax@^0.9.0:
   version "0.9.1"
@@ -3788,9 +3811,9 @@ rollup-plugin-babel@^4.0.0-beta.5:
     "@babel/helper-module-imports" "7.0.0-beta.49"
     rollup-pluginutils "^2.0.1"
 
-rollup-plugin-netlify-optimize@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-netlify-optimize/-/rollup-plugin-netlify-optimize-0.0.1.tgz#3b695fcb040289d3140f2e3f3ac65ff510dc397d"
+rollup-plugin-netlify-optimize@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-netlify-optimize/-/rollup-plugin-netlify-optimize-0.0.2.tgz#f68e33105e7f57622787dcba502213e8c132f672"
   dependencies:
     hasha "^3.0.0"
     rollup-plugin-babel "^4.0.0-beta.5"
@@ -3849,9 +3872,9 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.5.2"
     micromatch "^2.3.11"
 
-rollup@^0.60.6:
-  version "0.60.6"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.60.6.tgz#ecf7035055b0bd079247cb0de27cff8d0f020987"
+rollup@^0.60.7:
+  version "0.60.7"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.60.7.tgz#2b62ef9306f719b1ab85a7814b3e6596ac51fae8"
   dependencies:
     "@types/estree" "0.0.39"
     "@types/node" "*"
@@ -4128,7 +4151,7 @@ stylelint-order@^0.8.0:
     postcss "^6.0.14"
     postcss-sorting "^3.1.0"
 
-stylelint@^9.1.1, stylelint@^9.2.1:
+stylelint@^9.1.1:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-9.2.1.tgz#fe63c169f6cd3bc81e77f0e3c6443df3267ec211"
   dependencies:
@@ -4166,6 +4189,54 @@ stylelint@^9.1.1, stylelint@^9.2.1:
     postcss-scss "^1.0.2"
     postcss-selector-parser "^3.1.0"
     postcss-syntax "^0.9.0"
+    postcss-value-parser "^3.3.0"
+    resolve-from "^4.0.0"
+    signal-exit "^3.0.2"
+    specificity "^0.3.1"
+    string-width "^2.1.0"
+    style-search "^0.1.0"
+    sugarss "^1.0.0"
+    svg-tags "^1.0.0"
+    table "^4.0.1"
+
+stylelint@^9.3.0:
+  version "9.3.0"
+  resolved "https://registry.yarnpkg.com/stylelint/-/stylelint-9.3.0.tgz#fe176e4e421ac10eac1a6b6d9f28e908eb58c5db"
+  dependencies:
+    autoprefixer "^8.0.0"
+    balanced-match "^1.0.0"
+    chalk "^2.4.1"
+    cosmiconfig "^5.0.0"
+    debug "^3.0.0"
+    execall "^1.0.0"
+    file-entry-cache "^2.0.0"
+    get-stdin "^6.0.0"
+    globby "^8.0.0"
+    globjoin "^0.1.4"
+    html-tags "^2.0.0"
+    ignore "^3.3.3"
+    import-lazy "^3.1.0"
+    imurmurhash "^0.1.4"
+    known-css-properties "^0.6.0"
+    lodash "^4.17.4"
+    log-symbols "^2.0.0"
+    mathml-tag-names "^2.0.1"
+    meow "^5.0.0"
+    micromatch "^2.3.11"
+    normalize-selector "^0.2.0"
+    pify "^3.0.0"
+    postcss "^6.0.16"
+    postcss-html "^0.28.0"
+    postcss-less "^2.0.0"
+    postcss-markdown "^0.28.0"
+    postcss-media-query-parser "^0.2.3"
+    postcss-reporter "^5.0.0"
+    postcss-resolve-nested-selector "^0.1.1"
+    postcss-safe-parser "^3.0.1"
+    postcss-sass "^0.3.0"
+    postcss-scss "^1.0.2"
+    postcss-selector-parser "^3.1.0"
+    postcss-syntax "^0.28.0"
     postcss-value-parser "^3.3.0"
     resolve-from "^4.0.0"
     signal-exit "^3.0.2"
