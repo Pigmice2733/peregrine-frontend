@@ -76,6 +76,8 @@ interface MatchInfo {
   time: string
   // example: qm3
   key: string
+  redScore?: number
+  blueScore?: number
 }
 
 export const getEventMatches = (eventKey: string) =>

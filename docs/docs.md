@@ -40,6 +40,8 @@ type Data = {
   time: string
   // example: qm3
   key: string
+  redScore?: number
+  blueScore?: number
 }
 ```
 
@@ -182,6 +184,8 @@ type Data = {
   time: string
   // example: qm3
   key: string
+  redScore?: number
+  blueScore?: number
 }[]
 ```
 
@@ -268,6 +272,8 @@ type Data = {
     time: string
     // example: qm3
     key: string
+    redScore?: number
+    blueScore?: number
   }
   rank: number
   // ranking score
