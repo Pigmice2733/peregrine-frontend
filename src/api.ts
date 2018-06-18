@@ -154,6 +154,8 @@ interface TeamStatsWithAlliance extends TeamStats {
   alliance: 'red' | 'blue'
 }
 
+// these are the stats for every team at an event, describing their performance
+// only at that event
 export const getEventStats = (eventKey: string) =>
   getRequest<TeamStats[]>(`/event/${eventKey}/stats`)
 

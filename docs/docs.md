@@ -218,6 +218,9 @@ type Data = null
 
 ## `GET`
 
+these are the stats for every team at an event, describing their performance
+only at that event
+
 ### Response
 
 ```ts
