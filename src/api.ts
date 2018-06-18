@@ -51,6 +51,7 @@ interface BasicEventInfo {
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
+// only authenticated users can star events
 export const starEvent = (eventKey: string, starred: boolean) =>
   putRequest<null>(`/event/${eventKey}/star`, starred)
 

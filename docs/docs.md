@@ -199,6 +199,8 @@ type Data = {
 
 ## `PUT`
 
+only authenticated users can star events
+
 ### Request
 
 ```ts
