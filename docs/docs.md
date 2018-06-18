@@ -75,6 +75,7 @@ type Data = {
         succeeded: boolean
         statName: string
       })[]
+  autoName: string
 }
 ```
 
@@ -116,6 +117,7 @@ type Data = {
         succeeded: boolean
         statName: string
       })[]
+  autoName: string
 }[]
 ```
 

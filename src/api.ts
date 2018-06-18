@@ -190,6 +190,7 @@ export const getTeamAutoModes = (team: string) =>
 interface SubmittedReport {
   teleop: Field[]
   auto: Field[]
+  autoName: string
 }
 
 interface Report extends SubmittedReport {
