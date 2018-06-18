@@ -275,7 +275,7 @@ type Data = {
 
 ```ts
 type Data = {
-  // only if they have future matches
+  // only if they have future matches at this event
   nextMatch?: {
     redAlliance: string[]
     blueAlliance: string[]
