@@ -301,6 +301,7 @@ type Data = {
 ```ts
 type Data = {
   modeName: string
+  // in order by match time
   stats: (
     | {
         // 2018orwil
@@ -424,6 +425,7 @@ type Data = string[]
 ```ts
 type Data = {
   modeName: string
+  // in order by match time
   stats: (
     | {
         // 2018orwil

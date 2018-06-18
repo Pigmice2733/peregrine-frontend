@@ -141,6 +141,7 @@ type GraphableField = {
 type TeamTeleopStats = GraphableField[]
 type TeamAutoStats = {
   modeName: string
+  // in order by match time
   stats: GraphableField[]
 }[]
 
