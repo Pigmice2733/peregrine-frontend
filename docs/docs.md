@@ -304,8 +304,6 @@ type Data = {
   // in order by match time
   stats: (
     | {
-        // 2018orwil
-        event: string
         // qm1
         match: string
         attempts: number
@@ -313,8 +311,6 @@ type Data = {
         statName: string
       }
     | {
-        // 2018orwil
-        event: string
         // qm1
         match: string
         attempted: boolean
@@ -333,8 +329,6 @@ type Data = {
 ```ts
 type Data = (
   | {
-      // 2018orwil
-      event: string
       // qm1
       match: string
       attempts: number
@@ -342,8 +336,6 @@ type Data = (
       statName: string
     }
   | {
-      // 2018orwil
-      event: string
       // qm1
       match: string
       attempted: boolean
@@ -429,7 +421,7 @@ type Data = {
   stats: (
     | {
         // 2018orwil
-        event: string
+        eventKey: string
         // qm1
         match: string
         attempts: number
@@ -438,7 +430,7 @@ type Data = {
       }
     | {
         // 2018orwil
-        event: string
+        eventKey: string
         // qm1
         match: string
         attempted: boolean
@@ -455,47 +447,25 @@ type Data = {
 ### Response
 
 ```ts
-type Data = {
-  team: string
-  teleop: (
-    | {
-        attempts: {
-          max: number
-          avg: number
-        }
-        successes: {
-          max: number
-          avg: number
-        }
-        statName: string
-      }
-    | {
-        // total
-        attempts: number
-        // total
-        successes: number
-        statName: string
-      })[]
-  auto: (
-    | {
-        attempts: {
-          max: number
-          avg: number
-        }
-        successes: {
-          max: number
-          avg: number
-        }
-        statName: string
-      }
-    | {
-        // total
-        attempts: number
-        // total
-        successes: number
-        statName: string
-      })[]
-}
+type Data = (
+  | {
+      // 2018orwil
+      eventKey: string
+      // qm1
+      match: string
+      attempts: number
+      successes: number
+      statName: string
+    }
+  | {
+      // 2018orwil
+      eventKey: string
+      // qm1
+      match: string
+      attempted: boolean
+      succeeded: boolean
+      statName: string
+    })[]
 ```
 
 # `/users/{userId}/stars`

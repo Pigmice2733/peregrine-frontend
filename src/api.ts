@@ -132,18 +132,28 @@ type Stat = NumberStat | BooleanStat
 
 type Field = NumberField | BooleanField
 type GraphableField = {
-  // 2018orwil
-  event: string
   // qm1
   match: string
 } & (NumberField | BooleanField)
 
-type TeamTeleopStats = GraphableField[]
-type TeamAutoStats = {
+type TeamTeleopStats = (EventKey & GraphableField)[]
+type TeamAutoStats = ({
+  modeName: string
+  // in order by match time
+  stats: (EventKey & GraphableField)[]
+})[]
+
+type EventKey = {
+  // 2018orwil
+  eventKey: string
+}
+
+type EventTeamTeleopStats = GraphableField[]
+type EventTeamAutoStats = ({
   modeName: string
   // in order by match time
   stats: GraphableField[]
-}[]
+})[]
 
 interface TeamStats {
   team: string
@@ -169,7 +179,7 @@ export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   )
 
 interface EventTeamInfo {
-  // only if they have future matches
+  // only if they have future matches at this event
   nextMatch?: MatchInfo
   rank: number
   // ranking score
@@ -180,13 +190,15 @@ export const getEventTeamInfo = (eventKey: string, team: string) =>
   getRequest<EventTeamInfo>(`/event/${eventKey}/team/${team}/info`)
 
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
-  getRequest<TeamTeleopStats>(`/event/${eventKey}/team/${team}/stats/teleop`)
+  getRequest<EventTeamTeleopStats>(
+    `/event/${eventKey}/team/${team}/stats/teleop`,
+  )
 
 export const getEventTeamAutoStats = (eventKey: string, team: string) =>
-  getRequest<TeamAutoStats>(`/event/${eventKey}/team/${team}/stats/auto`)
+  getRequest<EventTeamAutoStats>(`/event/${eventKey}/team/${team}/stats/auto`)
 
 export const getTeamTeleopStats = (team: string) =>
-  getRequest<TeamStats>(`/team/${team}/stats/teleop`)
+  getRequest<TeamTeleopStats>(`/team/${team}/stats/teleop`)
 
 export const getTeamAutoStats = (team: string) =>
   getRequest<TeamAutoStats>(`/team/${team}/stats/auto`)
