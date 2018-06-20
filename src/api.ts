@@ -251,14 +251,20 @@ export const getSchema = () => getRequest<Schema>(`/schema`)
 
 interface EditableUser {
   username: string
-  name: string
+  name: {
+    first: string
+    last: string
+  }
   password: string
   admin?: boolean
 }
 
 interface UserInfo {
   username: string
-  name: string
+  name: {
+    first: string
+    last: string
+  }
   admin?: true
   verified: boolean
 }
