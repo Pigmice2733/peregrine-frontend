@@ -516,7 +516,10 @@ type Data = {
     last: string
   }
   password: string
+  // only an admin can set a user's admin status
   admin?: boolean
+  // only an admin can set a user's verified status
+  verified?: boolean
 }
 ```
 
@@ -557,7 +560,10 @@ type Data = {
     last: string
   }
   password: string
+  // only an admin can set a user's admin status
   admin?: boolean
+  // only an admin can set a user's verified status
+  verified?: boolean
 }
 ```
 

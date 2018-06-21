@@ -263,7 +263,10 @@ interface EditableUser {
     last: string
   }
   password: string
+  // only an admin can set a user's admin status
   admin?: boolean
+  // only an admin can set a user's verified status
+  verified?: boolean
 }
 
 interface UserInfo {
