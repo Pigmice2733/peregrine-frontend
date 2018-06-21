@@ -1,6 +1,6 @@
 type PeregrineResponse<T> =
   | {
-      data: T
+      data: Readonly<T>
     }
   | {
       error: string
@@ -21,6 +21,13 @@ const deleteRequest = <T extends any>(
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const putRequest = <T extends any>(
+  path: string,
+  data: any,
+  { authenticated = false }: { authenticated?: boolean } = {},
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+const patchRequest = <T extends any>(
   path: string,
   data: any,
   { authenticated = false }: { authenticated?: boolean } = {},
@@ -285,7 +292,7 @@ export const getStarredEvents = (userId: number) =>
 // Anyone can modify themselves
 // Only admins can modify other users
 export const modifyUser = (userId: number, user: EditableUser) =>
-  putRequest<null>(`/users/${userId}`, user)
+  patchRequest<null>(`/users/${userId}`, user)
 // Anyone can delete themselves
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>

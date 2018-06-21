@@ -501,7 +501,7 @@ type Data = {
 ```
 
 
-## `PUT`
+## `PATCH`
 
 Anyone can modify themselves
 Only admins can modify other users
