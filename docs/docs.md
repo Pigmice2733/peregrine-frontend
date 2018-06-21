@@ -1,3 +1,25 @@
+# `/authenticate`
+
+## `POST`
+
+Response is the JWT
+
+### Request
+
+```ts
+type Data = {
+  username: string
+  password: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = string
+```
+
 # `/event/{eventKey}/info`
 
 ## `GET`
@@ -199,7 +221,7 @@ type Data = {
 
 ## `PUT`
 
-only authenticated users can star events
+Only authenticated users can star events
 
 ### Request
 

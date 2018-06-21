@@ -58,7 +58,7 @@ interface BasicEventInfo {
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
-// only authenticated users can star events
+// Only authenticated users can star events
 export const starEvent = (eventKey: string, starred: boolean) =>
   putRequest<null>(`/event/${eventKey}/star`, starred)
 
@@ -300,3 +300,7 @@ export const modifyUser = (userId: number, user: EditableUser) =>
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`/users/${userId}`)
+
+// Response is the JWT
+export const authenticate = (username: string, password: string) =>
+  postRequest<string>(`/authenticate`, { username, password })
