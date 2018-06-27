@@ -18,7 +18,7 @@
     "eslint-plugin-unicorn": "4.0.3",
     "eslint_d": "5.3.1",
     "typescript": "2.9.2",
-    "typescript-eslint-parser": "16.0.0"
+    "typescript-eslint-parser": "16.0.1"
   },
   "scripts": {
     "lint": "eslint_d . --ignore-path .gitignore --ext .js,.ts,.tsx --format=pretty"
