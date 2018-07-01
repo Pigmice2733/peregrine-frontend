@@ -3,7 +3,10 @@ type PeregrineResponse<T> =
       data: Readonly<T>
     }
   | {
-      error: string
+      error: {
+        message: string
+        code: number
+      }
     }
 
 // Webhook but only for ranking points and match score
