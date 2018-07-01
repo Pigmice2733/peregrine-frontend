@@ -258,10 +258,8 @@ export const getSchema = () => getRequest<Schema>(`/schema`)
 
 interface EditableUser {
   username: string
-  name: {
-    first: string
-    last: string
-  }
+  firstname: string
+  lastname: string
   password: string
   // only an admin can set a user's admin status
   admin?: boolean
@@ -271,10 +269,8 @@ interface EditableUser {
 
 interface UserInfo {
   username: string
-  name: {
-    first: string
-    last: string
-  }
+  firstname: string
+  lastname: string
   admin?: true
   verified: boolean
 }
@@ -294,7 +290,7 @@ export const getStarredEvents = (userId: number) =>
   getRequest<string[]>(`/users/${userId}/stars`)
 // Anyone can modify themselves
 // Only admins can modify other users
-export const modifyUser = (userId: number, user: EditableUser) =>
+export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
   patchRequest<null>(`/users/${userId}`, user)
 // Anyone can delete themselves
 // Only admins can delete other users

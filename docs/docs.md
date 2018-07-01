@@ -513,10 +513,8 @@ Anyone can view any user
 ```ts
 type Data = {
   username: string
-  name: {
-    first: string
-    last: string
-  }
+  firstname: string
+  lastname: string
   admin?: true
   verified: boolean
 }
@@ -532,12 +530,10 @@ Only admins can modify other users
 
 ```ts
 type Data = {
-  username: string
-  name: {
-    first: string
-    last: string
-  }
-  password: string
+  username?: string
+  firstname?: string
+  lastname?: string
+  password?: string
   // only an admin can set a user's admin status
   admin?: boolean
   // only an admin can set a user's verified status
@@ -577,10 +573,8 @@ will require admin approval
 ```ts
 type Data = {
   username: string
-  name: {
-    first: string
-    last: string
-  }
+  firstname: string
+  lastname: string
   password: string
   // only an admin can set a user's admin status
   admin?: boolean
@@ -606,10 +600,8 @@ Anyone can view the list of users
 ```ts
 type Data = {
   username: string
-  name: {
-    first: string
-    last: string
-  }
+  firstname: string
+  lastname: string
   admin?: true
   verified: boolean
 }[]
