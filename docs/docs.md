@@ -1,3 +1,25 @@
+# `/authenticate`
+
+## `POST`
+
+Response is the JWT
+
+### Request
+
+```ts
+type Data = {
+  username: string
+  password: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = string
+```
+
 # `/event/{eventKey}/info`
 
 ## `GET`
@@ -199,7 +221,7 @@ type Data = {
 
 ## `PUT`
 
-only authenticated users can star events
+Only authenticated users can star events
 
 ### Request
 
@@ -491,14 +513,15 @@ Anyone can view any user
 ```ts
 type Data = {
   username: string
-  name: string
+  firstname: string
+  lastname: string
   admin?: true
   verified: boolean
 }
 ```
 
 
-## `PUT`
+## `PATCH`
 
 Anyone can modify themselves
 Only admins can modify other users
@@ -507,10 +530,14 @@ Only admins can modify other users
 
 ```ts
 type Data = {
-  username: string
-  name: string
-  password: string
+  username?: string
+  firstname?: string
+  lastname?: string
+  password?: string
+  // only an admin can set a user's admin status
   admin?: boolean
+  // only an admin can set a user's verified status
+  verified?: boolean
 }
 ```
 
@@ -546,9 +573,13 @@ will require admin approval
 ```ts
 type Data = {
   username: string
-  name: string
+  firstname: string
+  lastname: string
   password: string
+  // only an admin can set a user's admin status
   admin?: boolean
+  // only an admin can set a user's verified status
+  verified?: boolean
 }
 ```
 
@@ -569,7 +600,8 @@ Anyone can view the list of users
 ```ts
 type Data = {
   username: string
-  name: string
+  firstname: string
+  lastname: string
   admin?: true
   verified: boolean
 }[]

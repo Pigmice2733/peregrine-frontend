@@ -1,9 +1,12 @@
 type PeregrineResponse<T> =
   | {
-      data: T
+      data: Readonly<T>
     }
   | {
-      error: string
+      error: {
+        message: string
+        code: number
+      }
     }
 
 // Webhook but only for ranking points and match score
@@ -21,6 +24,13 @@ const deleteRequest = <T extends any>(
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const putRequest = <T extends any>(
+  path: string,
+  data: any,
+  { authenticated = false }: { authenticated?: boolean } = {},
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+const patchRequest = <T extends any>(
   path: string,
   data: any,
   { authenticated = false }: { authenticated?: boolean } = {},
@@ -51,7 +61,7 @@ interface BasicEventInfo {
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
-// only authenticated users can star events
+// Only authenticated users can star events
 export const starEvent = (eventKey: string, starred: boolean) =>
   putRequest<null>(`/event/${eventKey}/star`, starred)
 
@@ -251,14 +261,19 @@ export const getSchema = () => getRequest<Schema>(`/schema`)
 
 interface EditableUser {
   username: string
-  name: string
+  firstname: string
+  lastname: string
   password: string
+  // only an admin can set a user's admin status
   admin?: boolean
+  // only an admin can set a user's verified status
+  verified?: boolean
 }
 
 interface UserInfo {
   username: string
-  name: string
+  firstname: string
+  lastname: string
   admin?: true
   verified: boolean
 }
@@ -278,9 +293,13 @@ export const getStarredEvents = (userId: number) =>
   getRequest<string[]>(`/users/${userId}/stars`)
 // Anyone can modify themselves
 // Only admins can modify other users
-export const modifyUser = (userId: number, user: EditableUser) =>
-  putRequest<null>(`/users/${userId}`, user)
+export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
+  patchRequest<null>(`/users/${userId}`, user)
 // Anyone can delete themselves
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`/users/${userId}`)
+
+// Response is the JWT
+export const authenticate = (username: string, password: string) =>
+  postRequest<string>(`/authenticate`, { username, password })
