@@ -26,7 +26,7 @@
     "eslint_d": "6.0.0",
     "postcss-nesting": "^6.0.0",
     "rollup": "^0.62.0",
-    "rollup-plugin-netlify-optimize": "^0.0.6",
+    "rollup-plugin-netlify-optimize": "^0.0.7",
     "stylelint": "^9.3.0",
     "stylelint-config-prettier": "^3.3.0",
     "stylelint-config-rational-order": "^0.0.2",

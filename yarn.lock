@@ -2581,6 +2581,12 @@ lru-cache@^4.1.2:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
+make-dir@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-1.3.0.tgz#79c1033b80515bd6d24ec9933e860ca75ee27f0c"
+  dependencies:
+    pify "^3.0.0"
+
 map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
@@ -3761,13 +3767,14 @@ rollup-plugin-babel@^4.0.0-beta.5:
     "@babel/helper-module-imports" "7.0.0-beta.51"
     rollup-pluginutils "^2.3.0"
 
-rollup-plugin-netlify-optimize@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-netlify-optimize/-/rollup-plugin-netlify-optimize-0.0.6.tgz#5ff25ff02663d8ac5b7572c6c4a6d50c13bbcf3d"
+rollup-plugin-netlify-optimize@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-netlify-optimize/-/rollup-plugin-netlify-optimize-0.0.7.tgz#9a8f1ab9b5f4da8df8d6e20b358f71d35a8803bb"
   dependencies:
     "@babel/core" "^7.0.0-beta.52"
     hasha "^3.0.0"
     html-minifier "^3.5.18"
+    make-dir "^1.3.0"
     preact "^8.2.9"
     preact-render-to-string "^3.7.0"
     prettier "^1.13.7"
