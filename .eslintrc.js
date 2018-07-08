@@ -32,7 +32,7 @@ const promiseRules = {
   'promise/no-new-statics': 'error',
   'promise/no-return-in-finally': 'error',
   'promise/valid-params': 'error',
-  'promise/prefer-await-to-then': 'error',
+  // 'promise/prefer-await-to-then': 'error',
 }
 
 module.exports = {
