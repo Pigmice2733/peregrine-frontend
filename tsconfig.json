@@ -9,13 +9,13 @@
     "allowJs": true,
     "checkJs": true,
     "moduleResolution": "node",
-    "module": "esnext",
+    "module": "commonjs",
     "target": "ESNext",
     "sourceMap": true,
     "baseUrl": "./src",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "files": ["./src/index.tsx", "./src/sw.ts"],
+  "files": ["./src/**/*.tsx", "src/**/*.ts", "*.ts"],
   "include": ["types.d.ts", "./src/**/*.test.tsx"]
 }

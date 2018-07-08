@@ -1,4 +1,4 @@
-export const presets = [
+export const presets = ({ isModule }) => [
   [
     '@babel/preset-env',
     {
@@ -6,13 +6,13 @@ export const presets = [
       modules: false,
       loose: true,
       targets: {
-        esmodules: true,
+        esmodules: isModule,
       },
     },
   ],
   ['@babel/preset-typescript', { jsxPragma: 'h', isJSX: true }],
 ]
-export const plugins = [
+export const plugins = ({ isModule }) => [
   [
     '@babel/plugin-transform-react-jsx',
     {

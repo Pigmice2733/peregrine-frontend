@@ -1,4 +1,16 @@
+.eventCard {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  padding: 15px;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 1px 2px 6px rgba(0, 0, 0, 0.27);
+}
+
 .home {
-  color: red;
-  background: green;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #eeeeee;
 }

@@ -1,6 +1,7 @@
 import { h, render } from 'preact'
 import { Router } from 'preact-router'
 import AsyncRoute from 'preact-async-route'
+import './style.css'
 
 const def = <T extends any>(m: T) => m.default
 
@@ -17,4 +18,9 @@ export const App = () => (
   </Router>
 )
 
-render(<App />, document.body)
+const root = document.getElementById('app')
+
+if (root) {
+  const prerendered = document.getElementById('prerender')
+  render(<App />, root, prerendered || undefined)
+}

@@ -1,13 +1,10 @@
 import { createRollupConfig } from 'rollup-plugin-netlify-optimize'
-import * as babelConfig from './.babelrc'
+import { presets, plugins } from './.babelrc'
 
 export default createRollupConfig(
   {
-    babelConfig,
-    routes: {
-      '/': './routes/home',
-      '/event/:eventKey/info': './routes/event-info',
-    },
+    babelPlugins: plugins,
+    babelPresets: presets,
   },
   process.env.NODE_ENV,
 )

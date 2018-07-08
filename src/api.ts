@@ -44,7 +44,7 @@ const postRequest = <T extends any>(
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
-interface BasicEventInfo {
+export interface BasicEventInfo {
   // from TBA short name
   name: string
   district?: string
