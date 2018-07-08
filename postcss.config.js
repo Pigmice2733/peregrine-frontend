@@ -1,5 +1,3 @@
 module.exports = {
-  plugins: {
-    'postcss-nesting': {},
-  },
+  plugins: [require('postcss-nesting')({})],
 }
