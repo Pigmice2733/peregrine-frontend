@@ -3767,9 +3767,9 @@ rollup-plugin-babel@^4.0.0-beta.5:
     "@babel/helper-module-imports" "7.0.0-beta.51"
     rollup-pluginutils "^2.3.0"
 
-rollup-plugin-netlify-optimize@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-netlify-optimize/-/rollup-plugin-netlify-optimize-0.0.8.tgz#f774cfab86efcbc3a3086ea058e5ed00d51a8421"
+rollup-plugin-netlify-optimize@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-netlify-optimize/-/rollup-plugin-netlify-optimize-0.0.9.tgz#2477cd855b5cb7fd81e09d88dc0badf04421260f"
   dependencies:
     "@babel/core" "^7.0.0-beta.52"
     hasha "^3.0.0"
