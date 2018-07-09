@@ -26,7 +26,7 @@
     "eslint_d": "6.0.0",
     "postcss-nesting": "^6.0.0",
     "rollup": "^0.62.0",
-    "rollup-plugin-netlify-optimize": "^0.0.11",
+    "rollup-plugin-netlify-optimize": "^0.0.12",
     "stylelint": "^9.3.0",
     "stylelint-config-prettier": "^3.3.0",
     "stylelint-config-rational-order": "^0.0.2",
@@ -36,9 +36,8 @@
   },
   "scripts": {
     "lint": "eslint_d . --ignore-path .gitignore --ext .js,.ts,.tsx --format=pretty",
-    "build": "rollup -c rollup.config.ts",
-    "start": "rollup --watch -c rollup.config.ts",
-    "prerender": "rollup -c prerender.ts"
+    "build": "cross-env NODE_ENV=production rollup -c rollup.config.ts",
+    "start": "cross-env NODE_ENV=development rollup --watch -c rollup.config.ts"
   },
   "dependencies": {
     "preact": "^8.2.9",

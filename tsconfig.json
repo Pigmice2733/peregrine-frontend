@@ -16,6 +16,5 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "files": ["./src/**/*.tsx", "src/**/*.ts", "*.ts"],
-  "include": ["types.d.ts", "./src/**/*.test.tsx"]
+  "include": ["types.d.ts", "**/*.tsx", "**/*.ts"]
 }

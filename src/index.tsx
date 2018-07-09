@@ -18,4 +18,8 @@ const App = () => (
   </Router>
 )
 
-render(<App />, document.body, document.getElementById('prerender'))
+render(
+  <App />,
+  document.body,
+  document.getElementById('prerender') || undefined,
+)
