@@ -4,3 +4,4 @@
 stats.json
 package-lock.json
 /coverage
+/prerender

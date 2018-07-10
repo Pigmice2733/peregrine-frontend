@@ -1,25 +1,24 @@
-module.exports = {
-  presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          browsers: ['last 2 versions']
-        },
-        exclude: ['transform-regenerator'],
-        modules: false,
-        loose: true
-      }
-    ]
+export const presets = ({ isModule }) => [
+  [
+    '@babel/preset-env',
+    {
+      exclude: ['transform-regenerator'],
+      modules: false,
+      loose: true,
+      targets: {
+        esmodules: isModule,
+      },
+    },
   ],
-  plugins: [
-    [
-      '@babel/plugin-transform-react-jsx',
-      {
-        pragma: 'h'
-      }
-    ],
-    '@babel/plugin-proposal-class-properties',
-    ['@babel/plugin-transform-typescript', { jsxPragma: 'h' }]
-  ]
-}
+  ['@babel/preset-typescript', { jsxPragma: 'h', isJSX: true }],
+]
+export const plugins = ({ isModule }) => [
+  [
+    '@babel/plugin-transform-react-jsx',
+    {
+      pragma: 'h',
+    },
+  ],
+  '@babel/plugin-proposal-class-properties',
+  '@babel/plugin-syntax-dynamic-import',
+]

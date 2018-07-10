@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "strictNullChecks": true,
+    "strict": true,
     "jsx": "react",
     "jsxFactory": "h",
     "lib": ["esnext", "dom"],
@@ -9,12 +9,12 @@
     "allowJs": true,
     "checkJs": true,
     "moduleResolution": "node",
+    "module": "commonjs",
     "target": "ESNext",
     "sourceMap": true,
     "baseUrl": "./src",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "files": ["./src/index.tsx", "./src/sw.ts"],
-  "include": ["types.d.ts", "./src/**/*.test.tsx"]
+  "include": ["types.d.ts", "**/*.tsx", "**/*.ts"]
 }
