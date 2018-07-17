@@ -25,7 +25,7 @@
     "eslint-plugin-unicorn": "4.0.3",
     "eslint_d": "6.0.1",
     "postcss-nesting": "^6.0.0",
-    "rollup": "^0.62.0",
+    "rollup": "^0.63.0",
     "rollup-plugin-netlify-optimize": "^0.0.12",
     "stylelint": "^9.3.0",
     "stylelint-config-prettier": "^3.3.0",
