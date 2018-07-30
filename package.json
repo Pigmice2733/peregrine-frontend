@@ -31,7 +31,7 @@
     "stylelint-config-prettier": "^3.3.0",
     "stylelint-config-rational-order": "^0.0.2",
     "stylelint-config-recommended": "^2.1.0",
-    "typescript": "2.9.2",
+    "typescript": "3.0.1",
     "typescript-eslint-parser": "17.0.1"
   },
   "scripts": {
