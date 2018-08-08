@@ -28,7 +28,7 @@
     "rollup": "^0.64.0",
     "rollup-plugin-netlify-optimize": "^0.0.12",
     "stylelint": "^9.3.0",
-    "stylelint-config-prettier": "^3.3.0",
+    "stylelint-config-prettier": "^4.0.0",
     "stylelint-config-rational-order": "^0.0.2",
     "stylelint-config-recommended": "^2.1.0",
     "typescript": "3.0.1",
