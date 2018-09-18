@@ -1695,9 +1695,9 @@ eslint@^5.4.0:
     table "^4.0.3"
     text-table "^0.2.0"
 
-eslint_d@7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-7.1.0.tgz#f5a80b8c14c10213ebdb15f1d1cdd8e0531329ad"
+eslint_d@7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/eslint_d/-/eslint_d-7.1.1.tgz#a80e538483863850f94828a4698b2ed328f17662"
   dependencies:
     eslint "^5.4.0"
     nanolru "^1.0.0"

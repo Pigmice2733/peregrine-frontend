@@ -23,7 +23,7 @@
     "eslint-plugin-react": "7.11.1",
     "eslint-plugin-typescript": "0.12.0",
     "eslint-plugin-unicorn": "6.0.1",
-    "eslint_d": "7.1.0",
+    "eslint_d": "7.1.1",
     "postcss-nesting": "^7.0.0",
     "rollup": "^0.65.0",
     "rollup-plugin-netlify-optimize": "^0.0.12",
