@@ -17,7 +17,7 @@
     "eslint-import-resolver-typescript": "1.0.2",
     "eslint-plugin-array-func": "3.0.0",
     "eslint-plugin-import": "2.14.0",
-    "eslint-plugin-jest": "21.22.1",
+    "eslint-plugin-jest": "21.23.0",
     "eslint-plugin-jsx-a11y": "6.1.1",
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-react": "7.11.1",
