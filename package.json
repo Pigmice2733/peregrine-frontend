@@ -4,9 +4,6 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
-  "eslintIgnore": [
-    "/dist"
-  ],
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
@@ -14,7 +11,8 @@
     "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore '**/*.{j,t}s{x,}'",
     "type:watch": "tsc --noEmit --pretty --watch",
     "type": "tsc --noEmit --pretty",
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "build": "node build.js"
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +39,9 @@
       "**/?(*.)+(spec|test).(j|t)s?(x)"
     ]
   },
+  "browserslist": [
+    ">3%"
+  ],
   "devDependencies": {
     "@babel/core": "7.1.2",
     "@babel/plugin-proposal-class-properties": "7.1.0",
@@ -48,6 +49,7 @@
     "@types/jest": "23.3.2",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "23.6.0",
+    "babel-plugin-transform-inline-environment-variables": "^0.4.3",
     "eslint": "5.6.1",
     "eslint-plugin-caleb": "1.7.0",
     "jest": "23.6.0",
@@ -56,6 +58,14 @@
     "postcss-nesting": "^7.0.0",
     "preact-testing-library": "0.2.1",
     "prettier": "1.14.3",
+    "rollup": "^0.66.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-postcss": "^1.6.2",
+    "rollup-plugin-terser": "^3.0.0",
     "typescript": "3.1.1"
+  },
+  "engines": {
+    "node": "10"
   }
 }

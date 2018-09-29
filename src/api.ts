@@ -28,7 +28,7 @@ const processResponse = <T extends any>(
 
 const getRequest = <T extends any>(
   path: string,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ) =>
   fetch(apiUrl + path)
     .then(d => d.json() as Promise<PeregrineResponse<T>>)
@@ -36,28 +36,28 @@ const getRequest = <T extends any>(
 
 const deleteRequest = <T extends any>(
   path: string,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const putRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const patchRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const postRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 

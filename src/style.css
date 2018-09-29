@@ -9,7 +9,3 @@ body {
   color: #333;
   font-family: 'roboto', sans-serif;
 }
-
-:global #app {
-  height: 100vh;
-}
