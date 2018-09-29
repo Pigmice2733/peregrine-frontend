@@ -1,5 +1,5 @@
 import LoadData from '.'
-import { render, cleanup, waitForElement } from 'preact-testing-library'
+import { render, cleanup, wait } from 'preact-testing-library'
 import { h } from 'preact'
 
 afterEach(cleanup)
@@ -22,7 +22,7 @@ test('resolving promise', async () => {
 </h1>
 `)
   resolveData('HIYA')
-  await waitForElement(() => getByTestId('data'))
+  await wait(() => getByTestId('data'))
   expect(container.firstElementChild).toMatchInlineSnapshot(`
 <pre
   data-testid="data"
@@ -54,12 +54,12 @@ test('rejecting promise', async () => {
 </div>
 `)
   rejectData({ message: 'asdf' })
-  await waitForElement(() => getByTestId('error'))
+  await wait(() => getByTestId('error'))
   expect(container.firstElementChild).toMatchInlineSnapshot(`
 <div
   data-testid="error"
 >
-  <undefined />
+  asdf
 </div>
 `)
 })

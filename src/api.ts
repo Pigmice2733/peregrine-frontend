@@ -9,8 +9,11 @@ type PeregrineResponse<T> =
       }
     }
 
-// const apiUrl = 'https://api.pigmice.ga:8081/'
-const apiUrl = 'http://localhost:2345/'
+const apiUrl =
+  process.env.PEREGRINE_API_URL ||
+  (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
+    ? 'https://api.peregrine.ga:8081'
+    : 'https://edge.api.peregrine.ga:8081'
 
 const processResponse = <T extends any>(
   d: PeregrineResponse<T>,
