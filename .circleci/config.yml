@@ -1,26 +1,71 @@
 version: 2
+
+defaults: &defaults
+  docker:
+    - image: circleci/node:latest
+  working_directory: ~/project/home
+
+attach_workspace: &attach_workspace
+  attach_workspace:
+    at: ~/project
+
+persist_to_workspace: &persist_to_workspace
+  persist_to_workspace:
+    root: ~/project
+    paths:
+      - home
+
 jobs:
-  build:
-    docker:
-      - image: circleci/node:9
-
-    working_directory: ~/repo
-
+  install:
+    <<: *defaults
     steps:
       - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - run: yarn greenkeeper-lockfile-update
-      - run: yarn type
-      - run: yarn test
-      - run: yarn build
-      - run: yarn greenkeeper-lockfile-upload
+      - *attach_workspace
+      - run:
+          name: Install Dependencies
+          command: npm ci
+      - *persist_to_workspace
 
+  lint:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run: npm run lint
+
+  type:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run: npm run type
+
+  test:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run: npm test
+
+  build:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - run: npm run build
+      - store_artifacts:
+          path: dist
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - type:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - install

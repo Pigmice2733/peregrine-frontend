@@ -9,13 +9,27 @@ type PeregrineResponse<T> =
       }
     }
 
+// const apiUrl = 'https://api.pigmice.ga:8081/'
+const apiUrl = 'http://localhost:2345/'
+
+const processResponse = <T extends any>(
+  d: PeregrineResponse<T>,
+): Promise<T> => {
+  if ('error' in d) {
+    return Promise.reject(d.error)
+  }
+  return Promise.resolve(d.data)
+}
+
 // Webhook but only for ranking points and match score
 
 const getRequest = <T extends any>(
   path: string,
   { authenticated = false }: { authenticated?: boolean } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+) =>
+  fetch(apiUrl + path)
+    .then(d => d.json() as Promise<PeregrineResponse<T>>)
+    .then(processResponse)
 
 const deleteRequest = <T extends any>(
   path: string,
@@ -45,6 +59,7 @@ const postRequest = <T extends any>(
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 export interface BasicEventInfo {
+  id: string
   // from TBA short name
   name: string
   district?: string
@@ -146,17 +161,17 @@ type GraphableField = {
   match: string
 } & (NumberField | BooleanField)
 
+type EventKey = {
+  // 2018orwil
+  eventKey: string
+}
+
 type TeamTeleopStats = (EventKey & GraphableField)[]
 type TeamAutoStats = ({
   modeName: string
   // in order by match time
   stats: (EventKey & GraphableField)[]
 })[]
-
-type EventKey = {
-  // 2018orwil
-  eventKey: string
-}
 
 type EventTeamTeleopStats = GraphableField[]
 type EventTeamAutoStats = ({
