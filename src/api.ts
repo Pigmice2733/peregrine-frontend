@@ -45,6 +45,7 @@ const postRequest = <T extends any>(
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 export interface BasicEventInfo {
+  key: string
   // from TBA short name
   name: string
   district?: string
