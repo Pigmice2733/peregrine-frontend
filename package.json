@@ -40,5 +40,20 @@
     "testMatch": [
       "**/?(*.)+(spec|test).(j|t)s?(x)"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/jest": "^23.3.2",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "eslint": "^5.6.1",
+    "eslint-plugin-caleb": "^1.6.0",
+    "jest": "^23.6.0",
+    "parcel-bundler": "^1.10.1",
+    "postcss-modules": "^1.4.1",
+    "preact-testing-library": "^0.2.1",
+    "typescript": "^3.1.1"
   }
 }
