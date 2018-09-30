@@ -1,25 +1,16 @@
 import { h, render } from 'preact'
-import { Router } from 'preact-router'
-import AsyncRoute from 'preact-async-route'
-import './style.css'
-
-const def = (m: any) => m.default
+import { Router, Route } from 'preact-router'
+import Home from './routes/home'
+import './style'
 
 const App = () => (
   <Router>
-    <AsyncRoute
-      path="/"
-      getComponent={() => import('./routes/home').then(def)}
-    />
-    <AsyncRoute
-      path="/event/:eventKey/info"
-      getComponent={() => import('./routes/event-info').then(def)}
-    />
+    <Route path="/" component={Home} />
   </Router>
 )
 
-render(
-  <App />,
-  document.body,
-  document.getElementById('prerender') || undefined,
-)
+while (document.body.lastChild) {
+  document.body.removeChild(document.body.lastChild)
+}
+
+render(<App />, document.body, document.body.lastElementChild || undefined)

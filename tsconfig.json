@@ -12,6 +12,7 @@
     "module": "commonjs",
     "target": "ESNext",
     "sourceMap": true,
+    "noUnusedLocals": true,
     "baseUrl": "./src",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true

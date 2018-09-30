@@ -9,38 +9,55 @@ type PeregrineResponse<T> =
       }
     }
 
+const apiUrl =
+  process.env.PEREGRINE_API_URL ||
+  (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
+    ? 'https://api.peregrine.ga:8081'
+    : 'https://edge.api.peregrine.ga:8081'
+
+const processResponse = <T extends any>(
+  d: PeregrineResponse<T>,
+): Promise<T> => {
+  if ('error' in d) {
+    return Promise.reject(d.error)
+  }
+  return Promise.resolve(d.data)
+}
+
 // Webhook but only for ranking points and match score
 
 const getRequest = <T extends any>(
   path: string,
-  { authenticated = false }: { authenticated?: boolean } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  { authenticated = false } = {},
+) =>
+  fetch(apiUrl + path)
+    .then(d => d.json() as Promise<PeregrineResponse<T>>)
+    .then(processResponse)
 
 const deleteRequest = <T extends any>(
   path: string,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const putRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const patchRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 const postRequest = <T extends any>(
   path: string,
   data: any,
-  { authenticated = false }: { authenticated?: boolean } = {},
+  { authenticated = false } = {},
 ): Promise<PeregrineResponse<T>> =>
   fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
@@ -147,17 +164,17 @@ type GraphableField = {
   match: string
 } & (NumberField | BooleanField)
 
+type EventKey = {
+  // 2018orwil
+  eventKey: string
+}
+
 type TeamTeleopStats = (EventKey & GraphableField)[]
 type TeamAutoStats = ({
   modeName: string
   // in order by match time
   stats: (EventKey & GraphableField)[]
 })[]
-
-type EventKey = {
-  // 2018orwil
-  eventKey: string
-}
 
 type EventTeamTeleopStats = GraphableField[]
 type EventTeamAutoStats = ({
