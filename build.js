@@ -16,7 +16,7 @@ async function build() {
   const htmlSrc = await readFileAsync('index.html', 'utf8')
   const htmlOut = htmlSrc
     .replace(config.input, '/' + relative(outDir, config.output.file))
-    .replace('</body>', '<link rel="stylesheet" href="/style.css">\n</body>')
+    .replace('</head>', '<link rel="stylesheet" href="/style.css">\n</head>')
   await writeFileAsync(join(outDir, 'index.html'), htmlOut)
 }
 
