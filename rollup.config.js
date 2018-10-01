@@ -5,8 +5,6 @@ const postcss = require('rollup-plugin-postcss')
 const postcssConfig = require('./postcss.config')
 const cssModulesConfig = postcssConfig.plugins['postcss-modules']
 
-console.log(postcssConfig)
-
 const extensions = ['.js', '.jsx', '.es6', '.es', '.mjs', '.ts', '.tsx', '.css']
 
 module.exports = {

@@ -19,7 +19,8 @@ module.exports = {
           .update(prod ? local + path : path)
           .digest('hex')
           .substr(0, prod ? 7 : 5)
-        return prod ? h : `${local}-${h}`
+        // we must start with an underscore, otherwise it might start with a number
+        return prod ? '_' + h : `${local}-${h}`
       },
     },
     'postcss-preset-env': {
