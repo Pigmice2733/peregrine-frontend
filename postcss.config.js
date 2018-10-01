@@ -2,9 +2,17 @@ const { createHash } = require('crypto')
 
 const prod = process.env.NODE_ENV === 'production'
 
+const variables = {
+  '--pigmice-purple': '#800080',
+  '--light-grey': '#E8E8E8',
+}
+
 module.exports = {
   modules: true,
   plugins: {
+    'postcss-nesting': {},
+    'postcss-css-variables': { variables },
+    'postcss-calc': {},
     'postcss-modules': {
       generateScopedName: (local, path) => {
         const h = createHash('md5')
@@ -14,6 +22,11 @@ module.exports = {
         return prod ? h : `${local}-${h}`
       },
     },
-    'postcss-nesting': {},
+    'postcss-preset-env': {
+      stage: 3,
+      features: {
+        'custom-properties': false,
+      },
+    },
   },
 }

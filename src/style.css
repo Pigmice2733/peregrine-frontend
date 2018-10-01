@@ -4,8 +4,34 @@
   box-sizing: border-box;
 }
 
+html {
+  --min-screen: 300;
+  --min-screen-px: 300px;
+  --max-screen: 1000;
+  --min-size: 15;
+  --min-size-px: 15px;
+  --max-size: 18;
+  --max-size-px: 18px;
+  --size-diff: (var(--max-size) - var(--min-size));
+  --screen-diff: (var(--max-screen) - var(--min-screen));
+
+  font-size: calc(
+    var(--min-size-px) + var(--size-diff) * (100vw - var(--min-screen-px)) /
+      var(--screen-diff)
+  );
+
+  @media screen and (width < 300px) {
+    font-size: var(--min-size-px);
+  }
+
+  @media screen and (width > 1000px) {
+    font-size: var(--max-size-px);
+  }
+}
+
 body {
   margin: 0;
   color: #333;
   font-family: 'roboto', sans-serif;
+  background: var(--light-grey);
 }

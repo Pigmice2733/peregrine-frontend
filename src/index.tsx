@@ -14,3 +14,5 @@ while (document.body.lastChild) {
 }
 
 render(<App />, document.body, document.body.lastElementChild || undefined)
+
+require('preact/devtools')
