@@ -1,17 +1,14 @@
 type PeregrineResponse<T> =
   | {
-      data: Readonly<T>
-    }
+    data: Readonly<T>
+  }
   | {
-      error: {
-        message: string
-        code: number
-      }
-    }
+    error: string
+  }
 
 const apiUrl =
   process.env.PEREGRINE_API_URL ||
-  (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
+    (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
     ? 'https://api.peregrine.ga:8081'
     : 'https://edge.api.peregrine.ga:8081'
 
@@ -279,21 +276,17 @@ export const getSchema = () => getRequest<Schema>(`/schema`)
 
 interface EditableUser {
   username: string
-  firstname: string
-  lastname: string
+  firstName: string
+  lastName: string
   password: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+  roles: string[]
 }
 
 interface UserInfo {
   username: string
-  firstname: string
-  lastname: string
-  admin?: true
-  verified: boolean
+  firstName: string
+  lastName: string
+  roles: string[]
 }
 
 // Anyone can create a user. For admins the users will be verified automatically
@@ -320,4 +313,4 @@ export const deleteUser = (userId: number) =>
 
 // Response is the JWT
 export const authenticate = (username: string, password: string) =>
-  postRequest<string>(`/authenticate`, { username, password })
+  postRequest<{ jwt: string }>(`/authenticate`, { username, password })
