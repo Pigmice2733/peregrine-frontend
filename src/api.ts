@@ -211,7 +211,7 @@ interface EventTeamInfo {
   nextMatch?: MatchInfo
   rank: number
   // ranking score
-  rankingScore: number
+  rankingScore?: number
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
