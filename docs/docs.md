@@ -311,7 +311,7 @@ type Data = {
   }
   rank: number
   // ranking score
-  rankingScore: number
+  rankingScore?: number
 }
 ```
 
