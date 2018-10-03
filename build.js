@@ -5,6 +5,7 @@ const { promisify } = require('util')
 const readFileAsync = promisify(readFile)
 const writeFileAsync = promisify(writeFile)
 const { join, relative } = require('path')
+const cpy = require('cpy')
 
 const outDir = 'dist'
 
@@ -18,6 +19,7 @@ async function build() {
     .replace(config.input, '/' + relative(outDir, config.output.file))
     .replace('</head>', '<link rel="stylesheet" href="/style.css">\n</head>')
   await writeFileAsync(join(outDir, 'index.html'), htmlOut)
+  await cpy('_redirects', outDir)
 }
 
 build()
