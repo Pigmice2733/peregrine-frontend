@@ -309,9 +309,8 @@ type Data = {
     redScore?: number
     blueScore?: number
   }
-  rank: number
-  // ranking score
-  rankingScore: number
+  rank?: number
+  rankingScore?: number
 }
 ```
 
