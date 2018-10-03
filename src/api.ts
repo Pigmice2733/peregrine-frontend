@@ -209,9 +209,8 @@ export const getEventMatchStats = (eventKey: string, matchKey: string) =>
 interface EventTeamInfo {
   // only if they have future matches at this event
   nextMatch?: MatchInfo
-  rank: number
-  // ranking score
-  rankingScore: number
+  rank?: number
+  rankingScore?: number
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
