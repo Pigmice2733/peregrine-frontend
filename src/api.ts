@@ -1,14 +1,14 @@
 type PeregrineResponse<T> =
   | {
-    data: Readonly<T>
-  }
+      data: Readonly<T>
+    }
   | {
-    error: string
-  }
+      error: string
+    }
 
 const apiUrl =
   process.env.PEREGRINE_API_URL ||
-    (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
+  (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
     ? 'https://api.peregrine.ga:8081'
     : 'https://edge.api.peregrine.ga:8081'
 
