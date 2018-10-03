@@ -210,7 +210,6 @@ interface EventTeamInfo {
   // only if they have future matches at this event
   nextMatch?: MatchInfo
   rank?: number
-  // ranking score
   rankingScore?: number
 }
 

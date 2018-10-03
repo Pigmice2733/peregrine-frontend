@@ -310,7 +310,6 @@ type Data = {
     blueScore?: number
   }
   rank?: number
-  // ranking score
   rankingScore?: number
 }
 ```
