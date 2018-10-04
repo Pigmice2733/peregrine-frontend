@@ -276,23 +276,24 @@ interface Schema {
 
 export const getSchema = () => getRequest<Schema>(`/schema`)
 
+interface Roles {
+  isAdmin: boolean
+  isVerified: boolean
+}
+
 interface EditableUser {
   username: string
   firstname: string
   lastname: string
   password: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+  roles: Roles
 }
 
 interface UserInfo {
   username: string
   firstname: string
   lastname: string
-  admin?: true
-  verified: boolean
+  roles: Roles
 }
 
 // Anyone can create a user. For admins the users will be verified automatically
