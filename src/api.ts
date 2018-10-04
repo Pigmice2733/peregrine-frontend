@@ -310,6 +310,5 @@ export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`/users/${userId}`)
 
-// Response is the JWT
 export const authenticate = (username: string, password: string) =>
   postRequest<{ jwt: string }>(`/authenticate`, { username, password })
