@@ -9,11 +9,12 @@ interface Props {
     week?: number
     startDate: string
   }
+  href?: string
   key?: string
 }
 
-const EventCard = ({ event }: Props) => (
-  <div class={style.eventCard}>
+const EventCard = ({ event, href }: Props) => (
+  <a href={href} class={style.eventCard}>
     <span class={style.name}>{event.name}</span>
     {event.district !== undefined && <Chip>{event.district}</Chip>}
     {event.week === undefined ? (
@@ -21,7 +22,7 @@ const EventCard = ({ event }: Props) => (
     ) : (
       <Chip>{`Wk ${event.week + 1}`}</Chip>
     )}
-  </div>
+  </a>
 )
 
 export default EventCard

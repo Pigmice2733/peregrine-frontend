@@ -98,7 +98,7 @@ interface EventInfo extends BasicEventInfo {
 export const getEventInfo = (eventKey: string) =>
   getRequest<EventInfo>(`/event/${eventKey}/info`)
 
-interface MatchInfo {
+export interface MatchInfo {
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - match predicted time
@@ -110,7 +110,7 @@ interface MatchInfo {
 }
 
 export const getEventMatches = (eventKey: string) =>
-  getRequest<MatchInfo[]>(`/event/${eventKey}/matches`)
+  getRequest<MatchInfo[]>(`/events/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
   getRequest<MatchInfo>(`/event/${eventKey}/match/${matchKey}/info`)
