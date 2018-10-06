@@ -1,23 +1,40 @@
-import { formatTeamNumber, formatTime } from '.'
+import { formatTeamNumber, formatTime, formatMatchName } from '.'
 
 describe('formatTeamNumber', () => {
-  test('works with a string', () => {
+  it('works with a string', () => {
     expect(formatTeamNumber('frc2733')).toEqual(2733)
   })
 
-  test('returns NaN with an invalid string', () => {
+  it('returns NaN with an invalid string', () => {
     expect(formatTeamNumber('273frc3')).toBeNaN()
   })
 })
 
 describe('formatTime', () => {
-  test('works with a string', () => {
-    expect(formatTime('2018-04-19T19:37:49Z')).toEqual('7:37')
+  it('works with a string', () => {
+    expect(formatTime('2018-04-19T19:37:49Z')).toEqual('12:37 PM')
   })
 })
 
 describe('formatMatchKey', () => {
-  test('works with qualification match', () => {
-    expect(formatTeamNumber('qm10')).toEqual('Qual ')
+  it('should format a qualification match', () => {
+    expect(formatMatchName('qm10')).toEqual('Qual 10')
+  })
+  it('should format a eighths match', () => {
+    expect(formatMatchName('ef8m2')).toEqual('Eighths 8 Match 2')
+  })
+  it('should format a quarters match', () => {
+    expect(formatMatchName('qf3m1')).toEqual('Quarters 3 Match 1')
+  })
+  it('should format a semis match', () => {
+    expect(formatMatchName('sf2m3')).toEqual('Semis 2 Match 3')
+  })
+  it('should format a finals match', () => {
+    expect(formatMatchName('f1m2')).toEqual('Finals 1 Match 2')
+  })
+  it('should throw if it does not end with a number', () => {
+    expect(() => formatMatchName('asdf')).toThrowError(
+      /Expected asdf to end in a digit/,
+    )
   })
 })

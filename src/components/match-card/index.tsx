@@ -1,15 +1,16 @@
 import { h } from 'preact'
 import { MatchInfo } from '../../api'
-import { formatTeamNumber } from '../../utils'
+import { formatTeamNumber, formatMatchName, formatTime } from '../../utils'
+import style from './style.css'
 
 interface MatchCardProps {
   match: MatchInfo
 }
 
 export const MatchCard = ({ match }: MatchCardProps) => (
-  <div>
-    <h1>{match.key}</h1>
-    <h2>{match.time}</h2>
+  <div class={style.matchCard}>
+    <h1>{formatMatchName(match.key.replace(/^.*_/, ''))}</h1>
+    <h2>{formatTime(match.time)}</h2>
     <h2 style={{ color: 'red' }}>
       {match.redAlliance.map(formatTeamNumber).join(' ')}
     </h2>
