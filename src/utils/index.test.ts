@@ -15,3 +15,9 @@ describe('formatTime', () => {
     expect(formatTime('2018-04-19T19:37:49Z')).toEqual('7:37')
   })
 })
+
+describe('formatMatchKey', () => {
+  test('works with qualification match', () => {
+    expect(formatTeamNumber('qm10')).toEqual('Qual ')
+  })
+})
