@@ -199,25 +199,6 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/matches`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  redAlliance: string[]
-  blueAlliance: string[]
-  // UTC date - match predicted time
-  time: string
-  // example: qm3
-  key: string
-  redScore?: number
-  blueScore?: number
-}[]
-```
-
 # `/event/{eventKey}/star`
 
 ## `PUT`
@@ -374,6 +355,25 @@ type Data = (
 
 ```ts
 type Data = string[]
+```
+
+# `/events/{eventKey}/matches`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  redAlliance: string[]
+  blueAlliance: string[]
+  // UTC date - match predicted time
+  time: string
+  // example: qm3
+  key: string
+  redScore?: number
+  blueScore?: number
+}[]
 ```
 
 # `/events`
