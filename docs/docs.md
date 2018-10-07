@@ -2,8 +2,6 @@
 
 ## `POST`
 
-Response is the JWT
-
 ### Request
 
 ```ts
@@ -17,7 +15,9 @@ type Data = {
 ### Response
 
 ```ts
-type Data = string
+type Data = {
+  jwt: string
+}
 ```
 
 # `/event/{eventKey}/info`
@@ -514,10 +514,12 @@ Anyone can view any user
 ```ts
 type Data = {
   username: string
-  firstname: string
-  lastname: string
-  admin?: true
-  verified: boolean
+  firstName: string
+  lastName: string
+  roles: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
 }
 ```
 
@@ -531,14 +533,15 @@ Only admins can modify other users
 
 ```ts
 type Data = {
-  username?: string
-  firstname?: string
-  lastname?: string
   password?: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+  // Only admins can set roles, and they can do so for any user
+  roles?: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
+  username?: string
+  firstName?: string
+  lastName?: string
 }
 ```
 
@@ -573,14 +576,15 @@ will require admin approval
 
 ```ts
 type Data = {
-  username: string
-  firstname: string
-  lastname: string
   password: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+  // Only admins can set roles, and they can do so for any user
+  roles: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
+  username: string
+  firstName: string
+  lastName: string
 }
 ```
 
@@ -601,9 +605,11 @@ Anyone can view the list of users
 ```ts
 type Data = {
   username: string
-  firstname: string
-  lastname: string
-  admin?: true
-  verified: boolean
+  firstName: string
+  lastName: string
+  roles: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
 }[]
 ```

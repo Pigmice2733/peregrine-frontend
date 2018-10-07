@@ -278,18 +278,16 @@ interface Roles {
   isVerified: boolean
 }
 
-interface EditableUser {
-  username: string
-  firstName: string
-  lastName: string
-  password: string
-  roles: Roles
-}
-
 interface UserInfo {
   username: string
   firstName: string
   lastName: string
+  roles: Roles
+}
+
+interface EditableUser extends UserInfo {
+  password: string
+  // Only admins can set roles, and they can do so for any user
   roles: Roles
 }
 
