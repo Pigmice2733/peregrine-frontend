@@ -3,10 +3,7 @@ type PeregrineResponse<T> =
       data: Readonly<T>
     }
   | {
-      error: {
-        message: string
-        code: number
-      }
+      error: string
     }
 
 const apiUrl =
@@ -276,23 +273,22 @@ interface Schema {
 
 export const getSchema = () => getRequest<Schema>(`/schema`)
 
-interface EditableUser {
-  username: string
-  firstname: string
-  lastname: string
-  password: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+interface Roles {
+  isAdmin: boolean
+  isVerified: boolean
 }
 
 interface UserInfo {
   username: string
-  firstname: string
-  lastname: string
-  admin?: true
-  verified: boolean
+  firstName: string
+  lastName: string
+  roles: Roles
+}
+
+interface EditableUser extends UserInfo {
+  password: string
+  // Only admins can set roles, and they can do so for any user
+  roles: Roles
 }
 
 // Anyone can create a user. For admins the users will be verified automatically
@@ -317,6 +313,5 @@ export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`/users/${userId}`)
 
-// Response is the JWT
 export const authenticate = (username: string, password: string) =>
-  postRequest<string>(`/authenticate`, { username, password })
+  postRequest<{ jwt: string }>(`/authenticate`, { username, password })
