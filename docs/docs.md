@@ -209,7 +209,7 @@ type Data = {
 type Data = {
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC Date - scheduled match time
   time: string
   // example: qm3
   key: string

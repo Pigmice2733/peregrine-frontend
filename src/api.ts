@@ -112,7 +112,7 @@ interface MatchInfo {
 export const createEventMatch = (
   eventKey: string,
   match: MatchInfo & {
-    // scheduled match time
+    // UTC Date - scheduled match time
     time: string
   },
 ) => putRequest<null>(`/event/${eventKey}/matches`, match)
