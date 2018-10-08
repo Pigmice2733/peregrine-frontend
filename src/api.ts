@@ -74,6 +74,8 @@ export interface BasicEventInfo {
   }
 }
 
+export const createEvent = (event: EventInfo) => putRequest<null>(`/events`, event)
+
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
 // Only authenticated users can star events
@@ -105,6 +107,9 @@ interface MatchInfo {
   redScore?: number
   blueScore?: number
 }
+
+export const createEventMatch = (eventKey: string, match: MatchInfo) =>
+  putRequest<null>(`/event/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
   getRequest<MatchInfo[]>(`/event/${eventKey}/matches`)
