@@ -203,6 +203,8 @@ type Data = {
 
 ## `PUT`
 
+Only admins can create matches
+
 ### Request
 
 ```ts
@@ -404,6 +406,8 @@ type Data = string[]
 # `/events`
 
 ## `PUT`
+
+Only admins can create events
 
 ### Request
 

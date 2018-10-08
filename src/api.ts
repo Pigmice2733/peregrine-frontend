@@ -74,6 +74,7 @@ export interface BasicEventInfo {
   }
 }
 
+// Only admins can create events
 export const createEvent = (event: EventInfo) =>
   putRequest<null>(`/events`, event)
 
@@ -109,6 +110,7 @@ interface MatchInfo {
   blueScore?: number
 }
 
+// Only admins can create matches
 export const createEventMatch = (
   eventKey: string,
   match: MatchInfo & {
