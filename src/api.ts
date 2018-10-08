@@ -74,7 +74,8 @@ export interface BasicEventInfo {
   }
 }
 
-export const createEvent = (event: EventInfo) => putRequest<null>(`/events`, event)
+export const createEvent = (event: EventInfo) =>
+  putRequest<null>(`/events`, event)
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
@@ -108,8 +109,13 @@ interface MatchInfo {
   blueScore?: number
 }
 
-export const createEventMatch = (eventKey: string, match: MatchInfo) =>
-  putRequest<null>(`/event/${eventKey}/matches`, match)
+export const createEventMatch = (
+  eventKey: string,
+  match: MatchInfo & {
+    // scheduled match time
+    time: string
+  },
+) => putRequest<null>(`/event/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
   getRequest<MatchInfo[]>(`/event/${eventKey}/matches`)
