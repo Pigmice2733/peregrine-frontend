@@ -9,13 +9,17 @@ interface MatchCardProps {
 
 export const MatchCard = ({ match }: MatchCardProps) => (
   <div class={style.matchCard}>
-    <h1>{formatMatchName(match.key.replace(/^.*_/, ''))}</h1>
-    <h2>{formatTime(match.time)}</h2>
-    <h2 style={{ color: 'red' }}>
-      {match.redAlliance.map(formatTeamNumber).join(' ')}
-    </h2>
-    <h2 style={{ color: 'blue' }}>
-      {match.blueAlliance.map(formatTeamNumber).join(' ')}
-    </h2>
+    <div>{formatMatchName(match.key)}</div>
+    <time dateTime={match.time}>{formatTime(match.time)}</time>
+    <div class={`${style.red} ${style.alliance}`}>
+      {match.redAlliance.map(t => (
+        <div key={t}>{formatTeamNumber(t)}</div>
+      ))}
+    </div>
+    <div class={`${style.blue} ${style.alliance}`}>
+      {match.blueAlliance.map(t => (
+        <div key={t}>{formatTeamNumber(t)}</div>
+      ))}
+    </div>
   </div>
 )

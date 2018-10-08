@@ -1,3 +1,50 @@
 .matchCard {
+  margin: 1.2rem auto;
+  border-radius: 0.3rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   background: white;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+  font-size: 0.93rem;
+  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  grid-template-rows: 50% 50%;
+  overflow: hidden;
+
+  & > :first-child,
+  & > time {
+    grid-row: span 2;
+    padding: 0.8rem;
+  }
+  & > :first-child {
+    place-self: center start;
+    font-weight: bold;
+  }
+  & > time {
+    place-self: center end;
+  }
+}
+
+.alliance {
+  grid-column: 3;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+  justify-content: space-evenly;
+  align-items: center;
+  align-self: stretch;
+
+  & > div {
+    padding: 0.35rem;
+  }
+}
+
+.red {
+  background-color: var(--alliance-red);
+}
+
+.blue {
+  background-color: var(--alliance-blue);
 }

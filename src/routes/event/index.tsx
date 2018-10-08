@@ -12,15 +12,11 @@ const Event = ({ eventKey }: EventProps) => (
   <Page name="Home">
     <LoadData
       data={{ matches: () => getEventMatches(eventKey) }}
-      renderSuccess={({ matches }) => {
-        console.log(matches)
-        return (
-          <div>
-            Hello {eventKey}
-            {matches && matches.map(m => <MatchCard match={m} />)}
-          </div>
-        )
-      }}
+      renderSuccess={({ matches }) => (
+        <div>
+          {matches && matches.map(m => <MatchCard key={m.key} match={m} />)}
+        </div>
+      )}
       renderError={({}) => <h1 />}
     />
   </Page>
