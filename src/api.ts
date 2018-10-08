@@ -74,6 +74,10 @@ export interface BasicEventInfo {
   }
 }
 
+// Only admins can create events
+export const createEvent = (event: EventInfo) =>
+  putRequest<null>(`/events`, event)
+
 export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
 
 // Only authenticated users can star events
@@ -105,6 +109,15 @@ interface MatchInfo {
   redScore?: number
   blueScore?: number
 }
+
+// Only admins can create matches
+export const createEventMatch = (
+  eventKey: string,
+  match: MatchInfo & {
+    // UTC Date - scheduled match time
+    time: string
+  },
+) => putRequest<null>(`/event/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
   getRequest<MatchInfo[]>(`/event/${eventKey}/matches`)
