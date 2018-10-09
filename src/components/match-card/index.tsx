@@ -5,6 +5,7 @@ import style from './style.css'
 
 interface MatchCardProps {
   match: MatchInfo
+  key?: string | number
 }
 
 export const MatchCard = ({ match }: MatchCardProps) => (

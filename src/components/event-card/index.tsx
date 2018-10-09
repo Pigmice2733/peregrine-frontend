@@ -10,7 +10,7 @@ interface Props {
     startDate: string
   }
   href?: string
-  key?: string
+  key?: string | number
 }
 
 const EventCard = ({ event, href }: Props) => (

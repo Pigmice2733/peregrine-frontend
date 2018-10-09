@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import LoadData from '../../load-data'
 import Page from '../../components/page'
-import { getEventMatches } from '../../api'
+import { getEventMatches, getEventInfo } from '../../api'
 import { MatchCard } from '../../components/match-card'
 
 interface EventProps {
@@ -9,17 +9,20 @@ interface EventProps {
 }
 
 const Event = ({ eventKey }: EventProps) => (
-  <Page name="Home">
-    <LoadData
-      data={{ matches: () => getEventMatches(eventKey) }}
-      renderSuccess={({ matches }) => (
+  <LoadData
+    data={{
+      matches: () => getEventMatches(eventKey),
+      eventInfo: () => getEventInfo(eventKey),
+    }}
+    renderSuccess={({ matches, eventInfo }) => (
+      <Page name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}>
         <div>
           {matches && matches.map(m => <MatchCard key={m.key} match={m} />)}
         </div>
-      )}
-      renderError={({}) => <h1 />}
-    />
-  </Page>
+      </Page>
+    )}
+    renderError={({}) => <h1 />}
+  />
 )
 
 export default Event

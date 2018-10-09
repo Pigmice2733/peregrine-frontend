@@ -4,7 +4,7 @@ import { menu } from '../../icons'
 import Icon from '../../components/icon'
 
 interface Props {
-  name: string
+  name: string | JSX.Element
   children: ComponentChildren
 }
 
