@@ -199,6 +199,34 @@ type Data = {
 }[]
 ```
 
+# `/event/{eventKey}/matches`
+
+## `PUT`
+
+Only admins can create matches
+
+### Request
+
+```ts
+type Data = {
+  redAlliance: string[]
+  blueAlliance: string[]
+  // UTC Date - scheduled match time
+  time: string
+  // example: qm3
+  key: string
+  redScore?: number
+  blueScore?: number
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
 # `/event/{eventKey}/star`
 
 ## `PUT`
@@ -377,6 +405,43 @@ type Data = {
 ```
 
 # `/events`
+
+## `PUT`
+
+Only admins can create events
+
+### Request
+
+```ts
+type Data = {
+  webcasts: {
+    type: "twitch" | "youtube"
+    url: string
+  }[]
+  location: {
+    name: string
+    lat: number
+    lon: number
+  }
+  key: string
+  // from TBA short name
+  name: string
+  district?: string
+  week?: number
+  // UTC date
+  startDate: string
+  // UTC date
+  endDate: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
 
 ## `GET`
 
