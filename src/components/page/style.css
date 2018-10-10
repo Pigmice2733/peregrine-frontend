@@ -9,7 +9,7 @@
     height: var(--header-height);
     width: 100%;
     background: var(--pigmice-purple);
-    font-weight: bold;
+    font-weight: 500;
     color: white;
     display: flex;
     flex-direction: row;

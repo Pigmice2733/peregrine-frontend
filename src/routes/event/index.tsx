@@ -4,11 +4,11 @@ import Page from '../../components/page'
 import { getEventMatches, getEventInfo } from '../../api'
 import { MatchCard } from '../../components/match-card'
 
-interface EventProps {
+interface Props {
   eventKey: string
 }
 
-const Event = ({ eventKey }: EventProps) => (
+const Event = ({ eventKey }: Props) => (
   <LoadData
     data={{
       matches: () => getEventMatches(eventKey),
@@ -21,7 +21,7 @@ const Event = ({ eventKey }: EventProps) => (
         </div>
       </Page>
     )}
-    renderError={({}) => <h1 />}
+    renderError={({ matches }) => <h1>Error loading</h1>}
   />
 )
 

@@ -23,7 +23,7 @@
 }
 
 .matchTitle {
-  font-weight: bold;
+  font-weight: 500;
   grid-row: span 2;
 
   & > * {
@@ -43,7 +43,7 @@
 .alliance {
   grid-column: 3;
   color: white;
-  font-weight: bold;
+  font-weight: 500;
   display: flex;
   justify-content: space-around;
   justify-content: space-evenly;
