@@ -21,7 +21,7 @@ const Event = ({ eventKey }: Props) => (
         </div>
       </Page>
     )}
-    renderError={({ matches }) => <h1>Error loading</h1>}
+    renderError={({ matches }) => <h1>Error loading matches: {matches}</h1>}
   />
 )
 
