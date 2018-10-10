@@ -9,22 +9,35 @@
   align-items: center;
   display: grid;
   grid-template-columns: 1fr 1fr auto;
-  grid-template-rows: auto auto;
   overflow: hidden;
 
-  & > :first-child,
+  & > *:not(.alliance) {
+    margin: 0.5rem;
+  }
+
   & > time {
     grid-row: span 2;
-    padding: 0.8rem;
-  }
-  & > :first-child {
-    place-self: center start;
-    font-weight: bold;
-  }
-  & > time {
     place-self: center end;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--grey-text);
   }
+}
+
+.matchTitle {
+  font-weight: bold;
+  grid-row: span 2;
+
+  & > * {
+    margin: 0.4rem;
+  }
+}
+
+.matchNum {
+  grid-row: 2;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.8rem;
+  font-family: 'Roboto Condensed', 'Roboto';
+  color: var(--grey-text);
 }
 
 .alliance {

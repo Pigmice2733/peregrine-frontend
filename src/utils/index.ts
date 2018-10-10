@@ -29,7 +29,7 @@ export const formatMatchName = (key: string) => {
   }
   let groupNum = key.match(/(\d+)m\d+$/)
   if (groupNum) {
-    return `${matchType} ${groupNum[1]} Match ${matchNum[1]}`
+    return { group: `${matchType} ${groupNum[1]}`, num: matchNum[1] }
   }
-  return `${matchType} ${matchNum[1]}`
+  return { group: `${matchType} ${matchNum[1]}` }
 }
