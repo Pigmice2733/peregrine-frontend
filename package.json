@@ -57,7 +57,7 @@
     "parcel-bundler": "1.10.2",
     "postcss": "^7.0.4",
     "postcss-calc": "^6.0.2",
-    "postcss-css-variables": "^0.10.0",
+    "postcss-css-variables": "^0.11.0",
     "postcss-import": "^12.0.0",
     "postcss-modules": "1.4.1",
     "postcss-preset-env": "^6.0.7",
