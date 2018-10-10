@@ -45,6 +45,7 @@
   color: white;
   font-weight: 500;
   display: flex;
+  min-width: 10em;
   justify-content: space-around;
   justify-content: space-evenly;
   align-items: center;
