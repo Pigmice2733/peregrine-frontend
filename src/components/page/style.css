@@ -19,5 +19,9 @@
     & svg {
       margin: 0.6rem;
     }
+
+    & > * {
+      display: flex;
+    }
   }
 }

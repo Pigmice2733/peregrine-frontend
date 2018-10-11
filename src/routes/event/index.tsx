@@ -15,7 +15,10 @@ const Event = ({ eventKey }: Props) => (
       eventInfo: () => getEventInfo(eventKey),
     }}
     renderSuccess={({ matches, eventInfo }) => (
-      <Page name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}>
+      <Page
+        name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}
+        back="/"
+      >
         <div>
           {matches && matches.map(m => <MatchCard key={m.key} match={m} />)}
         </div>
