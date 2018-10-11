@@ -2,12 +2,12 @@ export const formatTeamNumber = (team: string) => {
   return Number(team.replace(/^frc/, ''))
 }
 
-export const formatTime = (date: string) => {
-  return new Date(date).toLocaleTimeString('en-US', {
+export const formatTime = (date: string, timeZone?: string) =>
+  new Date(date).toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: 'numeric',
+    timeZone,
   })
-}
 
 export const formatMatchName = (key: string) => {
   let matchType
