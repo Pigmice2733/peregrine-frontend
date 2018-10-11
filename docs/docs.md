@@ -20,7 +20,7 @@ type Data = {
 }
 ```
 
-# `/event/{eventKey}/info`
+# `/events/{eventKey}/info`
 
 ## `GET`
 
@@ -49,7 +49,7 @@ type Data = {
 }
 ```
 
-# `/event/{eventKey}/match/{matchKey}/info`
+# `/events/{eventKey}/match/{matchKey}/info`
 
 ## `GET`
 
@@ -68,7 +68,7 @@ type Data = {
 }
 ```
 
-# `/event/{eventKey}/match/{matchKey}/reports/{team}`
+# `/events/{eventKey}/match/{matchKey}/reports/{team}`
 
 ## `PUT`
 
@@ -144,7 +144,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/match/{matchKey}/stats`
+# `/events/{eventKey}/match/{matchKey}/stats`
 
 ## `GET`
 
@@ -199,7 +199,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/matches`
+# `/events/{eventKey}/matches`
 
 ## `PUT`
 
@@ -245,7 +245,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/star`
+# `/events/{eventKey}/star`
 
 ## `PUT`
 
@@ -264,7 +264,7 @@ type Data = boolean
 type Data = null
 ```
 
-# `/event/{eventKey}/stats`
+# `/events/{eventKey}/stats`
 
 ## `GET`
 
@@ -317,7 +317,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/team/{team}/info`
+# `/events/{eventKey}/team/{team}/info`
 
 ## `GET`
 
@@ -341,7 +341,7 @@ type Data = {
 }
 ```
 
-# `/event/{eventKey}/team/{team}/stats/auto`
+# `/events/{eventKey}/team/{team}/stats/auto`
 
 ## `GET`
 
@@ -369,7 +369,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/team/{team}/stats/teleop`
+# `/events/{eventKey}/team/{team}/stats/teleop`
 
 ## `GET`
 
@@ -393,7 +393,7 @@ type Data = (
     })[]
 ```
 
-# `/event/{eventKey}/teams`
+# `/events/{eventKey}/teams`
 
 ## `GET`
 

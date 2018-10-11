@@ -8,6 +8,7 @@
   font-size: 0.9rem;
   margin: 0 0.2rem;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .dateChip {

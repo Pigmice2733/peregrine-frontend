@@ -11,7 +11,9 @@ const Home = () => (
       renderSuccess={({ events }) => (
         <div>
           {events
-            ? events.map(e => <EventCard key={e.key} event={e} />)
+            ? events.map(e => (
+                <EventCard href={`/events/${e.key}`} key={e.key} event={e} />
+              ))
             : 'loading'}
         </div>
       )}
