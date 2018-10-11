@@ -9,7 +9,7 @@ import { initDevTools } from 'preact/devtools/devtools'
 const App = () => (
   <Router>
     <Route path="/" component={Home} />
-    <Route path="/events/:eventKey" component={Event} />
+    <Route<{ eventKey: string }> path="/events/:eventKey" component={Event} />
   </Router>
 )
 
