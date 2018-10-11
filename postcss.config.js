@@ -5,6 +5,9 @@ const prod = process.env.NODE_ENV === 'production'
 const variables = {
   '--pigmice-purple': '#800080',
   '--light-grey': '#E8E8E8',
+  '--alliance-blue': '#295dc0',
+  '--alliance-red': '#c30000',
+  '--grey-text': 'rgba(0, 0, 0, 0.6)',
 }
 
 module.exports = {
