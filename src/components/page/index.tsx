@@ -1,17 +1,24 @@
 import { h, ComponentChildren } from 'preact'
 import style from './style.css'
-import { menu } from '../../icons'
+import { menu, arrowLeft } from '../../icons'
 import Icon from '../../components/icon'
 
 interface Props {
-  name: string
+  name: string | JSX.Element
   children: ComponentChildren
+  back?: string
 }
 
-const Page = ({ name, children }: Props) => (
+const Page = ({ name, children, back }: Props) => (
   <div class={style.page}>
     <header>
-      <Icon icon={menu} />
+      {back ? (
+        <a href={back}>
+          <Icon icon={arrowLeft} />
+        </a>
+      ) : (
+        <Icon icon={menu} />
+      )}
       <span>{name}</span>
     </header>
     <main>{children}</main>
