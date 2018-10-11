@@ -13,7 +13,7 @@ describe('formatTeamNumber', () => {
 describe('formatTime', () => {
   it('works with a string', () => {
     expect(formatTime('2018-04-19T19:37:49Z', 'America/Los_Angeles')).toEqual(
-      '12:37 PM',
+      'Thu 12:37 PM',
     )
   })
 })
