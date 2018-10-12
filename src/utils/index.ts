@@ -11,18 +11,17 @@ export const formatTime = (date: string, timeZone?: string) =>
   })
 
 export const formatMatchName = (key: string) => {
-  let matchType
-  if (key.startsWith('qm')) {
-    matchType = 'Qual'
-  } else if (key.startsWith('ef')) {
-    matchType = 'Eighths'
-  } else if (key.startsWith('qf')) {
-    matchType = 'Quarters'
-  } else if (key.startsWith('sf')) {
-    matchType = 'Semis'
-  } else if (key.startsWith('f')) {
-    matchType = 'Finals'
-  }
+  const matchType = key.startsWith('qm')
+    ? 'Qual'
+    : key.startsWith('ef')
+      ? 'Eighths'
+      : key.startsWith('qf')
+        ? 'Quarters'
+        : key.startsWith('sf')
+          ? 'Semis'
+          : key.startsWith('f')
+            ? 'Finals'
+            : ''
 
   const matchNum = key.match(/(\d+)$/)
   if (!matchNum) {
