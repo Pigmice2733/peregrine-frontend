@@ -54,7 +54,7 @@
     "eslint": "5.6.1",
     "eslint-plugin-caleb": "1.9.0",
     "jest": "23.6.0",
-    "parcel-bundler": "1.10.2",
+    "parcel-bundler": "1.10.3",
     "postcss": "^7.0.4",
     "postcss-calc": "^6.0.2",
     "postcss-css-variables": "^0.11.0",
