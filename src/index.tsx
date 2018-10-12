@@ -13,8 +13,10 @@ const App = () => (
   </Router>
 )
 
-while (document.body.lastChild) {
-  document.body.removeChild(document.body.lastChild)
+if (process.env.NODE_ENV !== 'production') {
+  while (document.body.lastChild) {
+    document.body.removeChild(document.body.lastChild)
+  }
 }
 
 render(<App />, document.body, document.body.lastElementChild || undefined)
