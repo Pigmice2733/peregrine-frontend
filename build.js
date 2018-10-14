@@ -101,7 +101,6 @@ async function buildHeaders(output) {
           route: '/',
           Link: [
             '</systemjs-entry.js>; rel=preload; as=script',
-            '</index.js>; rel=preload; as=script',
             '</style.css>; rel=preload; as=style',
           ],
         },
