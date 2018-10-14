@@ -87,29 +87,39 @@ async function buildSystemEntry() {
 }
 
 async function buildHeaders(output) {
-  const headers = Object.values(output)
-    .reduce(
-      (headers, chunk) =>
-        chunk.imports && chunk.imports.length > 0
-          ? headers.concat({
-              route: '/' + chunk.fileName,
-              Link: chunk.imports.map(c => `</${c}>; rel=preload; as=script`),
-            })
-          : headers,
-      [
-        {
-          route: '/',
-          Link: [
-            '</systemjs-entry.js>; rel=preload; as=script',
-            '</style.css>; rel=preload; as=style',
-          ],
-        },
+  const headers = Object.values(output).reduce(
+    (headers, chunk) => {
+      if (chunk.isEntry && chunk.imports) {
+        headers[chunk.fileName] = chunk.imports.map(
+          c => `</${c}>; rel=preload; as=script`,
+        )
+      }
+      return headers
+    },
+    {
+      '': [
+        '</systemjs-entry.js>; rel=preload; as=script',
+        '</index.js>; rel=preload; as=script',
+        '</style.css>; rel=preload; as=style',
       ],
+    },
+  )
+  const stringHeaders = Object.entries(headers)
+    .map(([route, Link]) => [
+      route,
+      route === 'index.js'
+        ? Link
+        : // exclude pushing items that are already pushed by index.js
+          Link.filter(l => !headers['index.js'].includes(l)),
+    ])
+    .filter(([route, Link]) => Link.length > 0)
+    .map(
+      ([route, Link]) =>
+        '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
     )
-    .map(c => c.route + '\n' + c.Link.map(l => `  Link: ${l}`).join('\n'))
     .join('\n\n')
-  await writeFileAsync(join(outDir, '_headers'), headers)
-  console.log('built _redirects')
+  await writeFileAsync(join(outDir, '_headers'), stringHeaders)
+  console.log('built _headers')
 }
 
 async function build() {
