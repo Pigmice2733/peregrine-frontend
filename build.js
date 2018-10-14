@@ -112,7 +112,7 @@ async function buildHeaders(output) {
         : // exclude pushing items that are already pushed by index.js
           Link.filter(l => !headers['index.js'].includes(l)),
     ])
-    .filter(([route, Link]) => Link.length > 0)
+    .filter(([, Link]) => Link.length > 0)
     .map(
       ([route, Link]) =>
         '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
