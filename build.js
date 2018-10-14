@@ -91,7 +91,7 @@ async function buildHeaders(output) {
     (headers, chunk) => {
       if (chunk.isEntry && chunk.imports) {
         headers[chunk.fileName] = chunk.imports.map(
-          c => `</${c}>; rel=preload; as=script`,
+          c => `</${c}>; rel=preload; as=script; crossorigin`,
         )
       }
       return headers
@@ -99,7 +99,7 @@ async function buildHeaders(output) {
     {
       '': [
         '</systemjs-entry.js>; rel=preload; as=script',
-        '</index.js>; rel=preload; as=script',
+        '</index.js>; rel=preload; as=script; crossorigin',
         '</style.css>; rel=preload; as=style',
       ],
     },
