@@ -108,7 +108,6 @@ async function buildHeaders(output) {
   // root relies on index.js, so hoist the dependencies of index.js
   headers[''].push(...headers['index.js'])
   delete headers['index.js']
-  console.log(headers)
   const stringHeaders = Object.entries(headers)
     .map(([route, Link]) => [
       route,
