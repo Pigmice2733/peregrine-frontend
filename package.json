@@ -19,11 +19,15 @@
       "plugin:caleb/recommended",
       "plugin:caleb/preact",
       "plugin:caleb/jest"
-    ]
+    ],
+    "rules": {
+      "caleb/react/display-name": "off"
+    }
   },
   "dependencies": {
     "preact": "8.3.1",
-    "preact-router": "2.6.1"
+    "preact-router": "2.6.1",
+    "systemjs": "^2.0.2"
   },
   "jest": {
     "moduleFileExtensions": [
@@ -45,6 +49,8 @@
   "devDependencies": {
     "@babel/core": "7.1.2",
     "@babel/plugin-proposal-class-properties": "7.1.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-template-literals": "^7.0.0",
     "@babel/preset-typescript": "7.1.0",
     "@types/jest": "23.3.5",
     "babel-core": "7.0.0-bridge.0",
@@ -54,6 +60,7 @@
     "eslint": "5.6.1",
     "eslint-plugin-caleb": "1.9.0",
     "jest": "23.6.0",
+    "kleur": "^2.0.2",
     "parcel-bundler": "1.10.3",
     "postcss": "^7.0.4",
     "postcss-calc": "^6.0.2",
@@ -67,7 +74,8 @@
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-node-resolve": "3.4.0",
     "rollup-plugin-postcss": "1.6.2",
-    "rollup-plugin-terser": "3.0.0",
+    "rollup-plugin-terser": "^3.0.0",
+    "templite": "^1.1.0",
     "typescript": "3.1.3"
   },
   "engines": {
