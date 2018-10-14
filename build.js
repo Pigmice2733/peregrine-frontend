@@ -48,9 +48,9 @@ const graphChunk = (chunk, bundle) => {
 }
 
 const graphBundle = bundle =>
-  Object.entries(bundle)
-    .filter(([, chunk]) => chunk.isEntry)
-    .map(([, c]) => graphChunk(c, bundle))
+  Object.values(bundle)
+    .filter(chunk => chunk.isEntry)
+    .map(c => graphChunk(c, bundle))
     .join('\n')
 
 async function buildMain() {
@@ -61,6 +61,7 @@ async function buildMain() {
   const { output } = await bundle.write(configs.main.output)
   console.log(graphBundle(output))
   console.log('built main bundle')
+  return output
 }
 
 async function buildHtml() {
@@ -85,10 +86,38 @@ async function buildSystemEntry() {
   console.log('built systemjs entry')
 }
 
+async function buildHeaders(output) {
+  const headers = Object.values(output)
+    .reduce(
+      (headers, chunk) =>
+        chunk.imports && chunk.imports.length > 0
+          ? headers.concat({
+              route: '/' + chunk.fileName,
+              Link: chunk.imports.map(c => `</${c}>; rel=preload; as=script`),
+            })
+          : headers,
+      [
+        {
+          route: '/',
+          Link: [
+            '</systemjs-entry.js>; rel=preload; as=script',
+            '</index.js>; rel=preload; as=script',
+            '</style.css>; rel=preload; as=style',
+          ],
+        },
+      ],
+    )
+    .map(c => c.route + '\n' + c.Link.map(l => `  Link: ${l}`).join('\n'))
+    .join('\n\n')
+  await writeFileAsync(join(outDir, '_headers'), headers)
+  console.log('built _redirects')
+}
+
 async function build() {
-  await buildMain()
+  const output = await buildMain()
   await buildSystemEntry()
   await buildHtml()
+  await buildHeaders(output)
   await cpy('_redirects', outDir)
 }
 
