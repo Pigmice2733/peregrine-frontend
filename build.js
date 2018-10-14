@@ -91,6 +91,7 @@ async function buildHeaders(output) {
     (headers, chunk) => {
       if (chunk.isEntry && chunk.imports) {
         headers[chunk.fileName] = chunk.imports.map(
+          // crossorigin because systemjs scripts use crossorigin
           c => `</${c}>; rel=preload; as=script; crossorigin`,
         )
       }
@@ -105,14 +106,15 @@ async function buildHeaders(output) {
     },
   )
   // root relies on index.js, so hoist the dependencies of index.js
-  headers[''].push(headers['index.js'])
+  headers[''].push(...headers['index.js'])
   delete headers['index.js']
+  console.log(headers)
   const stringHeaders = Object.entries(headers)
     .map(([route, Link]) => [
       route,
       route === ''
         ? Link
-        : // exclude pushing items that are already pushed from /
+        : // exclude pushing items that are already pushed from root
           Link.filter(l => !headers[''].includes(l)),
     ])
     .filter(([, Link]) => Link.length > 0)
