@@ -86,7 +86,7 @@ async function buildSystemEntry() {
   console.log('built systemjs entry')
 }
 
-const pages = '*'
+const pages = '/,/events/*'
 
 async function buildHeaders(output) {
   const headers = Object.values(output).reduce(
@@ -107,7 +107,7 @@ async function buildHeaders(output) {
       ],
     },
   )
-  // root relies on index.js, so hoist the dependencies of index.js
+  // root always relies on index.js, so hoist the dependencies of index.js to root
   headers[pages].push(...headers['index.js'])
   delete headers['index.js']
   const stringHeaders = Object.entries(headers)
@@ -121,7 +121,12 @@ async function buildHeaders(output) {
     .filter(([, Link]) => Link.length > 0)
     .map(
       ([route, Link]) =>
-        '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
+        route === pages
+          ? pages
+              .split(',')
+              .map(r => r + '\n' + Link.map(l => `  Link: ${l}`).join('\n'))
+              .join('\n\n')
+          : '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
     )
     .join('\n\n')
   await writeFileAsync(join(outDir, '_headers'), stringHeaders)
