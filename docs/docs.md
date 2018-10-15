@@ -2,8 +2,6 @@
 
 ## `POST`
 
-Response is the JWT
-
 ### Request
 
 ```ts
@@ -17,10 +15,12 @@ type Data = {
 ### Response
 
 ```ts
-type Data = string
+type Data = {
+  jwt: string
+}
 ```
 
-# `/event/{eventKey}/info`
+# `/events/{eventKey}/info`
 
 ## `GET`
 
@@ -32,6 +32,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
   location: {
     name: string
     lat: number
@@ -40,6 +42,7 @@ type Data = {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
@@ -49,7 +52,7 @@ type Data = {
 }
 ```
 
-# `/event/{eventKey}/match/{matchKey}/info`
+# `/events/{eventKey}/match/{matchKey}/info`
 
 ## `GET`
 
@@ -68,7 +71,7 @@ type Data = {
 }
 ```
 
-# `/event/{eventKey}/match/{matchKey}/reports/{team}`
+# `/events/{eventKey}/match/{matchKey}/reports/{team}`
 
 ## `PUT`
 
@@ -144,7 +147,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/match/{matchKey}/stats`
+# `/events/{eventKey}/match/{matchKey}/stats`
 
 ## `GET`
 
@@ -199,7 +202,34 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/matches`
+# `/events/{eventKey}/matches`
+
+## `PUT`
+
+Only admins can create matches
+
+### Request
+
+```ts
+type Data = {
+  redAlliance: string[]
+  blueAlliance: string[]
+  // UTC Date - scheduled match time
+  time: string
+  // example: qm3
+  key: string
+  redScore?: number
+  blueScore?: number
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
 
 ## `GET`
 
@@ -218,7 +248,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/star`
+# `/events/{eventKey}/star`
 
 ## `PUT`
 
@@ -237,7 +267,7 @@ type Data = boolean
 type Data = null
 ```
 
-# `/event/{eventKey}/stats`
+# `/events/{eventKey}/stats`
 
 ## `GET`
 
@@ -290,7 +320,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/team/{team}/info`
+# `/events/{eventKey}/team/{team}/info`
 
 ## `GET`
 
@@ -309,13 +339,12 @@ type Data = {
     redScore?: number
     blueScore?: number
   }
-  rank: number
-  // ranking score
-  rankingScore: number
+  rank?: number
+  rankingScore?: number
 }
 ```
 
-# `/event/{eventKey}/team/{team}/stats/auto`
+# `/events/{eventKey}/team/{team}/stats/auto`
 
 ## `GET`
 
@@ -343,7 +372,7 @@ type Data = {
 }[]
 ```
 
-# `/event/{eventKey}/team/{team}/stats/teleop`
+# `/events/{eventKey}/team/{team}/stats/teleop`
 
 ## `GET`
 
@@ -367,7 +396,7 @@ type Data = (
     })[]
 ```
 
-# `/event/{eventKey}/teams`
+# `/events/{eventKey}/teams`
 
 ## `GET`
 
@@ -379,6 +408,46 @@ type Data = string[]
 
 # `/events`
 
+## `PUT`
+
+Only admins can create events
+
+### Request
+
+```ts
+type Data = {
+  webcasts: {
+    type: "twitch" | "youtube"
+    url: string
+  }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
+  location: {
+    name: string
+    lat: number
+    lon: number
+  }
+  key: string
+  // from TBA short name
+  name: string
+  // abbreviated district name
+  district?: string
+  week?: number
+  // UTC date
+  startDate: string
+  // UTC date
+  endDate: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+
 ## `GET`
 
 ### Response
@@ -388,6 +457,7 @@ type Data = {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
@@ -515,10 +585,12 @@ Anyone can view any user
 ```ts
 type Data = {
   username: string
-  firstname: string
-  lastname: string
-  admin?: true
-  verified: boolean
+  firstName: string
+  lastName: string
+  roles: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
 }
 ```
 
@@ -532,14 +604,15 @@ Only admins can modify other users
 
 ```ts
 type Data = {
-  username?: string
-  firstname?: string
-  lastname?: string
   password?: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+  // Only admins can set roles, and they can do so for any user
+  roles?: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
+  username?: string
+  firstName?: string
+  lastName?: string
 }
 ```
 
@@ -574,14 +647,15 @@ will require admin approval
 
 ```ts
 type Data = {
-  username: string
-  firstname: string
-  lastname: string
   password: string
-  // only an admin can set a user's admin status
-  admin?: boolean
-  // only an admin can set a user's verified status
-  verified?: boolean
+  // Only admins can set roles, and they can do so for any user
+  roles: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
+  username: string
+  firstName: string
+  lastName: string
 }
 ```
 
@@ -602,9 +676,11 @@ Anyone can view the list of users
 ```ts
 type Data = {
   username: string
-  firstname: string
-  lastname: string
-  admin?: true
-  verified: boolean
+  firstName: string
+  lastName: string
+  roles: {
+    isAdmin: boolean
+    isVerified: boolean
+  }
 }[]
 ```

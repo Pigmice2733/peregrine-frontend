@@ -28,6 +28,7 @@ export default class LoadData<T> extends Component<Props<T>, State<T>> {
           }))
         })
         .catch(error => {
+          console.error(error)
           this.setState(({ errors }: State<T>) => ({
             errors: Object.assign(errors, { [key]: error }),
           }))

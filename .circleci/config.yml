@@ -48,7 +48,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run: npm run build
+      - run: NODE_ENV=production npm run build
       - store_artifacts:
           path: dist
 
