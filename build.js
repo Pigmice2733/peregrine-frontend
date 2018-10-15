@@ -86,6 +86,8 @@ async function buildSystemEntry() {
   console.log('built systemjs entry')
 }
 
+const pages = '*.html'
+
 async function buildHeaders(output) {
   const headers = Object.values(output).reduce(
     (headers, chunk) => {
@@ -98,7 +100,7 @@ async function buildHeaders(output) {
       return headers
     },
     {
-      '': [
+      [pages]: [
         '</systemjs-entry.js>; rel=preload; as=script',
         '</index.js>; rel=preload; as=script; crossorigin',
         '</style.css>; rel=preload; as=style',
@@ -106,15 +108,15 @@ async function buildHeaders(output) {
     },
   )
   // root relies on index.js, so hoist the dependencies of index.js
-  headers[''].push(...headers['index.js'])
+  headers[pages].push(...headers['index.js'])
   delete headers['index.js']
   const stringHeaders = Object.entries(headers)
     .map(([route, Link]) => [
       route,
-      route === ''
+      route === pages
         ? Link
         : // exclude pushing items that are already pushed from root
-          Link.filter(l => !headers[''].includes(l)),
+          Link.filter(l => !headers[pages].includes(l)),
     ])
     .filter(([, Link]) => Link.length > 0)
     .map(
