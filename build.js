@@ -86,7 +86,7 @@ async function buildSystemEntry() {
   console.log('built systemjs entry')
 }
 
-const pages = '*.html'
+const pages = '*'
 
 async function buildHeaders(output) {
   const headers = Object.values(output).reduce(
