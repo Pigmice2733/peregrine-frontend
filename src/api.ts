@@ -63,6 +63,7 @@ export interface BasicEventInfo {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
@@ -90,6 +91,8 @@ interface EventInfo extends BasicEventInfo {
     type: 'twitch' | 'youtube'
     url: string
   }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
   location: {
     name: string
     lat: number

@@ -32,6 +32,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
   location: {
     name: string
     lat: number
@@ -40,6 +42,7 @@ type Data = {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
@@ -417,6 +420,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
   location: {
     name: string
     lat: number
@@ -425,6 +430,7 @@ type Data = {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
@@ -451,6 +457,7 @@ type Data = {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
