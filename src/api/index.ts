@@ -1,62 +1,10 @@
-type PeregrineResponse<T> =
-  | {
-      data: Readonly<T>
-    }
-  | {
-      error: string
-    }
-
-const apiUrl =
-  process.env.PEREGRINE_API_URL ||
-  (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
-    ? 'https://api.peregrine.ga:8081'
-    : 'https://edge.api.peregrine.ga:8081'
-
-const processResponse = <T extends any>(
-  d: PeregrineResponse<T>,
-): Promise<T> => {
-  if ('error' in d) {
-    return Promise.reject(d.error)
-  }
-  return Promise.resolve(d.data)
-}
-
-// Webhook but only for ranking points and match score
-
-const getRequest = <T extends any>(
-  path: string,
-  { authenticated = false } = {},
-) =>
-  fetch(apiUrl + path)
-    .then(d => d.json() as Promise<PeregrineResponse<T>>)
-    .then(processResponse)
-
-const deleteRequest = <T extends any>(
-  path: string,
-  { authenticated = false } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
-
-const putRequest = <T extends any>(
-  path: string,
-  data: any,
-  { authenticated = false } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
-
-const patchRequest = <T extends any>(
-  path: string,
-  data: any,
-  { authenticated = false } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
-
-const postRequest = <T extends any>(
-  path: string,
-  data: any,
-  { authenticated = false } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+import {
+  getRequest,
+  putRequest,
+  postRequest,
+  deleteRequest,
+  patchRequest,
+} from './base'
 
 export interface BasicEventInfo {
   key: string
@@ -78,11 +26,11 @@ export interface BasicEventInfo {
 export const createEvent = (event: EventInfo) =>
   putRequest<null>(`/events`, event)
 
-export const getEvents = () => getRequest<BasicEventInfo[]>('/events')
+export const getEvents = () => getRequest<BasicEventInfo[]>('events')
 
 // Only authenticated users can star events
 export const starEvent = (eventKey: string, starred: boolean) =>
-  putRequest<null>(`/events/${eventKey}/star`, starred)
+  putRequest<null>(`events/${eventKey}/star`, starred)
 
 interface EventInfo extends BasicEventInfo {
   webcasts: {
@@ -97,7 +45,7 @@ interface EventInfo extends BasicEventInfo {
 }
 
 export const getEventInfo = (eventKey: string) =>
-  getRequest<EventInfo>(`/events/${eventKey}/info`)
+  getRequest<EventInfo>(`events/${eventKey}/info`)
 
 export interface MatchInfo {
   redAlliance: string[]
@@ -117,16 +65,16 @@ export const createEventMatch = (
     // UTC Date - scheduled match time
     time: string
   },
-) => putRequest<null>(`/events/${eventKey}/matches`, match)
+) => putRequest<null>(`events/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
-  getRequest<MatchInfo[]>(`/events/${eventKey}/matches`)
+  getRequest<MatchInfo[]>(`events/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
-  getRequest<MatchInfo>(`/events/${eventKey}/match/${matchKey}/info`)
+  getRequest<MatchInfo>(`events/${eventKey}/match/${matchKey}/info`)
 
 export const getEventTeams = (eventKey: string) =>
-  getRequest<string[]>(`/events/${eventKey}/teams`)
+  getRequest<string[]>(`events/${eventKey}/teams`)
 
 // a stat is a summary representation of a field
 interface BaseStat {
@@ -206,14 +154,14 @@ interface TeamStatsWithAlliance extends TeamStats {
 // these are the stats for every team at an event, describing their performance
 // only at that event
 export const getEventStats = (eventKey: string) =>
-  getRequest<TeamStats[]>(`/events/${eventKey}/stats`)
+  getRequest<TeamStats[]>(`events/${eventKey}/stats`)
 
 // stats for the teams in a match
 // these stats describe a team's performance in all matches at this event,
 // not just this match
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
-    `/events/${eventKey}/match/${matchKey}/stats`,
+    `events/${eventKey}/match/${matchKey}/stats`,
   )
 
 interface EventTeamInfo {
@@ -224,24 +172,24 @@ interface EventTeamInfo {
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
-  getRequest<EventTeamInfo>(`/events/${eventKey}/team/${team}/info`)
+  getRequest<EventTeamInfo>(`events/${eventKey}/team/${team}/info`)
 
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
   getRequest<EventTeamTeleopStats>(
-    `/events/${eventKey}/team/${team}/stats/teleop`,
+    `events/${eventKey}/team/${team}/stats/teleop`,
   )
 
 export const getEventTeamAutoStats = (eventKey: string, team: string) =>
-  getRequest<EventTeamAutoStats>(`/events/${eventKey}/team/${team}/stats/auto`)
+  getRequest<EventTeamAutoStats>(`events/${eventKey}/team/${team}/stats/auto`)
 
 export const getTeamTeleopStats = (team: string) =>
-  getRequest<TeamTeleopStats>(`/team/${team}/stats/teleop`)
+  getRequest<TeamTeleopStats>(`team/${team}/stats/teleop`)
 
 export const getTeamAutoStats = (team: string) =>
-  getRequest<TeamAutoStats>(`/team/${team}/stats/auto`)
+  getRequest<TeamAutoStats>(`team/${team}/stats/auto`)
 
 export const getTeamAutoModes = (team: string) =>
-  getRequest<string[]>(`/team/${team}/automodes`)
+  getRequest<string[]>(`team/${team}/automodes`)
 
 interface SubmittedReport {
   teleop: Field[]
@@ -261,7 +209,7 @@ export const submitReport = (
   report: SubmittedReport,
 ) =>
   putRequest<null>(
-    `/events/${eventKey}/match/${matchKey}/reports/${team}`,
+    `events/${eventKey}/match/${matchKey}/reports/${team}`,
     report,
   )
 
@@ -271,7 +219,7 @@ export const getEventMatchTeamReports = (
   team: string,
   report: SubmittedReport,
 ) =>
-  getRequest<Report[]>(`/events/${eventKey}/match/${matchKey}/reports/${team}`)
+  getRequest<Report[]>(`events/${eventKey}/match/${matchKey}/reports/${team}`)
 
 interface StatDescription {
   statName: string
@@ -284,7 +232,7 @@ interface Schema {
   auto: StatDescription[]
 }
 
-export const getSchema = () => getRequest<Schema>(`/schema`)
+export const getSchema = () => getRequest<Schema>(`schema`)
 
 interface Roles {
   isAdmin: boolean
@@ -308,23 +256,23 @@ interface EditableUser extends UserInfo {
 // for non-admins or non-authenticated users the user will not be verified and
 // will require admin approval
 export const createUser = (user: EditableUser) =>
-  postRequest<number | false>(`/users`, user)
+  postRequest<number | false>(`users`, user)
 // Anyone can view the list of users
-export const getUsers = () => getRequest<UserInfo[]>(`/users`)
+export const getUsers = () => getRequest<UserInfo[]>(`users`)
 // Anyone can view any user
 export const getUser = (userId: number) =>
-  getRequest<UserInfo>(`/users/${userId}`)
+  getRequest<UserInfo>(`users/${userId}`)
 // Anyone can view anyone's stars
 export const getStarredEvents = (userId: number) =>
-  getRequest<string[]>(`/users/${userId}/stars`)
+  getRequest<string[]>(`users/${userId}/stars`)
 // Anyone can modify themselves
 // Only admins can modify other users
 export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
-  patchRequest<null>(`/users/${userId}`, user)
+  patchRequest<null>(`users/${userId}`, user)
 // Anyone can delete themselves
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>
-  deleteRequest<null>(`/users/${userId}`)
+  deleteRequest<null>(`users/${userId}`)
 
 export const authenticate = (username: string, password: string) =>
-  postRequest<{ jwt: string }>(`/authenticate`, { username, password })
+  postRequest<{ jwt: string }>(`authenticate`, { username, password })

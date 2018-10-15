@@ -7,37 +7,53 @@ const cssModulesConfig = postcssConfig.plugins['postcss-modules']
 
 const extensions = ['.js', '.jsx', '.es6', '.es', '.mjs', '.ts', '.tsx', '.css']
 
-module.exports = {
-  input: './src/index.tsx',
-  output: {
-    file: 'dist/index.js',
-    format: 'iife',
+const prod = process.env.NODE_ENV === 'production'
+const rollupNodeOptions = { extensions, jsnext: true }
+
+const terserOptions = prod => ({
+  ecma: 8,
+  module: true,
+  compress: {
+    passes: 4,
+    unsafe: true,
+    pure_getters: true,
+    join_vars: prod,
   },
-  plugins: [
-    node({
-      extensions,
-      jsnext: true,
-    }),
-    postcss({
-      extract: 'dist/style.css',
-      modules: cssModulesConfig,
-      plugins: Object.entries(postcssConfig.plugins).reduce(
-        (plugins, [key, value]) =>
-          key === 'postcss-modules'
-            ? plugins
-            : plugins.concat(require(key)(value)),
-        [],
-      ),
-      config: false,
-      minimize: true,
-    }),
-    babel({ extensions }),
-    terser({
-      compress: {
-        passes: 4,
-        unsafe: true,
-        pure_getters: true,
-      },
-    }),
-  ],
+  mangle: prod,
+  output: {
+    beautify: !prod,
+  },
+})
+
+module.exports = {
+  systemEntry: {
+    input: './src/systemjs-entry.js',
+    output: { file: 'dist/systemjs-entry.js', format: 'iife' },
+    plugins: [node(rollupNodeOptions), terser(terserOptions(true))],
+  },
+  main: {
+    input: './src/index.tsx',
+    output: { dir: 'dist', format: 'system' },
+    experimentalCodeSplitting: true,
+    optimizeChunks: true,
+    chunkGroupingSize: 50000,
+    plugins: [
+      node(rollupNodeOptions),
+      postcss({
+        extract: 'dist/style.css',
+        modules: cssModulesConfig,
+        plugins: Object.entries(postcssConfig.plugins).reduce(
+          (plugins, [key, value]) =>
+            key === 'postcss-modules'
+              ? plugins
+              : plugins.concat(require(key)(value)),
+          [],
+        ),
+        config: false,
+        minimize: true,
+      }),
+      babel({ extensions }),
+      terser(terserOptions(prod)),
+    ],
+  },
 }
