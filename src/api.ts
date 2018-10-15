@@ -1,15 +1,69 @@
-import {
-  getRequest,
-  putRequest,
-  postRequest,
-  deleteRequest,
-  patchRequest,
-} from './base'
+type PeregrineResponse<T> =
+  | {
+      data: Readonly<T>
+    }
+  | {
+      error: string
+    }
+
+const apiUrl =
+  (process.env.PEREGRINE_API_URL
+    ? process.env.PEREGRINE_API_URL
+    : process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
+      ? 'https://api.peregrine.ga:8081'
+      : 'https://edge.api.peregrine.ga:8081') + '/'
+
+const processResponse = <T extends any>(
+  d: PeregrineResponse<T>,
+): Promise<T> => {
+  if ('error' in d) {
+    return Promise.reject(d.error)
+  }
+  return Promise.resolve(d.data)
+}
+
+// Webhook but only for ranking points and match score
+
+export const getRequest = <T extends any>(
+  path: string,
+  { authenticated = false } = {},
+) =>
+  fetch(apiUrl + path)
+    .then(d => d.json() as Promise<PeregrineResponse<T>>)
+    .then(processResponse)
+
+export const deleteRequest = <T extends any>(
+  path: string,
+  { authenticated = false } = {},
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+export const putRequest = <T extends any>(
+  path: string,
+  data: any,
+  { authenticated = false } = {},
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+export const patchRequest = <T extends any>(
+  path: string,
+  data: any,
+  { authenticated = false } = {},
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+
+export const postRequest = <T extends any>(
+  path: string,
+  data: any,
+  { authenticated = false } = {},
+): Promise<PeregrineResponse<T>> =>
+  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
 
 export interface BasicEventInfo {
   key: string
   // from TBA short name
   name: string
+  // abbreviated district name
   district?: string
   week?: number
   // UTC date
@@ -24,7 +78,7 @@ export interface BasicEventInfo {
 
 // Only admins can create events
 export const createEvent = (event: EventInfo) =>
-  putRequest<null>(`/events`, event)
+  putRequest<null>(`events`, event)
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('events')
 
@@ -37,6 +91,8 @@ interface EventInfo extends BasicEventInfo {
     type: 'twitch' | 'youtube'
     url: string
   }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
   location: {
     name: string
     lat: number
