@@ -77,7 +77,7 @@ export interface BasicEventInfo {
 
 // Only admins can create events
 export const createEvent = (event: EventInfo) =>
-  putRequest<null>(`/events`, event)
+  putRequest<null>(`events`, event)
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('events')
 
