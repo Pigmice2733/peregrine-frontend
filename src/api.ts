@@ -103,10 +103,10 @@ interface EventInfo extends BasicEventInfo {
 export const getEventInfo = (eventKey: string) =>
   getRequest<EventInfo>(`events/${eventKey}/info`)
 
-export interface MatchInfo {
+export interface BasicMatchInfo {
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
@@ -114,10 +114,15 @@ export interface MatchInfo {
   blueScore?: number
 }
 
+export interface MatchInfo extends BasicMatchInfo {
+  // UTC date - scheduled match time
+  scheduledTime: string
+}
+
 // Only admins can create matches
 export const createEventMatch = (
   eventKey: string,
-  match: MatchInfo & {
+  match: BasicMatchInfo & {
     // UTC Date - scheduled match time
     time: string
   },

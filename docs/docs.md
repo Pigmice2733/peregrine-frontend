@@ -60,9 +60,11 @@ type Data = {
 
 ```ts
 type Data = {
+  // UTC date - scheduled match time
+  scheduledTime: string
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
@@ -237,9 +239,11 @@ type Data = null
 
 ```ts
 type Data = {
+  // UTC date - scheduled match time
+  scheduledTime: string
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
@@ -330,9 +334,11 @@ type Data = {
 type Data = {
   // only if they have future matches at this event
   nextMatch?: {
+    // UTC date - scheduled match time
+    scheduledTime: string
     redAlliance: string[]
     blueAlliance: string[]
-    // UTC date - match predicted time
+    // UTC date - predicted match time
     time: string
     // example: qm3
     key: string
