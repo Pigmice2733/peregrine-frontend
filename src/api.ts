@@ -106,13 +106,18 @@ export const getEventInfo = (eventKey: string) =>
 export interface MatchInfo {
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
   redScore?: number
   blueScore?: number
 }
+
+type MatchList = (MatchInfo & {
+  // UTC date - scheduled match time
+  scheduledTime: string
+})[]
 
 // Only admins can create matches
 export const createEventMatch = (
@@ -124,7 +129,7 @@ export const createEventMatch = (
 ) => putRequest<null>(`events/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
-  getRequest<MatchInfo[]>(`events/${eventKey}/matches`)
+  getRequest<MatchList>(`events/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
   getRequest<MatchInfo>(`events/${eventKey}/match/${matchKey}/info`)
