@@ -60,8 +60,6 @@ type Data = {
 
 ```ts
 type Data = {
-  // UTC date - scheduled match time
-  scheduledTime: string
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
@@ -239,8 +237,6 @@ type Data = null
 
 ```ts
 type Data = {
-  // UTC date - scheduled match time
-  scheduledTime: string
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
@@ -249,6 +245,8 @@ type Data = {
   key: string
   redScore?: number
   blueScore?: number
+  // UTC date - scheduled match time
+  scheduledTime: string
 }[]
 ```
 
@@ -334,8 +332,6 @@ type Data = {
 type Data = {
   // only if they have future matches at this event
   nextMatch?: {
-    // UTC date - scheduled match time
-    scheduledTime: string
     redAlliance: string[]
     blueAlliance: string[]
     // UTC date - predicted match time
