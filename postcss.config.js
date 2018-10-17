@@ -8,6 +8,7 @@ const variables = {
   '--alliance-blue': '#295dc0',
   '--alliance-red': '#c30000',
   '--grey-text': 'rgba(0, 0, 0, 0.6)',
+  '--off-black': '#333',
 }
 
 module.exports = {

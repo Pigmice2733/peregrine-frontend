@@ -1,0 +1,52 @@
+.card {
+  margin: 1.2rem auto;
+  border-radius: 0.3rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: white;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+  align-items: center;
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  font-size: 0.9rem;
+  align-items: center;
+  border-bottom: 0.1em solid #eee;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+
+  &[href]:hover,
+  &:focus {
+    background: #f1f1f1;
+    outline: none;
+  }
+
+  &:last-child {
+    border: none;
+  }
+
+  & svg {
+    margin: 0.8em;
+    flex-shrink: 0;
+  }
+
+  & path {
+    fill: currentColor;
+  }
+
+  & > :last-child:not(:nth-child(2)) {
+    margin-left: auto;
+    min-width: 5rem;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

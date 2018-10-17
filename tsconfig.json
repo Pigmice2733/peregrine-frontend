@@ -13,6 +13,7 @@
     "target": "ESNext",
     "sourceMap": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "baseUrl": "./src",
     "skipDefaultLibCheck": true,
     "skipLibCheck": true

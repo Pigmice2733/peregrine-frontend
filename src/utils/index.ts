@@ -33,3 +33,15 @@ export const formatMatchName = (key: string) => {
   }
   return { group: `${matchType} ${matchNum[1]}` }
 }
+
+export const formatDateRange = (startDate: string, endDate: string) => {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  return `${start.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+  })}-${end.toLocaleDateString('en-US', {
+    month: start.getMonth() === end.getMonth() ? undefined : 'long',
+    day: 'numeric',
+  })}`
+}

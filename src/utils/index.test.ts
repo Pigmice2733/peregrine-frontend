@@ -1,4 +1,9 @@
-import { formatTeamNumber, formatTime, formatMatchName } from '.'
+import {
+  formatTeamNumber,
+  formatTime,
+  formatMatchName,
+  formatDateRange,
+} from '.'
 
 describe('formatTeamNumber', () => {
   it('works with a string', () => {
@@ -38,5 +43,18 @@ describe('formatMatchKey', () => {
     expect(() => formatMatchName('asdf')).toThrowError(
       'Expected asdf to end in a digit',
     )
+  })
+})
+
+describe('formatDateRange', () => {
+  it('should format days from the same month', () => {
+    expect(
+      formatDateRange('2018-03-08T08:00:00Z', '2018-03-10T08:00:00Z'),
+    ).toEqual('March 8-10')
+  })
+  it('should format days from different months', () => {
+    expect(
+      formatDateRange('2018-03-08T08:00:00Z', '2018-04-10T08:00:00Z'),
+    ).toEqual('March 8-April 10')
   })
 })
