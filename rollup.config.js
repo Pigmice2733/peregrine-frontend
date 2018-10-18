@@ -4,6 +4,7 @@ const babel = require('rollup-plugin-babel')
 const postcss = require('rollup-plugin-postcss')
 const postcssConfig = require('./postcss.config')
 const cssModulesConfig = postcssConfig.plugins['postcss-modules']
+const babelConfig = require('./.babelrc')
 
 const extensions = ['.js', '.jsx', '.es', '.mjs', '.ts', '.tsx', '.css']
 
@@ -52,7 +53,7 @@ module.exports = {
         config: false,
         minimize: true,
       }),
-      babel({ extensions }),
+      babel({ extensions, babelrc: false, ...babelConfig }),
       terser(terserOptions(prod)),
     ],
   },
