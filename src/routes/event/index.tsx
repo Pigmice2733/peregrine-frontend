@@ -50,7 +50,7 @@ const Event = ({ eventKey }: Props) => (
                   },
                   eventInfo.district && {
                     icon: infoOutline,
-                    title: eventInfo.district.toUpperCase(),
+                    title: (eventInfo as { fullDistrict: string }).fullDistrict,
                     action: <Chip>{eventInfo.district}</Chip>,
                   },
                   {

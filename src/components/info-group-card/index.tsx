@@ -12,7 +12,6 @@ interface Props {
         JSX.HTMLAttributes,
         {
           icon: string
-          href?: string
           title: string | JSX.Element
           action?: falsy | JSX.Element
         }
@@ -24,13 +23,13 @@ const isTruthy = <T extends object>(i: T | falsy): i is T => Boolean(i)
 
 const InfoGroupCard = ({ info }: Props) => (
   <div class={style.card}>
-    {info.filter(isTruthy).map(i => {
+    {info.filter(isTruthy).map(({ icon, action, title, ...i }) => {
       const El = i.href ? 'a' : 'div'
       return (
-        <El class={style.row} key={i.title} href={i.href}>
-          <Icon icon={i.icon} />
-          <div class={style.title}>{i.title}</div>
-          {i.action && <div>{i.action}</div>}
+        <El class={style.row} key={title} {...i}>
+          <Icon icon={icon} />
+          <div class={style.title}>{title}</div>
+          {action && <div>{action}</div>}
         </El>
       )
     })}
