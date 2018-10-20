@@ -1,10 +1,7 @@
 import { h } from 'preact'
 import Icon from '../../components/icon'
 import style from './style.css'
-
-type falsy = null | undefined | false | '' | 0
-
-type Merge<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] } & B
+import { Merge, falsy } from '../../type-utils'
 
 interface Props {
   info: (
@@ -13,7 +10,7 @@ interface Props {
         {
           icon: string
           title: string | JSX.Element
-          action?: falsy | JSX.Element
+          action?: falsy | JSX.Element | JSX.Element[]
         }
       >
     | falsy)[]

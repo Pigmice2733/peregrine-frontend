@@ -10,14 +10,20 @@ import {
   calendar,
   googleMaps,
   video,
+  twitch,
+  youtube,
 } from '../../icons'
 import { formatDateRange } from '../../utils'
 import Icon from '../../components/icon'
 import Chip from '../../components/chip'
+import style from './style.css'
+import IconButton from '../../components/icon-button'
 
 interface Props {
   eventKey: string
 }
+
+const icons = { twitch, youtube }
 
 const gmapsUrl = (lat: number, lon: number) =>
   `https://www.google.com/maps/?q=${lat},${lon}`
@@ -35,7 +41,7 @@ const Event = ({ eventKey }: Props) => (
       >
         <div>
           {eventInfo && (
-            <div>
+            <div class={style.infoCard}>
               <InfoGroupCard
                 info={[
                   eventInfo.location.name && {
@@ -64,10 +70,31 @@ const Event = ({ eventKey }: Props) => (
                       <Chip>{`Wk ${eventInfo.week + 1}`}</Chip>
                     ),
                   },
-                  {
+                  eventInfo.webcasts.length > 0 && {
                     icon: video,
-                    title: 'Live Stream',
-                    action: <pre>{eventInfo.webcasts[0]}</pre>,
+                    title:
+                      'Live Stream' +
+                      (eventInfo.webcasts.length === 1 ? '' : 's'),
+                    href:
+                      eventInfo.webcasts.length === 1
+                        ? eventInfo.webcasts[0].url
+                        : undefined,
+                    target: '_blank',
+                    rel: 'noopener',
+                    action:
+                      eventInfo.webcasts.length === 1 ? (
+                        <Icon icon={icons[eventInfo.webcasts[0].type]} />
+                      ) : (
+                        eventInfo.webcasts.map(i => (
+                          <IconButton
+                            key={i.url}
+                            icon={icons[i.type]}
+                            href={i.url}
+                            target="_blank"
+                            rel="noopener"
+                          />
+                        ))
+                      ),
                   },
                 ]}
               />
