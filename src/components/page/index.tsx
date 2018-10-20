@@ -13,7 +13,7 @@ const Page = ({ name, children, back }: Props) => (
   <div class={style.page}>
     <header>
       {back ? (
-        <a href={back}>
+        <a href={back} aria-label="back">
           <Icon icon={arrowLeft} />
         </a>
       ) : (
