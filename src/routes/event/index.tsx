@@ -45,7 +45,8 @@ const Event = ({ eventKey }: Props) => (
                       eventInfo.location.lat,
                       eventInfo.location.lon,
                     ),
-                    target: 'blank',
+                    target: '_blank',
+                    rel: 'noopener',
                     action: <Icon icon={googleMaps} />,
                   },
                   eventInfo.district && {
