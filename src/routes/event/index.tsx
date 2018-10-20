@@ -73,7 +73,14 @@ const Event = ({ eventKey }: Props) => (
             </div>
           )}
           <div>
-            {matches && matches.map(m => <MatchCard key={m.key} match={m} />)}
+            {matches &&
+              matches
+                .sort(
+                  (a, b) =>
+                    ((new Date(a.scheduledTime) as unknown) as number) -
+                    ((new Date(b.scheduledTime) as unknown) as number),
+                )
+                .map(m => <MatchCard key={m.key} match={m} />)}
           </div>
         </div>
       </Page>
