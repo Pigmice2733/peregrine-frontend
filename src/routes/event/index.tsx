@@ -38,80 +38,87 @@ const Event = ({ eventKey }: Props) => (
       <Page
         name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}
         back="/"
-      >
-        <div>
-          {eventInfo && (
-            <div class={style.infoCard}>
-              <InfoGroupCard
-                info={[
-                  eventInfo.location.name && {
-                    icon: mapMarker,
-                    title: eventInfo.location.name,
-                    href: gmapsUrl(
-                      eventInfo.location.lat,
-                      eventInfo.location.lon,
-                    ),
-                    target: '_blank',
-                    rel: 'noopener',
-                    action: <Icon icon={googleMaps} />,
-                  },
-                  eventInfo.district && {
-                    icon: infoOutline,
-                    title: (eventInfo as { fullDistrict: string }).fullDistrict,
-                    action: <Chip>{eventInfo.district}</Chip>,
-                  },
-                  {
-                    icon: calendar,
-                    title: formatDateRange(
-                      eventInfo.startDate,
-                      eventInfo.endDate,
-                    ),
-                    action: eventInfo.week !== undefined && (
-                      <Chip>{`Wk ${eventInfo.week + 1}`}</Chip>
-                    ),
-                  },
-                  eventInfo.webcasts.length > 0 && {
-                    icon: video,
-                    title:
-                      'Live Stream' +
-                      (eventInfo.webcasts.length === 1 ? '' : 's'),
-                    href:
-                      eventInfo.webcasts.length === 1
-                        ? eventInfo.webcasts[0].url
-                        : undefined,
-                    target: '_blank',
-                    rel: 'noopener',
-                    action:
-                      eventInfo.webcasts.length === 1 ? (
-                        <Icon icon={icons[eventInfo.webcasts[0].type]} />
-                      ) : (
-                        eventInfo.webcasts.map(i => (
-                          <IconButton
-                            key={i.url}
-                            icon={icons[i.type]}
-                            href={i.url}
-                            target="_blank"
-                            rel="noopener"
-                          />
-                        ))
-                      ),
-                  },
-                ]}
-              />
-            </div>
-          )}
-          <div>
-            {matches &&
+        tabs={[
+          {
+            name: 'Info',
+            contents: (
+              <div class={style.event}>
+                {eventInfo && (
+                  <InfoGroupCard
+                    info={[
+                      eventInfo.location.name && {
+                        icon: mapMarker,
+                        title: eventInfo.location.name,
+                        href: gmapsUrl(
+                          eventInfo.location.lat,
+                          eventInfo.location.lon,
+                        ),
+                        target: '_blank',
+                        rel: 'noopener',
+                        action: <Icon icon={googleMaps} />,
+                      },
+                      eventInfo.district && {
+                        icon: infoOutline,
+                        title: (eventInfo as { fullDistrict: string })
+                          .fullDistrict,
+                        action: <Chip>{eventInfo.district}</Chip>,
+                      },
+                      {
+                        icon: calendar,
+                        title: formatDateRange(
+                          eventInfo.startDate,
+                          eventInfo.endDate,
+                        ),
+                        action: eventInfo.week !== undefined && (
+                          <Chip>{`Wk ${eventInfo.week + 1}`}</Chip>
+                        ),
+                      },
+                      eventInfo.webcasts.length > 0 && {
+                        icon: video,
+                        title:
+                          'Live Stream' +
+                          (eventInfo.webcasts.length === 1 ? '' : 's'),
+                        href:
+                          eventInfo.webcasts.length === 1
+                            ? eventInfo.webcasts[0].url
+                            : undefined,
+                        target: '_blank',
+                        rel: 'noopener',
+                        action:
+                          eventInfo.webcasts.length === 1 ? (
+                            <Icon icon={icons[eventInfo.webcasts[0].type]} />
+                          ) : (
+                            eventInfo.webcasts.map(i => (
+                              <IconButton
+                                key={i.url}
+                                icon={icons[i.type]}
+                                href={i.url}
+                                target="_blank"
+                                rel="noopener"
+                              />
+                            ))
+                          ),
+                      },
+                    ]}
+                  />
+                )}
+              </div>
+            ),
+          },
+          {
+            name: 'Matches',
+            contents:
+              matches &&
               matches
                 .sort(
                   (a, b) =>
                     ((new Date(a.scheduledTime) as unknown) as number) -
                     ((new Date(b.scheduledTime) as unknown) as number),
                 )
-                .map(m => <MatchCard key={m.key} match={m} />)}
-          </div>
-        </div>
-      </Page>
+                .map(m => <MatchCard key={m.key} match={m} />),
+          },
+        ]}
+      />
     )}
     renderError={({ matches }) => <h1>Error loading matches: {matches}</h1>}
   />

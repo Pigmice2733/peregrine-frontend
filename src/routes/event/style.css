@@ -1,2 +1,6 @@
-.infoCard {
+.event {
+  @media screen and (width > 80rem) {
+    display: flex;
+    justify-content: center;
+  }
 }

@@ -3,12 +3,7 @@ import { Merge } from '../../type-utils'
 import Icon from '../../components/icon'
 import style from './style.css'
 
-type Props = Merge<
-  JSX.HTMLAttributes,
-  {
-    icon: string
-  }
->
+type Props = Merge<JSX.HTMLAttributes, { icon: string }>
 
 const IconButton = ({ icon, ...attrs }: Props) => {
   const El = attrs.href ? 'a' : 'button'
