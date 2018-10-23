@@ -53,7 +53,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-transform-template-literals": "^7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@types/jest": "23.3.5",
+    "@types/jest": "23.3.7",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "23.6.0",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
