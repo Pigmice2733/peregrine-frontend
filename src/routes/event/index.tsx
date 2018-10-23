@@ -49,9 +49,12 @@ const gcalUrl = ({
   endDate: string
   location: { name: string }
 }) =>
-  `https://www.google.com/calendar/render?action=TEMPLATE&text=${name}&dates=${gcalDate(
-    startDate,
-  )}/${gcalDate(endDate, 1)}&location=${location.name}`
+  `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+    name,
+  )}&dates=${gcalDate(startDate)}/${gcalDate(
+    endDate,
+    1,
+  )}&location=${encodeURIComponent(location.name)}`
 
 const Event = ({ eventKey }: Props) => (
   <LoadData
