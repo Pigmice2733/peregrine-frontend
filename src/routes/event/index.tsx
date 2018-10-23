@@ -12,6 +12,7 @@ import {
   video,
   twitch,
   youtube,
+  calendarPlus,
 } from '../../icons'
 import { formatDateRange } from '../../utils'
 import Icon from '../../components/icon'
@@ -27,6 +28,23 @@ const icons = { twitch, youtube }
 
 const gmapsUrl = (lat: number, lon: number) =>
   `https://www.google.com/maps/?q=${lat},${lon}`
+
+const gcalDate = (d: string) => d.replace(/-/g, '').replace(/[^\d].*/, '')
+
+const gcalUrl = ({
+  name,
+  startDate,
+  endDate,
+  location,
+}: {
+  name: string
+  startDate: string
+  endDate: string
+  location: { name: string }
+}) =>
+  `https://www.google.com/calendar/render?action=TEMPLATE&text=${name}&dates=${gcalDate(
+    startDate,
+  )}/${gcalDate(endDate)}&location=${location.name}`
 
 const Event = ({ eventKey }: Props) => (
   <LoadData
@@ -59,18 +77,36 @@ const Event = ({ eventKey }: Props) => (
                       },
                       eventInfo.district && {
                         icon: infoOutline,
-                        title: (eventInfo as { fullDistrict: string })
-                          .fullDistrict,
-                        action: <Chip>{eventInfo.district}</Chip>,
+                        title: (
+                          <span>
+                            {
+                              (eventInfo as { fullDistrict: string })
+                                .fullDistrict
+                            }{' '}
+                            <Chip>{eventInfo.district}</Chip>
+                          </span>
+                        ),
                       },
                       {
                         icon: calendar,
-                        title: formatDateRange(
-                          eventInfo.startDate,
-                          eventInfo.endDate,
+                        title: (
+                          <span>
+                            {formatDateRange(
+                              eventInfo.startDate,
+                              eventInfo.endDate,
+                            )}{' '}
+                            {eventInfo.week !== undefined && (
+                              <Chip>{`Wk ${eventInfo.week + 1}`}</Chip>
+                            )}
+                          </span>
                         ),
-                        action: eventInfo.week !== undefined && (
-                          <Chip>{`Wk ${eventInfo.week + 1}`}</Chip>
+                        action: (
+                          <IconButton
+                            href={gcalUrl(eventInfo)}
+                            target="_blank"
+                            rel="noopener"
+                            icon={calendarPlus}
+                          />
                         ),
                       },
                       eventInfo.webcasts.length > 0 && {
