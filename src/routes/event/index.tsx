@@ -29,7 +29,14 @@ const icons = { twitch, youtube }
 const gmapsUrl = (lat: number, lon: number) =>
   `https://www.google.com/maps/?q=${lat},${lon}`
 
-const gcalDate = (d: string) => d.replace(/-/g, '').replace(/[^\d].*/, '')
+const gcalDate = (d: string, dateOffset = 0) => {
+  const date = new Date(d)
+  return (
+    String(date.getFullYear()) +
+    String(date.getMonth() + 1).padStart(2, '0') +
+    String(date.getDate() + dateOffset).padStart(2, '0')
+  )
+}
 
 const gcalUrl = ({
   name,
@@ -44,7 +51,7 @@ const gcalUrl = ({
 }) =>
   `https://www.google.com/calendar/render?action=TEMPLATE&text=${name}&dates=${gcalDate(
     startDate,
-  )}/${gcalDate(endDate)}&location=${location.name}`
+  )}/${gcalDate(endDate, 1)}&location=${location.name}`
 
 const Event = ({ eventKey }: Props) => (
   <LoadData
