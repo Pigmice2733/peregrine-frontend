@@ -22,9 +22,6 @@ describe('formatMatchKey', () => {
   it('should format a qualification match', () => {
     expect(formatMatchName('qm10')).toEqual({ group: 'Qual 10' })
   })
-  it('should format a eighths match', () => {
-    expect(formatMatchName('ef8m2')).toEqual({ group: 'Eighths 8', num: '2' })
-  })
   it('should format a quarters match', () => {
     expect(formatMatchName('qf3m1')).toEqual({ group: 'Quarters 3', num: '1' })
   })
@@ -34,9 +31,10 @@ describe('formatMatchKey', () => {
   it('should format a finals match', () => {
     expect(formatMatchName('f1m2')).toEqual({ group: 'Finals 1', num: '2' })
   })
-  it('should throw if it does not end with a number', () => {
-    expect(() => formatMatchName('asdf')).toThrowError(
-      'Expected asdf to end in a digit',
-    )
+  it('should return the key as-is if it does not end with a number', () => {
+    expect(formatMatchName('asdf')).toEqual({ group: 'ASDF' })
+  })
+  it('should return the key as-is if it starts with an unrecognized match type', () => {
+    expect(formatMatchName('ef3m2')).toEqual({ group: 'EF3M2' })
   })
 })
