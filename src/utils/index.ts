@@ -37,11 +37,20 @@ export const formatMatchName = (key: string) => {
 export const formatDateRange = (startDate: string, endDate: string) => {
   const start = new Date(startDate)
   const end = new Date(endDate)
-  return `${start.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-  })}-${end.toLocaleDateString('en-US', {
-    month: start.getMonth() === end.getMonth() ? undefined : 'long',
-    day: 'numeric',
-  })}`
+  const sameYear = start.getFullYear() === end.getFullYear()
+  const sameMonth = sameYear && start.getMonth() === end.getMonth()
+  const sameDay = sameMonth && start.getDate() === end.getDate()
+  return (
+    start.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+    }) +
+    (sameDay
+      ? ''
+      : '-' +
+        end.toLocaleDateString('en-US', {
+          month: sameMonth ? undefined : 'long',
+          day: 'numeric',
+        }))
+  )
 }

@@ -57,4 +57,9 @@ describe('formatDateRange', () => {
       formatDateRange('2018-03-08T08:00:00Z', '2018-04-10T08:00:00Z'),
     ).toEqual('March 8-April 10')
   })
+  it('should format single-day events', () => {
+    expect(
+      formatDateRange('2018-10-20T04:00:00Z', '2018-10-20T04:00:00Z'),
+    ).toEqual('October 19')
+  })
 })
