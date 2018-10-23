@@ -34,7 +34,11 @@ export const formatMatchName = (key: string) => {
   return { group: `${matchType} ${matchNum[1]}` }
 }
 
-export const formatDateRange = (startDate: string, endDate: string) => {
+export const formatDateRange = (
+  startDate: string,
+  endDate: string,
+  timeZone?: string,
+) => {
   const start = new Date(startDate)
   const end = new Date(endDate)
   const sameYear = start.getFullYear() === end.getFullYear()
@@ -44,6 +48,7 @@ export const formatDateRange = (startDate: string, endDate: string) => {
     start.toLocaleDateString('en-US', {
       month: 'long',
       day: 'numeric',
+      timeZone,
     }) +
     (sameDay
       ? ''
@@ -51,6 +56,7 @@ export const formatDateRange = (startDate: string, endDate: string) => {
         end.toLocaleDateString('en-US', {
           month: sameMonth ? undefined : 'long',
           day: 'numeric',
+          timeZone,
         }))
   )
 }

@@ -59,7 +59,11 @@ describe('formatDateRange', () => {
   })
   it('should format single-day events', () => {
     expect(
-      formatDateRange('2018-10-20T04:00:00Z', '2018-10-20T04:00:00Z'),
+      formatDateRange(
+        '2018-10-20T04:00:00Z',
+        '2018-10-20T04:00:00Z',
+        'America/Los_Angeles',
+      ),
     ).toEqual('October 19')
   })
 })
