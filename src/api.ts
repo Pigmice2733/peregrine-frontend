@@ -24,40 +24,32 @@ const processResponse = <T extends any>(
 
 // Webhook but only for ranking points and match score
 
-export const getRequest = <T extends any>(
-  path: string,
-  { authenticated = false } = {},
-) =>
+export const getRequest = <T extends any>(path: string) =>
   fetch(apiUrl + path)
     .then(d => d.json() as Promise<PeregrineResponse<T>>)
     .then(processResponse)
 
 export const deleteRequest = <T extends any>(
   path: string,
-  { authenticated = false } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+): Promise<PeregrineResponse<T>> => fetch(apiUrl + path).then(d => d.json())
 
 export const putRequest = <T extends any>(
   path: string,
-  data: any,
-  { authenticated = false } = {},
+  body: any,
 ): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  fetch(apiUrl + path, { body }).then(d => d.json())
 
 export const patchRequest = <T extends any>(
   path: string,
-  data: any,
-  { authenticated = false } = {},
+  body: any,
 ): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  fetch(apiUrl + path, { body }).then(d => d.json())
 
 export const postRequest = <T extends any>(
   path: string,
-  data: any,
-  { authenticated = false } = {},
+  body: any,
 ): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  fetch(apiUrl + path, { body }).then(d => d.json())
 
 export interface BasicEventInfo {
   key: string
@@ -278,7 +270,6 @@ export const getEventMatchTeamReports = (
   eventKey: string,
   matchKey: string,
   team: string,
-  report: SubmittedReport,
 ) =>
   getRequest<Report[]>(`events/${eventKey}/match/${matchKey}/reports/${team}`)
 

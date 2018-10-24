@@ -1,20 +1,22 @@
-.page {
-  min-height: 100vh;
+:root {
   --header-height: 3rem;
+  --tabs-height: 3rem;
+  --total-height: calc(var(--header-height) + var(--tabs-height));
+}
+
+.page {
   padding-top: var(--header-height);
 
   & header {
     position: fixed;
     top: 0;
-    height: var(--header-height);
     width: 100%;
     background: var(--pigmice-purple);
     font-weight: bold;
     color: white;
-    display: flex;
-    flex-direction: row;
     align-items: center;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    z-index: 1;
 
     & svg {
       margin: 0.6rem;
@@ -22,6 +24,62 @@
 
     & > * {
       display: flex;
+    }
+  }
+
+  & .topRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: var(--header-height);
+  }
+
+  & .tabs {
+    display: none;
+    height: var(--tabs-height);
+    align-items: stretch;
+    justify-content: center;
+    margin: 0 auto;
+
+    & > button {
+      background: transparent;
+      border: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 10rem;
+      flex-grow: 1;
+      border-bottom: 0.2rem solid transparent;
+      outline: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:focus,
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.active {
+        border-bottom-color: white;
+      }
+    }
+  }
+
+  @media screen and (width <= 1000px) {
+    &.hasTabs {
+      margin-top: var(--tabs-height);
+
+      & .tabs {
+        display: flex;
+      }
+
+      & main > div:not(.active) {
+        display: none;
+      }
     }
   }
 }

@@ -1,0 +1,18 @@
+.iconButton {
+  transition: all 0.1s ease;
+  border-radius: 50%;
+  --side: 2.5rem;
+  width: var(--side);
+  height: var(--side);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.4rem 0;
+  color: var(--off-black);
+
+  &:hover,
+  &:focus {
+    background: var(--light-grey);
+    outline: none;
+  }
+}

@@ -1,4 +1,9 @@
-import { formatTeamNumber, formatTime, formatMatchName } from '.'
+import {
+  formatTeamNumber,
+  formatTime,
+  formatMatchName,
+  formatDateRange,
+} from '.'
 
 describe('formatTeamNumber', () => {
   it('works with a string', () => {
@@ -36,5 +41,27 @@ describe('formatMatchKey', () => {
   })
   it('should return the key as-is if it starts with an unrecognized match type', () => {
     expect(formatMatchName('ef3m2')).toEqual({ group: 'EF3M2' })
+  })
+})
+
+describe('formatDateRange', () => {
+  it('should format days from the same month', () => {
+    expect(
+      formatDateRange('2018-03-08T08:00:00Z', '2018-03-10T08:00:00Z'),
+    ).toEqual('March 8-10')
+  })
+  it('should format days from different months', () => {
+    expect(
+      formatDateRange('2018-03-08T08:00:00Z', '2018-04-10T08:00:00Z'),
+    ).toEqual('March 8-April 10')
+  })
+  it('should format single-day events', () => {
+    expect(
+      formatDateRange(
+        '2018-10-20T04:00:00Z',
+        '2018-10-20T04:00:00Z',
+        'America/Los_Angeles',
+      ),
+    ).toEqual('October 19')
   })
 })
