@@ -69,7 +69,7 @@
     }
   }
 
-  @media screen and (width <= 80rem) {
+  @media screen and (width <= 1000px) {
     &.hasTabs {
       margin-top: var(--tabs-height);
 
