@@ -13,20 +13,17 @@ export const formatTime = (date: string, timeZone?: string) =>
 export const formatMatchName = (key: string) => {
   const matchType = key.startsWith('qm')
     ? 'Qual'
-    : key.startsWith('ef')
-      ? 'Eighths'
-      : key.startsWith('qf')
-        ? 'Quarters'
-        : key.startsWith('sf')
-          ? 'Semis'
-          : key.startsWith('f')
-            ? 'Finals'
-            : ''
+    : key.startsWith('qf')
+      ? 'Quarters'
+      : key.startsWith('sf')
+        ? 'Semis'
+        : key.startsWith('f')
+          ? 'Finals'
+          : ''
 
   const matchNum = key.match(/(\d+)$/)
-  if (!matchNum) {
-    throw new Error(`Expected ${key} to end in a digit`)
-  }
+  if (!matchNum || matchType === '') return { group: key.toUpperCase() }
+
   let groupNum = key.match(/(\d+)m\d+$/)
   if (groupNum) {
     return { group: `${matchType} ${groupNum[1]}`, num: matchNum[1] }
