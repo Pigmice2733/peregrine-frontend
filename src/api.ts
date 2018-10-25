@@ -296,6 +296,7 @@ interface UserInfo {
   firstName: string
   lastName: string
   roles: Roles
+  stars: string[]
 }
 
 interface EditableUser extends UserInfo {
@@ -314,9 +315,6 @@ export const getUsers = () => getRequest<UserInfo[]>(`users`)
 // Anyone can view any user
 export const getUser = (userId: number) =>
   getRequest<UserInfo>(`users/${userId}`)
-// Anyone can view anyone's stars
-export const getStarredEvents = (userId: number) =>
-  getRequest<string[]>(`users/${userId}/stars`)
 // Anyone can modify themselves
 // Only admins can modify other users
 export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
