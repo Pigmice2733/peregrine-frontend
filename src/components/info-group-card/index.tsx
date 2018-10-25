@@ -1,7 +1,7 @@
 import { h } from 'preact'
-import Icon from '../../components/icon'
+import Icon from '@/components/icon'
 import style from './style.css'
-import { Merge, falsy } from '../../type-utils'
+import { Merge, falsy } from '@/type-utils'
 
 interface Props {
   info: (
