@@ -1,6 +1,4 @@
-export const formatTeamNumber = (team: string) => {
-  return Number(team.replace(/^frc/, ''))
-}
+export const formatTeamNumber = (team: string) => team.replace(/^frc/, '')
 
 export const formatTime = (date: string, timeZone?: string) =>
   new Date(date).toLocaleTimeString('en-US', {
