@@ -1,6 +1,8 @@
 import { h } from 'preact'
-import { MatchInfo } from '../../api'
-import { formatTeamNumber, formatMatchName, formatTime } from '../../utils'
+import { MatchInfo } from '@/api'
+import { formatMatchKey } from '@/utils/format-match-key'
+import { formatTime } from '@/utils/format-time'
+import { formatTeamNumber } from '@/utils/format-team-number'
 import style from './style.css'
 
 interface MatchCardProps {
@@ -9,7 +11,7 @@ interface MatchCardProps {
 }
 
 export const MatchCard = ({ match }: MatchCardProps) => {
-  const matchName = formatMatchName(match.key)
+  const matchName = formatMatchKey(match.key)
   return (
     <div class={style.matchCard}>
       <div class={style.matchTitle}>

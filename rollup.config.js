@@ -4,8 +4,9 @@ const babel = require('rollup-plugin-babel')
 const postcss = require('rollup-plugin-postcss')
 const postcssConfig = require('./postcss.config')
 const cssModulesConfig = postcssConfig.plugins['postcss-modules']
+const babelConfig = require('./.babelrc')
 
-const extensions = ['.js', '.jsx', '.es6', '.es', '.mjs', '.ts', '.tsx', '.css']
+const extensions = ['.js', '.jsx', '.es', '.mjs', '.ts', '.tsx', '.css']
 
 const prod = process.env.NODE_ENV === 'production'
 const rollupNodeOptions = { extensions, jsnext: true }
@@ -36,7 +37,7 @@ module.exports = {
     output: { dir: 'dist', format: 'system' },
     experimentalCodeSplitting: true,
     optimizeChunks: true,
-    chunkGroupingSize: 50000,
+    chunkGroupingSize: 30000,
     plugins: [
       node(rollupNodeOptions),
       postcss({
@@ -52,7 +53,7 @@ module.exports = {
         config: false,
         minimize: true,
       }),
-      babel({ extensions }),
+      babel({ extensions, babelrc: false, ...babelConfig }),
       terser(terserOptions(prod)),
     ],
   },
