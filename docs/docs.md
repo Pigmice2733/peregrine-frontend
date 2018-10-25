@@ -587,18 +587,6 @@ type Data = (
     })[]
 ```
 
-# `/users/{userId}/stars`
-
-## `GET`
-
-Anyone can view anyone's stars
-
-### Response
-
-```ts
-type Data = string[]
-```
-
 # `/users/{userId}`
 
 ## `GET`
@@ -616,6 +604,7 @@ type Data = {
     isAdmin: boolean
     isVerified: boolean
   }
+  stars: string[]
 }
 ```
 
@@ -638,6 +627,7 @@ type Data = {
   username?: string
   firstName?: string
   lastName?: string
+  stars?: string[]
 }
 ```
 
@@ -681,6 +671,7 @@ type Data = {
   username: string
   firstName: string
   lastName: string
+  stars: string[]
 }
 ```
 
@@ -707,5 +698,6 @@ type Data = {
     isAdmin: boolean
     isVerified: boolean
   }
+  stars: string[]
 }[]
 ```
