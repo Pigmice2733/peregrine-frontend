@@ -1,27 +1,27 @@
 # Index
 
-- [`authenticate`](#authenticate)
-- [`events/{eventKey}/info`](#eventseventkeyinfo)
-- [`events/{eventKey}/match/{matchKey}/info`](#eventseventkeymatchmatchkeyinfo)
-- [`events/{eventKey}/match/{matchKey}/reports/{team}`](#eventseventkeymatchmatchkeyreportsteam)
-- [`events/{eventKey}/match/{matchKey}/stats`](#eventseventkeymatchmatchkeystats)
-- [`events/{eventKey}/matches`](#eventseventkeymatches)
-- [`events/{eventKey}/star`](#eventseventkeystar)
-- [`events/{eventKey}/stats`](#eventseventkeystats)
-- [`events/{eventKey}/team/{team}/info`](#eventseventkeyteamteaminfo)
-- [`events/{eventKey}/team/{team}/stats/auto`](#eventseventkeyteamteamstatsauto)
-- [`events/{eventKey}/team/{team}/stats/teleop`](#eventseventkeyteamteamstatsteleop)
-- [`events/{eventKey}/teams`](#eventseventkeyteams)
-- [`events`](#events)
-- [`schema`](#schema)
-- [`team/{team}/automodes`](#teamteamautomodes)
-- [`team/{team}/stats/auto`](#teamteamstatsauto)
-- [`team/{team}/stats/teleop`](#teamteamstatsteleop)
-- [`users/{userId}/stars`](#usersuseridstars)
-- [`users/{userId}`](#usersuserid)
-- [`users`](#users)
+- [`/authenticate`](#authenticate)
+- [`/events/{eventKey}/info`](#eventseventkeyinfo)
+- [`/events/{eventKey}/match/{matchKey}/info`](#eventseventkeymatchmatchkeyinfo)
+- [`/events/{eventKey}/match/{matchKey}/reports/{team}`](#eventseventkeymatchmatchkeyreportsteam)
+- [`/events/{eventKey}/match/{matchKey}/stats`](#eventseventkeymatchmatchkeystats)
+- [`/events/{eventKey}/matches`](#eventseventkeymatches)
+- [`/events/{eventKey}/star`](#eventseventkeystar)
+- [`/events/{eventKey}/stats`](#eventseventkeystats)
+- [`/events/{eventKey}/team/{team}/info`](#eventseventkeyteamteaminfo)
+- [`/events/{eventKey}/team/{team}/stats/auto`](#eventseventkeyteamteamstatsauto)
+- [`/events/{eventKey}/team/{team}/stats/teleop`](#eventseventkeyteamteamstatsteleop)
+- [`/events/{eventKey}/teams`](#eventseventkeyteams)
+- [`/events`](#events)
+- [`/schema`](#schema)
+- [`/team/{team}/automodes`](#teamteamautomodes)
+- [`/team/{team}/stats/auto`](#teamteamstatsauto)
+- [`/team/{team}/stats/teleop`](#teamteamstatsteleop)
+- [`/users/{userId}/stars`](#usersuseridstars)
+- [`/users/{userId}`](#usersuserid)
+- [`/users`](#users)
 
-# `authenticate`
+# `/authenticate`
 
 ## `POST`
 
@@ -43,7 +43,7 @@ type Data = {
 }
 ```
 
-# `events/{eventKey}/info`
+# `/events/{eventKey}/info`
 
 ## `GET`
 
@@ -75,7 +75,7 @@ type Data = {
 }
 ```
 
-# `events/{eventKey}/match/{matchKey}/info`
+# `/events/{eventKey}/match/{matchKey}/info`
 
 ## `GET`
 
@@ -94,7 +94,7 @@ type Data = {
 }
 ```
 
-# `events/{eventKey}/match/{matchKey}/reports/{team}`
+# `/events/{eventKey}/match/{matchKey}/reports/{team}`
 
 ## `PUT`
 
@@ -170,7 +170,7 @@ type Data = {
 }[]
 ```
 
-# `events/{eventKey}/match/{matchKey}/stats`
+# `/events/{eventKey}/match/{matchKey}/stats`
 
 ## `GET`
 
@@ -225,7 +225,7 @@ type Data = {
 }[]
 ```
 
-# `events/{eventKey}/matches`
+# `/events/{eventKey}/matches`
 
 ## `PUT`
 
@@ -273,7 +273,7 @@ type Data = {
 }[]
 ```
 
-# `events/{eventKey}/star`
+# `/events/{eventKey}/star`
 
 ## `PUT`
 
@@ -292,7 +292,7 @@ type Data = boolean
 type Data = null
 ```
 
-# `events/{eventKey}/stats`
+# `/events/{eventKey}/stats`
 
 ## `GET`
 
@@ -345,7 +345,7 @@ type Data = {
 }[]
 ```
 
-# `events/{eventKey}/team/{team}/info`
+# `/events/{eventKey}/team/{team}/info`
 
 ## `GET`
 
@@ -369,7 +369,7 @@ type Data = {
 }
 ```
 
-# `events/{eventKey}/team/{team}/stats/auto`
+# `/events/{eventKey}/team/{team}/stats/auto`
 
 ## `GET`
 
@@ -397,7 +397,7 @@ type Data = {
 }[]
 ```
 
-# `events/{eventKey}/team/{team}/stats/teleop`
+# `/events/{eventKey}/team/{team}/stats/teleop`
 
 ## `GET`
 
@@ -421,7 +421,7 @@ type Data = (
     })[]
 ```
 
-# `events/{eventKey}/teams`
+# `/events/{eventKey}/teams`
 
 ## `GET`
 
@@ -431,7 +431,7 @@ type Data = (
 type Data = string[]
 ```
 
-# `events`
+# `/events`
 
 ## `PUT`
 
@@ -496,7 +496,7 @@ type Data = {
 }[]
 ```
 
-# `schema`
+# `/schema`
 
 ## `GET`
 
@@ -517,7 +517,7 @@ type Data = {
 }
 ```
 
-# `team/{team}/automodes`
+# `/team/{team}/automodes`
 
 ## `GET`
 
@@ -527,7 +527,7 @@ type Data = {
 type Data = string[]
 ```
 
-# `team/{team}/stats/auto`
+# `/team/{team}/stats/auto`
 
 ## `GET`
 
@@ -559,7 +559,7 @@ type Data = {
 }[]
 ```
 
-# `team/{team}/stats/teleop`
+# `/team/{team}/stats/teleop`
 
 ## `GET`
 
@@ -587,7 +587,7 @@ type Data = (
     })[]
 ```
 
-# `users/{userId}/stars`
+# `/users/{userId}/stars`
 
 ## `GET`
 
@@ -599,7 +599,7 @@ Anyone can view anyone's stars
 type Data = string[]
 ```
 
-# `users/{userId}`
+# `/users/{userId}`
 
 ## `GET`
 
@@ -660,7 +660,7 @@ Only admins can delete other users
 type Data = null
 ```
 
-# `users`
+# `/users`
 
 ## `POST`
 
