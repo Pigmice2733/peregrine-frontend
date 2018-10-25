@@ -17,7 +17,6 @@
 - [`/team/{team}/automodes`](#teamteamautomodes)
 - [`/team/{team}/stats/auto`](#teamteamstatsauto)
 - [`/team/{team}/stats/teleop`](#teamteamstatsteleop)
-- [`/users/{userId}/stars`](#usersuseridstars)
 - [`/users/{userId}`](#usersuserid)
 - [`/users`](#users)
 
