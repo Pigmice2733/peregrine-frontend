@@ -1,6 +1,6 @@
 import { h } from 'preact'
-import { MatchInfo } from '../../api'
-import { formatTeamNumber, formatMatchName, formatTime } from '../../utils'
+import { MatchInfo } from '@/api'
+import { formatTeamNumber, formatMatchName, formatTime } from '@/utils'
 import style from './style.css'
 
 interface MatchCardProps {

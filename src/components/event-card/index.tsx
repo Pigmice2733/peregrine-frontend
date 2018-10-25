@@ -1,6 +1,6 @@
 import { h } from 'preact'
 import style from './style.css'
-import Chip, { DateChip } from '../../components/chip'
+import Chip, { DateChip } from '@/components/chip'
 
 interface Props {
   event: {

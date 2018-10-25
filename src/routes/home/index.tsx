@@ -1,8 +1,8 @@
 import { h } from 'preact'
-import { getEvents } from '../../api'
-import LoadData from '../../load-data'
-import Page from '../../components/page'
-import EventCard from '../../components/event-card'
+import { getEvents } from '@/api'
+import LoadData from '@/load-data'
+import Page from '@/components/page'
+import EventCard from '@/components/event-card'
 
 const Home = () => (
   <Page name="Home">

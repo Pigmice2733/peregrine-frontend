@@ -1,6 +1,6 @@
 import { h } from 'preact'
-import { Merge } from '../../type-utils'
-import Icon from '../../components/icon'
+import { Merge } from '@/type-utils'
+import Icon from '@/components/icon'
 import style from './style.css'
 
 type Props = Merge<JSX.HTMLAttributes, { icon: string }>
