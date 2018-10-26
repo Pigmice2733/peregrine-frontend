@@ -1,3 +1,25 @@
+# Index
+
+- [`/authenticate`](#authenticate)
+- [`/events/{eventKey}/info`](#eventseventkeyinfo)
+- [`/events/{eventKey}/match/{matchKey}/info`](#eventseventkeymatchmatchkeyinfo)
+- [`/events/{eventKey}/match/{matchKey}/reports/{team}`](#eventseventkeymatchmatchkeyreportsteam)
+- [`/events/{eventKey}/match/{matchKey}/stats`](#eventseventkeymatchmatchkeystats)
+- [`/events/{eventKey}/matches`](#eventseventkeymatches)
+- [`/events/{eventKey}/star`](#eventseventkeystar)
+- [`/events/{eventKey}/stats`](#eventseventkeystats)
+- [`/events/{eventKey}/team/{team}/info`](#eventseventkeyteamteaminfo)
+- [`/events/{eventKey}/team/{team}/stats/auto`](#eventseventkeyteamteamstatsauto)
+- [`/events/{eventKey}/team/{team}/stats/teleop`](#eventseventkeyteamteamstatsteleop)
+- [`/events/{eventKey}/teams`](#eventseventkeyteams)
+- [`/events`](#events)
+- [`/schema`](#schema)
+- [`/team/{team}/automodes`](#teamteamautomodes)
+- [`/team/{team}/stats/auto`](#teamteamstatsauto)
+- [`/team/{team}/stats/teleop`](#teamteamstatsteleop)
+- [`/users/{userId}`](#usersuserid)
+- [`/users`](#users)
+
 # `/authenticate`
 
 ## `POST`
