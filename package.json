@@ -12,7 +12,8 @@
     "type:watch": "tsc --noEmit --pretty --watch",
     "type": "tsc --noEmit --pretty",
     "start": "parcel index.html",
-    "build": "node build.js"
+    "build": "node build.js",
+    "new-route": "hygen route new"
   },
   "eslintConfig": {
     "extends": [
