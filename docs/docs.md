@@ -2,9 +2,9 @@
 
 - [`/authenticate`](#authenticate)
 - [`/events/{eventKey}/info`](#eventseventkeyinfo)
-- [`/events/{eventKey}/match/{matchKey}/info`](#eventseventkeymatchmatchkeyinfo)
-- [`/events/{eventKey}/match/{matchKey}/reports/{team}`](#eventseventkeymatchmatchkeyreportsteam)
-- [`/events/{eventKey}/match/{matchKey}/stats`](#eventseventkeymatchmatchkeystats)
+- [`/events/{eventKey}/matches/{matchKey}/info`](#eventseventkeymatchesmatchkeyinfo)
+- [`/events/{eventKey}/matches/{matchKey}/reports/{team}`](#eventseventkeymatchesmatchkeyreportsteam)
+- [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
@@ -74,7 +74,7 @@ type Data = {
 }
 ```
 
-# `/events/{eventKey}/match/{matchKey}/info`
+# `/events/{eventKey}/matches/{matchKey}/info`
 
 ## `GET`
 
@@ -93,7 +93,7 @@ type Data = {
 }
 ```
 
-# `/events/{eventKey}/match/{matchKey}/reports/{team}`
+# `/events/{eventKey}/matches/{matchKey}/reports/{team}`
 
 ## `PUT`
 
@@ -169,7 +169,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/match/{matchKey}/stats`
+# `/events/{eventKey}/matches/{matchKey}/stats`
 
 ## `GET`
 

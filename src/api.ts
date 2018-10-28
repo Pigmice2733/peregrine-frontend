@@ -124,7 +124,7 @@ export const getEventMatches = (eventKey: string) =>
   getRequest<MatchList>(`events/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
-  getRequest<MatchInfo>(`events/${eventKey}/match/${matchKey}/info`)
+  getRequest<MatchInfo>(`events/${eventKey}/matches/${matchKey}/info`)
 
 export const getEventTeams = (eventKey: string) =>
   getRequest<string[]>(`events/${eventKey}/teams`)
@@ -214,7 +214,7 @@ export const getEventStats = (eventKey: string) =>
 // not just this match
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
-    `events/${eventKey}/match/${matchKey}/stats`,
+    `events/${eventKey}/matches/${matchKey}/stats`,
   )
 
 interface EventTeamInfo {
@@ -262,7 +262,7 @@ export const submitReport = (
   report: SubmittedReport,
 ) =>
   putRequest<null>(
-    `events/${eventKey}/match/${matchKey}/reports/${team}`,
+    `events/${eventKey}/matches/${matchKey}/reports/${team}`,
     report,
   )
 
@@ -271,7 +271,7 @@ export const getEventMatchTeamReports = (
   matchKey: string,
   team: string,
 ) =>
-  getRequest<Report[]>(`events/${eventKey}/match/${matchKey}/reports/${team}`)
+  getRequest<Report[]>(`events/${eventKey}/matches/${matchKey}/reports/${team}`)
 
 interface StatDescription {
   statName: string
