@@ -23,6 +23,10 @@ const App = () => (
       path="/events/:eventKey"
       component={asyncRoute(() => import('./routes/event'))}
     />
+    <Route<{ eventKey: string; matchKey: string }>
+      path="/events/:eventKey/matches/:matchKey"
+      component={asyncRoute(() => import('./routes/event-match'))}
+    />
   </Router>
 )
 
