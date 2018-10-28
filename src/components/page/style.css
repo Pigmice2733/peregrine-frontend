@@ -22,13 +22,12 @@
       margin: 0.6rem;
     }
 
-    & > * {
+    & * {
       display: flex;
     }
   }
 
   & .topRow {
-    display: flex;
     flex-direction: row;
     align-items: center;
     height: var(--header-height);
@@ -48,7 +47,6 @@
       font-size: 0.95rem;
       color: white;
       text-decoration: none;
-      display: flex;
       justify-content: center;
       align-items: center;
       max-width: 10rem;
