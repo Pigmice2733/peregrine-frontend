@@ -159,7 +159,13 @@ const Event = ({ eventKey }: Props) => (
                     ((new Date(a.scheduledTime) as unknown) as number) -
                     ((new Date(b.scheduledTime) as unknown) as number),
                 )
-                .map(m => <MatchCard key={m.key} match={m} />),
+                .map(m => (
+                  <MatchCard
+                    key={m.key}
+                    match={m}
+                    href={`/events/${eventKey}/matches/${m.key}`}
+                  />
+                )),
           },
         ]}
       />
