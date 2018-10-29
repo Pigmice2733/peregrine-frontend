@@ -1,0 +1,3 @@
+---
+to: <%- filepath %>/style.css
+---

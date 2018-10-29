@@ -35,7 +35,7 @@ test('resolving promise', async () => {
 test('rejecting promise', async () => {
   type T = { message: string }
   let rejectData: (reason: T) => void = Promise.reject
-  const fakePromise = new Promise<T>((resolve, reject) => (rejectData = reject))
+  const fakePromise = new Promise<T>((_, reject) => (rejectData = reject))
   const getData = () => fakePromise
   const { container, getByTestId } = render(
     <LoadData

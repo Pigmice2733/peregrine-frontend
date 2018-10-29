@@ -1,3 +1,25 @@
+# Index
+
+- [`/authenticate`](#authenticate)
+- [`/events/{eventKey}/info`](#eventseventkeyinfo)
+- [`/events/{eventKey}/matches/{matchKey}/info`](#eventseventkeymatchesmatchkeyinfo)
+- [`/events/{eventKey}/matches/{matchKey}/reports/{team}`](#eventseventkeymatchesmatchkeyreportsteam)
+- [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
+- [`/events/{eventKey}/matches`](#eventseventkeymatches)
+- [`/events/{eventKey}/star`](#eventseventkeystar)
+- [`/events/{eventKey}/stats`](#eventseventkeystats)
+- [`/events/{eventKey}/team/{team}/info`](#eventseventkeyteamteaminfo)
+- [`/events/{eventKey}/team/{team}/stats/auto`](#eventseventkeyteamteamstatsauto)
+- [`/events/{eventKey}/team/{team}/stats/teleop`](#eventseventkeyteamteamstatsteleop)
+- [`/events/{eventKey}/teams`](#eventseventkeyteams)
+- [`/events`](#events)
+- [`/schema`](#schema)
+- [`/team/{team}/automodes`](#teamteamautomodes)
+- [`/team/{team}/stats/auto`](#teamteamstatsauto)
+- [`/team/{team}/stats/teleop`](#teamteamstatsteleop)
+- [`/users/{userId}`](#usersuserid)
+- [`/users`](#users)
+
 # `/authenticate`
 
 ## `POST`
@@ -52,7 +74,7 @@ type Data = {
 }
 ```
 
-# `/events/{eventKey}/match/{matchKey}/info`
+# `/events/{eventKey}/matches/{matchKey}/info`
 
 ## `GET`
 
@@ -62,7 +84,7 @@ type Data = {
 type Data = {
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
@@ -71,7 +93,7 @@ type Data = {
 }
 ```
 
-# `/events/{eventKey}/match/{matchKey}/reports/{team}`
+# `/events/{eventKey}/matches/{matchKey}/reports/{team}`
 
 ## `PUT`
 
@@ -147,7 +169,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/match/{matchKey}/stats`
+# `/events/{eventKey}/matches/{matchKey}/stats`
 
 ## `GET`
 
@@ -239,12 +261,14 @@ type Data = null
 type Data = {
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
   redScore?: number
   blueScore?: number
+  // UTC date - scheduled match time
+  scheduledTime: string
 }[]
 ```
 
@@ -332,7 +356,7 @@ type Data = {
   nextMatch?: {
     redAlliance: string[]
     blueAlliance: string[]
-    // UTC date - match predicted time
+    // UTC date - predicted match time
     time: string
     // example: qm3
     key: string
@@ -562,18 +586,6 @@ type Data = (
     })[]
 ```
 
-# `/users/{userId}/stars`
-
-## `GET`
-
-Anyone can view anyone's stars
-
-### Response
-
-```ts
-type Data = string[]
-```
-
 # `/users/{userId}`
 
 ## `GET`
@@ -591,6 +603,7 @@ type Data = {
     isAdmin: boolean
     isVerified: boolean
   }
+  stars: string[]
 }
 ```
 
@@ -613,6 +626,7 @@ type Data = {
   username?: string
   firstName?: string
   lastName?: string
+  stars?: string[]
 }
 ```
 
@@ -656,6 +670,7 @@ type Data = {
   username: string
   firstName: string
   lastName: string
+  stars: string[]
 }
 ```
 
@@ -682,5 +697,6 @@ type Data = {
     isAdmin: boolean
     isVerified: boolean
   }
+  stars: string[]
 }[]
 ```

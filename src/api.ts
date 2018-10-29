@@ -24,40 +24,32 @@ const processResponse = <T extends any>(
 
 // Webhook but only for ranking points and match score
 
-export const getRequest = <T extends any>(
-  path: string,
-  { authenticated = false } = {},
-) =>
+export const getRequest = <T extends any>(path: string) =>
   fetch(apiUrl + path)
     .then(d => d.json() as Promise<PeregrineResponse<T>>)
     .then(processResponse)
 
 export const deleteRequest = <T extends any>(
   path: string,
-  { authenticated = false } = {},
-): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+): Promise<PeregrineResponse<T>> => fetch(apiUrl + path).then(d => d.json())
 
 export const putRequest = <T extends any>(
   path: string,
-  data: any,
-  { authenticated = false } = {},
+  body: any,
 ): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  fetch(apiUrl + path, { body }).then(d => d.json())
 
 export const patchRequest = <T extends any>(
   path: string,
-  data: any,
-  { authenticated = false } = {},
+  body: any,
 ): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  fetch(apiUrl + path, { body }).then(d => d.json())
 
 export const postRequest = <T extends any>(
   path: string,
-  data: any,
-  { authenticated = false } = {},
+  body: any,
 ): Promise<PeregrineResponse<T>> =>
-  fetch(`https://api.pigmice.ga/$`).then(d => d.json())
+  fetch(apiUrl + path, { body }).then(d => d.json())
 
 export interface BasicEventInfo {
   key: string
@@ -106,13 +98,18 @@ export const getEventInfo = (eventKey: string) =>
 export interface MatchInfo {
   redAlliance: string[]
   blueAlliance: string[]
-  // UTC date - match predicted time
+  // UTC date - predicted match time
   time: string
   // example: qm3
   key: string
   redScore?: number
   blueScore?: number
 }
+
+type MatchList = (MatchInfo & {
+  // UTC date - scheduled match time
+  scheduledTime: string
+})[]
 
 // Only admins can create matches
 export const createEventMatch = (
@@ -124,10 +121,10 @@ export const createEventMatch = (
 ) => putRequest<null>(`events/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
-  getRequest<MatchInfo[]>(`events/${eventKey}/matches`)
+  getRequest<MatchList>(`events/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
-  getRequest<MatchInfo>(`events/${eventKey}/match/${matchKey}/info`)
+  getRequest<MatchInfo>(`events/${eventKey}/matches/${matchKey}/info`)
 
 export const getEventTeams = (eventKey: string) =>
   getRequest<string[]>(`events/${eventKey}/teams`)
@@ -217,7 +214,7 @@ export const getEventStats = (eventKey: string) =>
 // not just this match
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
-    `events/${eventKey}/match/${matchKey}/stats`,
+    `events/${eventKey}/matches/${matchKey}/stats`,
   )
 
 interface EventTeamInfo {
@@ -265,7 +262,7 @@ export const submitReport = (
   report: SubmittedReport,
 ) =>
   putRequest<null>(
-    `events/${eventKey}/match/${matchKey}/reports/${team}`,
+    `events/${eventKey}/matches/${matchKey}/reports/${team}`,
     report,
   )
 
@@ -273,9 +270,8 @@ export const getEventMatchTeamReports = (
   eventKey: string,
   matchKey: string,
   team: string,
-  report: SubmittedReport,
 ) =>
-  getRequest<Report[]>(`events/${eventKey}/match/${matchKey}/reports/${team}`)
+  getRequest<Report[]>(`events/${eventKey}/matches/${matchKey}/reports/${team}`)
 
 interface StatDescription {
   statName: string
@@ -300,6 +296,7 @@ interface UserInfo {
   firstName: string
   lastName: string
   roles: Roles
+  stars: string[]
 }
 
 interface EditableUser extends UserInfo {
@@ -318,9 +315,6 @@ export const getUsers = () => getRequest<UserInfo[]>(`users`)
 // Anyone can view any user
 export const getUser = (userId: number) =>
   getRequest<UserInfo>(`users/${userId}`)
-// Anyone can view anyone's stars
-export const getStarredEvents = (userId: number) =>
-  getRequest<string[]>(`users/${userId}/stars`)
 // Anyone can modify themselves
 // Only admins can modify other users
 export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
