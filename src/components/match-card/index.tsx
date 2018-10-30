@@ -5,6 +5,7 @@ import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import style from './style.css'
 import { Merge } from '@/type-utils'
+import Card from '@/components/card'
 
 type MatchCardProps = Merge<
   JSX.HTMLAttributes,
@@ -16,9 +17,8 @@ type MatchCardProps = Merge<
 
 export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
   const matchName = formatMatchKey(match.key)
-  const El = rest.href ? 'a' : 'div'
   return (
-    <El class={style.matchCard} {...rest}>
+    <Card class={style.matchCard} {...rest}>
       <div class={style.matchTitle}>
         <div>{matchName.group}</div>
         {matchName.num && (
@@ -36,6 +36,6 @@ export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
           <div key={t}>{formatTeamNumber(t)}</div>
         ))}
       </div>
-    </El>
+    </Card>
   )
 }

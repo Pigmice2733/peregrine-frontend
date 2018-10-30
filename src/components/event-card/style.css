@@ -1,18 +1,8 @@
 .eventCard {
-  --box-shadow: 0 0.2rem 0.3rem rgba(0, 0, 0, 0.25);
   padding: 0.85rem;
-  margin: 1.2rem auto;
-  border-radius: 0.3rem;
-  box-shadow: var(--box-shadow);
-  background: white;
-  width: 23rem;
-  max-width: calc(100% - 2rem);
   font-size: 0.93rem;
-  display: flex;
+  justify-content: space-between;
   align-items: center;
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow 0.1s ease;
 
   &:hover {
     box-shadow: 0 0.2rem 0.5rem 0.05rem rgba(0, 0, 0, 0.25);
