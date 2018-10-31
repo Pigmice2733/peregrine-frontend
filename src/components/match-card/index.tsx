@@ -4,16 +4,12 @@ import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import style from './style.css'
-import { Merge } from '@/type-utils'
-import Card from '@/components/card'
+import Card, { CardProps } from '@/components/card'
 
-type MatchCardProps = Merge<
-  JSX.HTMLAttributes,
-  {
-    match: MatchInfo
-    key?: string | number
-  }
->
+type MatchCardProps = CardProps<{
+  match: MatchInfo
+  key?: string | number
+}>
 
 export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
   const matchName = formatMatchKey(match.key)

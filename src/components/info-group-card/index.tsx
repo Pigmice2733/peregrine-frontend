@@ -1,19 +1,16 @@
 import { h } from 'preact'
 import Icon from '@/components/icon'
 import style from './style.css'
-import { Merge, falsy } from '@/type-utils'
-import Card from '@/components/card'
+import { falsy } from '@/type-utils'
+import Card, { CardProps } from '@/components/card'
 
 interface Props {
   info: (
-    | Merge<
-        JSX.HTMLAttributes,
-        {
-          icon: string
-          title: string | JSX.Element
-          action?: falsy | JSX.Element | JSX.Element[]
-        }
-      >
+    | CardProps<{
+        icon: string
+        title: string | JSX.Element
+        action?: falsy | JSX.Element | JSX.Element[]
+      }>
     | falsy)[]
 }
 

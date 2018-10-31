@@ -1,18 +1,16 @@
 import { h } from 'preact'
 import style from './style.css'
 import Chip, { DateChip } from '@/components/chip'
-import Card from '@/components/card'
+import Card, { CardProps } from '@/components/card'
 
-interface Props {
+type Props = CardProps<{
   event: {
     name: string
     district?: string
     week?: number
     startDate: string
   }
-  href?: string
-  key?: string | number
-}
+}>
 
 const EventCard = ({ event, href }: Props) => (
   <Card href={href} class={style.eventCard}>
