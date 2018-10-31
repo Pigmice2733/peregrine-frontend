@@ -1,8 +1,9 @@
 import { h } from 'preact'
 import Icon from '@/components/icon'
-import style from './style.css'
 import { falsy } from '@/type-utils'
 import Card, { CardProps } from '@/components/card'
+
+import style from './style.css'
 
 interface Props {
   info: (

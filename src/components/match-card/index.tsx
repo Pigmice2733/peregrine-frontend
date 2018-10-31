@@ -3,8 +3,9 @@ import { MatchInfo } from '@/api'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
-import style from './style.css'
 import Card, { CardProps } from '@/components/card'
+
+import style from './style.css'
 
 type MatchCardProps = CardProps<{
   match: MatchInfo

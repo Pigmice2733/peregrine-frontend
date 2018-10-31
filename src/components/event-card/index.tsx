@@ -1,7 +1,8 @@
 import { h } from 'preact'
-import style from './style.css'
 import Chip, { DateChip } from '@/components/chip'
 import Card, { CardProps } from '@/components/card'
+
+import style from './style.css'
 
 type Props = CardProps<{
   event: {
