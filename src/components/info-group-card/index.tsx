@@ -1,25 +1,24 @@
 import { h } from 'preact'
 import Icon from '@/components/icon'
+import { falsy } from '@/type-utils'
+import Card, { CardProps } from '@/components/card'
+
 import style from './style.css'
-import { Merge, falsy } from '@/type-utils'
 
 interface Props {
   info: (
-    | Merge<
-        JSX.HTMLAttributes,
-        {
-          icon: string
-          title: string | JSX.Element
-          action?: falsy | JSX.Element | JSX.Element[]
-        }
-      >
+    | CardProps<{
+        icon: string
+        title: string | JSX.Element
+        action?: falsy | JSX.Element | JSX.Element[]
+      }>
     | falsy)[]
 }
 
 const isTruthy = <T extends object>(i: T | falsy): i is T => Boolean(i)
 
 const InfoGroupCard = ({ info }: Props) => (
-  <div class={style.card}>
+  <Card class={style.infoCard}>
     {info.filter(isTruthy).map(({ icon, action, title, ...i }) => {
       const El = i.href ? 'a' : 'div'
       return (
@@ -30,7 +29,7 @@ const InfoGroupCard = ({ info }: Props) => (
         </El>
       )
     })}
-  </div>
+  </Card>
 )
 
 export default InfoGroupCard

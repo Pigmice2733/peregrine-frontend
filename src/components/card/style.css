@@ -1,0 +1,30 @@
+:root {
+  --card-shadow: 0 0.2rem 0.3rem rgba(0, 0, 0, 0.25);
+}
+.card {
+  margin: 1.2rem auto;
+  border-radius: 0.3rem;
+  box-shadow: var(--card-shadow);
+  background: white;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.1s ease;
+  display: flex;
+
+  &[href] {
+    &:hover {
+      box-shadow: 0 0.2rem 0.5rem 0.05rem rgba(0, 0, 0, 0.25);
+    }
+
+    &:focus {
+      box-shadow: var(--card-shadow), 0 0 0 0.2rem rgba(0, 113, 255, 0.27);
+      outline: none;
+    }
+
+    &:active {
+      box-shadow: var(--card-shadow);
+    }
+  }
+}

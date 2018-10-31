@@ -1,20 +1,20 @@
 import { h } from 'preact'
-import style from './style.css'
 import Chip, { DateChip } from '@/components/chip'
+import Card, { CardProps } from '@/components/card'
 
-interface Props {
+import style from './style.css'
+
+type Props = CardProps<{
   event: {
     name: string
     district?: string
     week?: number
     startDate: string
   }
-  href?: string
-  key?: string | number
-}
+}>
 
 const EventCard = ({ event, href }: Props) => (
-  <a href={href} class={style.eventCard}>
+  <Card href={href} class={style.eventCard}>
     <span class={style.name}>{event.name}</span>
     {event.district !== undefined && <Chip>{event.district}</Chip>}
     {event.week === undefined ? (
@@ -22,7 +22,7 @@ const EventCard = ({ event, href }: Props) => (
     ) : (
       <Chip>{`Wk ${event.week + 1}`}</Chip>
     )}
-  </a>
+  </Card>
 )
 
 export default EventCard
