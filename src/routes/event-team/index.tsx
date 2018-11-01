@@ -41,7 +41,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
             {
               title: 'Ranking Score',
               icon: history,
-              action: eventTeamInfo ? round(eventTeamInfo.rankingScore) : '',
+              action:
+                eventTeamInfo && eventTeamInfo.rankingScore
+                  ? round(eventTeamInfo.rankingScore)
+                  : '',
             },
           ]}
         />
