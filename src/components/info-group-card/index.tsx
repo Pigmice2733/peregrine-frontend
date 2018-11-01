@@ -10,7 +10,7 @@ interface Props {
     | CardProps<{
         icon: string
         title: string | JSX.Element
-        action?: falsy | JSX.Element | JSX.Element[]
+        action?: falsy | JSX.Element | JSX.Element[] | string | number
       }>
     | falsy)[]
 }

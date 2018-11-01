@@ -225,15 +225,15 @@ interface EventTeamInfo {
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
-  getRequest<EventTeamInfo>(`events/${eventKey}/team/${team}/info`)
+  getRequest<EventTeamInfo>(`events/${eventKey}/teams/${team}/info`)
 
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
   getRequest<EventTeamTeleopStats>(
-    `events/${eventKey}/team/${team}/stats/teleop`,
+    `events/${eventKey}/teams/${team}/stats/teleop`,
   )
 
 export const getEventTeamAutoStats = (eventKey: string, team: string) =>
-  getRequest<EventTeamAutoStats>(`events/${eventKey}/team/${team}/stats/auto`)
+  getRequest<EventTeamAutoStats>(`events/${eventKey}/teams/${team}/stats/auto`)
 
 export const getTeamTeleopStats = (team: string) =>
   getRequest<TeamTeleopStats>(`team/${team}/stats/teleop`)
