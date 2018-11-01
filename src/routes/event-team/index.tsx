@@ -21,7 +21,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
       eventTeamInfo: () => getEventTeamInfo(eventKey, 'frc' + teamNum),
     }}
     renderSuccess={({ eventInfo, eventTeamInfo }) => (
-      <Page name={`${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}>
+      <Page
+        name={`${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
+        back={`/events/${eventKey}`}
+      >
         <h2 class={style.section}>Next Match</h2>
         <MatchCard
           match={{
