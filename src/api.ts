@@ -310,9 +310,9 @@ interface EditableUser extends UserInfo {
 // will require admin approval
 export const createUser = (user: EditableUser) =>
   postRequest<number | false>(`users`, user)
-// Anyone can view the list of users
+// Admins can view the list of users
 export const getUsers = () => getRequest<UserInfo[]>(`users`)
-// Anyone can view any user
+// Admins can view any user, users can view themselves
 export const getUser = (userId: number) =>
   getRequest<UserInfo>(`users/${userId}`)
 // Anyone can modify themselves
