@@ -7,6 +7,7 @@ import InfoGroupCard from '@/components/info-group-card'
 import { sortAscending } from '@/icons/sort-ascending'
 import { history } from '@/icons/history'
 import { MatchCard } from '@/components/match-card'
+import { round } from '@/utils/round'
 
 interface Props {
   eventKey: string
@@ -40,7 +41,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
             {
               title: 'Ranking Score',
               icon: history,
-              action: eventTeamInfo ? eventTeamInfo.rankingScore : '',
+              action: eventTeamInfo ? round(eventTeamInfo.rankingScore) : '',
             },
           ]}
         />
