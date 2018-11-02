@@ -1,22 +1,22 @@
 # Index
 
 - [`/authenticate`](#authenticate)
-- [`/events/{eventKey}/info`](#eventseventkeyinfo)
-- [`/events/{eventKey}/matches/{matchKey}/info`](#eventseventkeymatchesmatchkeyinfo)
 - [`/events/{eventKey}/matches/{matchKey}/reports/{team}`](#eventseventkeymatchesmatchkeyreportsteam)
 - [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
+- [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
-- [`/events/{eventKey}/team/{team}/info`](#eventseventkeyteamteaminfo)
-- [`/events/{eventKey}/team/{team}/stats/auto`](#eventseventkeyteamteamstatsauto)
-- [`/events/{eventKey}/team/{team}/stats/teleop`](#eventseventkeyteamteamstatsteleop)
+- [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
+- [`/events/{eventKey}/teams/{team}/stats/teleop`](#eventseventkeyteamsteamstatsteleop)
+- [`/events/{eventKey}/teams/{team}`](#eventseventkeyteamsteam)
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
+- [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
 - [`/schema`](#schema)
-- [`/team/{team}/automodes`](#teamteamautomodes)
-- [`/team/{team}/stats/auto`](#teamteamstatsauto)
-- [`/team/{team}/stats/teleop`](#teamteamstatsteleop)
+- [`/teams/{team}/automodes`](#teamsteamautomodes)
+- [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
+- [`/teams/{team}/stats/teleop`](#teamsteamstatsteleop)
 - [`/users/{userId}`](#usersuserid)
 - [`/users`](#users)
 
@@ -39,57 +39,6 @@ type Data = {
 ```ts
 type Data = {
   jwt: string
-}
-```
-
-# `/events/{eventKey}/info`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  webcasts: {
-    type: "twitch" | "youtube"
-    url: string
-  }[]
-  // district "display_name" from TBA
-  fullDistrict?: string
-  location: {
-    name: string
-    lat: number
-    lon: number
-  }
-  key: string
-  // from TBA short name
-  name: string
-  // abbreviated district name
-  district?: string
-  week?: number
-  // UTC date
-  startDate: string
-  // UTC date
-  endDate: string
-}
-```
-
-# `/events/{eventKey}/matches/{matchKey}/info`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  redAlliance: string[]
-  blueAlliance: string[]
-  // UTC date - predicted match time
-  time: string
-  // example: qm3
-  key: string
-  redScore?: number
-  blueScore?: number
 }
 ```
 
@@ -224,6 +173,25 @@ type Data = {
 }[]
 ```
 
+# `/events/{eventKey}/matches/{matchKey}`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  redAlliance: string[]
+  blueAlliance: string[]
+  // UTC date - predicted match time
+  time: string
+  // example: qm3
+  key: string
+  redScore?: number
+  blueScore?: number
+}
+```
+
 # `/events/{eventKey}/matches`
 
 ## `PUT`
@@ -344,31 +312,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/team/{team}/info`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  // only if they have future matches at this event
-  nextMatch?: {
-    redAlliance: string[]
-    blueAlliance: string[]
-    // UTC date - predicted match time
-    time: string
-    // example: qm3
-    key: string
-    redScore?: number
-    blueScore?: number
-  }
-  rank?: number
-  rankingScore?: number
-}
-```
-
-# `/events/{eventKey}/team/{team}/stats/auto`
+# `/events/{eventKey}/teams/{team}/stats/auto`
 
 ## `GET`
 
@@ -396,7 +340,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/team/{team}/stats/teleop`
+# `/events/{eventKey}/teams/{team}/stats/teleop`
 
 ## `GET`
 
@@ -420,6 +364,30 @@ type Data = (
     })[]
 ```
 
+# `/events/{eventKey}/teams/{team}`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  // only if they have future matches at this event
+  nextMatch?: {
+    redAlliance: string[]
+    blueAlliance: string[]
+    // UTC date - predicted match time
+    time: string
+    // example: qm3
+    key: string
+    redScore?: number
+    blueScore?: number
+  }
+  rank?: number
+  rankingScore?: number
+}
+```
+
 # `/events/{eventKey}/teams`
 
 ## `GET`
@@ -428,6 +396,38 @@ type Data = (
 
 ```ts
 type Data = string[]
+```
+
+# `/events/{eventKey}`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  webcasts: {
+    type: "twitch" | "youtube"
+    url: string
+  }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
+  location: {
+    name: string
+    lat: number
+    lon: number
+  }
+  key: string
+  // from TBA short name
+  name: string
+  // abbreviated district name
+  district?: string
+  week?: number
+  // UTC date
+  startDate: string
+  // UTC date
+  endDate: string
+}
 ```
 
 # `/events`
@@ -516,7 +516,7 @@ type Data = {
 }
 ```
 
-# `/team/{team}/automodes`
+# `/teams/{team}/automodes`
 
 ## `GET`
 
@@ -526,7 +526,7 @@ type Data = {
 type Data = string[]
 ```
 
-# `/team/{team}/stats/auto`
+# `/teams/{team}/stats/auto`
 
 ## `GET`
 
@@ -558,7 +558,7 @@ type Data = {
 }[]
 ```
 
-# `/team/{team}/stats/teleop`
+# `/teams/{team}/stats/teleop`
 
 ## `GET`
 
@@ -590,7 +590,7 @@ type Data = (
 
 ## `GET`
 
-Anyone can view any user
+Admins can view any user, users can view themselves
 
 ### Response
 
@@ -684,7 +684,7 @@ type Data = number | false
 
 ## `GET`
 
-Anyone can view the list of users
+Admins can view the list of users
 
 ### Response
 
