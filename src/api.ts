@@ -93,7 +93,7 @@ interface EventInfo extends BasicEventInfo {
 }
 
 export const getEventInfo = (eventKey: string) =>
-  getRequest<EventInfo>(`events/${eventKey}/info`)
+  getRequest<EventInfo>(`events/${eventKey}`)
 
 export interface MatchInfo {
   redAlliance: string[]
@@ -124,7 +124,7 @@ export const getEventMatches = (eventKey: string) =>
   getRequest<MatchList>(`events/${eventKey}/matches`)
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
-  getRequest<MatchInfo>(`events/${eventKey}/matches/${matchKey}/info`)
+  getRequest<MatchInfo>(`events/${eventKey}/matches/${matchKey}`)
 
 export const getEventTeams = (eventKey: string) =>
   getRequest<string[]>(`events/${eventKey}/teams`)
@@ -225,7 +225,7 @@ interface EventTeamInfo {
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
-  getRequest<EventTeamInfo>(`events/${eventKey}/team/${team}/info`)
+  getRequest<EventTeamInfo>(`events/${eventKey}/team/${team}`)
 
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
   getRequest<EventTeamTeleopStats>(
