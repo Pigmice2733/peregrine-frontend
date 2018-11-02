@@ -590,7 +590,7 @@ type Data = (
 
 ## `GET`
 
-Anyone can view any user
+Admins can view any user, users can view themselves
 
 ### Response
 
@@ -684,7 +684,7 @@ type Data = number | false
 
 ## `GET`
 
-Anyone can view the list of users
+Admins can view the list of users
 
 ### Response
 
