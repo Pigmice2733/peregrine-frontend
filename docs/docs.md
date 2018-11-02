@@ -7,16 +7,16 @@
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
-- [`/events/{eventKey}/team/{team}/stats/auto`](#eventseventkeyteamteamstatsauto)
-- [`/events/{eventKey}/team/{team}/stats/teleop`](#eventseventkeyteamteamstatsteleop)
-- [`/events/{eventKey}/team/{team}`](#eventseventkeyteamteam)
+- [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
+- [`/events/{eventKey}/teams/{team}/stats/teleop`](#eventseventkeyteamsteamstatsteleop)
+- [`/events/{eventKey}/teams/{team}`](#eventseventkeyteamsteam)
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
 - [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
 - [`/schema`](#schema)
-- [`/team/{team}/automodes`](#teamteamautomodes)
-- [`/team/{team}/stats/auto`](#teamteamstatsauto)
-- [`/team/{team}/stats/teleop`](#teamteamstatsteleop)
+- [`/teams/{team}/automodes`](#teamsteamautomodes)
+- [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
+- [`/teams/{team}/stats/teleop`](#teamsteamstatsteleop)
 - [`/users/{userId}`](#usersuserid)
 - [`/users`](#users)
 
@@ -312,7 +312,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/team/{team}/stats/auto`
+# `/events/{eventKey}/teams/{team}/stats/auto`
 
 ## `GET`
 
@@ -340,7 +340,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/team/{team}/stats/teleop`
+# `/events/{eventKey}/teams/{team}/stats/teleop`
 
 ## `GET`
 
@@ -364,7 +364,7 @@ type Data = (
     })[]
 ```
 
-# `/events/{eventKey}/team/{team}`
+# `/events/{eventKey}/teams/{team}`
 
 ## `GET`
 
@@ -516,7 +516,7 @@ type Data = {
 }
 ```
 
-# `/team/{team}/automodes`
+# `/teams/{team}/automodes`
 
 ## `GET`
 
@@ -526,7 +526,7 @@ type Data = {
 type Data = string[]
 ```
 
-# `/team/{team}/stats/auto`
+# `/teams/{team}/stats/auto`
 
 ## `GET`
 
@@ -558,7 +558,7 @@ type Data = {
 }[]
 ```
 
-# `/team/{team}/stats/teleop`
+# `/teams/{team}/stats/teleop`
 
 ## `GET`
 

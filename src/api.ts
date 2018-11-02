@@ -225,24 +225,24 @@ interface EventTeamInfo {
 }
 
 export const getEventTeamInfo = (eventKey: string, team: string) =>
-  getRequest<EventTeamInfo>(`events/${eventKey}/team/${team}`)
+  getRequest<EventTeamInfo>(`events/${eventKey}/teams/${team}`)
 
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
   getRequest<EventTeamTeleopStats>(
-    `events/${eventKey}/team/${team}/stats/teleop`,
+    `events/${eventKey}/teams/${team}/stats/teleop`,
   )
 
 export const getEventTeamAutoStats = (eventKey: string, team: string) =>
-  getRequest<EventTeamAutoStats>(`events/${eventKey}/team/${team}/stats/auto`)
+  getRequest<EventTeamAutoStats>(`events/${eventKey}/teams/${team}/stats/auto`)
 
 export const getTeamTeleopStats = (team: string) =>
-  getRequest<TeamTeleopStats>(`team/${team}/stats/teleop`)
+  getRequest<TeamTeleopStats>(`teams/${team}/stats/teleop`)
 
 export const getTeamAutoStats = (team: string) =>
-  getRequest<TeamAutoStats>(`team/${team}/stats/auto`)
+  getRequest<TeamAutoStats>(`teams/${team}/stats/auto`)
 
 export const getTeamAutoModes = (team: string) =>
-  getRequest<string[]>(`team/${team}/automodes`)
+  getRequest<string[]>(`teams/${team}/automodes`)
 
 interface SubmittedReport {
   teleop: Field[]
