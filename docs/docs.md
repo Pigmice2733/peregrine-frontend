@@ -13,6 +13,8 @@
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
 - [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
+- [`/realms/{team}`](#realmsteam)
+- [`/realms`](#realms)
 - [`/schema`](#schema)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
 - [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
@@ -122,9 +124,9 @@ type Data = {
 
 ## `GET`
 
-stats for the teams in a match
-these stats describe a team's performance in all matches at this event,
-not just this match
+Stats for the teams in a match.
+These stats describe a team's performance in all matches at this event,
+not just this match.
 
 ### Response
 
@@ -196,7 +198,7 @@ type Data = {
 
 ## `PUT`
 
-Only admins can create matches
+Only admins can create matches for their realm
 
 ### Request
 
@@ -263,7 +265,7 @@ type Data = null
 
 ## `GET`
 
-these are the stats for every team at an event, describing their performance
+These are the stats for every team at an event, describing their performance
 only at that event
 
 ### Response
@@ -402,6 +404,9 @@ type Data = string[]
 
 ## `GET`
 
+Only TBA events, and custom events from their realm are available to
+non-super-admins.
+
 ### Response
 
 ```ts
@@ -434,7 +439,7 @@ type Data = {
 
 ## `PUT`
 
-Only admins can create events
+Only admins can create custom events on their realm
 
 ### Request
 
@@ -474,6 +479,10 @@ type Data = null
 
 ## `GET`
 
+Getting events will only list TBA events, unless a user is signed in. If the
+user is a super-admin, they will see all events, otherwise they will see all
+TBA events and additionally all the custom events on their realm.
+
 ### Response
 
 ```ts
@@ -492,6 +501,88 @@ type Data = {
     lat: number
     lon: number
   }
+}[]
+```
+
+# `/realms/{team}`
+
+## `PATCH`
+
+Super-admins can modify realms
+
+### Request
+
+```ts
+type Data = {
+  name?: string
+  team?: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+
+## `DELETE`
+
+Super-admins can delete realms
+
+### Response
+
+```ts
+type Data = null
+```
+
+# `/realms`
+
+## `POST`
+
+Only super-admins can create new realms. Creating a new realm will return an
+initial admin user for that realm.
+
+### Request
+
+```ts
+type Data = {
+  name: string
+  team: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = {
+  password: string
+  // Only admins can set roles, and they can do so for any user in their realm.
+  roles: {
+    isSuperAdmin: boolean
+    isAdmin: boolean
+    isVerified: boolean
+  }
+  username: string
+  firstName: string
+  lastName: string
+  stars: string[]
+}
+```
+
+
+## `GET`
+
+Super-admins can view a list of realms
+
+### Response
+
+```ts
+type Data = {
+  name: string
+  team: string
 }[]
 ```
 
@@ -590,7 +681,8 @@ type Data = (
 
 ## `GET`
 
-Admins can view any user, users can view themselves
+Super-admins can view any user, admins can view any user in their realm,
+users can view themselves
 
 ### Response
 
@@ -600,6 +692,7 @@ type Data = {
   firstName: string
   lastName: string
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -610,16 +703,17 @@ type Data = {
 
 ## `PATCH`
 
-Anyone can modify themselves
-Only admins can modify other users
+Anyone can modify themselves, admins can modify other users in their realm,
+super-admins can modify any user
 
 ### Request
 
 ```ts
 type Data = {
   password?: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
   roles?: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -640,8 +734,8 @@ type Data = null
 
 ## `DELETE`
 
-Anyone can delete themselves
-Only admins can delete other users
+Anyone can delete themselves, admins can delete other users in their realm,
+super-admins can delete any user.
 
 ### Response
 
@@ -662,8 +756,9 @@ will require admin approval
 ```ts
 type Data = {
   password: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -684,7 +779,8 @@ type Data = number | false
 
 ## `GET`
 
-Admins can view the list of users
+Super-admins can view the list of all users, admins can view the list of
+users in their realm.
 
 ### Response
 
@@ -694,6 +790,7 @@ type Data = {
   firstName: string
   lastName: string
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
