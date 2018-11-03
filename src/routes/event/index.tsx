@@ -17,6 +17,7 @@ import Icon from '@/components/icon'
 import Chip from '@/components/chip'
 import style from './style.css'
 import IconButton from '@/components/icon-button'
+import Spinner from '@/components/spinner'
 
 interface Props {
   eventKey: string
@@ -69,7 +70,7 @@ const Event = ({ eventKey }: Props) => (
             name: 'Info',
             contents: (
               <div class={style.event}>
-                {eventInfo && (
+                {eventInfo ? (
                   <InfoGroupCard
                     info={[
                       eventInfo.location.name && {
@@ -145,14 +146,15 @@ const Event = ({ eventKey }: Props) => (
                       },
                     ]}
                   />
+                ) : (
+                  <Spinner />
                 )}
               </div>
             ),
           },
           {
             name: 'Matches',
-            contents:
-              matches &&
+            contents: matches ? (
               matches
                 .sort(
                   (a, b) =>
@@ -165,7 +167,10 @@ const Event = ({ eventKey }: Props) => (
                     match={m}
                     href={`/events/${eventKey}/matches/${m.key}`}
                   />
-                )),
+                ))
+            ) : (
+              <Spinner />
+            ),
           },
         ]}
       />
