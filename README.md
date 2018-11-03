@@ -6,7 +6,25 @@ Peregrine is a scouting app for FRC competitions. This is the frontend, written 
 
 ## Setup
 
-- [Install Node (Current is preferred, not LTS)](https://nodejs.org/en/download/)
+### Prerequisites
+
+- [Install Node (Current is preferred, not LTS)](https://nodejs.org/en/download/current/)
+- Install git ([Windows](https://gitforwindows.org/), [Mac, Linux](https://git-scm.com/downloads))
+- [Install VSCode](https://code.visualstudio.com/Download)
+
+#### Recommended VSCode Extensions
+
+Install these by opening the extensions panel in the side bar and searching for them
+
+- [Live Share](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+- [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+- [Glean](https://marketplace.visualstudio.com/items?itemName=wix.glean)
+
+### Project Setup
+
 - `git clone https://github.com/pigmice2733/peregrine-frontend`
 - `cd peregrine-frontend`
 - `npm i`
