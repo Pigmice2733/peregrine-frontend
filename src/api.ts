@@ -347,6 +347,8 @@ export const createRealm = (realm : Realm) =>
   postRequest<EditableUser>(`realms`, realm)
 // Super-admins can view a list of realms
 export const getRealms = () => getRequest<Realm[]>(`realms`)
+// Super-admins can view a specific realm
+export const getRealm = (team: string) => getRequest<Realm>(`realms/${team}`)
 // Super-admins can modify realms
 export const modifyRealm = (team: string, realm: Partial<Realm>) =>
   patchRequest<null>(`realms/${team}`, realm)

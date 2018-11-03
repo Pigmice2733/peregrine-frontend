@@ -506,6 +506,20 @@ type Data = {
 
 # `/realms/{team}`
 
+## `GET`
+
+Super-admins can view a specific realm
+
+### Response
+
+```ts
+type Data = {
+  name: string
+  team: string
+}
+```
+
+
 ## `PATCH`
 
 Super-admins can modify realms
