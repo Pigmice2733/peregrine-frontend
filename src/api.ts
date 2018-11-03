@@ -337,8 +337,12 @@ export const authenticate = (username: string, password: string) =>
   postRequest<{ jwt: string }>(`authenticate`, { username, password })
 
 interface Realm {
-  name: string
+  // Team key, eg frc2733
   team: string
+  // Team name, eg Pigmice
+  name: string
+  // Whether reports data from realm shoudl be publicly available
+  publicData: boolean
 }
 
 // Only super-admins can create new realms. Creating a new realm will return an

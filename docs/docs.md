@@ -514,8 +514,12 @@ Super-admins can view a specific realm
 
 ```ts
 type Data = {
-  name: string
+  // Team key, eg frc2733
   team: string
+  // Team name, eg Pigmice
+  name: string
+  // Whether reports data from realm shoudl be publicly available
+  publicData: boolean
 }
 ```
 
@@ -528,8 +532,12 @@ Super-admins can modify realms
 
 ```ts
 type Data = {
-  name?: string
+  // Team key, eg frc2733
   team?: string
+  // Team name, eg Pigmice
+  name?: string
+  // Whether reports data from realm shoudl be publicly available
+  publicData?: boolean
 }
 ```
 
@@ -562,8 +570,12 @@ initial admin user for that realm.
 
 ```ts
 type Data = {
-  name: string
+  // Team key, eg frc2733
   team: string
+  // Team name, eg Pigmice
+  name: string
+  // Whether reports data from realm shoudl be publicly available
+  publicData: boolean
 }
 ```
 
@@ -595,8 +607,12 @@ Super-admins can view a list of realms
 
 ```ts
 type Data = {
-  name: string
+  // Team key, eg frc2733
   team: string
+  // Team name, eg Pigmice
+  name: string
+  // Whether reports data from realm shoudl be publicly available
+  publicData: boolean
 }[]
 ```
 
