@@ -5,7 +5,6 @@
 - [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
-- [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
 - [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
 - [`/events/{eventKey}/teams/{team}/stats/teleop`](#eventseventkeyteamsteamstatsteleop)
@@ -238,25 +237,6 @@ type Data = {
   // UTC date - scheduled match time
   scheduledTime: string
 }[]
-```
-
-# `/events/{eventKey}/star`
-
-## `PUT`
-
-Only authenticated users can star events
-
-### Request
-
-```ts
-type Data = boolean
-```
-
-
-### Response
-
-```ts
-type Data = null
 ```
 
 # `/events/{eventKey}/stats`

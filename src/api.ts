@@ -74,10 +74,6 @@ export const createEvent = (event: EventInfo) =>
 
 export const getEvents = () => getRequest<BasicEventInfo[]>('events')
 
-// Only authenticated users can star events
-export const starEvent = (eventKey: string, starred: boolean) =>
-  putRequest<null>(`events/${eventKey}/star`, starred)
-
 interface EventInfo extends BasicEventInfo {
   webcasts: {
     type: 'twitch' | 'youtube'
