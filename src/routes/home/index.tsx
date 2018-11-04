@@ -3,6 +3,7 @@ import { getEvents } from '@/api'
 import LoadData from '@/load-data'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
+import Spinner from '@/components/spinner'
 
 const Home = () => (
   <Page name="Home">
@@ -10,11 +11,13 @@ const Home = () => (
       data={{ events: getEvents }}
       renderSuccess={({ events }) => (
         <div>
-          {events
-            ? events.map(e => (
-                <EventCard href={`/events/${e.key}`} key={e.key} event={e} />
-              ))
-            : 'loading'}
+          {events ? (
+            events.map(e => (
+              <EventCard href={`/events/${e.key}`} key={e.key} event={e} />
+            ))
+          ) : (
+            <Spinner />
+          )}
         </div>
       )}
       renderError={({ events }) => <h1>ERROR: {events && events.message}</h1>}

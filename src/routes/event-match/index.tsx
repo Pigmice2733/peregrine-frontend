@@ -4,6 +4,7 @@ import { formatMatchKey } from '@/utils/format-match-key'
 import LoadData from '@/load-data'
 import { getEventInfo, getEventMatchInfo } from '@/api'
 import { MatchCard } from '@/components/match-card'
+import Spinner from '@/components/spinner'
 
 interface Props {
   eventKey: string
@@ -28,7 +29,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             (eventInfo ? eventInfo.name : eventKey)
           }
         >
-          {matchInfo && <MatchCard match={matchInfo} />}
+          {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
         </Page>
       )}
     />

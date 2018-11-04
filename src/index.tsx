@@ -4,6 +4,7 @@ import LoadData from './load-data'
 
 import './style'
 import { initDevTools } from 'preact/devtools/devtools'
+import Spinner from './components/spinner'
 
 const asyncRoute = <Props extends {}>(
   modulePromise: () => Promise<{ default: (props: Props) => JSX.Element }>,
@@ -11,7 +12,7 @@ const asyncRoute = <Props extends {}>(
   <LoadData
     data={{ Module: modulePromise }}
     renderSuccess={({ Module }) =>
-      Module ? <Module.default {...props} /> : <h1>Loading</h1>
+      Module ? <Module.default {...props} /> : <Spinner />
     }
   />
 )
