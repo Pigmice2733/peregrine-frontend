@@ -73,7 +73,7 @@ export const createEvent = (event: EventInfo) =>
   putRequest<null>(`events`, event)
 
 // Getting events will only list TBA events, unless a user is signed in. If the
-// user is a super-admin, they will see all events, otherwise they will see all 
+// user is a super-admin, they will see all events, otherwise they will see all
 // TBA events and additionally all the custom events on their realm.
 export const getEvents = () => getRequest<BasicEventInfo[]>('events')
 
@@ -312,15 +312,16 @@ interface EditableUser extends UserInfo {
   roles: Roles
 }
 
-// Anyone can create a user. For admins the users will be verified automatically
-// for non-admins or non-authenticated users the user will not be verified and
-// will require admin approval
+// Anyone can create a user. For admins the users will be verified
+// automatically, for non-admins or non-authenticated users the user will not be
+// verified and will require admin approval. Super-admins can create verified
+// users in any realm, admins can only do so in their own realm.
 export const createUser = (user: EditableUser) =>
   postRequest<number | false>(`users`, user)
 // Super-admins can view the list of all users, admins can view the list of
 // users in their realm.
 export const getUsers = () => getRequest<UserInfo[]>(`users`)
-// Super-admins can view any user, admins can view any user in their realm, 
+// Super-admins can view any user, admins can view any user in their realm,
 // users can view themselves
 export const getUser = (userId: number) =>
   getRequest<UserInfo>(`users/${userId}`)
@@ -347,7 +348,7 @@ interface Realm {
 
 // Only super-admins can create new realms. Creating a new realm will return an
 // initial admin user for that realm.
-export const createRealm = (realm : Realm) =>
+export const createRealm = (realm: Realm) =>
   postRequest<EditableUser>(`realms`, realm)
 // Super-admins can view a list of realms
 export const getRealms = () => getRequest<Realm[]>(`realms`)
