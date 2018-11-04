@@ -120,8 +120,10 @@ export const createEventMatch = (
   },
 ) => putRequest<null>(`events/${eventKey}/matches`, match)
 
-export const getEventMatches = (eventKey: string) =>
-  getRequest<MatchList>(`events/${eventKey}/matches`)
+export const getEventMatches = (eventKey: string, team?: string) =>
+  getRequest<MatchList>(
+    `events/${eventKey}/matches` + (team ? `?team=${team}` : ''),
+  )
 
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
   getRequest<MatchInfo>(`events/${eventKey}/matches/${matchKey}`)
