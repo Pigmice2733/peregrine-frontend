@@ -8,7 +8,6 @@ import { sortAscending } from '@/icons/sort-ascending'
 import { history } from '@/icons/history'
 import { MatchCard } from '@/components/match-card'
 import { round } from '@/utils/round'
-import Spinner from '@/components/spinner'
 
 interface Props {
   eventKey: string
