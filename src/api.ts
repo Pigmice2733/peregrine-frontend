@@ -70,7 +70,7 @@ export interface BasicEventInfo {
 
 // Only admins can create custom events on their realm
 export const createEvent = (event: EventInfo) =>
-  putRequest<null>(`events`, event)
+  postRequest<null>(`events`, event)
 
 // Getting events will only list TBA events, unless a user is signed in. If the
 // user is a super-admin, they will see all events, otherwise they will see all
@@ -123,7 +123,7 @@ export const createEventMatch = (
     // UTC Date - scheduled match time
     time: string
   },
-) => putRequest<null>(`events/${eventKey}/matches`, match)
+) => postRequest<null>(`events/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
   getRequest<MatchList>(`events/${eventKey}/matches`)
@@ -337,13 +337,16 @@ export const deleteUser = (userId: number) =>
 export const authenticate = (username: string, password: string) =>
   postRequest<{ jwt: string }>(`authenticate`, { username, password })
 
-interface Realm {
-  // Team key, eg frc2733
-  team: string
+interface PatchRealm {
   // Team name, eg Pigmice
   name: string
   // Whether reports data from realm shoudl be publicly available
   publicData: boolean
+}
+
+interface Realm extends PatchRealm {
+  // Team key, eg frc2733
+  team: string
 }
 
 // Only super-admins can create new realms. Creating a new realm will return an
@@ -352,11 +355,11 @@ export const createRealm = (realm: Realm) =>
   postRequest<EditableUser>(`realms`, realm)
 // Super-admins can view a list of realms
 export const getRealms = () => getRequest<Realm[]>(`realms`)
-// Super-admins can view a specific realm
+// Super-admins can view a specific realm, admins can view their own realm
 export const getRealm = (team: string) => getRequest<Realm>(`realms/${team}`)
-// Super-admins can modify realms
-export const modifyRealm = (team: string, realm: Partial<Realm>) =>
+// Super-admins can modify realms, admins can modify their own realm
+export const modifyRealm = (team: string, realm: Partial<PatchRealm>) =>
   patchRequest<null>(`realms/${team}`, realm)
-// Super-admins can delete realms
+// Super-admins can delete realms, admins can delete their own realm
 export const deleteRealm = (team: string) =>
   deleteRequest<null>(`realms/${team}`)

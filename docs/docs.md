@@ -196,7 +196,7 @@ type Data = {
 
 # `/events/{eventKey}/matches`
 
-## `PUT`
+## `POST`
 
 Only admins can create matches for their realm
 
@@ -437,7 +437,7 @@ type Data = {
 
 # `/events`
 
-## `PUT`
+## `POST`
 
 Only admins can create custom events on their realm
 
@@ -508,7 +508,7 @@ type Data = {
 
 ## `GET`
 
-Super-admins can view a specific realm
+Super-admins can view a specific realm, admins can view their own realm
 
 ### Response
 
@@ -526,14 +526,12 @@ type Data = {
 
 ## `PATCH`
 
-Super-admins can modify realms
+Super-admins can modify realms, admins can modify their own realm
 
 ### Request
 
 ```ts
 type Data = {
-  // Team key, eg frc2733
-  team?: string
   // Team name, eg Pigmice
   name?: string
   // Whether reports data from realm shoudl be publicly available
@@ -551,7 +549,7 @@ type Data = null
 
 ## `DELETE`
 
-Super-admins can delete realms
+Super-admins can delete realms, admins can delete their own realm
 
 ### Response
 
