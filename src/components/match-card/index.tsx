@@ -6,7 +6,6 @@ import { formatTeamNumber } from '@/utils/format-team-number'
 import Card, { CardProps } from '@/components/card'
 
 import style from './style.css'
-import { Merge } from '@/type-utils'
 
 type MatchCardProps = CardProps<{
   match: MatchInfo
