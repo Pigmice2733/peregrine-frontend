@@ -72,7 +72,7 @@
     "postcss-import": "^12.0.0",
     "postcss-modules": "1.4.1",
     "postcss-preset-env": "^6.0.7",
-    "preact-testing-library": "0.2.1",
+    "preact-testing-library": "0.3.0",
     "prettier": "1.15.1",
     "prompts": "^1.1.1",
     "rollup": "0.67.0",
