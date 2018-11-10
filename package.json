@@ -60,7 +60,7 @@
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "cpy": "7.0.1",
-    "eslint": "5.8.0",
+    "eslint": "5.9.0",
     "eslint-plugin-caleb": "1.11.0",
     "hygen": "^1.6.2",
     "jest": "23.6.0",
