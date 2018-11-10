@@ -30,7 +30,7 @@ jobs:
     <<: *defaults
     steps:
       - *attach_workspace
-      - run: npm run lint
+      - run: npm run check-lint
 
   type:
     <<: *defaults

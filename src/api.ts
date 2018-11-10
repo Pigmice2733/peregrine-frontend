@@ -10,8 +10,8 @@ const apiUrl =
   (process.env.PEREGRINE_API_URL
     ? process.env.PEREGRINE_API_URL
     : process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
-      ? 'https://api.peregrine.ga:8081'
-      : 'https://edge.api.peregrine.ga:8081') + '/'
+    ? 'https://api.peregrine.ga:8081'
+    : 'https://edge.api.peregrine.ga:8081') + '/'
 
 const processResponse = <T extends any>(
   d: PeregrineResponse<T>,
