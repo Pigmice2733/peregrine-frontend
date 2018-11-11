@@ -519,7 +519,7 @@ type Data = {
   // Team name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
-  publicData: boolean
+  shareReports: boolean
 }
 ```
 
@@ -535,7 +535,7 @@ type Data = {
   // Team name, eg Pigmice
   name?: string
   // Whether report data should be publicly available outside this realm
-  publicData?: boolean
+  shareReports?: boolean
 }
 ```
 
@@ -573,7 +573,7 @@ type Data = {
   // Team name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
-  publicData: boolean
+  shareReports: boolean
 }
 ```
 
@@ -610,7 +610,7 @@ type Data = {
   // Team name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
-  publicData: boolean
+  shareReports: boolean
 }[]
 ```
 
