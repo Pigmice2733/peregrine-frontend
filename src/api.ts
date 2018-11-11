@@ -297,7 +297,7 @@ interface Roles {
   isVerified: boolean
 }
 
-interface UserInfo {
+interface BaseUserInfo {
   username: string
   firstName: string
   lastName: string
@@ -305,7 +305,11 @@ interface UserInfo {
   stars: string[]
 }
 
-interface EditableUser extends UserInfo {
+interface UserInfo extends BaseUserInfo {
+  ID: number
+}
+
+interface EditableUser extends BaseUserInfo {
   password: string
   // Only admins can set roles, and they can do so for any user in their realm.
   // Super-admins can set roles for any user.
@@ -324,7 +328,7 @@ export const getUsers = () => getRequest<UserInfo[]>(`users`)
 // Super-admins can view any user, admins can view any user in their realm,
 // users can view themselves
 export const getUser = (userId: number) =>
-  getRequest<UserInfo>(`users/${userId}`)
+  getRequest<BaseUserInfo>(`users/${userId}`)
 // Anyone can modify themselves, admins can modify other users in their realm,
 // super-admins can modify any user
 export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
@@ -337,29 +341,28 @@ export const deleteUser = (userId: number) =>
 export const authenticate = (username: string, password: string) =>
   postRequest<{ jwt: string }>(`authenticate`, { username, password })
 
-interface PatchRealm {
-  // Team name, eg Pigmice
+interface BaseRealm {
+  // Realm name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
   shareReports: boolean
 }
 
-interface Realm extends PatchRealm {
-  // Team key, eg frc2733
-  team: string
+interface Realm extends BaseRealm {
+  ID: number
 }
 
-// Only super-admins can create new realms. Creating a new realm will return an
-// initial admin user for that realm.
-export const createRealm = (realm: Realm) =>
-  postRequest<EditableUser>(`realms`, realm)
+// Only super-admins can create new realms. Creating a new realm will return the
+// ID of that realm.
+export const createRealm = (realm: BaseRealm) =>
+  postRequest<number>(`realms`, realm)
 // Super-admins can view a list of realms
 export const getRealms = () => getRequest<Realm[]>(`realms`)
 // Super-admins can view a specific realm, admins can view their own realm
-export const getRealm = (team: string) => getRequest<Realm>(`realms/${team}`)
+export const getRealm = (id: number) => getRequest<Realm>(`realms/${id}`)
 // Super-admins can modify realms, admins can modify their own realm
-export const modifyRealm = (team: string, realm: Partial<PatchRealm>) =>
-  patchRequest<null>(`realms/${team}`, realm)
+export const modifyRealm = (id: number, realm: Partial<BaseRealm>) =>
+  patchRequest<null>(`realms/${id}`, realm)
 // Super-admins can delete realms, admins can delete their own realm
-export const deleteRealm = (team: string) =>
-  deleteRequest<null>(`realms/${team}`)
+export const deleteRealm = (id: number) =>
+  deleteRequest<null>(`realms/${id}`)

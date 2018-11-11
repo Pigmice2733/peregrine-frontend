@@ -13,7 +13,7 @@
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
 - [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
-- [`/realms/{team}`](#realmsteam)
+- [`/realms/{id}`](#realmsid)
 - [`/realms`](#realms)
 - [`/schema`](#schema)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
@@ -504,7 +504,7 @@ type Data = {
 }[]
 ```
 
-# `/realms/{team}`
+# `/realms/{id}`
 
 ## `GET`
 
@@ -514,9 +514,8 @@ Super-admins can view a specific realm, admins can view their own realm
 
 ```ts
 type Data = {
-  // Team key, eg frc2733
-  team: string
-  // Team name, eg Pigmice
+  ID: number
+  // Realm name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
   shareReports: boolean
@@ -532,7 +531,7 @@ Super-admins can modify realms, admins can modify their own realm
 
 ```ts
 type Data = {
-  // Team name, eg Pigmice
+  // Realm name, eg Pigmice
   name?: string
   // Whether report data should be publicly available outside this realm
   shareReports?: boolean
@@ -561,16 +560,14 @@ type Data = null
 
 ## `POST`
 
-Only super-admins can create new realms. Creating a new realm will return an
-initial admin user for that realm.
+Only super-admins can create new realms. Creating a new realm will return the
+ID of that realm.
 
 ### Request
 
 ```ts
 type Data = {
-  // Team key, eg frc2733
-  team: string
-  // Team name, eg Pigmice
+  // Realm name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
   shareReports: boolean
@@ -581,19 +578,7 @@ type Data = {
 ### Response
 
 ```ts
-type Data = {
-  password: string
-  // Only admins can set roles, and they can do so for any user in their realm.
-  roles: {
-    isSuperAdmin: boolean
-    isAdmin: boolean
-    isVerified: boolean
-  }
-  username: string
-  firstName: string
-  lastName: string
-  stars: string[]
-}
+type Data = number
 ```
 
 
@@ -605,9 +590,8 @@ Super-admins can view a list of realms
 
 ```ts
 type Data = {
-  // Team key, eg frc2733
-  team: string
-  // Team name, eg Pigmice
+  ID: number
+  // Realm name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
   shareReports: boolean
@@ -815,6 +799,7 @@ users in their realm.
 
 ```ts
 type Data = {
+  ID: number
   username: string
   firstName: string
   lastName: string
