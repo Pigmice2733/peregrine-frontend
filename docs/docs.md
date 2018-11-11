@@ -518,7 +518,7 @@ type Data = {
   team: string
   // Team name, eg Pigmice
   name: string
-  // Whether reports data from realm shoudl be publicly available
+  // Whether report data should be publicly available outside this realm
   publicData: boolean
 }
 ```
@@ -534,7 +534,7 @@ Super-admins can modify realms, admins can modify their own realm
 type Data = {
   // Team name, eg Pigmice
   name?: string
-  // Whether reports data from realm shoudl be publicly available
+  // Whether report data should be publicly available outside this realm
   publicData?: boolean
 }
 ```
@@ -572,7 +572,7 @@ type Data = {
   team: string
   // Team name, eg Pigmice
   name: string
-  // Whether reports data from realm shoudl be publicly available
+  // Whether report data should be publicly available outside this realm
   publicData: boolean
 }
 ```
@@ -609,7 +609,7 @@ type Data = {
   team: string
   // Team name, eg Pigmice
   name: string
-  // Whether reports data from realm shoudl be publicly available
+  // Whether report data should be publicly available outside this realm
   publicData: boolean
 }[]
 ```

@@ -340,7 +340,7 @@ export const authenticate = (username: string, password: string) =>
 interface PatchRealm {
   // Team name, eg Pigmice
   name: string
-  // Whether reports data from realm shoudl be publicly available
+  // Whether report data should be publicly available outside this realm
   publicData: boolean
 }
 
