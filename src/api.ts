@@ -10,8 +10,8 @@ const apiUrl =
   (process.env.PEREGRINE_API_URL
     ? process.env.PEREGRINE_API_URL
     : process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
-    ? 'https://api.peregrine.ga:8081'
-    : 'https://edge.api.peregrine.ga:8081') + '/'
+      ? 'https://api.peregrine.ga:8081'
+      : 'https://edge.api.peregrine.ga:8081') + '/'
 
 const processResponse = <T extends any>(
   d: PeregrineResponse<T>,
@@ -364,5 +364,4 @@ export const getRealm = (id: number) => getRequest<Realm>(`realms/${id}`)
 export const modifyRealm = (id: number, realm: Partial<BaseRealm>) =>
   patchRequest<null>(`realms/${id}`, realm)
 // Super-admins can delete realms, admins can delete their own realm
-export const deleteRealm = (id: number) =>
-  deleteRequest<null>(`realms/${id}`)
+export const deleteRealm = (id: number) => deleteRequest<null>(`realms/${id}`)

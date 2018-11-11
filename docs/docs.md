@@ -35,7 +35,6 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
@@ -78,13 +77,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = null
 ```
-
 
 ## `GET`
 
@@ -132,7 +129,7 @@ not just this match.
 
 ```ts
 type Data = {
-  alliance: "red" | "blue"
+  alliance: 'red' | 'blue'
   team: string
   teleop: (
     | {
@@ -215,13 +212,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = null
 ```
-
 
 ## `GET`
 
@@ -253,7 +248,6 @@ Only authenticated users can star events
 ```ts
 type Data = boolean
 ```
-
 
 ### Response
 
@@ -412,7 +406,7 @@ non-super-admins.
 ```ts
 type Data = {
   webcasts: {
-    type: "twitch" | "youtube"
+    type: 'twitch' | 'youtube'
     url: string
   }[]
   // district "display_name" from TBA
@@ -446,7 +440,7 @@ Only admins can create custom events on their realm
 ```ts
 type Data = {
   webcasts: {
-    type: "twitch" | "youtube"
+    type: 'twitch' | 'youtube'
     url: string
   }[]
   // district "display_name" from TBA
@@ -469,13 +463,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = null
 ```
-
 
 ## `GET`
 
@@ -522,7 +514,6 @@ type Data = {
 }
 ```
 
-
 ## `PATCH`
 
 Super-admins can modify realms, admins can modify their own realm
@@ -538,13 +529,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = null
 ```
-
 
 ## `DELETE`
 
@@ -574,13 +563,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = number
 ```
-
 
 ## `GET`
 
@@ -609,12 +596,12 @@ type Data = {
   teleop: {
     statName: string
     statKey: string
-    type: "number" | "boolean"
+    type: 'number' | 'boolean'
   }[]
   auto: {
     statName: string
     statKey: string
-    type: "number" | "boolean"
+    type: 'number' | 'boolean'
   }[]
 }
 ```
@@ -712,7 +699,6 @@ type Data = {
 }
 ```
 
-
 ## `PATCH`
 
 Anyone can modify themselves, admins can modify other users in their realm,
@@ -736,13 +722,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = null
 ```
-
 
 ## `DELETE`
 
@@ -782,13 +766,11 @@ type Data = {
 }
 ```
 
-
 ### Response
 
 ```ts
 type Data = number | false
 ```
-
 
 ## `GET`
 
