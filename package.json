@@ -69,7 +69,7 @@
     "postcss": "7.0.5",
     "postcss-calc": "7.0.1",
     "postcss-css-variables": "0.11.0",
-    "postcss-import": "12.0.0",
+    "postcss-import": "12.0.1",
     "postcss-modules": "1.4.1",
     "postcss-preset-env": "6.0.7",
     "preact-testing-library": "0.3.0",
