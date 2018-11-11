@@ -10,7 +10,7 @@ export const formatMatchKey = (key: string) => {
     : ''
   const matchNum = key.match(/(\d+)$/)
   if (!matchNum || matchType === '') return { group: key.toUpperCase() }
-  let groupNum = key.match(/(\d+)m\d+$/)
+  const groupNum = key.match(/(\d+)m\d+$/)
   if (groupNum) {
     return { group: `${matchType} ${groupNum[1]}`, num: matchNum[1] }
   }

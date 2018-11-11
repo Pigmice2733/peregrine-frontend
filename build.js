@@ -37,15 +37,12 @@ const listModules = modules =>
     .filter(Boolean)
     .join(', ')
 
-const graphChunk = (chunk, bundle) => {
-  let output =
-    kleur.bold.blue(chunk.fileName) +
-    ' - ' +
-    listModules(chunk.modules) +
-    '\n' +
-    chunk.imports.map(i => indent(graphChunk(bundle[i], bundle))).join('\n')
-  return output
-}
+const graphChunk = (chunk, bundle) =>
+  kleur.bold.blue(chunk.fileName) +
+  ' - ' +
+  listModules(chunk.modules) +
+  '\n' +
+  chunk.imports.map(i => indent(graphChunk(bundle[i], bundle))).join('\n')
 
 const graphBundle = bundle =>
   Object.values(bundle)
