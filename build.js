@@ -66,8 +66,8 @@ async function buildHtml() {
   const apiUrl = process.env.PEREGRINE_API_URL
     ? process.env.PEREGRINE_API_URL
     : process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
-      ? 'https://api.peregrine.ga:8081'
-      : 'https://edge.api.peregrine.ga:8081'
+    ? 'https://api.peregrine.ga:8081'
+    : 'https://edge.api.peregrine.ga:8081'
   const htmlSrc = await readFileAsync('rollup-index.html', 'utf8')
   const htmlOut = templite(htmlSrc, { apiUrl })
   await writeFileAsync(join(outDir, 'index.html'), htmlOut)
@@ -116,14 +116,13 @@ async function buildHeaders(output) {
           Link.filter(l => !headers[pages].includes(l)),
     ])
     .filter(([, Link]) => Link.length > 0)
-    .map(
-      ([route, Link]) =>
-        route === pages
-          ? pages
-              .split(',')
-              .map(r => r + '\n' + Link.map(l => `  Link: ${l}`).join('\n'))
-              .join('\n\n')
-          : '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
+    .map(([route, Link]) =>
+      route === pages
+        ? pages
+            .split(',')
+            .map(r => r + '\n' + Link.map(l => `  Link: ${l}`).join('\n'))
+            .join('\n\n')
+        : '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
     )
     .join('\n\n')
   await writeFileAsync(join(outDir, '_headers'), stringHeaders)
