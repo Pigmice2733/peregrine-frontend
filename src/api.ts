@@ -53,6 +53,8 @@ export const postRequest = <T extends any>(
 
 export interface BasicEventInfo {
   key: string
+  // the ID of the realm the event belongs to
+  realmID?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -356,9 +358,9 @@ interface Realm extends BaseRealm {
 // ID of that realm.
 export const createRealm = (realm: BaseRealm) =>
   postRequest<number>(`realms`, realm)
-// Super-admins can view a list of realms
+// Public realms will be returned. If logged-in, the user's realm will also be returned.
 export const getRealms = () => getRequest<Realm[]>(`realms`)
-// Super-admins can view a specific realm, admins can view their own realm
+// Public realms can be fetched. If logged-in, the user's realm is also available.
 export const getRealm = (id: number) => getRequest<Realm>(`realms/${id}`)
 // Super-admins can modify realms, admins can modify their own realm
 export const modifyRealm = (id: number, realm: Partial<BaseRealm>) =>

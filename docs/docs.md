@@ -423,6 +423,8 @@ type Data = {
     lon: number
   }
   key: string
+  // the ID of the realm the event belongs to
+  realmID?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -457,6 +459,8 @@ type Data = {
     lon: number
   }
   key: string
+  // the ID of the realm the event belongs to
+  realmID?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -488,6 +492,8 @@ TBA events and additionally all the custom events on their realm.
 ```ts
 type Data = {
   key: string
+  // the ID of the realm the event belongs to
+  realmID?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -508,7 +514,7 @@ type Data = {
 
 ## `GET`
 
-Super-admins can view a specific realm, admins can view their own realm
+Public realms can be fetched. If logged-in, the user's realm is also available.
 
 ### Response
 
@@ -584,7 +590,7 @@ type Data = number
 
 ## `GET`
 
-Super-admins can view a list of realms
+Public realms will be returned. If logged-in, the user's realm will also be returned.
 
 ### Response
 
