@@ -7,8 +7,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
-    "check-lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore '**/*.{j,t}s{x,}'",
-    "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore '**/*.{j,t}s{x,}'",
+    "check-lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
+    "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "type:watch": "tsc --noEmit --pretty --watch",
     "type": "tsc --noEmit --pretty",
     "start": "parcel index.html",
