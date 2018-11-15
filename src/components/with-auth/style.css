@@ -1,0 +1,10 @@
+.login {
+  padding: 2rem;
+
+  & > form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
