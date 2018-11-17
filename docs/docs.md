@@ -11,7 +11,6 @@
 - [`/events/{eventKey}/teams/{team}/stats/teleop`](#eventseventkeyteamsteamstatsteleop)
 - [`/events/{eventKey}/teams/{team}`](#eventseventkeyteamsteam)
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
-- [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
 - [`/schema`](#schema)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
@@ -398,38 +397,6 @@ type Data = {
 type Data = string[]
 ```
 
-# `/events/{eventKey}`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  webcasts: {
-    type: "twitch" | "youtube"
-    url: string
-  }[]
-  // district "display_name" from TBA
-  fullDistrict?: string
-  location: {
-    name: string
-    lat: number
-    lon: number
-  }
-  key: string
-  // from TBA short name
-  name: string
-  // abbreviated district name
-  district?: string
-  week?: number
-  // UTC date
-  startDate: string
-  // UTC date
-  endDate: string
-}
-```
-
 # `/events`
 
 ## `PUT`
@@ -469,30 +436,6 @@ type Data = {
 
 ```ts
 type Data = null
-```
-
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  key: string
-  // from TBA short name
-  name: string
-  // abbreviated district name
-  district?: string
-  week?: number
-  // UTC date
-  startDate: string
-  // UTC date
-  endDate: string
-  location: {
-    lat: number
-    lon: number
-  }
-}[]
 ```
 
 # `/schema`

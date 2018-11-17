@@ -2,9 +2,10 @@ import { h } from 'preact'
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import LoadData from '@/load-data'
-import { getEventInfo, getEventMatchInfo } from '@/api'
 import { MatchCard } from '@/components/match-card'
 import Spinner from '@/components/spinner'
+import { getEventInfo } from '@/api/event-info/get-event-info'
+import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
 
 interface Props {
   eventKey: string

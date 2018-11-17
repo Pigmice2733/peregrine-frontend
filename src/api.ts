@@ -72,8 +72,6 @@ export interface BasicEventInfo {
 export const createEvent = (event: EventInfo) =>
   putRequest<null>(`events`, event)
 
-export const getEvents = () => getRequest<BasicEventInfo[]>('events')
-
 // Only authenticated users can star events
 export const starEvent = (eventKey: string, starred: boolean) =>
   putRequest<null>(`events/${eventKey}/star`, starred)
@@ -91,9 +89,6 @@ interface EventInfo extends BasicEventInfo {
     lon: number
   }
 }
-
-export const getEventInfo = (eventKey: string) =>
-  getRequest<EventInfo>(`events/${eventKey}`)
 
 export interface MatchInfo {
   redAlliance: string[]
