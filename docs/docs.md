@@ -13,6 +13,8 @@
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
 - [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
+- [`/realms/{id}`](#realmsid)
+- [`/realms`](#realms)
 - [`/schema`](#schema)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
 - [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
@@ -122,9 +124,9 @@ type Data = {
 
 ## `GET`
 
-stats for the teams in a match
-these stats describe a team's performance in all matches at this event,
-not just this match
+Stats for the teams in a match.
+These stats describe a team's performance in all matches at this event,
+not just this match.
 
 ### Response
 
@@ -194,9 +196,9 @@ type Data = {
 
 # `/events/{eventKey}/matches`
 
-## `PUT`
+## `POST`
 
-Only admins can create matches
+Only admins can create matches for their realm
 
 ### Request
 
@@ -263,7 +265,7 @@ type Data = null
 
 ## `GET`
 
-these are the stats for every team at an event, describing their performance
+These are the stats for every team at an event, describing their performance
 only at that event
 
 ### Response
@@ -402,6 +404,9 @@ type Data = string[]
 
 ## `GET`
 
+Only TBA events, and custom events from their realm are available to
+non-super-admins.
+
 ### Response
 
 ```ts
@@ -418,6 +423,8 @@ type Data = {
     lon: number
   }
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -432,9 +439,9 @@ type Data = {
 
 # `/events`
 
-## `PUT`
+## `POST`
 
-Only admins can create events
+Only admins can create custom events on their realm
 
 ### Request
 
@@ -452,6 +459,8 @@ type Data = {
     lon: number
   }
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -474,11 +483,17 @@ type Data = null
 
 ## `GET`
 
+Getting events will only list TBA events, unless a user is signed in. If the
+user is a super-admin, they will see all events, otherwise they will see all
+TBA events and additionally all the custom events on their realm.
+
 ### Response
 
 ```ts
 type Data = {
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -492,6 +507,100 @@ type Data = {
     lat: number
     lon: number
   }
+}[]
+```
+
+# `/realms/{id}`
+
+## `GET`
+
+Public realms can be fetched. If logged-in, the user's realm is also available.
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}
+```
+
+
+## `PATCH`
+
+Super-admins can modify realms, admins can modify their own realm
+
+### Request
+
+```ts
+type Data = {
+  // Realm name, eg Pigmice
+  name?: string
+  // Whether report data should be publicly available outside this realm
+  shareReports?: boolean
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+
+## `DELETE`
+
+Super-admins can delete realms, admins can delete their own realm
+
+### Response
+
+```ts
+type Data = null
+```
+
+# `/realms`
+
+## `POST`
+
+Only super-admins can create new realms. Creating a new realm will return the
+ID of that realm.
+
+### Request
+
+```ts
+type Data = {
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}
+```
+
+
+### Response
+
+```ts
+type Data = number
+```
+
+
+## `GET`
+
+Public realms will be returned. If logged-in, the user's realm will also be returned.
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
 }[]
 ```
 
@@ -590,7 +699,8 @@ type Data = (
 
 ## `GET`
 
-Admins can view any user, users can view themselves
+Super-admins can view any user, admins can view any user in their realm,
+users can view themselves
 
 ### Response
 
@@ -600,6 +710,7 @@ type Data = {
   firstName: string
   lastName: string
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -610,16 +721,17 @@ type Data = {
 
 ## `PATCH`
 
-Anyone can modify themselves
-Only admins can modify other users
+Anyone can modify themselves, admins can modify other users in their realm,
+super-admins can modify any user
 
 ### Request
 
 ```ts
 type Data = {
   password?: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
   roles?: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -640,8 +752,8 @@ type Data = null
 
 ## `DELETE`
 
-Anyone can delete themselves
-Only admins can delete other users
+Anyone can delete themselves, admins can delete other users in their realm,
+super-admins can delete any user.
 
 ### Response
 
@@ -653,17 +765,19 @@ type Data = null
 
 ## `POST`
 
-Anyone can create a user. For admins the users will be verified automatically
-for non-admins or non-authenticated users the user will not be verified and
-will require admin approval
+Anyone can create a user. For admins the users will be verified
+automatically, for non-admins or non-authenticated users the user will not be
+verified and will require admin approval. Super-admins can create verified
+users in any realm, admins can only do so in their own realm.
 
 ### Request
 
 ```ts
 type Data = {
   password: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -684,16 +798,19 @@ type Data = number | false
 
 ## `GET`
 
-Admins can view the list of users
+Super-admins can view the list of all users, admins can view the list of
+users in their realm.
 
 ### Response
 
 ```ts
 type Data = {
+  id: number
   username: string
   firstName: string
   lastName: string
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }

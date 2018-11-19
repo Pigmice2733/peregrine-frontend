@@ -53,6 +53,8 @@ export const postRequest = <T extends any>(
 
 export interface BasicEventInfo {
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -68,10 +70,13 @@ export interface BasicEventInfo {
   }
 }
 
-// Only admins can create events
+// Only admins can create custom events on their realm
 export const createEvent = (event: EventInfo) =>
-  putRequest<null>(`events`, event)
+  postRequest<null>(`events`, event)
 
+// Getting events will only list TBA events, unless a user is signed in. If the
+// user is a super-admin, they will see all events, otherwise they will see all
+// TBA events and additionally all the custom events on their realm.
 export const getEvents = () => getRequest<BasicEventInfo[]>('events')
 
 // Only authenticated users can star events
@@ -92,6 +97,8 @@ interface EventInfo extends BasicEventInfo {
   }
 }
 
+// Only TBA events, and custom events from their realm are available to
+// non-super-admins.
 export const getEventInfo = (eventKey: string) =>
   getRequest<EventInfo>(`events/${eventKey}`)
 
@@ -111,14 +118,14 @@ type MatchList = (MatchInfo & {
   scheduledTime: string
 })[]
 
-// Only admins can create matches
+// Only admins can create matches for their realm
 export const createEventMatch = (
   eventKey: string,
   match: MatchInfo & {
     // UTC Date - scheduled match time
     time: string
   },
-) => putRequest<null>(`events/${eventKey}/matches`, match)
+) => postRequest<null>(`events/${eventKey}/matches`, match)
 
 export const getEventMatches = (eventKey: string) =>
   getRequest<MatchList>(`events/${eventKey}/matches`)
@@ -204,14 +211,14 @@ interface TeamStatsWithAlliance extends TeamStats {
   alliance: 'red' | 'blue'
 }
 
-// these are the stats for every team at an event, describing their performance
+// These are the stats for every team at an event, describing their performance
 // only at that event
 export const getEventStats = (eventKey: string) =>
   getRequest<TeamStats[]>(`events/${eventKey}/stats`)
 
-// stats for the teams in a match
-// these stats describe a team's performance in all matches at this event,
-// not just this match
+// Stats for the teams in a match.
+// These stats describe a team's performance in all matches at this event,
+// not just this match.
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
     `events/${eventKey}/matches/${matchKey}/stats`,
@@ -287,11 +294,12 @@ interface Schema {
 export const getSchema = () => getRequest<Schema>(`schema`)
 
 interface Roles {
+  isSuperAdmin: boolean
   isAdmin: boolean
   isVerified: boolean
 }
 
-interface UserInfo {
+interface BaseUserInfo {
   username: string
   firstName: string
   lastName: string
@@ -299,30 +307,63 @@ interface UserInfo {
   stars: string[]
 }
 
-interface EditableUser extends UserInfo {
+interface UserInfo extends BaseUserInfo {
+  id: number
+}
+
+interface EditableUser extends BaseUserInfo {
   password: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
+  // Super-admins can set roles for any user.
   roles: Roles
 }
 
-// Anyone can create a user. For admins the users will be verified automatically
-// for non-admins or non-authenticated users the user will not be verified and
-// will require admin approval
+// Anyone can create a user. For admins the users will be verified
+// automatically, for non-admins or non-authenticated users the user will not be
+// verified and will require admin approval. Super-admins can create verified
+// users in any realm, admins can only do so in their own realm.
 export const createUser = (user: EditableUser) =>
   postRequest<number | false>(`users`, user)
-// Admins can view the list of users
+// Super-admins can view the list of all users, admins can view the list of
+// users in their realm.
 export const getUsers = () => getRequest<UserInfo[]>(`users`)
-// Admins can view any user, users can view themselves
+// Super-admins can view any user, admins can view any user in their realm,
+// users can view themselves
 export const getUser = (userId: number) =>
-  getRequest<UserInfo>(`users/${userId}`)
-// Anyone can modify themselves
-// Only admins can modify other users
+  getRequest<BaseUserInfo>(`users/${userId}`)
+// Anyone can modify themselves, admins can modify other users in their realm,
+// super-admins can modify any user
 export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
   patchRequest<null>(`users/${userId}`, user)
-// Anyone can delete themselves
-// Only admins can delete other users
+// Anyone can delete themselves, admins can delete other users in their realm,
+// super-admins can delete any user.
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`users/${userId}`)
 
 export const authenticate = (username: string, password: string) =>
   postRequest<{ jwt: string }>(`authenticate`, { username, password })
+
+interface BaseRealm {
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}
+
+interface Realm extends BaseRealm {
+  id: number
+}
+
+// Only super-admins can create new realms. Creating a new realm will return the
+// ID of that realm.
+export const createRealm = (realm: BaseRealm) =>
+  postRequest<number>(`realms`, realm)
+// Public realms will be returned. If logged-in, the user's realm will also be returned.
+export const getRealms = () => getRequest<Realm[]>(`realms`)
+// Public realms can be fetched. If logged-in, the user's realm is also available.
+export const getRealm = (id: number) => getRequest<Realm>(`realms/${id}`)
+// Super-admins can modify realms, admins can modify their own realm
+export const modifyRealm = (id: number, realm: Partial<BaseRealm>) =>
+  patchRequest<null>(`realms/${id}`, realm)
+// Super-admins can delete realms, admins can delete their own realm
+export const deleteRealm = (id: number) => deleteRequest<null>(`realms/${id}`)
