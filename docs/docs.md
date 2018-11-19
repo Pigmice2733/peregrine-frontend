@@ -424,7 +424,7 @@ type Data = {
   }
   key: string
   // the ID of the realm the event belongs to
-  realmID?: string
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -460,7 +460,7 @@ type Data = {
   }
   key: string
   // the ID of the realm the event belongs to
-  realmID?: string
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -493,7 +493,7 @@ TBA events and additionally all the custom events on their realm.
 type Data = {
   key: string
   // the ID of the realm the event belongs to
-  realmID?: string
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -520,7 +520,7 @@ Public realms can be fetched. If logged-in, the user's realm is also available.
 
 ```ts
 type Data = {
-  ID: number
+  id: number
   // Realm name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
@@ -596,7 +596,7 @@ Public realms will be returned. If logged-in, the user's realm will also be retu
 
 ```ts
 type Data = {
-  ID: number
+  id: number
   // Realm name, eg Pigmice
   name: string
   // Whether report data should be publicly available outside this realm
@@ -805,7 +805,7 @@ users in their realm.
 
 ```ts
 type Data = {
-  ID: number
+  id: number
   username: string
   firstName: string
   lastName: string

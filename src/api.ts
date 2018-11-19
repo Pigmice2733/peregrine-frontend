@@ -54,7 +54,7 @@ export const postRequest = <T extends any>(
 export interface BasicEventInfo {
   key: string
   // the ID of the realm the event belongs to
-  realmID?: string
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -308,7 +308,7 @@ interface BaseUserInfo {
 }
 
 interface UserInfo extends BaseUserInfo {
-  ID: number
+  id: number
 }
 
 interface EditableUser extends BaseUserInfo {
@@ -351,7 +351,7 @@ interface BaseRealm {
 }
 
 interface Realm extends BaseRealm {
-  ID: number
+  id: number
 }
 
 // Only super-admins can create new realms. Creating a new realm will return the
