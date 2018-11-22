@@ -1,9 +1,10 @@
 interface Roles {
+  isSuperAdmin: boolean
   isAdmin: boolean
   isVerified: boolean
 }
 
-export interface UserInfo {
+export interface BaseUserInfo {
   username: string
   firstName: string
   lastName: string
@@ -11,8 +12,13 @@ export interface UserInfo {
   stars: string[]
 }
 
-export interface EditableUser extends UserInfo {
+export interface UserInfo extends BaseUserInfo {
+  id: number
+}
+
+export interface EditableUser extends BaseUserInfo {
   password: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
+  // Super-admins can set roles for any user.
   roles: Roles
 }

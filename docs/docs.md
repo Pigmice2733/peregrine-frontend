@@ -28,9 +28,9 @@ type Data = {
 
 # `/events/{eventKey}/matches`
 
-## `PUT`
+## `POST`
 
-Only admins can create matches
+Only admins can create matches for their realm
 
 ### Request
 
@@ -78,6 +78,9 @@ type Data = {
 
 ## `GET`
 
+Only TBA events, and custom events from their realm are available to
+non-super-admins.
+
 ### Response
 
 ```ts
@@ -94,6 +97,8 @@ type Data = {
     lon: number
   }
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -110,11 +115,17 @@ type Data = {
 
 ## `GET`
 
+Getting events will only list TBA events, unless a user is signed in. If the
+user is a super-admin, they will see all events, otherwise they will see all
+TBA events and additionally all the custom events on their realm.
+
 ### Response
 
 ```ts
 type Data = {
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -135,7 +146,8 @@ type Data = {
 
 ## `GET`
 
-Admins can view any user, users can view themselves
+Super-admins can view any user, admins can view any user in their realm,
+users can view themselves
 
 ### Response
 
@@ -145,6 +157,7 @@ type Data = {
   firstName: string
   lastName: string
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -152,21 +165,54 @@ type Data = {
 }
 ```
 
+
+## `PATCH`
+
+Anyone can modify themselves, admins can modify other users in their realm,
+super-admins can modify any user
+
+### Request
+
+```ts
+type Data = {
+  password?: string
+  // Only admins can set roles, and they can do so for any user in their realm.
+  roles?: {
+    isSuperAdmin: boolean
+    isAdmin: boolean
+    isVerified: boolean
+  }
+  username?: string
+  firstName?: string
+  lastName?: string
+  stars?: string[]
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
 # `/users`
 
 ## `POST`
 
-Anyone can create a user. For admins the users will be verified automatically
-for non-admins or non-authenticated users the user will not be verified and
-will require admin approval
+Anyone can create a user. For admins the users will be verified
+automatically, for non-admins or non-authenticated users the user will not be
+verified and will require admin approval. Super-admins can create verified
+users in any realm, admins can only do so in their own realm.
 
 ### Request
 
 ```ts
 type Data = {
   password: string
-  // Only admins can set roles, and they can do so for any user
+  // Only admins can set roles, and they can do so for any user in their realm.
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }
@@ -187,16 +233,19 @@ type Data = number | false
 
 ## `GET`
 
-Admins can view the list of users
+Super-admins can view the list of all users, admins can view the list of
+users in their realm.
 
 ### Response
 
 ```ts
 type Data = {
+  id: number
   username: string
   firstName: string
   lastName: string
   roles: {
+    isSuperAdmin: boolean
     isAdmin: boolean
     isVerified: boolean
   }

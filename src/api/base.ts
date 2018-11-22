@@ -23,7 +23,7 @@ export function request<T, D = T>(
 export function request<T, D = T>(
   method: HTTPMethodWithBody,
   endpoint: string,
-  body: any,
+  body?: any,
   postProcess?: (data: T) => D,
 ): Promise<D>
 export function request<T, D = T>(

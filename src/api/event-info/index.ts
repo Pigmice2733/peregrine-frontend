@@ -2,6 +2,8 @@ import { Merge } from '@/type-utils'
 
 export interface BasicEventInfo {
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name

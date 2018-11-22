@@ -1,6 +1,7 @@
 import { request } from '../base'
-import { UserInfo } from '.'
+import { BaseUserInfo } from '.'
 
-// Admins can view any user, users can view themselves
+// Super-admins can view any user, admins can view any user in their realm,
+// users can view themselves
 export const getUser = (userId: number) =>
-  request<UserInfo>('GET', `users/${userId}`)
+  request<BaseUserInfo>('GET', `users/${userId}`)

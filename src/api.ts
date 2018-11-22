@@ -53,6 +53,8 @@ export const postRequest = <T extends any>(
 
 export interface BasicEventInfo {
   key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -68,9 +70,9 @@ export interface BasicEventInfo {
   }
 }
 
-// Only admins can create events
+// Only admins can create custom events on their realm
 export const createEvent = (event: EventInfo) =>
-  putRequest<null>(`events`, event)
+  postRequest<null>(`events`, event)
 
 // Only authenticated users can star events
 export const starEvent = (eventKey: string, starred: boolean) =>
@@ -179,14 +181,14 @@ interface TeamStatsWithAlliance extends TeamStats {
   alliance: 'red' | 'blue'
 }
 
-// these are the stats for every team at an event, describing their performance
+// These are the stats for every team at an event, describing their performance
 // only at that event
 export const getEventStats = (eventKey: string) =>
   getRequest<TeamStats[]>(`events/${eventKey}/stats`)
 
-// stats for the teams in a match
-// these stats describe a team's performance in all matches at this event,
-// not just this match
+// Stats for the teams in a match.
+// These stats describe a team's performance in all matches at this event,
+// not just this match.
 export const getEventMatchStats = (eventKey: string, matchKey: string) =>
   getRequest<TeamStatsWithAlliance[]>(
     `events/${eventKey}/matches/${matchKey}/stats`,
@@ -261,10 +263,35 @@ interface Schema {
 
 export const getSchema = () => getRequest<Schema>(`schema`)
 
-// Anyone can delete themselves
-// Only admins can delete other users
+// Anyone can delete themselves, admins can delete other users in their realm,
+// super-admins can delete any user.
 export const deleteUser = (userId: number) =>
   deleteRequest<null>(`users/${userId}`)
 
 export const authenticate = (username: string, password: string) =>
   postRequest<{ jwt: string }>(`authenticate`, { username, password })
+
+interface BaseRealm {
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}
+
+interface Realm extends BaseRealm {
+  id: number
+}
+
+// Only super-admins can create new realms. Creating a new realm will return the
+// ID of that realm.
+export const createRealm = (realm: BaseRealm) =>
+  postRequest<number>(`realms`, realm)
+// Public realms will be returned. If logged-in, the user's realm will also be returned.
+export const getRealms = () => getRequest<Realm[]>(`realms`)
+// Public realms can be fetched. If logged-in, the user's realm is also available.
+export const getRealm = (id: number) => getRequest<Realm>(`realms/${id}`)
+// Super-admins can modify realms, admins can modify their own realm
+export const modifyRealm = (id: number, realm: Partial<BaseRealm>) =>
+  patchRequest<null>(`realms/${id}`, realm)
+// Super-admins can delete realms, admins can delete their own realm
+export const deleteRealm = (id: number) => deleteRequest<null>(`realms/${id}`)
