@@ -101,26 +101,6 @@ export interface MatchInfo {
   blueScore?: number
 }
 
-type MatchList = (MatchInfo & {
-  // UTC date - scheduled match time
-  scheduledTime: string
-})[]
-
-// Only admins can create matches
-export const createEventMatch = (
-  eventKey: string,
-  match: MatchInfo & {
-    // UTC Date - scheduled match time
-    time: string
-  },
-) => putRequest<null>(`events/${eventKey}/matches`, match)
-
-export const getEventMatches = (eventKey: string) =>
-  getRequest<MatchList>(`events/${eventKey}/matches`)
-
-export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
-  getRequest<MatchInfo>(`events/${eventKey}/matches/${matchKey}`)
-
 export const getEventTeams = (eventKey: string) =>
   getRequest<string[]>(`events/${eventKey}/teams`)
 
@@ -281,39 +261,6 @@ interface Schema {
 
 export const getSchema = () => getRequest<Schema>(`schema`)
 
-interface Roles {
-  isAdmin: boolean
-  isVerified: boolean
-}
-
-interface UserInfo {
-  username: string
-  firstName: string
-  lastName: string
-  roles: Roles
-  stars: string[]
-}
-
-interface EditableUser extends UserInfo {
-  password: string
-  // Only admins can set roles, and they can do so for any user
-  roles: Roles
-}
-
-// Anyone can create a user. For admins the users will be verified automatically
-// for non-admins or non-authenticated users the user will not be verified and
-// will require admin approval
-export const createUser = (user: EditableUser) =>
-  postRequest<number | false>(`users`, user)
-// Admins can view the list of users
-export const getUsers = () => getRequest<UserInfo[]>(`users`)
-// Admins can view any user, users can view themselves
-export const getUser = (userId: number) =>
-  getRequest<UserInfo>(`users/${userId}`)
-// Anyone can modify themselves
-// Only admins can modify other users
-export const modifyUser = (userId: number, user: Partial<EditableUser>) =>
-  patchRequest<null>(`users/${userId}`, user)
 // Anyone can delete themselves
 // Only admins can delete other users
 export const deleteUser = (userId: number) =>
