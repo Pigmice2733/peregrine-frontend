@@ -1,11 +1,179 @@
 # Index
 
+- [`/authenticate`](#authenticate)
+- [`/events/{eventKey}/matches/{matchKey}/reports/{team}`](#eventseventkeymatchesmatchkeyreportsteam)
+- [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
+- [`/events/{eventKey}/star`](#eventseventkeystar)
+- [`/events/{eventKey}/stats`](#eventseventkeystats)
+- [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
+- [`/events/{eventKey}/teams/{team}/stats/teleop`](#eventseventkeyteamsteamstatsteleop)
+- [`/events/{eventKey}/teams/{team}`](#eventseventkeyteamsteam)
+- [`/events/{eventKey}/teams`](#eventseventkeyteams)
 - [`/events/{eventKey}`](#eventseventkey)
 - [`/events`](#events)
+- [`/realms/{id}`](#realmsid)
+- [`/realms`](#realms)
+- [`/schema`](#schema)
+- [`/teams/{team}/automodes`](#teamsteamautomodes)
+- [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
+- [`/teams/{team}/stats/teleop`](#teamsteamstatsteleop)
 - [`/users/{userId}`](#usersuserid)
 - [`/users`](#users)
+
+# `/authenticate`
+
+## `POST`
+
+### Request
+
+```ts
+type Data = {
+  username: string
+  password: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = {
+  jwt: string
+}
+```
+
+# `/events/{eventKey}/matches/{matchKey}/reports/{team}`
+
+## `PUT`
+
+### Request
+
+```ts
+type Data = {
+  teleop: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  auto: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  autoName: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  reporter: string
+  reporterId: string
+  teleop: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  auto: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  autoName: string
+}[]
+```
+
+# `/events/{eventKey}/matches/{matchKey}/stats`
+
+## `GET`
+
+Stats for the teams in a match.
+These stats describe a team's performance in all matches at this event,
+not just this match.
+
+### Response
+
+```ts
+type Data = {
+  alliance: "red" | "blue"
+  team: string
+  teleop: (
+    | {
+        attempts: {
+          max: number
+          avg: number
+        }
+        successes: {
+          max: number
+          avg: number
+        }
+        statName: string
+      }
+    | {
+        // total
+        attempts: number
+        // total
+        successes: number
+        statName: string
+      })[]
+  auto: (
+    | {
+        attempts: {
+          max: number
+          avg: number
+        }
+        successes: {
+          max: number
+          avg: number
+        }
+        statName: string
+      }
+    | {
+        // total
+        attempts: number
+        // total
+        successes: number
+        statName: string
+      })[]
+}[]
+```
 
 # `/events/{eventKey}/matches/{matchKey}`
 
@@ -74,6 +242,164 @@ type Data = {
 }[]
 ```
 
+# `/events/{eventKey}/star`
+
+## `PUT`
+
+Only authenticated users can star events
+
+### Request
+
+```ts
+type Data = boolean
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+# `/events/{eventKey}/stats`
+
+## `GET`
+
+These are the stats for every team at an event, describing their performance
+only at that event
+
+### Response
+
+```ts
+type Data = {
+  team: string
+  teleop: (
+    | {
+        attempts: {
+          max: number
+          avg: number
+        }
+        successes: {
+          max: number
+          avg: number
+        }
+        statName: string
+      }
+    | {
+        // total
+        attempts: number
+        // total
+        successes: number
+        statName: string
+      })[]
+  auto: (
+    | {
+        attempts: {
+          max: number
+          avg: number
+        }
+        successes: {
+          max: number
+          avg: number
+        }
+        statName: string
+      }
+    | {
+        // total
+        attempts: number
+        // total
+        successes: number
+        statName: string
+      })[]
+}[]
+```
+
+# `/events/{eventKey}/teams/{team}/stats/auto`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  modeName: string
+  // in order by match time
+  stats: (
+    | {
+        // qm1
+        match: string
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        // qm1
+        match: string
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+}[]
+```
+
+# `/events/{eventKey}/teams/{team}/stats/teleop`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = (
+  | {
+      // qm1
+      match: string
+      attempts: number
+      successes: number
+      statName: string
+    }
+  | {
+      // qm1
+      match: string
+      attempted: boolean
+      succeeded: boolean
+      statName: string
+    })[]
+```
+
+# `/events/{eventKey}/teams/{team}`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  // only if they have future matches at this event
+  nextMatch?: {
+    redAlliance: string[]
+    blueAlliance: string[]
+    // UTC date - predicted match time
+    time: string
+    // example: qm3
+    key: string
+    redScore?: number
+    blueScore?: number
+  }
+  rank?: number
+  rankingScore?: number
+}
+```
+
+# `/events/{eventKey}/teams`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = string[]
+```
+
 # `/events/{eventKey}`
 
 ## `GET`
@@ -113,6 +439,48 @@ type Data = {
 
 # `/events`
 
+## `POST`
+
+Only admins can create custom events on their realm
+
+### Request
+
+```ts
+type Data = {
+  webcasts: {
+    type: "twitch" | "youtube"
+    url: string
+  }[]
+  // district "display_name" from TBA
+  fullDistrict?: string
+  location: {
+    name: string
+    lat: number
+    lon: number
+  }
+  key: string
+  // the ID of the realm the event belongs to
+  realmId?: string
+  // from TBA short name
+  name: string
+  // abbreviated district name
+  district?: string
+  week?: number
+  // UTC date
+  startDate: string
+  // UTC date
+  endDate: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+
 ## `GET`
 
 Getting events will only list TBA events, unless a user is signed in. If the
@@ -142,7 +510,204 @@ type Data = {
 }[]
 ```
 
+# `/realms/{id}`
+
+## `DELETE`
+
+Super-admins can delete realms, admins can delete their own realm
+
+### Response
+
+```ts
+type Data = null
+```
+
+
+## `GET`
+
+Public realms can be fetched. If logged-in, the user's realm is also available.
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}
+```
+
+
+## `PATCH`
+
+Super-admins can modify realms, admins can modify their own realm
+
+### Request
+
+```ts
+type Data = {
+  // Realm name, eg Pigmice
+  name?: string
+  // Whether report data should be publicly available outside this realm
+  shareReports?: boolean
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+# `/realms`
+
+## `POST`
+
+Only super-admins can create new realms. Creating a new realm will return the
+ID of that realm.
+
+### Request
+
+```ts
+type Data = {
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}
+```
+
+
+### Response
+
+```ts
+type Data = number
+```
+
+
+## `GET`
+
+Public realms will be returned. If logged-in, the user's realm will also be returned.
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // Realm name, eg Pigmice
+  name: string
+  // Whether report data should be publicly available outside this realm
+  shareReports: boolean
+}[]
+```
+
+# `/schema`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  teleop: {
+    statName: string
+    statKey: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    statName: string
+    statKey: string
+    type: "number" | "boolean"
+  }[]
+}
+```
+
+# `/teams/{team}/automodes`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = string[]
+```
+
+# `/teams/{team}/stats/auto`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  modeName: string
+  // in order by match time
+  stats: (
+    | {
+        // 2018orwil
+        eventKey: string
+        // qm1
+        match: string
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        // 2018orwil
+        eventKey: string
+        // qm1
+        match: string
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+}[]
+```
+
+# `/teams/{team}/stats/teleop`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = (
+  | {
+      // 2018orwil
+      eventKey: string
+      // qm1
+      match: string
+      attempts: number
+      successes: number
+      statName: string
+    }
+  | {
+      // 2018orwil
+      eventKey: string
+      // qm1
+      match: string
+      attempted: boolean
+      succeeded: boolean
+      statName: string
+    })[]
+```
+
 # `/users/{userId}`
+
+## `DELETE`
+
+Anyone can delete themselves, admins can delete other users in their realm,
+super-admins can delete any user.
+
+### Response
+
+```ts
+type Data = null
+```
+
 
 ## `GET`
 
