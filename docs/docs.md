@@ -5,7 +5,6 @@
 - [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
-- [`/events/{eventKey}/schema`](#eventseventkeyschema)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
 - [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
@@ -59,23 +58,23 @@ type Data = {
     | {
         attempts: number
         successes: number
-        statName: string
+        statId: string
       }
     | {
         attempted: boolean
         succeeded: boolean
-        statName: string
+        statId: string
       })[]
   auto: (
     | {
         attempts: number
         successes: number
-        statName: string
+        statId: string
       }
     | {
         attempted: boolean
         succeeded: boolean
-        statName: string
+        statId: string
       })[]
   autoName: string
 }
@@ -101,23 +100,23 @@ type Data = {
     | {
         attempts: number
         successes: number
-        statName: string
+        statId: string
       }
     | {
         attempted: boolean
         succeeded: boolean
-        statName: string
+        statId: string
       })[]
   auto: (
     | {
         attempts: number
         successes: number
-        statName: string
+        statId: string
       }
     | {
         attempted: boolean
         succeeded: boolean
-        statName: string
+        statId: string
       })[]
   autoName: string
 }[]
@@ -147,14 +146,14 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
+        statId: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
+        statId: string
       })[]
   auto: (
     | {
@@ -166,14 +165,14 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
+        statId: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
+        statId: string
       })[]
 }[]
 ```
@@ -245,16 +244,6 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/schema`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = number
-```
-
 # `/events/{eventKey}/star`
 
 ## `PUT`
@@ -296,14 +285,14 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
+        statId: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
+        statId: string
       })[]
   auto: (
     | {
@@ -315,14 +304,14 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
+        statId: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
+        statId: string
       })[]
 }[]
 ```
@@ -343,14 +332,14 @@ type Data = {
         match: string
         attempts: number
         successes: number
-        statName: string
+        statId: string
       }
     | {
         // qm1
         match: string
         attempted: boolean
         succeeded: boolean
-        statName: string
+        statId: string
       })[]
 }[]
 ```
@@ -368,14 +357,14 @@ type Data = (
       match: string
       attempts: number
       successes: number
-      statName: string
+      statId: string
     }
   | {
       // qm1
       match: string
       attempted: boolean
       succeeded: boolean
-      statName: string
+      statId: string
     })[]
 ```
 
@@ -626,7 +615,23 @@ Anyone can view the schema for a specific year's game
 ### Response
 
 ```ts
-type Data = number
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a speific year's main FRC game
+  year?: number
+  teleop: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+}
 ```
 
 # `/schemas/{id}`
@@ -645,17 +650,54 @@ type Data = {
   // If created for a speific year's main FRC game
   year?: number
   teleop: {
-    statName: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
   auto: {
-    statName: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
 }
 ```
 
 # `/schemas`
+
+## `POST`
+
+Admins can create schemas for their realms, super-admins can create schemas
+for main-season FRC games.
+
+### Request
+
+```ts
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a speific year's main FRC game
+  year?: number
+  teleop: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
 
 ## `GET`
 
@@ -671,11 +713,13 @@ type Data = {
   // If created for a speific year's main FRC game
   year?: number
   teleop: {
-    statName: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
   auto: {
-    statName: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
 }[]
@@ -685,7 +729,7 @@ type Data = {
 ## `POST`
 
 Admins can create schemas for their realms, super-admins can create schemas
-for main-season FRC games
+for main-season FRC games.
 
 ### Request
 
@@ -697,11 +741,13 @@ type Data = {
   // If created for a speific year's main FRC game
   year?: number
   teleop: {
-    statName: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
   auto: {
-    statName: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
 }
@@ -742,7 +788,7 @@ type Data = {
         match: string
         attempts: number
         successes: number
-        statName: string
+        statId: string
       }
     | {
         // 2018orwil
@@ -751,7 +797,7 @@ type Data = {
         match: string
         attempted: boolean
         succeeded: boolean
-        statName: string
+        statId: string
       })[]
 }[]
 ```
@@ -771,7 +817,7 @@ type Data = (
       match: string
       attempts: number
       successes: number
-      statName: string
+      statId: string
     }
   | {
       // 2018orwil
@@ -780,7 +826,7 @@ type Data = (
       match: string
       attempted: boolean
       succeeded: boolean
-      statName: string
+      statId: string
     })[]
 ```
 

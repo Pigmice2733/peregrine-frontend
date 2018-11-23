@@ -1,11 +1,11 @@
 // a stat is a summary representation of a field
 interface BaseStat {
-  statName: string
+  statId: string
 }
 
 // a field is the details of something specific that happened during a match
 interface BaseField {
-  statName: string
+  statId: string
 }
 
 interface BooleanStat extends BaseStat {
