@@ -1,10 +1,10 @@
 export const formatDateRange = (
-  startDate: string,
-  endDate: string,
+  startDate: Date,
+  endDate: Date,
   timeZone?: string,
 ) => {
-  const start = new Date(startDate)
-  const end = new Date(endDate)
+  const start = startDate
+  const end = endDate
   const sameYear = start.getFullYear() === end.getFullYear()
   const sameMonth = sameYear && start.getMonth() === end.getMonth()
   const sameDay = sameMonth && start.getDate() === end.getDate()

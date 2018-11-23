@@ -186,7 +186,7 @@ type Data = {
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
-  time: string
+  time?: string
   // example: qm3
   key: string
   redScore?: number
@@ -232,13 +232,13 @@ type Data = {
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
-  time: string
+  time?: string
   // example: qm3
   key: string
   redScore?: number
   blueScore?: number
   // UTC date - scheduled match time
-  scheduledTime: string
+  scheduledTime?: string
 }[]
 ```
 
@@ -379,7 +379,7 @@ type Data = {
     redAlliance: string[]
     blueAlliance: string[]
     // UTC date - predicted match time
-    time: string
+    time?: string
     // example: qm3
     key: string
     redScore?: number
@@ -512,6 +512,17 @@ type Data = {
 
 # `/realms/{id}`
 
+## `DELETE`
+
+Super-admins can delete realms, admins can delete their own realm
+
+### Response
+
+```ts
+type Data = null
+```
+
+
 ## `GET`
 
 Public realms can be fetched. If logged-in, the user's realm is also available.
@@ -544,17 +555,6 @@ type Data = {
 }
 ```
 
-
-### Response
-
-```ts
-type Data = null
-```
-
-
-## `DELETE`
-
-Super-admins can delete realms, admins can delete their own realm
 
 ### Response
 
@@ -697,6 +697,18 @@ type Data = (
 
 # `/users/{userId}`
 
+## `DELETE`
+
+Anyone can delete themselves, admins can delete other users in their realm,
+super-admins can delete any user.
+
+### Response
+
+```ts
+type Data = null
+```
+
+
 ## `GET`
 
 Super-admins can view any user, admins can view any user in their realm,
@@ -742,18 +754,6 @@ type Data = {
 }
 ```
 
-
-### Response
-
-```ts
-type Data = null
-```
-
-
-## `DELETE`
-
-Anyone can delete themselves, admins can delete other users in their realm,
-super-admins can delete any user.
 
 ### Response
 
