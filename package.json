@@ -4,13 +4,15 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
+  "description": "A scouting app for FRC competitions. This is the frontend, written in TypeScript with Preact",
+  "license": "MIT",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "check-lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
-    "type:watch": "tsc --noEmit --pretty --watch",
-    "type": "tsc --noEmit --pretty",
+    "type:watch": "tsc --watch",
+    "type": "tsc",
     "start": "parcel index.html",
     "build": "node build.js",
     "new-route": "hygen route new"
@@ -82,7 +84,7 @@
     "rollup-plugin-postcss": "1.6.2",
     "rollup-plugin-terser": "3.0.0",
     "templite": "1.1.0",
-    "typescript": "3.1.6"
+    "typescript": "3.3.0-dev.20181122"
   },
   "engines": {
     "node": "10"
