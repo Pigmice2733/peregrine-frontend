@@ -1,5 +1,3 @@
-import { request } from '../base'
-
 interface StatDescription {
   name: string
   id: string
@@ -15,7 +13,3 @@ export interface Schema {
   teleop: StatDescription[]
   auto: StatDescription[]
 }
-// Admins can create schemas for their realms, super-admins can create schemas
-// for main-season FRC games.
-export const createSchema = (schema: Schema) =>
-  request<null>('POST', `schemas`, schema)

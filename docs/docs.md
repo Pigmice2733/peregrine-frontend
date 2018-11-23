@@ -610,7 +610,7 @@ type Data = {
 
 ## `GET`
 
-Anyone can view the schema for a specific year's game
+Anyone can view the standard schema for a specific year's game
 
 ### Response
 
@@ -638,7 +638,9 @@ type Data = {
 
 ## `GET`
 
-Anyone can view a specific schema
+Standard FRC schemas, and schemas from public realms can be viewed by anyone.
+Members of a realm can view any schemas from their realm, super-admins can
+view any schema.
 
 ### Response
 
@@ -666,8 +668,9 @@ type Data = {
 
 ## `POST`
 
-Admins can create schemas for their realms, super-admins can create schemas
-for main-season FRC games.
+Admins can create schemas for any event in their realms, EXCEPT for public
+realms which must use a standard schema for main-season FRC games. Only
+super-admins can create the standard schemas for main-season FRC games.
 
 ### Request
 
@@ -701,7 +704,9 @@ type Data = null
 
 ## `GET`
 
-Anyone can view the schemas
+Standard FRC schemas, and schemas from public realms can be viewed by anyone.
+Members of a realm can view any schemas from their realm, super-admins can
+view any schema.
 
 ### Response
 
@@ -723,41 +728,6 @@ type Data = {
     type: "number" | "boolean"
   }[]
 }[]
-```
-
-
-## `POST`
-
-Admins can create schemas for their realms, super-admins can create schemas
-for main-season FRC games.
-
-### Request
-
-```ts
-type Data = {
-  id: number
-  // If created for a specific realm
-  realmId?: number
-  // If created for a speific year's main FRC game
-  year?: number
-  teleop: {
-    name: string
-    id: string
-    type: "number" | "boolean"
-  }[]
-  auto: {
-    name: string
-    id: string
-    type: "number" | "boolean"
-  }[]
-}
-```
-
-
-### Response
-
-```ts
-type Data = null
 ```
 
 # `/teams/{team}/automodes`
