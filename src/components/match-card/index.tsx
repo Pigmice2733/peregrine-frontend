@@ -11,7 +11,7 @@ type MatchCardProps = CardProps<{
     key: string
     redAlliance: string[]
     blueAlliance: string[]
-    time: Date
+    time?: Date
   }
   key?: string | number
 }>
@@ -26,7 +26,11 @@ export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
           <div class={style.matchNum}>{`Match ${matchName.num}`}</div>
         )}
       </div>
-      <time dateTime={match.time.toISOString()}>{formatTime(match.time)}</time>
+      {match.time && (
+        <time dateTime={match.time.toISOString()}>
+          {formatTime(match.time)}
+        </time>
+      )}
       <div class={`${style.red} ${style.alliance}`}>
         {match.redAlliance.map(t => (
           <div key={t}>{formatTeamNumber(t)}</div>

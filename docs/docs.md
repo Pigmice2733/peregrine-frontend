@@ -186,7 +186,7 @@ type Data = {
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
-  time: string
+  time?: string
   // example: qm3
   key: string
   redScore?: number
@@ -232,13 +232,13 @@ type Data = {
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
-  time: string
+  time?: string
   // example: qm3
   key: string
   redScore?: number
   blueScore?: number
   // UTC date - scheduled match time
-  scheduledTime: string
+  scheduledTime?: string
 }[]
 ```
 
@@ -379,7 +379,7 @@ type Data = {
     redAlliance: string[]
     blueAlliance: string[]
     // UTC date - predicted match time
-    time: string
+    time?: string
     // example: qm3
     key: string
     redScore?: number

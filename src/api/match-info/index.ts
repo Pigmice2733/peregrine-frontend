@@ -4,7 +4,7 @@ export interface MatchInfo {
   redAlliance: string[]
   blueAlliance: string[]
   // UTC date - predicted match time
-  time: string
+  time?: string
   // example: qm3
   key: string
   redScore?: number
@@ -13,7 +13,7 @@ export interface MatchInfo {
 
 export type MatchList = (MatchInfo & {
   // UTC date - scheduled match time
-  scheduledTime: string
+  scheduledTime?: string
 })[]
 
 export const processMatch = <T extends MatchInfo | MatchList[0]>(match: T) =>
