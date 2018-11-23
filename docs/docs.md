@@ -5,6 +5,7 @@
 - [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
+- [`/events/{eventKey}/schema`](#eventseventkeyschema)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
 - [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
@@ -15,7 +16,9 @@
 - [`/events`](#events)
 - [`/realms/{id}`](#realmsid)
 - [`/realms`](#realms)
-- [`/schema`](#schema)
+- [`/schemas/year/{year}`](#schemasyearyear)
+- [`/schemas/{id}`](#schemasid)
+- [`/schemas`](#schemas)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
 - [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
 - [`/teams/{team}/stats/teleop`](#teamsteamstatsteleop)
@@ -93,7 +96,7 @@ type Data = null
 ```ts
 type Data = {
   reporter: string
-  reporterId: string
+  reporterId?: string
   teleop: (
     | {
         attempts: number
@@ -240,6 +243,16 @@ type Data = {
   // UTC date - scheduled match time
   scheduledTime: string
 }[]
+```
+
+# `/events/{eventKey}/schema`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = number
 ```
 
 # `/events/{eventKey}/star`
@@ -604,25 +617,101 @@ type Data = {
 }[]
 ```
 
-# `/schema`
+# `/schemas/year/{year}`
 
 ## `GET`
+
+Anyone can view the schema for a specific year's game
+
+### Response
+
+```ts
+type Data = number
+```
+
+# `/schemas/{id}`
+
+## `GET`
+
+Anyone can view a specific schema
 
 ### Response
 
 ```ts
 type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a speific year's main FRC game
+  year?: number
   teleop: {
     statName: string
-    statKey: string
     type: "number" | "boolean"
   }[]
   auto: {
     statName: string
-    statKey: string
     type: "number" | "boolean"
   }[]
 }
+```
+
+# `/schemas`
+
+## `GET`
+
+Anyone can view the schemas
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a speific year's main FRC game
+  year?: number
+  teleop: {
+    statName: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    statName: string
+    type: "number" | "boolean"
+  }[]
+}[]
+```
+
+
+## `POST`
+
+Admins can create schemas for their realms, super-admins can create schemas
+for main-season FRC games
+
+### Request
+
+```ts
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a speific year's main FRC game
+  year?: number
+  teleop: {
+    statName: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    statName: string
+    type: "number" | "boolean"
+  }[]
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
 ```
 
 # `/teams/{team}/automodes`

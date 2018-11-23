@@ -234,6 +234,9 @@ interface EventTeamInfo {
 export const getEventTeamInfo = (eventKey: string, team: string) =>
   getRequest<EventTeamInfo>(`events/${eventKey}/teams/${team}`)
 
+export const getEventSchemeId = (eventKey: string) =>
+  getRequest<number>(`events/${eventKey}/schema`)
+
 export const getEventTeamTeleopStats = (eventKey: string, team: string) =>
   getRequest<EventTeamTeleopStats>(
     `events/${eventKey}/teams/${team}/stats/teleop`,
@@ -259,7 +262,7 @@ interface SubmittedReport {
 
 interface Report extends SubmittedReport {
   reporter: string
-  reporterId: string
+  reporterId?: string
 }
 
 export const submitReport = (
@@ -282,16 +285,30 @@ export const getEventMatchTeamReports = (
 
 interface StatDescription {
   statName: string
-  statKey: string
   type: 'boolean' | 'number'
 }
 
 interface Schema {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a speific year's main FRC game
+  year?: number
   teleop: StatDescription[]
   auto: StatDescription[]
 }
 
-export const getSchema = () => getRequest<Schema>(`schema`)
+// Anyone can view the schemas
+export const getSchemas = () => getRequest<Schema[]>(`schemas`)
+// Anyone can view a specific schema
+export const getSchema = (id: number) => getRequest<Schema>(`schemas/${id}`)
+// Anyone can view the schema for a specific year's game
+export const getYearSchemaId = (year: number) =>
+  getRequest<number>(`schemas/year/${year}`)
+// Admins can create schemas for their realms, super-admins can create schemas
+// for main-season FRC games
+export const createSchema = (schema: Schema) =>
+  postRequest<null>(`schemas`, schema)
 
 interface Roles {
   isSuperAdmin: boolean
