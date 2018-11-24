@@ -1,18 +1,15 @@
 import { h } from 'preact'
 import style from './style.css'
 
-interface Props {
-  children: string
-}
+const formatDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 
-const formatDate = (d: string) =>
-  new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+const Chip = ({ children }: { children: string }) => (
+  <span class={style.chip}>{children}</span>
+)
 
-const Chip = ({ children }: Props) => <span class={style.chip}>{children}</span>
-export const DateChip = ({ children }: Props) => (
-  <span class={`${style.dateChip} ${style.chip}`}>
-    {formatDate(children[0])}
-  </span>
+export const DateChip = ({ date }: { date: Date }) => (
+  <span class={`${style.dateChip} ${style.chip}`}>{formatDate(date)}</span>
 )
 
 export default Chip

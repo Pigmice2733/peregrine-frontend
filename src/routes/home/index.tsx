@@ -1,9 +1,9 @@
 import { h } from 'preact'
-import { getEvents } from '@/api'
 import LoadData from '@/load-data'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
 import Spinner from '@/components/spinner'
+import { getEvents } from '@/api/event-info/get-events'
 
 const Home = () => (
   <Page name="Home">
