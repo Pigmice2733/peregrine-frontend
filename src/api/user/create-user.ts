@@ -6,4 +6,4 @@ import { request } from '../base'
 // verified and will require admin approval. Super-admins can create verified
 // users in any realm, admins can only do so in their own realm.
 export const createUser = (user: EditableUser) =>
-  request<number | false>('POST', 'users', user)
+  request<number | false>('POST', 'users', {}, user)
