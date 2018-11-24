@@ -37,7 +37,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
           {nextMatch && (
             <div>
               <h2 class={style.section}>Next Match</h2>
-              <MatchCard match={nextMatch} />
+              <MatchCard
+                match={nextMatch}
+                href={`/events/${eventKey}/matches/${nextMatch.key}`}
+              />
             </div>
           )}
           <InfoGroupCard
