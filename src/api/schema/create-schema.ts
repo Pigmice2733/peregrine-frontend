@@ -5,4 +5,4 @@ import { Schema } from '.'
 // realms which must use a standard schema for main-season FRC games. Only
 // super-admins can create the standard schemas for main-season FRC games.
 export const createSchema = (schema: Schema) =>
-  request<null>('POST', `schemas`, schema)
+  request<null>('POST', `schemas`, {}, schema)
