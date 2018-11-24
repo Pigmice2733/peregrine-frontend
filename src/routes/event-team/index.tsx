@@ -24,7 +24,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
       eventMatches: () => getEventMatches(eventKey, 'frc' + teamNum),
     }}
     renderSuccess={({ eventInfo, eventTeamInfo, eventMatches }) => {
-      console.log(eventMatches)
       const nextMatch =
         eventMatches &&
         eventMatches.find(
