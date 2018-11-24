@@ -1,8 +1,6 @@
 import LoadData from '.'
-import { render, cleanup, wait } from 'preact-testing-library'
+import { render, wait } from 'preact-testing-library'
 import { h } from 'preact'
-
-afterEach(cleanup)
 
 test('resolving promise', async () => {
   let resolveData: (value: string) => void = Promise.resolve
@@ -53,8 +51,11 @@ test('rejecting promise', async () => {
   no data
 </div>
 `)
+  jest.spyOn(console, 'error').mockImplementation()
   rejectData({ message: 'asdf' })
   await wait(() => getByTestId('error'))
+  expect(console.error).toHaveBeenCalledWith({ message: 'asdf' })
+  jest.spyOn(console, 'error').mockRestore()
   expect(container.firstElementChild).toMatchInlineSnapshot(`
 <div
   data-testid="error"
