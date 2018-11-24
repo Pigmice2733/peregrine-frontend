@@ -1,7 +1,6 @@
 import { h } from 'preact'
 import LoadData from '@/load-data'
 import Page from '@/components/page'
-import { getEventMatches, getEventInfo } from '@/api'
 import { MatchCard } from '@/components/match-card'
 import InfoGroupCard from '@/components/info-group-card'
 import { calendarPlus } from '@/icons/calendar-plus'
@@ -18,6 +17,8 @@ import Chip from '@/components/chip'
 import style from './style.css'
 import IconButton from '@/components/icon-button'
 import Spinner from '@/components/spinner'
+import { getEventMatches } from '@/api/match-info/get-event-matches'
+import { getEventInfo } from '@/api/event-info/get-event-info'
 
 interface Props {
   eventKey: string
@@ -28,8 +29,7 @@ const icons = { twitch, youtube }
 const gmapsUrl = (lat: number, lon: number) =>
   `https://www.google.com/maps/?q=${lat},${lon}`
 
-const gcalDate = (d: string, dateOffset = 0) => {
-  const date = new Date(d)
+const gcalDate = (date: Date, dateOffset = 0) => {
   return (
     String(date.getFullYear()) +
     String(date.getMonth() + 1).padStart(2, '0') +
@@ -44,8 +44,8 @@ const gcalUrl = ({
   location,
 }: {
   name: string
-  startDate: string
-  endDate: string
+  startDate: Date
+  endDate: Date
   location: { name: string }
 }) =>
   `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
@@ -155,19 +155,13 @@ const Event = ({ eventKey }: Props) => (
           {
             name: 'Matches',
             contents: matches ? (
-              matches
-                .sort(
-                  (a, b) =>
-                    ((new Date(a.scheduledTime) as unknown) as number) -
-                    ((new Date(b.scheduledTime) as unknown) as number),
-                )
-                .map(m => (
-                  <MatchCard
-                    key={m.key}
-                    match={m}
-                    href={`/events/${eventKey}/matches/${m.key}`}
-                  />
-                ))
+              matches.map(m => (
+                <MatchCard
+                  key={m.key}
+                  match={m}
+                  href={`/events/${eventKey}/matches/${m.key}`}
+                />
+              ))
             ) : (
               <Spinner />
             ),

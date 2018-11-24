@@ -33,5 +33,13 @@ module.exports = {
         'custom-properties': false,
       },
     },
+    'postcss-font-magician': {
+      variants: {
+        'Roboto Condensed': { '400': [] },
+        Roboto: { '400': [], '700': [] },
+      },
+      foundries: ['google'],
+      display: 'swap',
+    },
   },
 }

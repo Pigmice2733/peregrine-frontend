@@ -9,7 +9,7 @@ type Props = CardProps<{
     name: string
     district?: string
     week?: number
-    startDate: string
+    startDate: Date
   }
 }>
 
@@ -18,7 +18,7 @@ const EventCard = ({ event, href }: Props) => (
     <span class={style.name}>{event.name}</span>
     {event.district !== undefined && <Chip>{event.district}</Chip>}
     {event.week === undefined ? (
-      <DateChip>{event.startDate}</DateChip>
+      <DateChip date={event.startDate} />
     ) : (
       <Chip>{`Wk ${event.week + 1}`}</Chip>
     )}

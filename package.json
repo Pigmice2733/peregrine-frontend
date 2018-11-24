@@ -4,13 +4,15 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
+  "description": "A scouting app for FRC competitions. This is the frontend, written in TypeScript with Preact",
+  "license": "MIT",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "check-lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
-    "type:watch": "tsc --noEmit --pretty --watch",
-    "type": "tsc --noEmit --pretty",
+    "type:watch": "tsc --watch",
+    "type": "tsc",
     "start": "parcel index.html",
     "build": "node build.js",
     "new-route": "hygen route new"
@@ -48,7 +50,7 @@
     ">3%"
   ],
   "devDependencies": {
-    "@babel/core": "7.1.5",
+    "@babel/core": "7.1.6",
     "@babel/plugin-proposal-class-properties": "7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "7.0.0",
     "@babel/plugin-syntax-dynamic-import": "7.0.0",
@@ -61,7 +63,7 @@
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "cpy": "7.0.1",
     "eslint": "5.9.0",
-    "eslint-plugin-caleb": "1.12.0",
+    "eslint-plugin-caleb": "1.13.0",
     "hygen": "1.6.2",
     "jest": "23.6.0",
     "kleur": "2.0.2",
@@ -69,19 +71,20 @@
     "postcss": "7.0.5",
     "postcss-calc": "7.0.1",
     "postcss-css-variables": "0.11.0",
+    "postcss-font-magician": "^2.2.1",
     "postcss-import": "12.0.1",
     "postcss-modules": "1.4.1",
     "postcss-preset-env": "6.4.0",
     "preact-testing-library": "0.3.0",
     "prettier": "1.15.2",
     "prompts": "1.2.0",
-    "rollup": "0.67.1",
+    "rollup": "0.67.3",
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-node-resolve": "3.4.0",
     "rollup-plugin-postcss": "1.6.2",
     "rollup-plugin-terser": "3.0.0",
     "templite": "1.1.0",
-    "typescript": "3.1.6"
+    "typescript": "3.3.0-dev.20181122"
   },
   "engines": {
     "node": "10"

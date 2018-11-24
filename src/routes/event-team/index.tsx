@@ -2,12 +2,14 @@ import { h } from 'preact'
 import Page from '@/components/page'
 import style from './style.css'
 import LoadData from '@/load-data'
-import { getEventInfo, getEventTeamInfo, getEventMatches } from '@/api'
 import InfoGroupCard from '@/components/info-group-card'
 import { sortAscending } from '@/icons/sort-ascending'
 import { history } from '@/icons/history'
 import { MatchCard } from '@/components/match-card'
 import { round } from '@/utils/round'
+import { getEventInfo } from '@/api/event-info/get-event-info'
+import { getEventTeamInfo } from '@/api/get-event-team-info'
+import { getEventMatches } from '@/api/match-info/get-event-matches'
 
 interface Props {
   eventKey: string
@@ -22,6 +24,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
       eventMatches: () => getEventMatches(eventKey, 'frc' + teamNum),
     }}
     renderSuccess={({ eventInfo, eventTeamInfo, eventMatches }) => {
+      console.log(eventMatches)
       const nextMatch =
         eventMatches &&
         eventMatches.find(
