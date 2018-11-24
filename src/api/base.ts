@@ -10,10 +10,11 @@ const qs = (
   q: { [key: string]: string | number | undefined } | null | undefined,
 ) => {
   if (!q) return ''
-  return Object.entries(q)
-    .map(([key, val]) => `${key}=${val}`)
+  const v = Object.entries(q)
     .filter(([_key, val]) => val !== undefined)
+    .map(([key, val]) => `${key}=${val}`)
     .join('&')
+  return v ? `?${v}` : ''
 }
 
 export const request = <T extends any>(
