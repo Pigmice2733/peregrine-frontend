@@ -4,42 +4,25 @@ const apiUrl =
     ? 'https://api.peregrine.ga:8081'
     : 'https://edge.api.peregrine.ga:8081') + '/'
 
-type PeregrineResponse<T> =
-  | {
-      data: Readonly<T>
-    }
-  | {
-      error: string
-    }
+type PeregrineResponse<T> = Readonly<{ data: T } | { error: string }>
 
-type HTTPMethodWithoutBody = 'GET' | 'DELETE'
-type HTTPMethodWithBody = 'POST' | 'PUT' | 'PATCH'
+const qs = (
+  q: { [key: string]: string | number | undefined } | null | undefined,
+) => {
+  if (!q) return ''
+  return Object.entries(q)
+    .map(([key, val]) => `${key}=${val}`)
+    .filter(([_key, val]) => val !== undefined)
+    .join('&')
+}
 
-export function request<T, D = T>(
-  method: HTTPMethodWithoutBody,
+export const request = <T extends any>(
+  method: 'GET' | 'DELETE' | 'POST' | 'PUT' | 'PATCH',
   endpoint: string,
-  postProcess?: (data: T) => D,
-): Promise<D>
-export function request<T, D = T>(
-  method: HTTPMethodWithBody,
-  endpoint: string,
+  params?: { [key: string]: string | number | undefined } | null,
   body?: any,
-  postProcess?: (data: T) => D,
-): Promise<D>
-export function request<T, D = T>(
-  method: HTTPMethodWithBody | HTTPMethodWithoutBody,
-  endpoint: string,
-  bodyOrPostprocess?: ((data: T) => D) | any,
-  postProcess?: (data: T) => D,
-): Promise<D> {
-  const body =
-    typeof bodyOrPostprocess === 'function'
-      ? undefined
-      : JSON.stringify(bodyOrPostprocess)
-  const processor =
-    postProcess ||
-    (typeof bodyOrPostprocess === 'function' && bodyOrPostprocess)
-  return fetch(apiUrl + endpoint, { method, body })
+) =>
+  fetch(apiUrl + endpoint + qs(params), { method, body })
     .then(res => {
       if (res.ok) {
         return res.json() as Promise<PeregrineResponse<T>>
@@ -50,8 +33,5 @@ export function request<T, D = T>(
       if ('error' in data) {
         return Promise.reject(data.error)
       }
-      return Promise.resolve(
-        processor ? processor(data.data) : ((data.data as unknown) as D),
-      )
+      return (data.data as unknown) as Promise<T>
     })
-}

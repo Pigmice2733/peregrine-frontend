@@ -10,5 +10,6 @@ export const submitReport = (
   request<null>(
     'PUT',
     `events/${eventKey}/matches/${matchKey}/reports/${team}`,
+    {},
     report,
   )

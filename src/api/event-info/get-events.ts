@@ -5,6 +5,6 @@ import { BasicEventInfo, processEvent } from '.'
 // user is a super-admin, they will see all events, otherwise they will see all
 // TBA events and additionally all the custom events on their realm.
 export const getEvents = () =>
-  request('GET', 'events', (events: BasicEventInfo[]) =>
+  request<BasicEventInfo[]>('GET', 'events').then(events =>
     events.map(processEvent),
   )

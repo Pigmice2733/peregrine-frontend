@@ -8,4 +8,4 @@ export const createEventMatch = (
     // UTC Date - scheduled match time
     time: string
   },
-) => request<null>('POST', `events/${eventKey}/matches`, match)
+) => request<null>('POST', `events/${eventKey}/matches`, {}, match)
