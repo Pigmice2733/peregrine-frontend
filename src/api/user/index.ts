@@ -1,4 +1,4 @@
-interface Roles {
+export interface Roles {
   isSuperAdmin: boolean
   isAdmin: boolean
   isVerified: boolean

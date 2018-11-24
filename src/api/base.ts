@@ -1,8 +1,10 @@
+import { getJWT } from '@/auth'
+
 const apiUrl =
   (process.env.PEREGRINE_API_URL ||
-  (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master')
-    ? 'https://api.peregrine.ga:8081'
-    : 'https://edge.api.peregrine.ga:8081') + '/'
+    (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
+      ? 'https://api.peregrine.ga:8081'
+      : 'https://edge.api.peregrine.ga:8081')) + '/'
 
 type PeregrineResponse<T> = Readonly<{ data: T } | { error: string }>
 
@@ -22,8 +24,14 @@ export const request = <T extends any>(
   endpoint: string,
   params?: { [key: string]: string | number | undefined } | null,
   body?: any,
-) =>
-  fetch(apiUrl + endpoint + qs(params), { method, body })
+) => {
+  const jwt = getJWT()
+  console.log(jwt)
+  return fetch(apiUrl + endpoint + qs(params), {
+    method,
+    body: JSON.stringify(body),
+    headers: jwt ? { Authorization: `Bearer ${jwt}` } : {},
+  })
     .then(res => {
       if (res.ok) {
         return res.json() as Promise<PeregrineResponse<T>>
@@ -36,3 +44,4 @@ export const request = <T extends any>(
       }
       return (data.data as unknown) as Promise<T>
     })
+}

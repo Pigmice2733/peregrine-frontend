@@ -3,10 +3,18 @@ import { getJWT, setJWT } from '@/auth'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import style from './style.css'
-import { authenticate } from '@/api'
+import { authenticate } from '@/api/authenticate'
+import { Roles } from '@/api/user'
+
+interface JWT {
+  exp: number
+  pigmiceRealm: number
+  pigmiceRoles: Roles
+  sub: string
+}
 
 interface Props {
-  render: (data: { username: string }) => JSX.Element
+  render: (data: { roles: Roles; userId: string }) => JSX.Element
 }
 
 interface State {
@@ -16,7 +24,7 @@ interface State {
 
 const parseJWT = (jwt: string) => {
   const payload = jwt.split('.', 2)[1]
-  return atob(payload)
+  return JSON.parse(atob(payload)) as JWT
 }
 
 class WithAuth extends Component<Props, State> {
@@ -31,12 +39,9 @@ class WithAuth extends Component<Props, State> {
   updatePassword = (e: Event) =>
     this.setState({ password: (e.target as HTMLInputElement).value })
 
-  onSubmit = async e => {
+  onSubmit = async (e: Event) => {
     e.preventDefault()
-    const res = await authenticate(this.state.username, this.state.password)
-    if (!('data' in res)) return
-    const { jwt } = res.data
-    console.log(jwt)
+    const { jwt } = await authenticate(this.state.username, this.state.password)
     setJWT(jwt)
     this.setState({ username: '', password: '' })
   }
@@ -59,9 +64,8 @@ class WithAuth extends Component<Props, State> {
         </Card>
       )
     }
-    console.log(jwt)
-    console.log(parseJWT(jwt))
-    return render({ username: 'cale' })
+    const parsedJWT = parseJWT(jwt)
+    return render({ roles: parsedJWT.pigmiceRoles, userId: parsedJWT.sub })
   }
 }
 

@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import Page from '@/components/page'
 // import style from './style.css'
-import WithAuth from '@/components/with-auth'
+import Authenticated from '@/components/authenticated'
 
 interface Props {
   eventKey: string
@@ -9,10 +9,10 @@ interface Props {
 }
 
 const Scout = ({ eventKey, matchKey }: Props) => (
-  <WithAuth
-    render={({ username }) => (
-      <Page name="Scout">
-        <h1>Hi, {username}</h1>
+  <Authenticated
+    render={() => (
+      <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
+        <h1>Scout</h1>
       </Page>
     )}
   />

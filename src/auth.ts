@@ -1,6 +1,6 @@
 let jwt: string | null = null
 
-export const getJWT = () => jwt || localStorage.getItem('jwt')
+export const getJWT = () => jwt || (jwt = localStorage.getItem('jwt'))
 
 export const setJWT = (newJWT: string) => {
   jwt = newJWT
