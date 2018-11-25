@@ -11,8 +11,10 @@ type Props = Merge<
 
 const TextInput = ({ label, ...rest }: Props) => (
   <div>
-    <input {...rest} class={style.input} />
-    <label>{label}</label>
+    <label>
+      <input {...rest} class={style.input} />
+      {label}
+    </label>
   </div>
 )
 

@@ -1,4 +1,4 @@
-import { getJWT } from '@/auth'
+import { getJWT } from '@/jwt'
 
 const apiUrl =
   (process.env.PEREGRINE_API_URL ||
@@ -26,7 +26,6 @@ export const request = <T extends any>(
   body?: any,
 ) => {
   const jwt = getJWT()
-  console.log(jwt)
   return fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),

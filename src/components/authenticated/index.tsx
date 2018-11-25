@@ -1,5 +1,5 @@
 import { h, Component } from 'preact'
-import { getJWT, setJWT } from '@/auth'
+import { getJWT, setJWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import style from './style.css'
@@ -27,7 +27,7 @@ const parseJWT = (jwt: string) => {
   return JSON.parse(atob(payload)) as JWT
 }
 
-class WithAuth extends Component<Props, State> {
+class Authenticted extends Component<Props, State> {
   state = {
     username: '',
     password: '',
@@ -69,4 +69,4 @@ class WithAuth extends Component<Props, State> {
   }
 }
 
-export default WithAuth
+export default Authenticted
