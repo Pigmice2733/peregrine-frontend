@@ -68,7 +68,7 @@
     "jest": "23.6.0",
     "kleur": "2.0.2",
     "parcel-bundler": "1.10.3",
-    "postcss": "7.0.5",
+    "postcss": "7.0.6",
     "postcss-calc": "7.0.1",
     "postcss-css-variables": "0.11.0",
     "postcss-font-magician": "^2.2.1",
