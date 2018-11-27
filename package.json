@@ -77,7 +77,7 @@
     "postcss-preset-env": "6.4.0",
     "preact-testing-library": "0.3.0",
     "prettier": "1.15.2",
-    "prompts": "1.2.0",
+    "prompts": "1.2.1",
     "rollup": "0.67.3",
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-node-resolve": "3.4.0",
