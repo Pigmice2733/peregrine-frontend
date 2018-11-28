@@ -84,7 +84,7 @@
     "rollup-plugin-postcss": "1.6.3",
     "rollup-plugin-terser": "3.0.0",
     "templite": "1.1.0",
-    "typescript": "3.3.0-dev.20181127"
+    "typescript": "3.3.0-dev.20181128"
   },
   "engines": {
     "node": "10"
