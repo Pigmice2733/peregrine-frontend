@@ -6,13 +6,6 @@ import style from './style.css'
 import { authenticate } from '@/api/authenticate'
 import { Roles } from '@/api/user'
 
-interface JWT {
-  exp: number
-  pigmiceRealm: number
-  pigmiceRoles: Roles
-  sub: string
-}
-
 interface Props {
   render: (data: { roles: Roles; userId: string }) => JSX.Element
 }
@@ -20,11 +13,6 @@ interface Props {
 interface State {
   username: string
   password: string
-}
-
-const parseJWT = (jwt: string) => {
-  const payload = jwt.split('.', 2)[1]
-  return JSON.parse(atob(payload)) as JWT
 }
 
 class Authenticted extends Component<Props, State> {
@@ -64,8 +52,7 @@ class Authenticted extends Component<Props, State> {
         </Card>
       )
     }
-    const parsedJWT = parseJWT(jwt)
-    return render({ roles: parsedJWT.pigmiceRoles, userId: parsedJWT.sub })
+    return render({ roles: jwt.pigmiceRoles, userId: jwt.sub })
   }
 }
 
