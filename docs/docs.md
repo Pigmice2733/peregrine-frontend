@@ -31,10 +31,7 @@
 ### Request
 
 ```ts
-type Data = {
-  username: string
-  password: string
-}
+type Data = {}
 ```
 
 
@@ -53,31 +50,7 @@ type Data = {
 ### Request
 
 ```ts
-type Data = {
-  teleop: (
-    | {
-        attempts: number
-        successes: number
-        statId: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statId: string
-      })[]
-  auto: (
-    | {
-        attempts: number
-        successes: number
-        statId: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statId: string
-      })[]
-  autoName: string
-}
+type Data = {}
 ```
 
 
@@ -205,16 +178,7 @@ Only admins can create matches for their realm
 ### Request
 
 ```ts
-type Data = {
-  redAlliance: string[]
-  blueAlliance: string[]
-  // UTC Date - scheduled match time
-  time: string
-  // example: qm3
-  key: string
-  redScore?: number
-  blueScore?: number
-}
+type Data = {}
 ```
 
 
@@ -226,6 +190,15 @@ type Data = null
 
 
 ## `GET`
+
+### Request
+
+```ts
+type Data = {
+  team: string
+}
+```
+
 
 ### Response
 
@@ -253,7 +226,7 @@ Only authenticated users can star events
 ### Request
 
 ```ts
-type Data = boolean
+type Data = {}
 ```
 
 
@@ -448,31 +421,7 @@ Only admins can create custom events on their realm
 ### Request
 
 ```ts
-type Data = {
-  webcasts: {
-    type: "twitch" | "youtube"
-    url: string
-  }[]
-  // district "display_name" from TBA
-  fullDistrict?: string
-  location: {
-    name: string
-    lat: number
-    lon: number
-  }
-  key: string
-  // the ID of the realm the event belongs to
-  realmId?: string
-  // from TBA short name
-  name: string
-  // abbreviated district name
-  district?: string
-  week?: number
-  // UTC date
-  startDate: string
-  // UTC date
-  endDate: string
-}
+type Data = {}
 ```
 
 
@@ -549,12 +498,7 @@ Super-admins can modify realms, admins can modify their own realm
 ### Request
 
 ```ts
-type Data = {
-  // Realm name, eg Pigmice
-  name?: string
-  // Whether report data should be publicly available outside this realm
-  shareReports?: boolean
-}
+type Data = {}
 ```
 
 
@@ -574,12 +518,7 @@ ID of that realm.
 ### Request
 
 ```ts
-type Data = {
-  // Realm name, eg Pigmice
-  name: string
-  // Whether report data should be publicly available outside this realm
-  shareReports: boolean
-}
+type Data = {}
 ```
 
 
@@ -675,23 +614,7 @@ super-admins can create the standard schemas for main-season FRC games.
 ### Request
 
 ```ts
-type Data = {
-  id: number
-  // If created for a specific realm
-  realmId?: number
-  // If created for a speific year's main FRC game
-  year?: number
-  teleop: {
-    name: string
-    id: string
-    type: "number" | "boolean"
-  }[]
-  auto: {
-    name: string
-    id: string
-    type: "number" | "boolean"
-  }[]
-}
+type Data = {}
 ```
 
 
@@ -844,19 +767,7 @@ super-admins can modify any user
 ### Request
 
 ```ts
-type Data = {
-  password?: string
-  // Only admins can set roles, and they can do so for any user in their realm.
-  roles?: {
-    isSuperAdmin: boolean
-    isAdmin: boolean
-    isVerified: boolean
-  }
-  username?: string
-  firstName?: string
-  lastName?: string
-  stars?: string[]
-}
+type Data = {}
 ```
 
 
@@ -878,19 +789,7 @@ users in any realm, admins can only do so in their own realm.
 ### Request
 
 ```ts
-type Data = {
-  password: string
-  // Only admins can set roles, and they can do so for any user in their realm.
-  roles: {
-    isSuperAdmin: boolean
-    isAdmin: boolean
-    isVerified: boolean
-  }
-  username: string
-  firstName: string
-  lastName: string
-  stars: string[]
-}
+type Data = {}
 ```
 
 
