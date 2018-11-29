@@ -68,6 +68,7 @@ type Data = null
 ```ts
 type Data = {
   reporter: string
+  // Not sent if the reporter account has been deleted.
   reporterId?: string
   teleop: (
     | {
