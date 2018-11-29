@@ -56,7 +56,7 @@
     "@babel/plugin-syntax-dynamic-import": "7.0.0",
     "@babel/plugin-transform-template-literals": "7.0.0",
     "@babel/preset-typescript": "7.1.0",
-    "@types/jest": "23.3.9",
+    "@types/jest": "23.3.10",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "23.6.0",
     "babel-plugin-module-resolver": "3.1.1",
@@ -66,9 +66,9 @@
     "eslint-plugin-caleb": "1.13.0",
     "hygen": "1.6.2",
     "jest": "23.6.0",
-    "kleur": "2.0.2",
+    "kleur": "3.0.0",
     "parcel-bundler": "1.10.3",
-    "postcss": "7.0.5",
+    "postcss": "7.0.6",
     "postcss-calc": "7.0.1",
     "postcss-css-variables": "0.11.0",
     "postcss-font-magician": "^2.2.1",
@@ -77,14 +77,14 @@
     "postcss-preset-env": "6.4.0",
     "preact-testing-library": "0.3.0",
     "prettier": "1.15.2",
-    "prompts": "1.2.0",
+    "prompts": "1.2.1",
     "rollup": "0.67.3",
     "rollup-plugin-babel": "4.0.3",
     "rollup-plugin-node-resolve": "3.4.0",
-    "rollup-plugin-postcss": "1.6.2",
+    "rollup-plugin-postcss": "1.6.3",
     "rollup-plugin-terser": "3.0.0",
     "templite": "1.1.0",
-    "typescript": "3.3.0-dev.20181122"
+    "typescript": "3.3.0-dev.20181128"
   },
   "engines": {
     "node": "10"

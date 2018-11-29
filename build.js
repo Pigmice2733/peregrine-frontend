@@ -38,7 +38,7 @@ const listModules = modules =>
     .join(', ')
 
 const graphChunk = (chunk, bundle) =>
-  kleur.bold.blue(chunk.fileName) +
+  kleur.bold().blue(chunk.fileName) +
   ' - ' +
   listModules(chunk.modules) +
   '\n' +
