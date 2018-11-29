@@ -49,9 +49,20 @@ export interface SubmittedReport {
   autoName: string
 }
 
-export interface Report extends SubmittedReport {
+interface BaseReport {
+  teleop: Field[]
+  auto: Field[]
+  autoName: string
+}
+
+export interface GetReport extends BaseReport {
   reporter: string
   reporterId?: string
+}
+
+export interface PutReport extends BaseReport {
+  reporter: string
+  reporterId: string
 }
 
 type EventKey = {

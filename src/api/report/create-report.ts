@@ -1,11 +1,11 @@
 import { request } from '../base'
-import { SubmittedReport } from '.'
+import { PutReport } from '.'
 
 export const submitReport = (
   eventKey: string,
   matchKey: string,
   team: string,
-  report: SubmittedReport,
+  report: PutReport,
 ) =>
   request<null>(
     'PUT',
