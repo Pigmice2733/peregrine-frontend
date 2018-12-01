@@ -1,21 +1,11 @@
-// a stat is a summary representation of a field
-interface BaseStat {
-  statId: string
-}
-
-// a field is the details of something specific that happened during a match
-interface BaseField {
-  statId: string
-}
-
-interface BooleanStat extends BaseStat {
+interface BooleanStat {
   // total
   attempts: number
   // total
   successes: number
 }
 
-interface NumberStat extends BaseStat {
+interface NumberStat {
   attempts: {
     max: number
     avg: number
@@ -26,12 +16,12 @@ interface NumberStat extends BaseStat {
   }
 }
 
-interface BooleanField extends BaseField {
+interface BooleanField {
   attempted: boolean
   succeeded: boolean
 }
 
-interface NumberField extends BaseField {
+interface NumberField {
   attempts: number
   successes: number
 }
