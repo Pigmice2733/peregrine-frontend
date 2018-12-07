@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "preact": "8.4.1",
+    "preact": "8.4.2",
     "preact-router": "2.6.1",
     "systemjs": "2.1.1"
   },
