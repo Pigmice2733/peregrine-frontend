@@ -7,7 +7,7 @@ interface JWT {
   pigmiceRealm: number
   pigmiceRoles: Roles
   sub: string
-  jwt: string
+  raw: string
 }
 
 export const getJWT = () => {
@@ -25,7 +25,7 @@ const parseJWT = (jwt?: string | null) => {
   if (!jwt) return
   const payload = jwt.split('.', 2)[1]
   const data = JSON.parse(atob(payload))
-  data.jwt = jwt
+  data.raw = jwt
   return data as JWT
 }
 

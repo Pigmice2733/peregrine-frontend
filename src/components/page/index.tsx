@@ -1,6 +1,5 @@
 import { h, ComponentChildren, Component } from 'preact'
 import style from './style.css'
-import Icon from '@/components/icon'
 import { menu } from '@/icons/menu'
 import { arrowLeft } from '@/icons/arrow-left'
 import IconButton from '../icon-button'

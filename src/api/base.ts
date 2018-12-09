@@ -25,11 +25,11 @@ export const request = <T extends any>(
   params?: { [key: string]: string | number | undefined } | null,
   body?: any,
 ) => {
-  const { jwt } = getJWT()
+  const jwt = getJWT()
   return fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
-    headers: jwt ? { Authorization: `Bearer ${jwt}` } : {},
+    headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
   })
     .then(res => {
       if (res.ok) {

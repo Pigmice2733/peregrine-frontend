@@ -7,6 +7,7 @@ import { setJWT } from '@/jwt'
 window.fetch = (fetch as unknown) as GlobalFetch['fetch']
 
 const jwtBody = {
+  exp: Date.now() / 1000 + 100,
   sub: 'name',
   pigmiceRoles: { admin: true },
 }
@@ -72,4 +73,15 @@ test('renders content directly with jwt in localstorage', () => {
   expect(rolesDiv.textContent).toMatchInlineSnapshot(`"{\\"admin\\":true}"`)
 
   expect(getByText(/userid/i).textContent).toEqual('UserId - name')
+})
+
+test('deletes expired jwt', async () => {
+  const expiredJWTBody = { exp: Date.now() / 1000 - 100 }
+  const expiredJWT = `asdf.${btoa(JSON.stringify(expiredJWTBody))}.asdf`
+  localStorage.setItem('jwt', expiredJWT)
+  const { getByText } = render(<Authenticted render={() => <h1>Hi</h1>} />)
+
+  await wait(() => getByText('Submit'))
+
+  expect(localStorage.getItem('jwt')).toBeNull()
 })
