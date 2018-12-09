@@ -10,6 +10,7 @@ interface Props {
 
 const Scout = ({ eventKey, matchKey }: Props) => (
   <Authenticated
+    label="Log In to Scout"
     render={() => (
       <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
         <h1>Scout</h1>

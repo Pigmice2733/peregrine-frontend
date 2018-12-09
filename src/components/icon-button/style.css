@@ -9,10 +9,13 @@
   align-items: center;
   margin: 0.4rem 0;
   color: var(--off-black);
+  background: transparent;
+  border: none;
+  padding: 0;
 
   &:hover,
   &:focus {
-    background: var(--light-grey);
+    background: color-mod(#aaa alpha(25%));
     outline: none;
   }
 }

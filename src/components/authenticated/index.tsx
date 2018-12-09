@@ -5,9 +5,12 @@ import Card from '@/components/card'
 import style from './style.css'
 import { authenticate } from '@/api/authenticate'
 import { Roles } from '@/api/user'
+import Page from '../page'
+import Button from '../button'
 
 interface Props {
   render: (data: { roles: Roles; userId: string }) => JSX.Element
+  label?: string
 }
 
 interface State {
@@ -34,22 +37,24 @@ class Authenticted extends Component<Props, State> {
     this.setState({ username: '', password: '' })
   }
 
-  render({ render }: Props) {
+  render({ render, label }: Props) {
     const jwt = getJWT()
     if (!jwt) {
       return (
-        <Card class={style.login}>
-          <form onSubmit={this.onSubmit}>
-            <TextInput label="Username" onInput={this.updateUsername} />
-            <TextInput
-              name="password"
-              label="Password"
-              type="password"
-              onInput={this.updatePassword}
-            />
-            <button>Submit</button>
-          </form>
-        </Card>
+        <Page name={label || 'Log In'} back={window.history.back}>
+          <Card class={style.login}>
+            <form onSubmit={this.onSubmit}>
+              <TextInput label="Username" onInput={this.updateUsername} />
+              <TextInput
+                name="password"
+                label="Password"
+                type="password"
+                onInput={this.updatePassword}
+              />
+              <Button>Submit</Button>
+            </form>
+          </Card>
+        </Page>
       )
     }
     return render({ roles: jwt.pigmiceRoles, userId: jwt.sub })
