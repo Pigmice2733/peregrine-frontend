@@ -2,7 +2,7 @@
   margin: 0.8rem 0;
   background: transparent;
   font-size: 0.85rem;
-  color: #555;
+  color: #666;
 
   & input {
     padding: 0.25rem 0;
@@ -14,7 +14,7 @@
     transition: border-bottom-color 0.2s ease;
 
     &:focus {
-      border-bottom-color: purple;
+      border-bottom-color: var(--pigmice-purple);
       outline: none;
     }
 
