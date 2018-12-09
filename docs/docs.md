@@ -15,7 +15,9 @@
 - [`/events`](#events)
 - [`/realms/{id}`](#realmsid)
 - [`/realms`](#realms)
-- [`/schema`](#schema)
+- [`/schemas/year/{year}`](#schemasyearyear)
+- [`/schemas/{id}`](#schemasid)
+- [`/schemas`](#schemas)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
 - [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
 - [`/teams/{team}/stats/teleop`](#teamsteamstatsteleop)
@@ -45,6 +47,41 @@ type Data = {
 ```
 
 # `/events/{eventKey}/matches/{matchKey}/reports/{team}`
+
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  // Not sent if the reporter account has been deleted.
+  reporterId?: string
+  teleop: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  auto: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  autoName: string
+}[]
+```
+
 
 ## `PUT`
 
@@ -85,41 +122,6 @@ type Data = {
 type Data = null
 ```
 
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  reporter: string
-  reporterId: string
-  teleop: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
-  auto: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
-  autoName: string
-}[]
-```
-
 # `/events/{eventKey}/matches/{matchKey}/stats`
 
 ## `GET`
@@ -144,14 +146,12 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
       })[]
   auto: (
     | {
@@ -163,14 +163,12 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
       })[]
 }[]
 ```
@@ -283,14 +281,12 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
       })[]
   auto: (
     | {
@@ -302,14 +298,12 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
       })[]
 }[]
 ```
@@ -604,25 +598,176 @@ type Data = {
 }[]
 ```
 
-# `/schema`
+# `/schemas/year/{year}`
 
 ## `GET`
+
+Anyone can view the standard schema for a specific year's game
 
 ### Response
 
 ```ts
 type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a specific year's main FRC game
+  year?: number
   teleop: {
-    statName: string
-    statKey: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
   auto: {
-    statName: string
-    statKey: string
+    name: string
+    id: string
     type: "number" | "boolean"
   }[]
 }
+```
+
+# `/schemas/{id}`
+
+## `GET`
+
+Standard FRC schemas, and schemas from public realms can be viewed by anyone.
+Members of a realm can view any schemas from their realm, super-admins can
+view any schema.
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a specific year's main FRC game
+  year?: number
+  teleop: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+}
+```
+
+
+## `PATCH`
+
+Admins can patch schemas for any event in their realms, or for FRC events if
+their realm's data is private.
+
+### Request
+
+```ts
+type Data = (
+  | {
+      path: string
+      op: "add"
+      value: any
+    }
+  | {
+      path: string
+      op: "remove"
+    }
+  | {
+      path: string
+      op: "replace"
+      value: any
+    }
+  | {
+      path: string
+      op: "copy"
+      from: string
+    }
+  | {
+      path: string
+      op: "move"
+      from: string
+    }
+  | {
+      path: string
+      op: "test"
+      value: any
+    })[]
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+# `/schemas`
+
+## `POST`
+
+Admins can create schemas for any event in their realms, EXCEPT for public
+realms which must use a standard schema for main-season FRC games. Only
+super-admins can create the standard schemas for main-season FRC games.
+
+### Request
+
+```ts
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a specific year's main FRC game
+  year?: number
+  teleop: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+}
+```
+
+
+### Response
+
+```ts
+type Data = null
+```
+
+
+## `GET`
+
+Standard FRC schemas, and schemas from public realms can be viewed by anyone.
+Members of a realm can view any schemas from their realm, super-admins can
+view any schema.
+
+### Response
+
+```ts
+type Data = {
+  id: number
+  // If created for a specific realm
+  realmId?: number
+  // If created for a specific year's main FRC game
+  year?: number
+  teleop: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+  auto: {
+    name: string
+    id: string
+    type: "number" | "boolean"
+  }[]
+}[]
 ```
 
 # `/teams/{team}/automodes`
