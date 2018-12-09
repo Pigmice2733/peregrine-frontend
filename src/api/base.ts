@@ -19,28 +19,25 @@ const qs = (
   return v ? `?${v}` : ''
 }
 
-export const request = <T extends any>(
+export const request = async <T extends any>(
   method: 'GET' | 'DELETE' | 'POST' | 'PUT' | 'PATCH',
   endpoint: string,
   params?: { [key: string]: string | number | undefined } | null,
   body?: any,
 ) => {
   const jwt = getJWT()
-  return fetch(apiUrl + endpoint + qs(params), {
+  const response = await fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
     headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
   })
-    .then(res => {
-      if (res.ok) {
-        return res.json() as Promise<PeregrineResponse<T>>
-      }
-      throw new Error(res.statusText)
-    })
-    .then(data => {
-      if ('error' in data) {
-        return Promise.reject(data.error)
-      }
-      return (data.data as unknown) as Promise<T>
-    })
+  const data: PeregrineResponse<T> = await response
+    .json()
+    .catch(() => ({ error: response.text() }))
+
+  if ('error' in data) {
+    throw data.error
+  }
+
+  return data.data
 }
