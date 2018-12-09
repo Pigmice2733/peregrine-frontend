@@ -54,8 +54,6 @@ type Data = {
 
 ```ts
 type Data = {
-  reporter: string
-  reporterId: string
   teleop: (
     | {
         attempts: number

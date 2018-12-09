@@ -43,7 +43,7 @@ export interface SubmittedReport {
   autoName: string
 }
 
-interface BaseReport {
+export interface BaseReport {
   teleop: Field[]
   auto: Field[]
   autoName: string
@@ -53,11 +53,6 @@ export interface GetReport extends BaseReport {
   reporter: string
   // Not sent if the reporter account has been deleted.
   reporterId?: string
-}
-
-export interface PutReport extends BaseReport {
-  reporter: string
-  reporterId: string
 }
 
 type EventKey = {
