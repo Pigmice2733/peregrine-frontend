@@ -1,3 +1,7 @@
+interface BaseField {
+  statName: string
+}
+
 interface BooleanStat {
   // total
   attempts: number
@@ -16,12 +20,12 @@ interface NumberStat {
   }
 }
 
-interface BooleanField {
+interface BooleanField extends BaseField {
   attempted: boolean
   succeeded: boolean
 }
 
-interface NumberField {
+interface NumberField extends BaseField {
   attempts: number
   successes: number
 }

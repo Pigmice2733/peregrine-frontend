@@ -60,19 +60,23 @@ type Data = {
     | {
         attempts: number
         successes: number
+        statName: string
       }
     | {
         attempted: boolean
         succeeded: boolean
+        statName: string
       })[]
   auto: (
     | {
         attempts: number
         successes: number
+        statName: string
       }
     | {
         attempted: boolean
         succeeded: boolean
+        statName: string
       })[]
   autoName: string
 }
@@ -99,19 +103,23 @@ type Data = {
     | {
         attempts: number
         successes: number
+        statName: string
       }
     | {
         attempted: boolean
         succeeded: boolean
+        statName: string
       })[]
   auto: (
     | {
         attempts: number
         successes: number
+        statName: string
       }
     | {
         attempted: boolean
         succeeded: boolean
+        statName: string
       })[]
   autoName: string
 }[]
@@ -319,12 +327,14 @@ type Data = {
         match: string
         attempts: number
         successes: number
+        statName: string
       }
     | {
         // qm1
         match: string
         attempted: boolean
         succeeded: boolean
+        statName: string
       })[]
 }[]
 ```
@@ -342,12 +352,14 @@ type Data = (
       match: string
       attempts: number
       successes: number
+      statName: string
     }
   | {
       // qm1
       match: string
       attempted: boolean
       succeeded: boolean
+      statName: string
     })[]
 ```
 
@@ -760,6 +772,7 @@ type Data = {
         match: string
         attempts: number
         successes: number
+        statName: string
       }
     | {
         // 2018orwil
@@ -768,6 +781,7 @@ type Data = {
         match: string
         attempted: boolean
         succeeded: boolean
+        statName: string
       })[]
 }[]
 ```
@@ -787,6 +801,7 @@ type Data = (
       match: string
       attempts: number
       successes: number
+      statName: string
     }
   | {
       // 2018orwil
@@ -795,6 +810,7 @@ type Data = (
       match: string
       attempted: boolean
       succeeded: boolean
+      statName: string
     })[]
 ```
 
