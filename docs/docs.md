@@ -614,7 +614,7 @@ type Data = {
   id: number
   // If created for a specific realm
   realmId?: number
-  // If created for a speific year's main FRC game
+  // If created for a specific year's main FRC game
   year?: number
   teleop: {
     name: string
@@ -644,7 +644,7 @@ type Data = {
   id: number
   // If created for a specific realm
   realmId?: number
-  // If created for a speific year's main FRC game
+  // If created for a specific year's main FRC game
   year?: number
   teleop: {
     name: string
@@ -668,7 +668,36 @@ their realm's data is private.
 ### Request
 
 ```ts
-type Data = any
+type Data = (
+  | {
+      path: string
+      op: "add"
+      value: any
+    }
+  | {
+      path: string
+      op: "remove"
+    }
+  | {
+      path: string
+      op: "replace"
+      value: any
+    }
+  | {
+      path: string
+      op: "copy"
+      from: string
+    }
+  | {
+      path: string
+      op: "move"
+      from: string
+    }
+  | {
+      path: string
+      op: "test"
+      value: any
+    })[]
 ```
 
 
@@ -693,7 +722,7 @@ type Data = {
   id: number
   // If created for a specific realm
   realmId?: number
-  // If created for a speific year's main FRC game
+  // If created for a specific year's main FRC game
   year?: number
   teleop: {
     name: string
@@ -729,7 +758,7 @@ type Data = {
   id: number
   // If created for a specific realm
   realmId?: number
-  // If created for a speific year's main FRC game
+  // If created for a specific year's main FRC game
   year?: number
   teleop: {
     name: string
