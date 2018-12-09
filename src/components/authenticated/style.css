@@ -1,7 +1,12 @@
 .login {
+  min-height: 100vh;
   padding: 2rem;
 
-  & > form {
+  & > div {
+    padding: 2rem;
+  }
+
+  & form {
     width: 100%;
     display: flex;
     flex-direction: column;

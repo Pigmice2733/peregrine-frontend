@@ -41,19 +41,21 @@ class Authenticted extends Component<Props, State> {
     const jwt = getJWT()
     if (!jwt) {
       return (
-        <Page name={label || 'Log In'} back={window.history.back}>
-          <Card class={style.login}>
-            <form onSubmit={this.onSubmit}>
-              <TextInput label="Username" onInput={this.updateUsername} />
-              <TextInput
-                name="password"
-                label="Password"
-                type="password"
-                onInput={this.updatePassword}
-              />
-              <Button>Submit</Button>
-            </form>
-          </Card>
+        <Page name={label || 'Log In'} back={() => window.history.back()}>
+          <div class={style.login}>
+            <Card>
+              <form onSubmit={this.onSubmit}>
+                <TextInput label="Username" onInput={this.updateUsername} />
+                <TextInput
+                  name="password"
+                  label="Password"
+                  type="password"
+                  onInput={this.updatePassword}
+                />
+                <Button>Submit</Button>
+              </form>
+            </Card>
+          </div>
         </Page>
       )
     }
