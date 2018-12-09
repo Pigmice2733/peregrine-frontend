@@ -10,9 +10,9 @@ type Props = Merge<
 >
 
 const TextInput = ({ label, ...rest }: Props) => (
-  <label>
-    <input {...rest} class={style.input} />
+  <label class={style.input}>
     {label}
+    <input {...rest} />
   </label>
 )
 

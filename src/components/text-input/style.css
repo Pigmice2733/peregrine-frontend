@@ -1,22 +1,26 @@
 .input {
-  display: block;
-  font-size: 1rem;
-  padding: 0.3rem 0;
-  margin: 0.3rem 0;
+  margin: 0.8rem 0;
   background: transparent;
-  border: 0;
-  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.3);
-  border-radius: 0;
-  transition: border-bottom-color 0.2s ease;
-  appearance: textfield;
+  font-size: 0.9rem;
+  color: #555;
 
-  &:focus {
-    border-bottom-color: purple;
-    outline: none;
-  }
+  & input {
+    padding: 0.1rem 0;
+    font-size: 1.1rem;
+    display: block;
+    border: 0;
+    border-bottom: 0.13rem solid rgba(0, 0, 0, 0.3);
+    border-radius: 0;
+    transition: border-bottom-color 0.2s ease;
 
-  &:invalid {
-    border-bottom-color: red;
-    box-shadow: none;
+    &:focus {
+      border-bottom-color: purple;
+      outline: none;
+    }
+
+    &:invalid {
+      border-bottom-color: red;
+      box-shadow: none;
+    }
   }
 }

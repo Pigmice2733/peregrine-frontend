@@ -1,15 +1,15 @@
 .login {
-  min-height: 100vh;
   padding: 2rem;
+  display: flex;
 
   & > div {
-    padding: 2rem;
+    padding: 1.5rem 2rem;
+    width: auto;
   }
 
   & form {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
 }
