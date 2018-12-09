@@ -48,6 +48,41 @@ type Data = {
 
 # `/events/{eventKey}/matches/{matchKey}/reports/{team}`
 
+## `GET`
+
+### Response
+
+```ts
+type Data = {
+  // Not sent if the reporter account has been deleted.
+  reporterId?: string
+  teleop: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  auto: (
+    | {
+        attempts: number
+        successes: number
+        statName: string
+      }
+    | {
+        attempted: boolean
+        succeeded: boolean
+        statName: string
+      })[]
+  autoName: string
+}[]
+```
+
+
 ## `PUT`
 
 ### Request
@@ -85,42 +120,6 @@ type Data = {
 
 ```ts
 type Data = null
-```
-
-
-## `GET`
-
-### Response
-
-```ts
-type Data = {
-  reporter: string
-  // Not sent if the reporter account has been deleted.
-  reporterId?: string
-  teleop: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
-  auto: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
-  autoName: string
-}[]
 ```
 
 # `/events/{eventKey}/matches/{matchKey}/stats`

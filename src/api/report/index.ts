@@ -50,7 +50,6 @@ export interface BaseReport {
 }
 
 export interface GetReport extends BaseReport {
-  reporter: string
   // Not sent if the reporter account has been deleted.
   reporterId?: string
 }
