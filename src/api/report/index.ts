@@ -1,21 +1,15 @@
-// a stat is a summary representation of a field
-interface BaseStat {
-  statName: string
-}
-
-// a field is the details of something specific that happened during a match
 interface BaseField {
   statName: string
 }
 
-interface BooleanStat extends BaseStat {
+interface BooleanStat {
   // total
   attempts: number
   // total
   successes: number
 }
 
-interface NumberStat extends BaseStat {
+interface NumberStat {
   attempts: {
     max: number
     avg: number
@@ -49,9 +43,15 @@ export interface SubmittedReport {
   autoName: string
 }
 
-export interface Report extends SubmittedReport {
-  reporter: string
-  reporterId: string
+export interface BaseReport {
+  teleop: Field[]
+  auto: Field[]
+  autoName: string
+}
+
+export interface GetReport extends BaseReport {
+  // Not sent if the reporter account has been deleted.
+  reporterId?: string
 }
 
 type EventKey = {
