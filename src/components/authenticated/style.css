@@ -4,10 +4,11 @@
 
   & > div {
     padding: 1.5rem 2rem;
-    width: auto;
+    width: 15rem;
   }
 
   & form {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
