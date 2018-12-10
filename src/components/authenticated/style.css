@@ -1,0 +1,16 @@
+.login {
+  padding: 1.5rem;
+  display: flex;
+
+  & > div {
+    padding: 1.5rem 2rem;
+    width: 15rem;
+  }
+
+  & form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

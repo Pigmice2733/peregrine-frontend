@@ -1,0 +1,27 @@
+.input {
+  margin: 0.8rem 0;
+  background: transparent;
+  font-size: 0.85rem;
+  color: #666;
+
+  & input {
+    padding: 0.2rem 0;
+    font-size: 1.1rem;
+    display: block;
+    width: 100%;
+    border: 0;
+    border-bottom: 0.13rem solid rgba(0, 0, 0, 0.3);
+    border-radius: 0;
+    transition: border-bottom-color 0.2s ease;
+
+    &:focus {
+      border-bottom-color: var(--pigmice-purple);
+      outline: none;
+    }
+
+    &:invalid {
+      border-bottom-color: red;
+      box-shadow: none;
+    }
+  }
+}

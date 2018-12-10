@@ -6,6 +6,8 @@ import { MatchCard } from '@/components/match-card'
 import Spinner from '@/components/spinner'
 import { getEventInfo } from '@/api/event-info/get-event-info'
 import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
+import Button from '@/components/button'
+import style from './style.css'
 
 interface Props {
   eventKey: string
@@ -30,7 +32,12 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             (eventInfo ? eventInfo.name : eventKey)
           }
         >
-          {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
+          <div class={style.match}>
+            {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
+            <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+              Scout Match
+            </Button>
+          </div>
         </Page>
       )}
     />

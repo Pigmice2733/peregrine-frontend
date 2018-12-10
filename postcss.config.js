@@ -41,5 +41,6 @@ module.exports = {
       foundries: ['google'],
       display: 'swap',
     },
+    'postcss-color-mod-function': {},
   },
 }

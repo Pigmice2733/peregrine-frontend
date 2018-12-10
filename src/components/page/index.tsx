@@ -1,8 +1,8 @@
 import { h, ComponentChildren, Component } from 'preact'
 import style from './style.css'
-import Icon from '@/components/icon'
 import { menu } from '@/icons/menu'
 import { arrowLeft } from '@/icons/arrow-left'
+import IconButton from '../icon-button'
 
 interface Tab {
   name: string
@@ -12,14 +12,13 @@ interface Tab {
 type Props = {
   name: string | JSX.Element | JSX.Element[]
   children?: ComponentChildren
-  back?: string
+  back?: string | (() => void)
   tabs?: Tab[]
 }
 
 interface State {
   selectedTab: string | undefined
 }
-
 class Page extends Component<Props, State> {
   state = {
     selectedTab: this.props.tabs && this.props.tabs[0].name,
@@ -30,13 +29,13 @@ class Page extends Component<Props, State> {
       <div class={`${style.page} ${tabs && style.hasTabs}`}>
         <header>
           <div class={style.topRow}>
-            {back ? (
-              <a href={back} aria-label="back">
-                <Icon icon={arrowLeft} />
-              </a>
-            ) : (
-              <Icon icon={menu} />
-            )}
+            <IconButton
+              icon={back ? arrowLeft : menu}
+              aria-label={back ? 'back' : 'menu'}
+              {...(typeof back === 'string'
+                ? { href: back }
+                : { onClick: back })}
+            />
             <span>{name}</span>
           </div>
           {tabs && (
