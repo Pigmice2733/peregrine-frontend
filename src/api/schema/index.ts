@@ -1,6 +1,5 @@
 interface StatDescription {
   name: string
-  id: string
   type: 'boolean' | 'number'
 }
 
