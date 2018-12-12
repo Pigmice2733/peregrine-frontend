@@ -24,6 +24,8 @@ export interface EventInfo extends BasicEventInfo {
     type: 'twitch' | 'youtube'
     url: string
   }[]
+  // the ID of the schema attached to the event
+  schemaId: string
   // district "display_name" from TBA
   fullDistrict?: string
   location: {

@@ -37,15 +37,12 @@ type GraphableField = {
   // qm1
   match: string
 } & (NumberField | BooleanField)
-export interface SubmittedReport {
-  teleop: Field[]
-  auto: Field[]
-  autoName: string
-}
 
 export interface BaseReport {
-  teleop: Field[]
-  auto: Field[]
+  data: {
+    teleop: Field[]
+    auto: Field[]
+  }
   autoName: string
 }
 

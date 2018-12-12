@@ -56,28 +56,30 @@ type Data = {
 type Data = {
   // Not sent if the reporter account has been deleted.
   reporterId?: string
-  teleop: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
-  auto: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
+  data: {
+    teleop: (
+      | {
+          attempts: number
+          successes: number
+          statName: string
+        }
+      | {
+          attempted: boolean
+          succeeded: boolean
+          statName: string
+        })[]
+    auto: (
+      | {
+          attempts: number
+          successes: number
+          statName: string
+        }
+      | {
+          attempted: boolean
+          succeeded: boolean
+          statName: string
+        })[]
+  }
   autoName: string
 }[]
 ```
@@ -89,28 +91,30 @@ type Data = {
 
 ```ts
 type Data = {
-  teleop: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
-  auto: (
-    | {
-        attempts: number
-        successes: number
-        statName: string
-      }
-    | {
-        attempted: boolean
-        succeeded: boolean
-        statName: string
-      })[]
+  data: {
+    teleop: (
+      | {
+          attempts: number
+          successes: number
+          statName: string
+        }
+      | {
+          attempted: boolean
+          succeeded: boolean
+          statName: string
+        })[]
+    auto: (
+      | {
+          attempts: number
+          successes: number
+          statName: string
+        }
+      | {
+          attempted: boolean
+          succeeded: boolean
+          statName: string
+        })[]
+  }
   autoName: string
 }
 ```
@@ -409,6 +413,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // the ID of the schema attached to the event
+  schemaId: string
   // district "display_name" from TBA
   fullDistrict?: string
   location: {
@@ -445,6 +451,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // the ID of the schema attached to the event
+  schemaId: string
   // district "display_name" from TBA
   fullDistrict?: string
   location: {
@@ -615,12 +623,10 @@ type Data = {
   year?: number
   teleop: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
   auto: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
 }
@@ -645,12 +651,10 @@ type Data = {
   year?: number
   teleop: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
   auto: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
 }
@@ -723,12 +727,10 @@ type Data = {
   year?: number
   teleop: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
   auto: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
 }
@@ -759,12 +761,10 @@ type Data = {
   year?: number
   teleop: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
   auto: {
     name: string
-    id: string
     type: "number" | "boolean"
   }[]
 }[]
