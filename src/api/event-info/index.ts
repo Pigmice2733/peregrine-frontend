@@ -4,8 +4,6 @@ export interface BasicEventInfo {
   key: string
   // the ID of the realm the event belongs to
   realmId?: string
-  // the ID of the schema attached to the event
-  schemaId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -26,6 +24,8 @@ export interface EventInfo extends BasicEventInfo {
     type: 'twitch' | 'youtube'
     url: string
   }[]
+  // the ID of the schema attached to the event
+  schemaId: string
   // district "display_name" from TBA
   fullDistrict?: string
   location: {

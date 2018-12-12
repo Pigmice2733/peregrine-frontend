@@ -413,6 +413,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // the ID of the schema attached to the event
+  schemaId: string
   // district "display_name" from TBA
   fullDistrict?: string
   location: {
@@ -423,8 +425,6 @@ type Data = {
   key: string
   // the ID of the realm the event belongs to
   realmId?: string
-  // the ID of the schema attached to the event
-  schemaId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -451,6 +451,8 @@ type Data = {
     type: "twitch" | "youtube"
     url: string
   }[]
+  // the ID of the schema attached to the event
+  schemaId: string
   // district "display_name" from TBA
   fullDistrict?: string
   location: {
@@ -461,8 +463,6 @@ type Data = {
   key: string
   // the ID of the realm the event belongs to
   realmId?: string
-  // the ID of the schema attached to the event
-  schemaId?: string
   // from TBA short name
   name: string
   // abbreviated district name
@@ -487,8 +487,7 @@ type Data = null
 
 Getting events will only list TBA events, unless a user is signed in. If the
 user is a super-admin, they will see all events, otherwise they will see all
-TBA events and additionally all the custom events on their realm. No webcasts
-or schema IDs will be fetched.
+TBA events and additionally all the custom events on their realm.
 
 ### Response
 
@@ -497,8 +496,6 @@ type Data = {
   key: string
   // the ID of the realm the event belongs to
   realmId?: string
-  // the ID of the schema attached to the event
-  schemaId?: string
   // from TBA short name
   name: string
   // abbreviated district name
