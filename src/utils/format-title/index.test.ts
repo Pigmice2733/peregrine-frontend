@@ -2,8 +2,9 @@ import { formatTitle } from '.'
 
 test('formats title', () => {
   expect(
-    formatTitle(`asdf
+    formatTitle(`
+    asdf
    ASDF4_asdf   
-  4-cube`),
+  4-cube  `),
   ).toMatchInlineSnapshot(`"Asdf Asdf4 Asdf 4-Cube"`)
 })
