@@ -11,9 +11,7 @@ import TeamPicker from '@/components/team-picker'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import FieldCard from '../../components/field-card'
 import Button from '@/components/button'
-import LoadData from '@/load-data'
 import { getSchema } from '@/api/schema/get-schema'
-import { getSchemas } from '@/api/schema/get-schemas'
 import { getEventInfo } from '@/api/event-info/get-event-info'
 
 interface Props {
@@ -33,21 +31,6 @@ interface State {
 interface ReadyState extends State {
   team: string
   schema: Schema
-}
-
-const schema: Schema = {
-  id: 1324,
-  teleop: [
-    { name: 'Home Switch Cubes', type: 'number' },
-    { name: 'Scale Cubes', type: 'number' },
-    { name: 'Far Switch Cubes', type: 'number' },
-    { name: 'Climbed', type: 'boolean' },
-  ],
-  auto: [
-    { name: 'Crossed Line', type: 'boolean' },
-    { name: 'Switch Cubes', type: 'number' },
-    { name: 'Scale Cubes', type: 'number' },
-  ],
 }
 
 const isReportReady = (s: State): s is ReadyState =>

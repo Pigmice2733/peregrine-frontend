@@ -22,7 +22,7 @@ const EnumSelector = <T extends string>({
           name={name}
           value={i}
           checked={i === selected}
-          onChange={e => onChange(i)}
+          onChange={() => onChange(i)}
         />
         <div>{i}</div>
       </label>
