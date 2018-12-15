@@ -13,6 +13,9 @@ import FieldCard from '../../components/field-card'
 import Button from '@/components/button'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventInfo } from '@/api/event-info/get-event-info'
+import TextInput from '@/components/text-input'
+import Card from '@/components/card'
+import { formatTitle } from '@/utils/format-title'
 
 interface Props {
   eventKey: string
@@ -34,7 +37,7 @@ interface ReadyState extends State {
 }
 
 const isReportReady = (s: State): s is ReadyState =>
-  s.team !== null && s.schema !== null
+  s.team !== null && s.schema !== null && s.report.autoName !== ''
 
 const createEmptyField = (s: StatDescription) => ({
   statName: s.name,
@@ -123,6 +126,7 @@ class ScoutPage extends Component<Props, State> {
       <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
         <form class={style.scout} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
+          <pre>{JSON.stringify(report, null, 2)}</pre>
           {schema || <Spinner />}
           {blueAlliance && redAlliance && (
             <TeamPicker
@@ -139,6 +143,23 @@ class ScoutPage extends Component<Props, State> {
               onChange={this.updateField('auto', field.statName)}
             />
           ))}
+          <Card class={style.autoNameCard}>
+            <TextInput
+              label="Auto Name"
+              onInput={e =>
+                this.setState(
+                  (s: State): Partial<State> => ({
+                    report: {
+                      ...s.report,
+                      autoName: formatTitle(
+                        (e.target as HTMLInputElement).value,
+                      ),
+                    },
+                  }),
+                )
+              }
+            />
+          </Card>
           <h2>Teleop</h2>
           {report.data.teleop.map(field => (
             <FieldCard
@@ -147,7 +168,7 @@ class ScoutPage extends Component<Props, State> {
               onChange={this.updateField('teleop', field.statName)}
             />
           ))}
-          <Button>Submit</Button>
+          <Button disabled={!isReportReady(this.state)}>Submit</Button>
         </form>
       </Page>
     )
