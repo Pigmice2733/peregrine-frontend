@@ -25,7 +25,7 @@ export interface EventInfo extends BasicEventInfo {
     url: string
   }[]
   // the ID of the schema attached to the event
-  schemaId: string
+  schemaId: number
   // district "display_name" from TBA
   fullDistrict?: string
   location: {

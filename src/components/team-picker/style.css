@@ -1,0 +1,51 @@
+.teamPicker {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  width: 12rem;
+  border-radius: 0.3rem;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+
+  &:focus-within,
+  &:active {
+    box-shadow: 0 0 0px 4px var(--focus-ring);
+  }
+
+  & label {
+    color: white;
+    font-weight: bold;
+    flex-grow: 1;
+  }
+
+  & .team {
+    padding: 0.5rem;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  & input {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  & input:checked + div,
+  & input:hover + div {
+    background: #ffffff38;
+  }
+}
+
+.alliance {
+  display: flex;
+  justify-content: stretch;
+}
+
+.red {
+  background-color: var(--alliance-red);
+}
+
+.blue {
+  background-color: var(--alliance-blue);
+}

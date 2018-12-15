@@ -32,7 +32,8 @@ interface NumberField extends BaseField {
 
 type Stat = NumberStat | BooleanStat
 
-type Field = NumberField | BooleanField
+export type Field = NumberField | BooleanField
+
 type GraphableField = {
   // qm1
   match: string
