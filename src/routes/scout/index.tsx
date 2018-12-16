@@ -95,8 +95,6 @@ class ScoutPage extends Component<Props, State> {
         this.state.team,
         this.state.report,
       )
-    } else {
-      console.log('not ready')
     }
   }
 
