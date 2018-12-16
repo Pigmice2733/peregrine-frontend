@@ -45,6 +45,7 @@
       "\\.ts$": "./jest-transform",
       "\\.tsx$": "./jest-transform"
     },
+    "setupTestFrameworkScriptFile": "./jest.setup.ts",
     "testMatch": [
       "**/?(*.)+(spec|test).(j|t)s?(x)"
     ]

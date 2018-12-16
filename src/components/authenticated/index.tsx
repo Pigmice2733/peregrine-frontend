@@ -9,6 +9,11 @@ import Page from '../page'
 import Button from '../button'
 import Alert from '../alert'
 
+const minUsernameLength = 4
+const maxUsernameLength = 32
+const minPasswordLength = 8
+const maxPasswordLength = 128
+
 interface Props {
   render: (data: { roles: Roles; userId: string }) => JSX.Element
   label?: string
@@ -46,9 +51,10 @@ class Authenticted extends Component<Props, State> {
       setJWT(jwt)
       this.setState({ username: '', password: '' })
     } catch (error) {
-      if (error.match(/password/i)) {
-        this.setState({ invalid: true })
+      if (error.message.match(/unauthorized/i)) {
+        return this.setState({ invalid: true, loading: false })
       }
+      throw error
     }
     this.setState({ loading: false })
   }
@@ -62,14 +68,23 @@ class Authenticted extends Component<Props, State> {
             <Card>
               <form onSubmit={this.onSubmit}>
                 {invalid && <Alert>Invalid Username or Password</Alert>}
-                <TextInput label="Username" onInput={this.updateUsername} />
+                <TextInput
+                  label="Username"
+                  onInput={this.updateUsername}
+                  minLength={minUsernameLength}
+                  maxLength={maxUsernameLength}
+                />
                 <TextInput
                   name="password"
                   label="Password"
                   type="password"
                   onInput={this.updatePassword}
+                  minLength={minPasswordLength}
+                  maxLength={maxPasswordLength}
                 />
-                <Button>{loading ? 'Submitting' : 'Submit'}</Button>
+                <Button disabled={loading}>
+                  {loading ? 'Submitting' : 'Submit'}
+                </Button>
               </form>
             </Card>
           </div>
