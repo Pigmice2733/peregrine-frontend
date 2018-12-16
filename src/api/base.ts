@@ -26,18 +26,19 @@ export const request = async <T extends any>(
   body?: any,
 ) => {
   const jwt = getJWT()
-  const response = await fetch(apiUrl + endpoint + qs(params), {
+  const text = await fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
     headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
-  })
-  const data: PeregrineResponse<T> = await response
-    .json()
-    .catch(() => ({ error: response.text() }))
+  }).then(d => d.text())
+  try {
+    const data = JSON.parse(text) as PeregrineResponse<T>
+    if ('error' in data) {
+      throw new Error(data.error)
+    }
 
-  if ('error' in data) {
-    throw data.error
+    return data.data
+  } catch (error) {
+    throw new Error(text)
   }
-
-  return data.data
 }

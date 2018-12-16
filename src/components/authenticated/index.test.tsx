@@ -1,10 +1,7 @@
 import { render, fireEvent, wait } from 'preact-testing-library'
 import Authenticted from '.'
 import { h } from 'preact'
-import fetch, { Response } from 'node-fetch'
 import { setJWT } from '@/jwt'
-
-window.fetch = (fetch as unknown) as GlobalFetch['fetch']
 
 const jwtBody = {
   exp: Date.now() / 1000 + 100,
@@ -53,6 +50,42 @@ test('renders login page then renders contents', async () => {
   await wait(() => getByText('Rendered'))
 
   expect(localStorage.getItem('jwt')).toEqual(jwt)
+})
+
+test('displays error for incorrect username/pw', async () => {
+  const { getByLabelText, getByText } = render(
+    <Authenticted render={() => <div>Rendered</div>} />,
+  )
+  const usernameInput = getByLabelText(/username/i) as HTMLInputElement
+
+  usernameInput.value = 'name'
+  fireEvent.input(usernameInput)
+
+  const passwordInput = getByLabelText(/password/i) as HTMLInputElement
+
+  passwordInput.value = 'incorrect'
+  fireEvent.input(passwordInput)
+
+  jest.spyOn(window, 'fetch').mockImplementation(
+    (url, options) =>
+      new Promise(resolve => {
+        expect(url).toMatch(/\/authenticate$/)
+        expect(options).toEqual({
+          body: '{"username":"name","password":"incorrect"}',
+          headers: {},
+          method: 'POST',
+        })
+        resolve(new Response('Unauthorized', { status: 401 }))
+      }),
+  )
+
+  fireEvent.submit(getByText('Submit'))
+
+  await wait(() => getByText(/invalid/i))
+
+  expect(window.fetch).toHaveBeenCalledTimes(1)
+
+  expect(localStorage.getItem('jwt')).toBeNull()
 })
 
 test('renders content directly with jwt in localstorage', () => {
