@@ -126,7 +126,6 @@ class ScoutPage extends Component<Props, State> {
       <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
         <form class={style.scout} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
-          <pre>{JSON.stringify(report, null, 2)}</pre>
           {schema || <Spinner />}
           {blueAlliance && redAlliance && (
             <TeamPicker
