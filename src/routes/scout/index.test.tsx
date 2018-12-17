@@ -1,10 +1,4 @@
-import {
-  render,
-  wait,
-  getByText,
-  fireEvent,
-  within,
-} from 'preact-testing-library'
+import { render, fireEvent } from 'preact-testing-library'
 import { ScoutPage } from '.'
 import { h } from 'preact'
 import { MatchInfo } from '@/api/match-info'
@@ -67,23 +61,21 @@ const report: BaseReport = {
 const createResponse = (data: any) => new Response(JSON.stringify({ data }))
 
 test('renders and submits', async () => {
-  jest
-    .spyOn(window, 'fetch')
-    .mockImplementation(async (url: string, options: RequestInit) => {
-      if (url.endsWith('/events/2018orwil/matches/qm3')) {
-        return createResponse(matchInfo)
-      }
-      if (url.endsWith('/events/2018orwil')) {
-        return createResponse(eventInfo)
-      }
-      if (url.endsWith('/schemas/1000')) {
-        return createResponse(schema)
-      }
-      if (url.endsWith('/reports/frc254')) {
-        return createResponse(null)
-      }
-      throw new Error(`Unrecognized parameters to fetch: ${url}`)
-    })
+  jest.spyOn(window, 'fetch').mockImplementation(async (url: string) => {
+    if (url.endsWith('/events/2018orwil/matches/qm3')) {
+      return createResponse(matchInfo)
+    }
+    if (url.endsWith('/events/2018orwil')) {
+      return createResponse(eventInfo)
+    }
+    if (url.endsWith('/schemas/1000')) {
+      return createResponse(schema)
+    }
+    if (url.endsWith('/reports/frc254')) {
+      return createResponse(null)
+    }
+    throw new Error(`Unrecognized parameters to fetch: ${url}`)
+  })
 
   const scoutPage = render(<ScoutPage eventKey="2018orwil" matchKey="qm3" />)
 
