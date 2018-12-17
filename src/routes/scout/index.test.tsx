@@ -142,6 +142,8 @@ test('renders and submits', async () => {
   attemptedBox.checked = true
   fireEvent.change(attemptedBox)
 
+  expect(submitButton).not.toBeDisabled()
+
   fireEvent.submit(scoutPage.container.querySelector('form') as HTMLFormElement)
 
   expect(window.fetch).toHaveBeenCalledTimes(4)
@@ -155,8 +157,4 @@ test('renders and submits', async () => {
       method: 'PUT',
     },
   )
-
-  await nextTick()
-
-  expect(submitButton).not.toBeDisabled()
 })
