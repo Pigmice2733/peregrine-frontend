@@ -17,4 +17,10 @@
     background: color-mod(var(--pigmice-purple) lightness(+5%));
     box-shadow: 0.1rem 0.1rem 1rem #00000059;
   }
+
+  &[disabled] {
+    background: #0000000d;
+    color: #00000036;
+    box-shadow: none;
+  }
 }

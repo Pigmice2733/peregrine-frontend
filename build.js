@@ -83,49 +83,74 @@ async function buildSystemEntry() {
   console.log('built systemjs entry')
 }
 
-const pages = '/,/events/*'
+function createLink(path, type, crossorigin = true) {
+  if (type === 'script' && crossorigin) {
+    return `  Link: </${path}>; rel=preload; as=script; crossorigin`
+  }
+  return `  Link: </${path}>; rel=preload; as=${type}`
+}
+
+const pages = [
+  {
+    path: '/',
+    file: './src/routes/home/index.tsx',
+  },
+  {
+    path: '/events/:eventKey',
+    file: './src/routes/event/index.tsx',
+  },
+  {
+    path: '/events/:eventKey/matches/:matchKey',
+    file: './src/routes/event-match/index.tsx',
+  },
+  {
+    path: '/events/:eventKey/matches/:matchKey/scout',
+    file: './src/routes/scout/index.tsx',
+  },
+  {
+    path: '/events/:eventKey/teams/:teamNum',
+    file: './src/routes/event-team/index.tsx',
+  },
+]
+
+function trackDependencies(chunk, chunks) {
+  return [
+    ...new Set([
+      ...chunk.imports,
+      ...chunk.imports.flatMap(c => trackDependencies(chunks[c], chunks)),
+    ]),
+  ]
+}
+
+const baseDependencies =
+  [
+    createLink('systemjs-entry.js', 'script', false),
+    createLink('index.js', 'script'),
+    createLink('style.css', 'style'),
+  ].join('\n') + '\n'
 
 async function buildHeaders(output) {
-  const headers = Object.values(output).reduce(
-    (headers, chunk) => {
-      if (chunk.isEntry && chunk.imports) {
-        headers[chunk.fileName] = chunk.imports.map(
-          // crossorigin because systemjs scripts use crossorigin
-          c => `</${c}>; rel=preload; as=script; crossorigin`,
-        )
+  const outputValues = Object.values(output)
+  const contents = pages
+    .map(p => {
+      const srcPath = require.resolve(p.file)
+      const chunk = outputValues.find(v => v.facadeModuleId === srcPath)
+      return {
+        path: p.path,
+        dependencies: [chunk.fileName, ...trackDependencies(chunk, output)],
       }
-      return headers
-    },
-    {
-      [pages]: [
-        '</systemjs-entry.js>; rel=preload; as=script',
-        '</index.js>; rel=preload; as=script; crossorigin',
-        '</style.css>; rel=preload; as=style',
-      ],
-    },
-  )
-  // root always relies on index.js, so hoist the dependencies of index.js to root
-  headers[pages].push(...headers['index.js'])
-  delete headers['index.js']
-  const stringHeaders = Object.entries(headers)
-    .map(([route, Link]) => [
-      route,
-      route === pages
-        ? Link
-        : // exclude pushing items that are already pushed from root
-          Link.filter(l => !headers[pages].includes(l)),
-    ])
-    .filter(([, Link]) => Link.length > 0)
-    .map(([route, Link]) =>
-      route === pages
-        ? pages
-            .split(',')
-            .map(r => r + '\n' + Link.map(l => `  Link: ${l}`).join('\n'))
-            .join('\n\n')
-        : '/' + route + '\n' + Link.map(l => `  Link: ${l}`).join('\n'),
+    })
+    .map(
+      p =>
+        p.path +
+        '\n' +
+        baseDependencies +
+        p.dependencies.map(d => createLink(d, 'script')).join('\n'),
     )
     .join('\n\n')
-  await writeFileAsync(join(outDir, '_headers'), stringHeaders)
+
+  await writeFileAsync(join(outDir, '_headers'), contents)
+
   console.log('built _headers')
 }
 

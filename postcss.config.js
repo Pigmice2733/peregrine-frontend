@@ -9,6 +9,8 @@ const variables = {
   '--alliance-red': '#c30000',
   '--grey-text': 'rgba(0, 0, 0, 0.6)',
   '--off-black': '#333',
+  '--card-shadow': '0 0.2rem 0.3rem rgba(0, 0, 0, 0.25)',
+  '--focus-ring': '#0044ff40',
 }
 
 module.exports = {

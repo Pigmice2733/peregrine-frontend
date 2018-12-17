@@ -1,4 +1,4 @@
-interface StatDescription {
+export interface StatDescription {
   name: string
   type: 'boolean' | 'number'
 }
