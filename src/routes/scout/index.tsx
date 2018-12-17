@@ -46,7 +46,7 @@ const createEmptyField = (s: StatDescription) => ({
     : { attempts: 0, successes: 0 }),
 })
 
-class ScoutPage extends Component<Props, State> {
+export class ScoutPage extends Component<Props, State> {
   state = {
     redAlliance: null,
     blueAlliance: null,

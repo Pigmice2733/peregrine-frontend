@@ -4,7 +4,7 @@
   align-items: center;
   padding: 2rem;
 
-  & button {
+  & > button {
     margin: 1rem;
   }
 }

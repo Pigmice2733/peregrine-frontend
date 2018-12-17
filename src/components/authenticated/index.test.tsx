@@ -1,7 +1,6 @@
 import { render, fireEvent, wait } from 'preact-testing-library'
 import Authenticted from '.'
 import { h } from 'preact'
-import { setJWT } from '@/jwt'
 
 const jwtBody = {
   exp: Date.now() / 1000 + 100,
@@ -12,8 +11,6 @@ const jwt = `asdf.${btoa(JSON.stringify(jwtBody))}.asdf`
 
 afterEach(() => {
   jest.restoreAllMocks()
-  setJWT((null as unknown) as string)
-  localStorage.clear()
 })
 
 test('renders login page then renders contents', async () => {
