@@ -16,6 +16,7 @@ import { getEventInfo } from '@/api/event-info/get-event-info'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import { formatTitle } from '@/utils/format-title'
+import { route } from 'preact-router'
 
 interface Props {
   eventKey: string
@@ -28,6 +29,7 @@ interface State {
   team: string | null
   schema: Schema | null
   report: BaseReport
+  submitting: boolean
 }
 
 // Ready to submit
@@ -48,6 +50,7 @@ const createEmptyField = (s: StatDescription) => ({
 
 export class ScoutPage extends Component<Props, State> {
   state = {
+    submitting: false,
     redAlliance: null,
     blueAlliance: null,
     team: null,
@@ -89,11 +92,14 @@ export class ScoutPage extends Component<Props, State> {
   onSubmit = (e: Event) => {
     e.preventDefault()
     if (isReportReady(this.state)) {
+      this.setState({ submitting: true })
       submitReport(
         this.props.eventKey,
         this.props.matchKey,
         this.state.team,
         this.state.report,
+      ).then(() =>
+        route(`/events/${this.props.eventKey}/matches/${this.props.matchKey}`),
       )
     }
   }
@@ -118,7 +124,7 @@ export class ScoutPage extends Component<Props, State> {
 
   render(
     { eventKey, matchKey }: Props,
-    { schema, redAlliance, blueAlliance, team, report }: State,
+    { schema, redAlliance, blueAlliance, team, report, submitting }: State,
   ) {
     return (
       <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
@@ -165,7 +171,9 @@ export class ScoutPage extends Component<Props, State> {
               onChange={this.updateField('teleop', field.statName)}
             />
           ))}
-          <Button disabled={!isReportReady(this.state)}>Submit</Button>
+          <Button disabled={!isReportReady(this.state) || submitting}>
+            {submitting ? 'Submitting' : 'Submit'}
+          </Button>
         </form>
       </Page>
     )
