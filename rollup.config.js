@@ -36,7 +36,7 @@ module.exports = {
     input: './src/index.tsx',
     output: { dir: 'dist', format: 'system' },
     experimentalCodeSplitting: true,
-    optimizeChunks: true,
+    experimentalOptimizeChunks: true,
     chunkGroupingSize: 30000,
     plugins: [
       node(rollupNodeOptions),
