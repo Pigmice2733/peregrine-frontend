@@ -7,8 +7,7 @@
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
 - [`/events/{eventKey}/stats`](#eventseventkeystats)
-- [`/events/{eventKey}/teams/{team}/stats/auto`](#eventseventkeyteamsteamstatsauto)
-- [`/events/{eventKey}/teams/{team}/stats/teleop`](#eventseventkeyteamsteamstatsteleop)
+- [`/events/{eventKey}/teams/{team}/stats`](#eventseventkeyteamsteamstats)
 - [`/events/{eventKey}/teams/{team}`](#eventseventkeyteamsteam)
 - [`/events/{eventKey}/teams`](#eventseventkeyteams)
 - [`/events/{eventKey}`](#eventseventkey)
@@ -19,8 +18,7 @@
 - [`/schemas/{id}`](#schemasid)
 - [`/schemas`](#schemas)
 - [`/teams/{team}/automodes`](#teamsteamautomodes)
-- [`/teams/{team}/stats/auto`](#teamsteamstatsauto)
-- [`/teams/{team}/stats/teleop`](#teamsteamstatsteleop)
+- [`/teams/{team}/stats`](#teamsteamstats)
 - [`/users/{userId}`](#usersuserid)
 - [`/users`](#users)
 
@@ -312,7 +310,7 @@ type Data = {
 }[]
 ```
 
-# `/events/{eventKey}/teams/{team}/stats/auto`
+# `/events/{eventKey}/teams/{team}/stats`
 
 ## `GET`
 
@@ -320,9 +318,26 @@ type Data = {
 
 ```ts
 type Data = {
-  modeName: string
-  // in order by match time
-  stats: (
+  auto: {
+    modeName: string
+    // in order by match time
+    stats: (
+      | {
+          // qm1
+          match: string
+          attempts: number
+          successes: number
+          statName: string
+        }
+      | {
+          // qm1
+          match: string
+          attempted: boolean
+          succeeded: boolean
+          statName: string
+        })[]
+  }[]
+  teleop: (
     | {
         // qm1
         match: string
@@ -337,31 +352,7 @@ type Data = {
         succeeded: boolean
         statName: string
       })[]
-}[]
-```
-
-# `/events/{eventKey}/teams/{team}/stats/teleop`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = (
-  | {
-      // qm1
-      match: string
-      attempts: number
-      successes: number
-      statName: string
-    }
-  | {
-      // qm1
-      match: string
-      attempted: boolean
-      succeeded: boolean
-      statName: string
-    })[]
+}
 ```
 
 # `/events/{eventKey}/teams/{team}`
@@ -780,7 +771,7 @@ type Data = {
 type Data = string[]
 ```
 
-# `/teams/{team}/stats/auto`
+# `/teams/{team}/stats`
 
 ## `GET`
 
@@ -788,9 +779,30 @@ type Data = string[]
 
 ```ts
 type Data = {
-  modeName: string
-  // in order by match time
-  stats: (
+  auto: {
+    modeName: string
+    // in order by match time
+    stats: (
+      | {
+          // 2018orwil
+          eventKey: string
+          // qm1
+          match: string
+          attempts: number
+          successes: number
+          statName: string
+        }
+      | {
+          // 2018orwil
+          eventKey: string
+          // qm1
+          match: string
+          attempted: boolean
+          succeeded: boolean
+          statName: string
+        })[]
+  }[]
+  teleop: (
     | {
         // 2018orwil
         eventKey: string
@@ -809,35 +821,7 @@ type Data = {
         succeeded: boolean
         statName: string
       })[]
-}[]
-```
-
-# `/teams/{team}/stats/teleop`
-
-## `GET`
-
-### Response
-
-```ts
-type Data = (
-  | {
-      // 2018orwil
-      eventKey: string
-      // qm1
-      match: string
-      attempts: number
-      successes: number
-      statName: string
-    }
-  | {
-      // 2018orwil
-      eventKey: string
-      // qm1
-      match: string
-      attempted: boolean
-      succeeded: boolean
-      statName: string
-    })[]
+}
 ```
 
 # `/users/{userId}`

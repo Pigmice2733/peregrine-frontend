@@ -57,19 +57,23 @@ type EventKey = {
   eventKey: string
 }
 
-export type TeamTeleopStats = (EventKey & GraphableField)[]
-export type TeamAutoStats = ({
-  modeName: string
-  // in order by match time
-  stats: (EventKey & GraphableField)[]
-})[]
+export type SingleTeamStats = {
+  auto: ({
+    modeName: string
+    // in order by match time
+    stats: (EventKey & GraphableField)[]
+  })[]
+  teleop: (EventKey & GraphableField)[]
+}
 
-export type EventTeamTeleopStats = GraphableField[]
-export type EventTeamAutoStats = ({
-  modeName: string
-  // in order by match time
-  stats: GraphableField[]
-})[]
+export type EventSingleTeamStats = {
+  auto: ({
+    modeName: string
+    // in order by match time
+    stats: GraphableField[]
+  })[]
+  teleop: GraphableField[]
+}
 
 export interface TeamStats {
   team: string
