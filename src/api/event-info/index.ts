@@ -35,13 +35,12 @@ export interface EventInfo extends BasicEventInfo {
   }
 }
 
-export const processEvent = <T extends EventInfo | BasicEventInfo>(e: T) => {
-  return {
+export const processEvent = <T extends EventInfo | BasicEventInfo>(e: T) =>
+  ({
     ...e,
     startDate: new Date(e.startDate),
     endDate: new Date(e.endDate),
-  } as Merge<T, { startDate: Date; endDate: Date }>
-}
+  } as Merge<T, { startDate: Date; endDate: Date }>)
 // need this coercion otherwise ts will have startDate as string & Date
 // rest spread creates intersection types which is slightly inaccurate
 // https://github.com/Microsoft/TypeScript/pull/28234
