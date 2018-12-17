@@ -83,14 +83,11 @@ async function buildSystemEntry() {
   console.log('built systemjs entry')
 }
 
-function createLink(path, type) {
-  if (type === 'script') {
+function createLink(path, type, crossorigin = true) {
+  if (type === 'script' && crossorigin) {
     return `  Link: </${path}>; rel=preload; as=script; crossorigin`
   }
-  if (type === 'style') {
-    return `  Link: </${path}>; rel=preload; as=style`
-  }
-  throw new Error(`unrecognized type: ${type}`)
+  return `  Link: </${path}>; rel=preload; as=${type}`
 }
 
 const pages = [
@@ -127,7 +124,7 @@ function trackDependencies(chunk, chunks) {
 
 const baseDependencies =
   [
-    createLink('systemjs-entry.js', 'script'),
+    createLink('systemjs-entry.js', 'script', false),
     createLink('index.js', 'script'),
     createLink('style.css', 'style'),
   ].join('\n') + '\n'
