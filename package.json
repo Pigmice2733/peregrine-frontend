@@ -68,7 +68,7 @@
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "cpy": "7.0.1",
     "eslint": "5.10.0",
-    "eslint-plugin-caleb": "1.15.0",
+    "eslint-plugin-caleb": "1.16.0",
     "hygen": "1.6.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "23.6.0",
