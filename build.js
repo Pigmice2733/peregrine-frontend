@@ -4,51 +4,11 @@ const { readFile, writeFile } = require('fs')
 const { promisify } = require('util')
 const readFileAsync = promisify(readFile)
 const writeFileAsync = promisify(writeFile)
-const { join, relative } = require('path')
+const { join } = require('path')
 const cpy = require('cpy')
 const templite = require('templite')
-const kleur = require('kleur')
 
 const outDir = 'dist'
-
-const indent = s =>
-  s
-    .split('\n')
-    .map(l => '  ' + l)
-    .join('\n')
-
-const simpleFileName = file =>
-  relative(process.cwd(), file)
-    .replace(/\.([tj]sx?|css|mjs)$/, '')
-    .replace(/\.es$/, '')
-    .replace(/\/index$/, '')
-    .replace(/^src\//, '')
-    .replace(/^node_modules\/.*\//, '')
-
-const listModules = modules =>
-  Object.entries(modules)
-    .map(([file, m]) => {
-      return file.endsWith('.css')
-        ? null
-        : `${kleur.bold(simpleFileName(file))} (${
-            m.renderedExports.length === 0 ? '*' : m.renderedExports.join(',')
-          })`
-    })
-    .filter(Boolean)
-    .join(', ')
-
-const graphChunk = (chunk, bundle) =>
-  kleur.bold().blue(chunk.fileName) +
-  ' - ' +
-  listModules(chunk.modules) +
-  '\n' +
-  chunk.imports.map(i => indent(graphChunk(bundle[i], bundle))).join('\n')
-
-const graphBundle = bundle =>
-  Object.values(bundle)
-    .filter(chunk => chunk.isEntry)
-    .map(c => graphChunk(c, bundle))
-    .join('\n')
 
 async function buildMain() {
   console.log('building main bundle')
@@ -56,7 +16,6 @@ async function buildMain() {
     .rollup(configs.main)
     .catch(error => console.log(error))
   const { output } = await bundle.write(configs.main.output)
-  console.log(graphBundle(output))
   console.log('built main bundle')
   return output
 }
@@ -117,7 +76,9 @@ function trackDependencies(chunk, chunks) {
   return [
     ...new Set([
       ...chunk.imports,
-      ...chunk.imports.flatMap(c => trackDependencies(chunks[c], chunks)),
+      ...chunk.imports.flatMap(c =>
+        trackDependencies(chunks.find(ch => ch.fileName === c), chunks),
+      ),
     ]),
   ]
 }

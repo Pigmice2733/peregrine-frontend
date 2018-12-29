@@ -35,7 +35,6 @@ module.exports = {
   main: {
     input: './src/index.tsx',
     output: { dir: 'dist', format: 'system' },
-    experimentalCodeSplitting: true,
     experimentalOptimizeChunks: true,
     chunkGroupingSize: 30000,
     plugins: [
