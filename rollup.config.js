@@ -36,7 +36,7 @@ module.exports = {
     input: './src/index.tsx',
     output: { dir: 'dist', format: 'system', preferConst: true },
     experimentalOptimizeChunks: true,
-    chunkGroupingSize: 30000,
+    chunkGroupingSize: 37000,
     plugins: [
       node(rollupNodeOptions),
       postcss({
@@ -50,7 +50,9 @@ module.exports = {
           [],
         ),
         config: false,
-        minimize: true,
+        minimize: {
+          zindex: false,
+        },
       }),
       babel({ extensions, babelrc: false, ...babelConfig }),
       terser(terserOptions(prod)),

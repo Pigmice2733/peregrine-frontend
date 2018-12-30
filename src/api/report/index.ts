@@ -2,24 +2,6 @@ interface BaseField {
   statName: string
 }
 
-interface BooleanStat {
-  // total
-  attempts: number
-  // total
-  successes: number
-}
-
-interface NumberStat {
-  attempts: {
-    max: number
-    avg: number
-  }
-  successes: {
-    max: number
-    avg: number
-  }
-}
-
 interface BooleanField extends BaseField {
   attempted: boolean
   succeeded: boolean
@@ -30,9 +12,40 @@ interface NumberField extends BaseField {
   successes: number
 }
 
-type Stat = NumberStat | BooleanStat
-
 export type Field = NumberField | BooleanField
+
+interface BooleanStat extends BaseField {
+  // total
+  attempts: number
+  // total
+  successes: number
+}
+
+interface NumberStat extends BaseField {
+  attempts: {
+    max: number
+    avg: number
+  }
+  successes: {
+    max: number
+    avg: number
+  }
+}
+
+export type Stat = NumberStat | BooleanStat
+
+export interface NormalizedStat {
+  attempts: {
+    max: number
+    avg: number
+    type: 'percent' | 'number'
+  }
+  successes: {
+    max: number
+    avg: number
+    type: 'percent' | 'number'
+  }
+}
 
 type GraphableField = {
   // qm1

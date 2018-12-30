@@ -4,3 +4,11 @@
     justify-content: center;
   }
 }
+
+.teamsView {
+  max-height: calc(100vh - 6rem);
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  padding: 1rem;
+}

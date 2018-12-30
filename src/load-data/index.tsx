@@ -4,7 +4,7 @@ type OptionalKeys<T> = { [K in keyof T]?: T[K] }
 
 interface Props<T> {
   data: { [K in keyof T]: () => Promise<T[K]> }
-  renderSuccess: (data: OptionalKeys<T>) => JSX.Element
+  renderSuccess: (data: OptionalKeys<T>) => JSX.Element | number | string | null
   renderError?: (
     errors: { [K in keyof T]?: { message: string } },
   ) => JSX.Element

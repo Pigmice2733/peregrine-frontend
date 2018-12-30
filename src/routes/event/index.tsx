@@ -19,6 +19,9 @@ import IconButton from '@/components/icon-button'
 import Spinner from '@/components/spinner'
 import { getEventMatches } from '@/api/match-info/get-event-matches'
 import { getEventInfo } from '@/api/event-info/get-event-info'
+import { getSchema } from '@/api/schema/get-schema'
+import AnalysisTable from '@/components/analysis-table'
+import { getEventStats } from '@/api/report/get-event-stats'
 
 interface Props {
   eventKey: string
@@ -60,12 +63,30 @@ const Event = ({ eventKey }: Props) => (
     data={{
       matches: () => getEventMatches(eventKey),
       eventInfo: () => getEventInfo(eventKey),
+      eventStats: () => getEventStats(eventKey),
+      schema: () => getEventInfo(eventKey).then(e => getSchema(e.schemaId)),
     }}
-    renderSuccess={({ matches, eventInfo }) => (
+    renderSuccess={({ matches, eventInfo, eventStats, schema }) => (
       <Page
         name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}
         back="/"
         tabs={[
+          {
+            name: 'Teams',
+            contents: (
+              <div class={style.teamsView}>
+                {eventStats && schema ? (
+                  <AnalysisTable
+                    teams={eventStats}
+                    schema={schema}
+                    eventKey={eventKey}
+                  />
+                ) : (
+                  <Spinner />
+                )}
+              </div>
+            ),
+          },
           {
             name: 'Info',
             contents: (
@@ -169,7 +190,6 @@ const Event = ({ eventKey }: Props) => (
         ]}
       />
     )}
-    renderError={({ matches }) => <h1>Error loading matches: {matches}</h1>}
   />
 )
 
