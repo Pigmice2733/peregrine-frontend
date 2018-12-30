@@ -1,6 +1,6 @@
 import { h, Component } from 'preact'
 import { Schema } from '@/api/schema'
-import { NormalizedStat } from '@/api/report'
+import { NormalizedStat } from '@/api/stats'
 import Card from '../card'
 import style from './style.css'
 import Icon from '../icon'

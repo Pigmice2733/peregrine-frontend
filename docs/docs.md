@@ -148,12 +148,14 @@ type Data = {
           max: number
           avg: number
         }
+        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
+        statName: string
       })[]
   auto: (
     | {
@@ -165,12 +167,14 @@ type Data = {
           max: number
           avg: number
         }
+        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
+        statName: string
       })[]
 }[]
 ```
@@ -283,12 +287,14 @@ type Data = {
           max: number
           avg: number
         }
+        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
+        statName: string
       })[]
   auto: (
     | {
@@ -300,12 +306,14 @@ type Data = {
           max: number
           avg: number
         }
+        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
+        statName: string
       })[]
 }[]
 ```

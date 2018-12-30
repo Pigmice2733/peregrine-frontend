@@ -21,7 +21,7 @@ import { getEventMatches } from '@/api/match-info/get-event-matches'
 import { getEventInfo } from '@/api/event-info/get-event-info'
 import { getSchema } from '@/api/schema/get-schema'
 import AnalysisTable from '@/components/analysis-table'
-import { getEventStats } from '@/api/report/get-event-stats'
+import { getEventStats } from '@/api/stats/get-event-stats'
 
 interface Props {
   eventKey: string

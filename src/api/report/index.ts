@@ -14,39 +14,6 @@ interface NumberField extends BaseField {
 
 export type Field = NumberField | BooleanField
 
-interface BooleanStat extends BaseField {
-  // total
-  attempts: number
-  // total
-  successes: number
-}
-
-interface NumberStat extends BaseField {
-  attempts: {
-    max: number
-    avg: number
-  }
-  successes: {
-    max: number
-    avg: number
-  }
-}
-
-export type Stat = NumberStat | BooleanStat
-
-export interface NormalizedStat {
-  attempts: {
-    max: number
-    avg: number
-    type: 'percent' | 'number'
-  }
-  successes: {
-    max: number
-    avg: number
-    type: 'percent' | 'number'
-  }
-}
-
 type GraphableField = {
   // qm1
   match: string
@@ -86,14 +53,4 @@ export type EventSingleTeamStats = {
     stats: GraphableField[]
   })[]
   teleop: GraphableField[]
-}
-
-export interface TeamStats {
-  team: string
-  teleop: Stat[]
-  auto: Stat[]
-}
-
-export interface TeamStatsWithAlliance extends TeamStats {
-  alliance: 'red' | 'blue'
 }
