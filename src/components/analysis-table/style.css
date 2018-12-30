@@ -1,0 +1,163 @@
+/* div to increase specificity to override card */
+
+div.analysisTable {
+  max-width: 100%;
+  width: unset;
+
+  & table {
+    border-collapse: collapse;
+  }
+
+  & tr {
+    background: white;
+  }
+
+  & > .wrapper {
+    overflow: auto;
+  }
+
+  & td {
+    padding: 1rem;
+  }
+
+  & td,
+  & th {
+    min-width: 4rem;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  & tbody tr:hover {
+    background: color-mod(var(--light-grey) lightness(+5%));
+  }
+
+  & tr,
+  & th {
+    box-shadow: inset 0 -1px var(--light-grey);
+  }
+
+  & td:first-child,
+  & th:first-child {
+    min-width: 4.5rem;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: hidden;
+    table-layout: fixed;
+    position: sticky;
+    left: 0;
+    background: inherit;
+    box-shadow: inset -1px -1px var(--light-grey);
+  }
+
+  & tbody tr:last-child {
+    box-shadow: none;
+  }
+  & tbody tr:last-child th:first-child {
+    box-shadow: inset -1px 0 var(--light-grey);
+  }
+
+  & th:first-child {
+    z-index: 2;
+  }
+}
+
+tr.groupHeader {
+  & tr,
+  & th {
+    background: white;
+  }
+
+  & th:first-child {
+    box-shadow: inset -1px 0 var(--light-grey);
+  }
+
+  & th {
+    text-align: left;
+    font-size: 0.8rem;
+    box-shadow: none;
+    position: sticky;
+    top: 0;
+    height: 2.1rem;
+
+    & span {
+      position: sticky;
+      left: calc(4.5rem + 2px);
+      padding: 0 0.6rem;
+    }
+  }
+
+  & .auto {
+    box-shadow: inset 0 -0.2rem var(--alliance-blue);
+    & span {
+      color: var(--alliance-blue);
+    }
+  }
+  & .teleop {
+    box-shadow: inset 0 -0.2rem var(--alliance-red);
+    & span {
+      color: var(--alliance-red);
+    }
+  }
+}
+
+tr.statsHeader {
+  & th {
+    position: sticky;
+    top: 2.1rem;
+    background: white;
+  }
+
+  & th:first-child button {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+th.tableHeader {
+  padding: 0;
+
+  & .icon {
+    transition: transform 0.2s ease;
+    transform: rotate(90deg);
+    padding: 0 0.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & svg {
+      width: 1rem;
+    }
+
+    &.reversed {
+      transform: rotate(270deg);
+    }
+  }
+
+  & button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    font-size: 0.8rem;
+    width: 100%;
+    height: 100%;
+    padding: 0.7rem 0.3rem;
+    color: var(--off-black);
+  }
+}
+
+.dropdown {
+  background: transparent;
+  border: none;
+  font-size: 0.8rem;
+  color: var(--off-black);
+  font-weight: bold;
+  height: 100%;
+  width: 100%;
+
+  & option {
+    text-transform: none;
+  }
+}

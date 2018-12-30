@@ -24,7 +24,7 @@ module.exports = {
         const h = createHash('md5')
           .update(prod ? local + path : path)
           .digest('hex')
-          .substr(0, 5)
+          .substr(0, 4)
         // we must start with an underscore, otherwise it might start with a number
         return prod ? '_' + h : `${local}-${h}`
       },

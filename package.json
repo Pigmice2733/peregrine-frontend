@@ -4,6 +4,7 @@
     "singleQuote": true,
     "trailingComma": "all"
   },
+  "repository": "Pigmice2733/peregrine-frontend",
   "description": "A scouting app for FRC competitions. This is the frontend, written in TypeScript with Preact",
   "license": "MIT",
   "scripts": {
@@ -66,6 +67,7 @@
     "babel-jest": "23.6.0",
     "babel-plugin-module-resolver": "3.1.1",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
+    "clsx": "^1.0.0",
     "cpy": "7.0.1",
     "eslint": "5.11.1",
     "eslint-plugin-caleb": "1.16.0",
