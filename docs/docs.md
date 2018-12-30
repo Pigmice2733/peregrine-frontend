@@ -2,7 +2,6 @@
 
 - [`/authenticate`](#authenticate)
 - [`/events/{eventKey}/matches/{matchKey}/reports/{team}`](#eventseventkeymatchesmatchkeyreportsteam)
-- [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
@@ -122,61 +121,6 @@ type Data = {
 
 ```ts
 type Data = null
-```
-
-# `/events/{eventKey}/matches/{matchKey}/stats`
-
-## `GET`
-
-Stats for the teams in a match.
-These stats describe a team's performance in all matches at this event,
-not just this match.
-
-### Response
-
-```ts
-type Data = {
-  alliance: "red" | "blue"
-  team: string
-  teleop: (
-    | {
-        attempts: {
-          max: number
-          avg: number
-        }
-        successes: {
-          max: number
-          avg: number
-        }
-        statName: string
-      }
-    | {
-        // total
-        attempts: number
-        // total
-        successes: number
-        statName: string
-      })[]
-  auto: (
-    | {
-        attempts: {
-          max: number
-          avg: number
-        }
-        successes: {
-          max: number
-          avg: number
-        }
-        statName: string
-      }
-    | {
-        // total
-        attempts: number
-        // total
-        successes: number
-        statName: string
-      })[]
-}[]
 ```
 
 # `/events/{eventKey}/matches/{matchKey}`

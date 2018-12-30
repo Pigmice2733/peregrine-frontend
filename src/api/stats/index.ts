@@ -40,7 +40,3 @@ export interface TeamStats {
   teleop: Stat[]
   auto: Stat[]
 }
-
-export interface TeamStatsWithAlliance extends TeamStats {
-  alliance: 'red' | 'blue'
-}
