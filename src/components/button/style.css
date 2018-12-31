@@ -1,4 +1,5 @@
 .button {
+  text-align: center;
   background: var(--pigmice-purple);
   border: none;
   padding: 0.4rem 0.7rem;

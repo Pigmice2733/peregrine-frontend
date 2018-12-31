@@ -79,7 +79,9 @@ const Event = ({ eventKey }: Props) => (
                   <AnalysisTable
                     teams={eventStats}
                     schema={schema}
-                    eventKey={eventKey}
+                    renderTeam={team => (
+                      <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
+                    )}
                   />
                 ) : (
                   <Spinner />
