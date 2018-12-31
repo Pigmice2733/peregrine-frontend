@@ -1,6 +1,6 @@
 import { h, Component } from 'preact'
 import { Schema } from '@/api/schema'
-import { NormalizedStat } from '@/api/report'
+import { NormalizedStat } from '@/api/stats'
 import Card from '../card'
 import style from './style.css'
 import Icon from '../icon'
@@ -88,7 +88,7 @@ interface Props {
     teleop: { [key: string]: NormalizedStat }
   }[]
   schema: Schema
-  eventKey: string
+  renderTeam: (team: string) => JSX.Element
 }
 
 type SortType = 'teamNum' | 'auto' | 'teleop'
@@ -123,7 +123,7 @@ class AnalysisTable extends Component<Props, State> {
   }
 
   render(
-    { teams, schema, eventKey }: Props,
+    { teams, schema, renderTeam }: Props,
     { sortStat, sortType, reversed, statType }: State,
   ) {
     return (
@@ -192,20 +192,25 @@ class AnalysisTable extends Component<Props, State> {
                 })
                 .map(team => (
                   <tr key={team.team}>
-                    <td>
-                      <a href={`/events/${eventKey}/teams/${team.team}`}>
-                        {team.team}
-                      </a>
-                    </td>
+                    <td>{renderTeam(team.team)}</td>
                     {eachStat(schema).map(({ name, key, gamePart }) => {
                       const stat = team[gamePart][name]
-                      if (!stat) return <td key={key}>?</td>
+                      if (!stat)
+                        return (
+                          <td key={key}>
+                            <span>?</span>
+                          </td>
+                        )
                       const value = getValueByStatType(stat, statType)
                       const output =
                         value.type === 'percent' || statType === '% Success'
                           ? formatPercent(value.avg)
                           : `${round(value.avg)} (${round(value.max)})`
-                      return <td key={key}>{output}</td>
+                      return (
+                        <td key={key}>
+                          <span>{output}</span>
+                        </td>
+                      )
                     })}
                   </tr>
                 ))}

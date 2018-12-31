@@ -21,7 +21,7 @@ import { getEventMatches } from '@/api/match-info/get-event-matches'
 import { getEventInfo } from '@/api/event-info/get-event-info'
 import { getSchema } from '@/api/schema/get-schema'
 import AnalysisTable from '@/components/analysis-table'
-import { getEventStats } from '@/api/report/get-event-stats'
+import { getEventStats } from '@/api/stats/get-event-stats'
 
 interface Props {
   eventKey: string
@@ -79,7 +79,9 @@ const Event = ({ eventKey }: Props) => (
                   <AnalysisTable
                     teams={eventStats}
                     schema={schema}
-                    eventKey={eventKey}
+                    renderTeam={team => (
+                      <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
+                    )}
                   />
                 ) : (
                   <Spinner />

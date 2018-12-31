@@ -2,7 +2,6 @@
 
 - [`/authenticate`](#authenticate)
 - [`/events/{eventKey}/matches/{matchKey}/reports/{team}`](#eventseventkeymatchesmatchkeyreportsteam)
-- [`/events/{eventKey}/matches/{matchKey}/stats`](#eventseventkeymatchesmatchkeystats)
 - [`/events/{eventKey}/matches/{matchKey}`](#eventseventkeymatchesmatchkey)
 - [`/events/{eventKey}/matches`](#eventseventkeymatches)
 - [`/events/{eventKey}/star`](#eventseventkeystar)
@@ -124,57 +123,6 @@ type Data = {
 type Data = null
 ```
 
-# `/events/{eventKey}/matches/{matchKey}/stats`
-
-## `GET`
-
-Stats for the teams in a match.
-These stats describe a team's performance in all matches at this event,
-not just this match.
-
-### Response
-
-```ts
-type Data = {
-  alliance: "red" | "blue"
-  team: string
-  teleop: (
-    | {
-        attempts: {
-          max: number
-          avg: number
-        }
-        successes: {
-          max: number
-          avg: number
-        }
-      }
-    | {
-        // total
-        attempts: number
-        // total
-        successes: number
-      })[]
-  auto: (
-    | {
-        attempts: {
-          max: number
-          avg: number
-        }
-        successes: {
-          max: number
-          avg: number
-        }
-      }
-    | {
-        // total
-        attempts: number
-        // total
-        successes: number
-      })[]
-}[]
-```
-
 # `/events/{eventKey}/matches/{matchKey}`
 
 ## `GET`
@@ -283,12 +231,14 @@ type Data = {
           max: number
           avg: number
         }
+        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
+        statName: string
       })[]
   auto: (
     | {
@@ -300,12 +250,14 @@ type Data = {
           max: number
           avg: number
         }
+        statName: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
+        statName: string
       })[]
 }[]
 ```
