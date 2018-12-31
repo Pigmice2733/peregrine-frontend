@@ -11,7 +11,7 @@ interface JWT {
   raw: string
 }
 
-const isExpired = (jwt: JWT) => new Date(jwt.exp * 1000) <= new Date()
+const isExpired = (jwt: JWT) => jwt.exp <= Math.floor(new Date() / 1000)
 
 export const setRefreshToken = (token: string) =>
   localStorage.setItem('refreshToken', token)
