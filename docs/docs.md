@@ -13,6 +13,7 @@
 - [`/events`](#events)
 - [`/realms/{id}`](#realmsid)
 - [`/realms`](#realms)
+- [`/refresh`](#refresh)
 - [`/schemas/year/{year}`](#schemasyearyear)
 - [`/schemas/{id}`](#schemasid)
 - [`/schemas`](#schemas)
@@ -39,7 +40,8 @@ type Data = {
 
 ```ts
 type Data = {
-  jwt: string
+  refreshToken: string
+  accessToken: string
 }
 ```
 
@@ -547,6 +549,27 @@ type Data = {
   // Whether report data should be publicly available outside this realm
   shareReports: boolean
 }[]
+```
+
+# `/refresh`
+
+## `POST`
+
+### Request
+
+```ts
+type Data = {
+  refreshToken: string
+}
+```
+
+
+### Response
+
+```ts
+type Data = {
+  accessToken: string
+}
 ```
 
 # `/schemas/year/{year}`

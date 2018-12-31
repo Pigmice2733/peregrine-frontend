@@ -23,6 +23,7 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
   return (
     <div class={style.numberInput}>
       <button
+        tabIndex={-1}
         onClick={e => {
           e.preventDefault()
           onChange(value - 1)
@@ -37,6 +38,7 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
         onChange={e => onChange((e.target as HTMLInputElement).valueAsNumber)}
       />
       <button
+        tabIndex={-1}
         onClick={e => {
           e.preventDefault()
           onChange(value + 1)

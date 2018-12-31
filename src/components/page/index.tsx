@@ -3,6 +3,7 @@ import style from './style.css'
 import { menu } from '@/icons/menu'
 import { arrowLeft } from '@/icons/arrow-left'
 import IconButton from '../icon-button'
+import clsx from 'clsx'
 
 interface Tab {
   name: string
@@ -26,7 +27,7 @@ class Page extends Component<Props, State> {
   selectTab = (selectedTab: string) => this.setState({ selectedTab })
   render({ name, children, back, tabs }: Props, { selectedTab }: State) {
     return (
-      <div class={`${style.page} ${tabs && style.hasTabs}`}>
+      <div class={clsx(style.page, tabs && style.hasTabs)}>
         <header>
           <div class={style.topRow}>
             <IconButton

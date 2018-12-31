@@ -6,10 +6,6 @@ import { EventInfo } from '@/api/event-info'
 import { Schema } from '@/api/schema'
 import { BaseReport } from '@/api/report'
 
-afterEach(() => {
-  jest.restoreAllMocks()
-})
-
 const nextTick = () => new Promise(resolve => setImmediate(resolve))
 
 const matchInfo: MatchInfo = {
@@ -83,6 +79,10 @@ test('renders and submits', async () => {
 
   expect(submitButton).toBeDisabled()
 
+  await nextTick()
+
+  expect(window.fetch).toHaveBeenCalledTimes(3)
+
   expect(window.fetch).toHaveBeenCalledWith(
     expect.stringMatching(/\/events\/2018orwil\/matches\/qm3$/),
     { body: undefined, headers: {}, method: 'GET' },
@@ -92,13 +92,6 @@ test('renders and submits', async () => {
     expect.stringMatching(/\/events\/2018orwil$/),
     { body: undefined, headers: {}, method: 'GET' },
   )
-
-  expect(window.fetch).toHaveBeenCalledTimes(2)
-
-  // after the initial promise is resolved, we have the schema id and request the schema
-  await nextTick()
-
-  expect(window.fetch).toHaveBeenCalledTimes(3)
 
   expect(window.fetch).toHaveBeenLastCalledWith(
     expect.stringMatching(/\/schemas\/1000/),
@@ -137,6 +130,8 @@ test('renders and submits', async () => {
   expect(submitButton).not.toBeDisabled()
 
   fireEvent.submit(scoutPage.container.querySelector('form') as HTMLFormElement)
+
+  await nextTick()
 
   expect(window.fetch).toHaveBeenCalledTimes(4)
   expect(window.fetch).toHaveBeenLastCalledWith(

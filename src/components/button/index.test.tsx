@@ -14,7 +14,7 @@ test('button', () => {
   expect(clickHandler).toHaveBeenCalledTimes(1)
   expect(container.firstChild).toMatchInlineSnapshot(`
 <button
-  class="button "
+  class="button"
 >
   Hello
 </button>

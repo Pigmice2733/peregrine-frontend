@@ -24,8 +24,9 @@ export const request = async <T extends any>(
   endpoint: string,
   params?: { [key: string]: string | number | undefined } | null,
   body?: any,
+  notAuthenticated?: true,
 ) => {
-  const jwt = getJWT()
+  const jwt = notAuthenticated ? false : await getJWT()
   const text = await fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
