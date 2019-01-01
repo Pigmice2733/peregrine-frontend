@@ -1,4 +1,5 @@
 import { Roles } from '@/api/user'
+import { refreshToken } from './api/refresh-token'
 
 let jwt: string | null = null
 
@@ -10,19 +11,43 @@ interface JWT {
   raw: string
 }
 
+const isExpired = (jwt: JWT) =>
+  jwt.exp <= Math.floor(new Date().getTime() / 1000)
+
+export const setRefreshToken = (token: string) =>
+  localStorage.setItem('refreshToken', token)
+
+let refreshPromise: Promise<JWT> | null = null
+
 export const getJWT = () => {
   const j = jwt || localStorage.getItem('jwt')
-  const parsed = parseJWT(j)
-  if (parsed && new Date(parsed.exp * 1000) > new Date()) {
-    jwt = j
-    return parsed
+
+  const parsed = j && parseJWT(j)
+
+  if (!parsed || isExpired(parsed)) {
+    setJWT(null)
+    const rToken = localStorage.getItem('refreshToken')
+
+    // request a new access token using the refresh token
+    if (rToken && !isExpired(parseJWT(rToken))) {
+      // if there is an existing request, use that instead of making a new one
+      return (
+        refreshPromise ||
+        (refreshPromise = refreshToken(rToken).then(({ accessToken }) => {
+          setJWT(accessToken)
+          refreshPromise = null
+          return parseJWT(accessToken)
+        }))
+      )
+    }
+    return localStorage.removeItem('refreshToken')
   }
-  // jwt is expired, remove it from localstorage
-  setJWT(null)
+
+  jwt = j
+  return parsed
 }
 
-const parseJWT = (jwt?: string | null) => {
-  if (!jwt) return
+const parseJWT = (jwt: string) => {
   const payload = jwt.split('.', 2)[1]
   const data = JSON.parse(atob(payload))
   data.raw = jwt

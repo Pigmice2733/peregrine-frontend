@@ -11,4 +11,5 @@ afterEach(cleanup)
 afterEach(() => {
   setJWT((null as unknown) as string)
   localStorage.clear()
+  jest.restoreAllMocks()
 })

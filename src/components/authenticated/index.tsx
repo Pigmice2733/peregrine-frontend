@@ -1,10 +1,9 @@
 import { h, Component } from 'preact'
-import { getJWT, setJWT } from '@/jwt'
+import { getJWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import style from './style.css'
 import { authenticate } from '@/api/authenticate'
-import { Roles } from '@/api/user'
 import Page from '../page'
 import Button from '../button'
 import Alert from '../alert'
@@ -15,7 +14,7 @@ const minPasswordLength = 8
 const maxPasswordLength = 128
 
 interface Props {
-  render: (data: { roles: Roles; userId: string }) => JSX.Element
+  render: () => JSX.Element
   label?: string
 }
 
@@ -44,11 +43,7 @@ class Authenticted extends Component<Props, State> {
     e.preventDefault()
     this.setState({ loading: true, invalid: false })
     try {
-      const { jwt } = await authenticate(
-        this.state.username,
-        this.state.password,
-      )
-      setJWT(jwt)
+      await authenticate(this.state.username, this.state.password)
       this.setState({ username: '', password: '' })
     } catch (error) {
       if (error.message.match(/unauthorized/i)) {
@@ -91,7 +86,7 @@ class Authenticted extends Component<Props, State> {
         </Page>
       )
     }
-    return render({ roles: jwt.pigmiceRoles, userId: jwt.sub })
+    return render()
   }
 }
 

@@ -9,10 +9,6 @@ const jwtBody = {
 }
 const jwt = `asdf.${btoa(JSON.stringify(jwtBody))}.asdf`
 
-afterEach(() => {
-  jest.restoreAllMocks()
-})
-
 test('renders login page then renders contents', async () => {
   const { getByLabelText, getByText } = render(
     <Authenticted render={() => <div>Rendered</div>} />,
@@ -36,15 +32,15 @@ test('renders login page then renders contents', async () => {
           headers: {},
           method: 'POST',
         })
-        resolve(new Response(JSON.stringify({ data: { jwt } })))
+        resolve(new Response(JSON.stringify({ data: { accessToken: jwt } })))
       }),
   )
 
   fireEvent.submit(getByText('Submit'))
 
-  expect(window.fetch).toHaveBeenCalledTimes(1)
-
   await wait(() => getByText('Rendered'))
+
+  expect(window.fetch).toHaveBeenCalledTimes(1)
 
   expect(localStorage.getItem('jwt')).toEqual(jwt)
 })
@@ -89,20 +85,15 @@ test('renders content directly with jwt in localstorage', () => {
   localStorage.setItem('jwt', jwt)
   const { getByText } = render(
     <Authenticted
-      render={({ roles, userId }) => (
+      render={() => (
         <div>
           <h1>Roles</h1>
-          <div>{JSON.stringify(roles)}</div>
-          <h1>UserId - {userId}</h1>
         </div>
       )}
     />,
   )
 
-  const rolesDiv = getByText('Roles').nextElementSibling as HTMLDivElement
-  expect(rolesDiv.textContent).toMatchInlineSnapshot(`"{\\"admin\\":true}"`)
-
-  expect(getByText(/userid/i).textContent).toEqual('UserId - name')
+  getByText('Roles')
 })
 
 test('deletes expired jwt', async () => {
