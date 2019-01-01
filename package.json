@@ -91,7 +91,7 @@
     "rollup-plugin-babel": "4.1.0",
     "rollup-plugin-node-resolve": "4.0.0",
     "rollup-plugin-postcss": "1.6.3",
-    "rollup-plugin-terser": "3.0.0",
+    "rollup-plugin-terser": "4.0.0",
     "templite": "1.1.0",
     "typescript": "3.2.2"
   },
