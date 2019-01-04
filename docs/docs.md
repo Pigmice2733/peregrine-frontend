@@ -354,10 +354,7 @@ non-super-admins.
 
 ```ts
 type Data = {
-  webcasts: {
-    type: "twitch" | "youtube"
-    url: string
-  }[]
+  webcasts: string[]
   // the ID of the schema attached to the event
   schemaId: number
   // district "display_name" from TBA
@@ -390,10 +387,7 @@ Only admins can create custom events on their realm
 
 ```ts
 type Data = {
-  webcasts: {
-    type: "twitch" | "youtube"
-    url: string
-  }[]
+  webcasts: string[]
   // the ID of the schema attached to the event
   schemaId: number
   // district "display_name" from TBA
@@ -434,10 +428,7 @@ TBA events and additionally all the custom events on their realm.
 
 ```ts
 type Data = {
-  webcasts: {
-    type: "twitch" | "youtube"
-    url: string
-  }[]
+  webcasts: string[]
   // the ID of the schema attached to the event
   schemaId: number
   // district "display_name" from TBA

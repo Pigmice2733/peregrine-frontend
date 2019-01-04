@@ -1,10 +1,7 @@
 import { Merge } from '@/type-utils'
 
 export interface EventInfo {
-  webcasts: {
-    type: 'twitch' | 'youtube'
-    url: string
-  }[]
+  webcasts: string[]
   // the ID of the schema attached to the event
   schemaId: number
   // district "display_name" from TBA
