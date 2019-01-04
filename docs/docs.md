@@ -438,6 +438,19 @@ TBA events and additionally all the custom events on their realm.
 
 ```ts
 type Data = {
+  webcasts: {
+    type: "twitch" | "youtube"
+    url: string
+  }[]
+  // the ID of the schema attached to the event
+  schemaId: number
+  // district "display_name" from TBA
+  fullDistrict?: string
+  location: {
+    name: string
+    lat: number
+    lon: number
+  }
   key: string
   // the ID of the realm the event belongs to
   realmId?: string
@@ -450,10 +463,6 @@ type Data = {
   startDate: string
   // UTC date
   endDate: string
-  location: {
-    lat: number
-    lon: number
-  }
 }[]
 ```
 
