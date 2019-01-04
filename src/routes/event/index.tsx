@@ -44,19 +44,19 @@ const gcalUrl = ({
   name,
   startDate,
   endDate,
-  location,
+  locationName,
 }: {
   name: string
   startDate: Date
   endDate: Date
-  location: { name: string }
+  locationName: string
 }) =>
   `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
     name,
   )}&dates=${gcalDate(startDate)}/${gcalDate(
     endDate,
     1,
-  )}&location=${encodeURIComponent(location.name)}`
+  )}&location=${encodeURIComponent(locationName)}`
 
 const Event = ({ eventKey }: Props) => (
   <LoadData
@@ -96,13 +96,10 @@ const Event = ({ eventKey }: Props) => (
                 {eventInfo ? (
                   <InfoGroupCard
                     info={[
-                      eventInfo.location.name && {
+                      eventInfo.locationName && {
                         icon: mapMarker,
-                        title: eventInfo.location.name,
-                        href: gmapsUrl(
-                          eventInfo.location.lat,
-                          eventInfo.location.lon,
-                        ),
+                        title: eventInfo.locationName,
+                        href: gmapsUrl(eventInfo.lat, eventInfo.lon),
                         target: '_blank',
                         rel: 'noopener',
                         action: <Icon icon={googleMaps} />,

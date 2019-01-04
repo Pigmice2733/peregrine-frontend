@@ -9,11 +9,9 @@ export interface EventInfo {
   schemaId: number
   // district "display_name" from TBA
   fullDistrict?: string
-  location: {
-    name: string
-    lat: number
-    lon: number
-  }
+  locationName: string
+  lat: number
+  lon: number
   key: string
   // the ID of the realm the event belongs to
   realmId?: string
