@@ -27,8 +27,6 @@ interface Props {
   eventKey: string
 }
 
-const icons = { twitch, youtube }
-
 const gmapsUrl = (lat: number, lon: number) =>
   `https://www.google.com/maps/?q=${lat},${lon}`
 
@@ -40,23 +38,25 @@ const gcalDate = (date: Date, dateOffset = 0) => {
   )
 }
 
+const webcastIcon = (url: string) => (url.match(/youtube/i) ? youtube : twitch)
+
 const gcalUrl = ({
   name,
   startDate,
   endDate,
-  location,
+  locationName,
 }: {
   name: string
   startDate: Date
   endDate: Date
-  location: { name: string }
+  locationName: string
 }) =>
   `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
     name,
   )}&dates=${gcalDate(startDate)}/${gcalDate(
     endDate,
     1,
-  )}&location=${encodeURIComponent(location.name)}`
+  )}&location=${encodeURIComponent(locationName)}`
 
 const Event = ({ eventKey }: Props) => (
   <LoadData
@@ -96,13 +96,10 @@ const Event = ({ eventKey }: Props) => (
                 {eventInfo ? (
                   <InfoGroupCard
                     info={[
-                      eventInfo.location.name && {
+                      eventInfo.locationName && {
                         icon: mapMarker,
-                        title: eventInfo.location.name,
-                        href: gmapsUrl(
-                          eventInfo.location.lat,
-                          eventInfo.location.lon,
-                        ),
+                        title: eventInfo.locationName,
+                        href: gmapsUrl(eventInfo.lat, eventInfo.lon),
                         target: '_blank',
                         rel: 'noopener',
                         action: <Icon icon={googleMaps} />,
@@ -148,19 +145,19 @@ const Event = ({ eventKey }: Props) => (
                           (eventInfo.webcasts.length === 1 ? '' : 's'),
                         href:
                           eventInfo.webcasts.length === 1
-                            ? eventInfo.webcasts[0].url
+                            ? eventInfo.webcasts[0]
                             : undefined,
                         target: '_blank',
                         rel: 'noopener',
                         action:
                           eventInfo.webcasts.length === 1 ? (
-                            <Icon icon={icons[eventInfo.webcasts[0].type]} />
+                            <Icon icon={webcastIcon(eventInfo.webcasts[0])} />
                           ) : (
-                            eventInfo.webcasts.map(i => (
+                            eventInfo.webcasts.map(w => (
                               <IconButton
-                                key={i.url}
-                                icon={icons[i.type]}
-                                href={i.url}
+                                key={w}
+                                icon={webcastIcon(w)}
+                                href={w}
                                 target="_blank"
                                 rel="noopener"
                               />

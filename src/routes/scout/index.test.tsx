@@ -20,11 +20,9 @@ const eventInfo: EventInfo = {
   schemaId: 1000,
   startDate: '2018-12-22T16:00:00Z',
   endDate: '2018-12-23T04:00:00Z',
-  location: {
-    name: 'nowhere',
-    lat: 0,
-    lon: 0,
-  },
+  locationName: 'nowhere',
+  lat: 0,
+  lon: 0,
   key: '2018orwil',
 }
 
