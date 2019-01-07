@@ -1,6 +1,9 @@
 .infoCard {
   overflow: hidden;
   flex-direction: column;
+  margin: 1.2rem auto;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
 }
 
 .row {

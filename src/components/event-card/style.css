@@ -1,4 +1,8 @@
 .eventCard {
+  display: flex;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+  margin: 1.2rem auto;
   padding: 0.85rem;
   font-size: 0.93rem;
   justify-content: space-between;

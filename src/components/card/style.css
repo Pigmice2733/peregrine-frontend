@@ -1,14 +1,10 @@
 .card {
-  margin: 1.2rem auto;
   border-radius: 0.3rem;
   box-shadow: var(--card-shadow);
   background: white;
-  width: 23rem;
-  max-width: calc(100% - 2rem);
   text-decoration: none;
   color: inherit;
   transition: box-shadow 0.1s ease;
-  display: flex;
 
   &[href] {
     &:hover {
