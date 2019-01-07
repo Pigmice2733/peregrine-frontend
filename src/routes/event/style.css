@@ -1,8 +1,7 @@
 .event {
-  @media screen and (width > 80rem) {
-    display: flex;
-    justify-content: center;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .teamsView {
