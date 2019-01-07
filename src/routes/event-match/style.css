@@ -1,11 +1,12 @@
 .match {
+  padding: 0 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 1.5rem;
 
+  & > div, /* increase specificity */
   & > * {
-    margin: 2rem 0;
+    margin: 1.5rem 0 0 0;
     max-width: 100%;
   }
 }

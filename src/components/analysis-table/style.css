@@ -3,6 +3,7 @@
 div.analysisTable {
   max-width: 100%;
   width: unset;
+  display: flex;
 
   & table {
     border-collapse: collapse;

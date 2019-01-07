@@ -1,5 +1,6 @@
-div.matchCard,
-a.matchCard {
+.matchCard {
+  margin: 1.2rem auto;
+  width: 23rem;
   font-size: 0.93rem;
   align-items: center;
   display: grid;
