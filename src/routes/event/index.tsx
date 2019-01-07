@@ -70,6 +70,7 @@ const Event = ({ eventKey }: Props) => (
       <Page
         name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}
         back="/"
+        defaultTab="Info"
         tabs={[
           {
             name: 'Teams',
