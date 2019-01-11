@@ -76,26 +76,7 @@ const Event = ({ eventKey }: Props) => (
         <Page
           name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}
           back="/"
-          defaultTab="Info"
           tabs={[
-            {
-              name: 'Teams',
-              contents: (
-                <div class={style.teamsView}>
-                  {eventStats && schema ? (
-                    <AnalysisTable
-                      teams={eventStats}
-                      schema={schema}
-                      renderTeam={team => (
-                        <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
-                      )}
-                    />
-                  ) : (
-                    <Spinner />
-                  )}
-                </div>
-              ),
-            },
             {
               name: 'Info',
               contents: (
@@ -181,6 +162,24 @@ const Event = ({ eventKey }: Props) => (
                       key={nextMatch.key}
                       match={nextMatch}
                       href={`/events/${eventKey}/matches/${nextMatch.key}`}
+                    />
+                  ) : (
+                    <Spinner />
+                  )}
+                </div>
+              ),
+            },
+            {
+              name: 'Teams',
+              contents: (
+                <div class={style.teamsView}>
+                  {eventStats && schema ? (
+                    <AnalysisTable
+                      teams={eventStats}
+                      schema={schema}
+                      renderTeam={team => (
+                        <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
+                      )}
                     />
                   ) : (
                     <Spinner />

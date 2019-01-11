@@ -15,7 +15,6 @@ type Props = {
   children?: ComponentChildren
   back?: string | (() => void)
   tabs?: Tab[]
-  defaultTab?: string
 }
 
 interface State {
@@ -23,8 +22,7 @@ interface State {
 }
 class Page extends Component<Props, State> {
   state = {
-    selectedTab:
-      this.props.defaultTab || (this.props.tabs && this.props.tabs[0].name),
+    selectedTab: this.props.tabs && this.props.tabs[0].name,
   }
   selectTab = (selectedTab: string) => this.setState({ selectedTab })
   render({ name, children, back, tabs }: Props, { selectedTab }: State) {
