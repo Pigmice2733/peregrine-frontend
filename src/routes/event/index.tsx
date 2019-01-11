@@ -69,7 +69,7 @@ const Event = ({ eventKey }: Props) => (
     renderSuccess={({ matches, eventInfo, eventStats, schema }) => {
       const now = new Date()
       const nextMatch = matches
-        ? matches.find(m => m.time !== undefined && m.time > now) || matches[0]
+        ? matches.find(m => m.time !== undefined && m.time > now)
         : undefined
 
       return (
@@ -157,14 +157,12 @@ const Event = ({ eventKey }: Props) => (
                   ) : (
                     <Spinner />
                   )}
-                  {nextMatch ? (
+                  {nextMatch && (
                     <MatchCard
                       key={nextMatch.key}
                       match={nextMatch}
                       href={`/events/${eventKey}/matches/${nextMatch.key}`}
                     />
-                  ) : (
-                    <Spinner />
                   )}
                 </div>
               ),
