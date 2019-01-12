@@ -18,7 +18,7 @@ const FieldCard = ({
   key: string
 }) => (
   <Card class={style.fieldCard}>
-    <div class={style.name}>{field.statName}</div>
+    <div class={style.name}>{field.name}</div>
     {'attempts' in field ? (
       <div>
         <div class={style.numInputLabel}>
@@ -48,7 +48,7 @@ const FieldCard = ({
       </div>
     ) : (
       <EnumSelector
-        name={`field ${field.statName}`}
+        name={`field ${field.name}`}
         items={[NO_ATTEMPT, FAIL, SUCCESS]}
         selected={
           field.attempted ? (field.succeeded ? SUCCESS : FAIL) : NO_ATTEMPT

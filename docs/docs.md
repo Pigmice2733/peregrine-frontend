@@ -60,23 +60,23 @@ type Data = {
       | {
           attempts: number
           successes: number
-          statName: string
+          name: string
         }
       | {
           attempted: boolean
           succeeded: boolean
-          statName: string
+          name: string
         })[]
     auto: (
       | {
           attempts: number
           successes: number
-          statName: string
+          name: string
         }
       | {
           attempted: boolean
           succeeded: boolean
-          statName: string
+          name: string
         })[]
   }
   autoName: string
@@ -95,23 +95,23 @@ type Data = {
       | {
           attempts: number
           successes: number
-          statName: string
+          name: string
         }
       | {
           attempted: boolean
           succeeded: boolean
-          statName: string
+          name: string
         })[]
     auto: (
       | {
           attempts: number
           successes: number
-          statName: string
+          name: string
         }
       | {
           attempted: boolean
           succeeded: boolean
-          statName: string
+          name: string
         })[]
   }
   autoName: string
@@ -233,14 +233,14 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
+        name: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
+        name: string
       })[]
   auto: (
     | {
@@ -252,14 +252,14 @@ type Data = {
           max: number
           avg: number
         }
-        statName: string
+        name: string
       }
     | {
         // total
         attempts: number
         // total
         successes: number
-        statName: string
+        name: string
       })[]
 }[]
 ```
@@ -281,14 +281,14 @@ type Data = {
           match: string
           attempts: number
           successes: number
-          statName: string
+          name: string
         }
       | {
           // qm1
           match: string
           attempted: boolean
           succeeded: boolean
-          statName: string
+          name: string
         })[]
   }[]
   teleop: (
@@ -297,14 +297,14 @@ type Data = {
         match: string
         attempts: number
         successes: number
-        statName: string
+        name: string
       }
     | {
         // qm1
         match: string
         attempted: boolean
         succeeded: boolean
-        statName: string
+        name: string
       })[]
 }
 ```
@@ -759,7 +759,7 @@ type Data = {
           match: string
           attempts: number
           successes: number
-          statName: string
+          name: string
         }
       | {
           // 2018orwil
@@ -768,7 +768,7 @@ type Data = {
           match: string
           attempted: boolean
           succeeded: boolean
-          statName: string
+          name: string
         })[]
   }[]
   teleop: (
@@ -779,7 +779,7 @@ type Data = {
         match: string
         attempts: number
         successes: number
-        statName: string
+        name: string
       }
     | {
         // 2018orwil
@@ -788,7 +788,7 @@ type Data = {
         match: string
         attempted: boolean
         succeeded: boolean
-        statName: string
+        name: string
       })[]
 }
 ```

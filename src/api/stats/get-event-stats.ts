@@ -12,7 +12,7 @@ const normalizeMinMax = (stat: Stat['attempts']) =>
  */
 const normalizeStat = (input: Stat[]) =>
   input.reduce<{ [key: string]: NormalizedStat }>((acc, stat) => {
-    acc[stat.statName] = {
+    acc[stat.name] = {
       attempts: normalizeMinMax(stat.attempts),
       successes: normalizeMinMax(stat.successes),
     }

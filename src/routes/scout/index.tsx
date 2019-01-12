@@ -42,7 +42,7 @@ const isReportReady = (s: State): s is ReadyState =>
   s.team !== null && s.schema !== null && s.report.autoName !== ''
 
 const createEmptyField = (s: StatDescription) => ({
-  statName: s.name,
+  name: s.name,
   ...(s.type === 'boolean'
     ? { attempted: false, succeeded: false }
     : { attempts: 0, successes: 0 }),
@@ -104,7 +104,7 @@ export class ScoutPage extends Component<Props, State> {
     }
   }
 
-  updateField = (gameStage: 'auto' | 'teleop', statName: string) => (
+  updateField = (gameStage: 'auto' | 'teleop', name: string) => (
     value: Field,
   ) => {
     this.setState(
@@ -114,7 +114,7 @@ export class ScoutPage extends Component<Props, State> {
           data: {
             ...s.report.data,
             [gameStage]: s.report.data[gameStage].map(f =>
-              f.statName === statName ? value : f,
+              f.name === name ? value : f,
             ),
           },
         },
@@ -141,9 +141,9 @@ export class ScoutPage extends Component<Props, State> {
           <h2>Auto</h2>
           {report.data.auto.map(field => (
             <FieldCard
-              key={'auto' + field.statName}
+              key={'auto' + field.name}
               field={field}
-              onChange={this.updateField('auto', field.statName)}
+              onChange={this.updateField('auto', field.name)}
             />
           ))}
           <Card class={style.autoNameCard}>
@@ -166,9 +166,9 @@ export class ScoutPage extends Component<Props, State> {
           <h2>Teleop</h2>
           {report.data.teleop.map(field => (
             <FieldCard
-              key={'teleop' + field.statName}
+              key={'teleop' + field.name}
               field={field}
-              onChange={this.updateField('teleop', field.statName)}
+              onChange={this.updateField('teleop', field.name)}
             />
           ))}
           <Button disabled={!isReportReady(this.state) || submitting}>
