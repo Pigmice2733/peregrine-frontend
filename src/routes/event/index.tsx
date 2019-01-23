@@ -186,10 +186,8 @@ const Event = ({ eventKey }: Props) => (
             },
             {
               name: 'Matches',
-              contents:
-                matches === undefined ? (
-                  <Spinner />
-                ) : matches.length === 0 ? (
+              contents: matches ? (
+                matches.length === 0 ? (
                   <div class={style.noMatches}>No matches yet</div>
                 ) : (
                   matches.map(m => (
@@ -199,7 +197,10 @@ const Event = ({ eventKey }: Props) => (
                       href={`/events/${eventKey}/matches/${m.key}`}
                     />
                   ))
-                ),
+                )
+              ) : (
+                <Spinner />
+              ),
             },
           ]}
         />
