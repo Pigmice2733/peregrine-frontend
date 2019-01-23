@@ -68,8 +68,8 @@ const Event = ({ eventKey }: Props) => (
     }}
     renderSuccess={({ matches, eventInfo, eventStats, schema }) => {
       const now = new Date()
-      const nextMatch = matches
-        && matches.find(m => m.time !== undefined && m.time > now)
+      const nextMatch =
+        matches && matches.find(m => m.time !== undefined && m.time > now)
 
       return (
         <Page
