@@ -76,7 +76,7 @@
     "jest": "23.6.0",
     "node-fetch": "2.3.0",
     "parcel-bundler": "1.11.0",
-    "postcss": "7.0.7",
+    "postcss": "7.0.14",
     "postcss-calc": "7.0.1",
     "postcss-color-mod-function": "3.0.3",
     "postcss-css-variables": "0.11.0",
