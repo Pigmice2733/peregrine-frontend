@@ -126,6 +126,7 @@ class AnalysisTable extends Component<Props, State> {
     { teams, schema, renderTeam }: Props,
     { sortStat, sortType, reversed, statType }: State,
   ) {
+    const transformedStats = eachStat(schema)
     return (
       <Card class={style.analysisTable}>
         <div class={style.wrapper}>
@@ -155,7 +156,7 @@ class AnalysisTable extends Component<Props, State> {
                 >
                   Team
                 </TableHeader>
-                {eachStat(schema).map(({ name, key, gamePart }) => (
+                {transformedStats.map(({ name, key, gamePart }) => (
                   <TableHeader
                     key={key}
                     onClick={this.sortBy(gamePart, name)}
@@ -193,7 +194,7 @@ class AnalysisTable extends Component<Props, State> {
                 .map(team => (
                   <tr key={team.team}>
                     <td>{renderTeam(team.team)}</td>
-                    {eachStat(schema).map(({ name, key, gamePart }) => {
+                    {transformedStats.map(({ name, key, gamePart }) => {
                       const stat = team[gamePart][name]
                       if (!stat) return <td key={key}>?</td>
                       const value = getValueByStatType(stat, statType)
