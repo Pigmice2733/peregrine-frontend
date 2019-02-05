@@ -195,22 +195,13 @@ class AnalysisTable extends Component<Props, State> {
                     <td>{renderTeam(team.team)}</td>
                     {eachStat(schema).map(({ name, key, gamePart }) => {
                       const stat = team[gamePart][name]
-                      if (!stat)
-                        return (
-                          <td key={key}>
-                            <span>?</span>
-                          </td>
-                        )
+                      if (!stat) return <td key={key}>?</td>
                       const value = getValueByStatType(stat, statType)
                       const output =
                         value.type === 'percent' || statType === '% Success'
                           ? formatPercent(value.avg)
                           : `${round(value.avg)} (${round(value.max)})`
-                      return (
-                        <td key={key}>
-                          <span>{output}</span>
-                        </td>
-                      )
+                      return <td key={key}>{output}</td>
                     })}
                   </tr>
                 ))}
