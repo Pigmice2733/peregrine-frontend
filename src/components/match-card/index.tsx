@@ -32,14 +32,10 @@ export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
         </time>
       )}
       <div class={`${style.red} ${style.alliance}`}>
-        {match.redAlliance.map(t => (
-          <div key={t}>{formatTeamNumber(t)}</div>
-        ))}
+        {match.redAlliance.map(t => formatTeamNumber(t)).join(' ')}
       </div>
       <div class={`${style.blue} ${style.alliance}`}>
-        {match.blueAlliance.map(t => (
-          <div key={t}>{formatTeamNumber(t)}</div>
-        ))}
+        {match.blueAlliance.map(t => formatTeamNumber(t)).join(' ')}
       </div>
     </Card>
   )
