@@ -1,5 +1,5 @@
 interface BaseStat {
-  statName: string
+  name: string
 }
 
 interface BooleanStat extends BaseStat {

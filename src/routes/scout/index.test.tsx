@@ -42,12 +42,12 @@ const report: BaseReport = {
   autoName: 'Very Cool Auto',
   data: {
     teleop: [
-      { statName: 'Scale Cubes', attempts: 5, successes: 3 },
-      { statName: 'Climbed', attempted: false, succeeded: false },
+      { name: 'Scale Cubes', attempts: 5, successes: 3 },
+      { name: 'Climbed', attempted: false, succeeded: false },
     ],
     auto: [
-      { statName: 'Crossed Line', attempted: true, succeeded: false },
-      { statName: 'Switch Cubes', attempts: 0, successes: 0 },
+      { name: 'Crossed Line', attempted: true, succeeded: false },
+      { name: 'Switch Cubes', attempts: 0, successes: 0 },
     ],
   },
 }

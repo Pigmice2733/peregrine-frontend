@@ -1,5 +1,5 @@
 interface BaseField {
-  statName: string
+  name: string
 }
 
 interface BooleanField extends BaseField {

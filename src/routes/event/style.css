@@ -1,7 +1,12 @@
 .event {
-  @media screen and (width > 80rem) {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  & h2 {
+    margin: 0 auto;
+    font-size: 1.2rem;
+    text-align: center;
   }
 }
 
@@ -11,4 +16,13 @@
   width: 100%;
   overflow: hidden;
   padding: 1rem;
+  justify-content: center;
+}
+
+.noMatches {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 2em;
+  opacity: 0.5;
 }
