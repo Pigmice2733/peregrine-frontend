@@ -46,7 +46,9 @@
       "\\.ts$": "./jest-transform",
       "\\.tsx$": "./jest-transform"
     },
-    "setupTestFrameworkScriptFile": "./jest.setup.ts",
+    "setupFilesAfterEnv": [
+      "./jest.setup.ts"
+    ],
     "testMatch": [
       "**/?(*.)+(spec|test).(j|t)s?(x)"
     ]
@@ -61,19 +63,18 @@
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
     "@babel/plugin-transform-template-literals": "7.2.0",
     "@babel/preset-typescript": "7.1.0",
-    "@types/jest": "23.3.13",
+    "@types/jest": "24.0.0",
     "@types/node-fetch": "2.1.4",
-    "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "23.6.0",
+    "babel-jest": "24.1.0",
     "babel-plugin-module-resolver": "3.1.1",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
-    "clsx": "^1.0.0",
+    "clsx": "1.0.0",
     "cpy": "7.0.1",
     "eslint": "5.12.1",
     "eslint-plugin-caleb": "1.16.0",
     "hygen": "1.6.2",
     "identity-obj-proxy": "3.0.0",
-    "jest": "23.6.0",
+    "jest": "24.1.0",
     "node-fetch": "2.3.0",
     "parcel-bundler": "1.11.0",
     "postcss": "7.0.14",
