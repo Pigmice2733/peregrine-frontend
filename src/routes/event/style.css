@@ -2,6 +2,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  & h2 {
+    margin: 0 auto;
+    font-size: 1.2rem;
+    text-align: center;
+  }
 }
 
 .teamsView {

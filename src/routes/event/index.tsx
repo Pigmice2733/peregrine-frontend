@@ -157,11 +157,14 @@ const Event = ({ eventKey }: Props) => (
                     <Spinner />
                   )}
                   {nextMatch && (
-                    <MatchCard
-                      key={nextMatch.key}
-                      match={nextMatch}
-                      href={`/events/${eventKey}/matches/${nextMatch.key}`}
-                    />
+                    <div>
+                      <h2>Next Match</h2>
+                      <MatchCard
+                        key={nextMatch.key}
+                        match={nextMatch}
+                        href={`/events/${eventKey}/matches/${nextMatch.key}`}
+                      />
+                    </div>
                   )}
                 </div>
               ),
