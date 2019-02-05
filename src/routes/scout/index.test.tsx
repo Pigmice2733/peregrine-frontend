@@ -55,7 +55,8 @@ const report: BaseReport = {
 const createResponse = (data: any) => new Response(JSON.stringify({ data }))
 
 test('renders and submits', async () => {
-  jest.spyOn(window, 'fetch').mockImplementation(async (url: string) => {
+  jest.spyOn(window, 'fetch').mockImplementation(async (req: RequestInfo) => {
+    const url = typeof req === 'string' ? req : req.url
     if (url.endsWith('/events/2018orwil/matches/qm3')) {
       return createResponse(matchInfo)
     }
