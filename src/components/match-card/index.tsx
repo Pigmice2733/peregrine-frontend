@@ -21,7 +21,7 @@ export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
   return (
     <Card class={style.matchCard} {...rest}>
       <div class={style.matchTitle}>
-        <div>{matchName.group}</div>
+        {matchName.num ? <div>{matchName.group}</div> : matchName.group}
         {matchName.num && (
           <div class={style.matchNum}>{`Match ${matchName.num}`}</div>
         )}

@@ -23,9 +23,9 @@
   font-weight: bold;
   grid-row: span 2;
   white-space: nowrap;
-  margin: 0.2rem;
+  margin: 0.3rem 0.7rem;
   & > * {
-    margin: 0.3rem;
+    margin: 0.3rem 0;
   }
 }
 
