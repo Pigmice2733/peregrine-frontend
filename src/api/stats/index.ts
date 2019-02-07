@@ -1,15 +1,5 @@
-interface BaseStat {
+export interface Stat {
   name: string
-}
-
-interface BooleanStat extends BaseStat {
-  // total
-  attempts: number
-  // total
-  successes: number
-}
-
-interface NumberStat extends BaseStat {
   attempts: {
     max: number
     avg: number
@@ -19,8 +9,6 @@ interface NumberStat extends BaseStat {
     avg: number
   }
 }
-
-export type Stat = NumberStat | BooleanStat
 
 export interface NormalizedStat {
   attempts: {
