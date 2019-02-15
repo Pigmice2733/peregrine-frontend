@@ -27,19 +27,26 @@ export const request = async <T extends any>(
   notAuthenticated?: true,
 ) => {
   const jwt = notAuthenticated ? false : await getJWT()
-  const text = await fetch(apiUrl + endpoint + qs(params), {
+  const resp = await fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
     headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
-  }).then(d => d.text())
-  try {
-    const data = JSON.parse(text) as PeregrineResponse<T>
-    if ('error' in data) {
-      throw new Error(data.error)
-    }
+  })
 
-    return data.data
-  } catch (error) {
-    throw new Error(text)
+  const contentType = resp.headers.get('Content-Type')
+  if (resp.status === 204 || resp.status === 201) {
+    return null
+  } else if (resp.ok) {
+    if (contentType === 'application/json') {
+      return resp.json() as PeregrineResponse<T>
+    } else {
+      throw new Error('got unexpected Content-Type: ' + contentType)
+    }
+  } else {
+    if (contentType === 'application/json') {
+      throw new Error((await resp.json()).error)
+    } else {
+      throw new Error(await resp.text())
+    }
   }
 }

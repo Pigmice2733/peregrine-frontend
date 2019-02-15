@@ -14,7 +14,7 @@
     "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "type:watch": "tsc --watch",
     "type": "tsc",
-    "start": "parcel index.html",
+    "start": "parcel index.html --no-cache",
     "build": "node build.js",
     "new-route": "hygen route new"
   },

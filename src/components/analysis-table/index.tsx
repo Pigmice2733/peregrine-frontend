@@ -184,7 +184,6 @@ class AnalysisTable extends Component<Props, State> {
                       if (!bStat) return -r
                       const aVal = getValueByStatType(aStat, statType).avg
                       const bVal = getValueByStatType(bStat, statType).avg
-                      console.log(aVal, bVal)
                       const sortFactor = (bVal - aVal) * r
                       if (sortFactor !== 0) return sortFactor
                     }
