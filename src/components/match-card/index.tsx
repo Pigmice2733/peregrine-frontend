@@ -2,11 +2,11 @@ import { h } from 'preact'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
-import Card, { CardProps } from '@/components/card'
+import Card from '@/components/card'
 
 import style from './style.css'
 
-type MatchCardProps = CardProps<{
+type MatchCardProps = {
   match: {
     key: string
     redAlliance: string[]
@@ -14,12 +14,13 @@ type MatchCardProps = CardProps<{
     time?: Date
   }
   key?: string | number
-}>
+  href?: string
+}
 
-export const MatchCard = ({ match, ...rest }: MatchCardProps) => {
+export const MatchCard = ({ match, href }: MatchCardProps) => {
   const matchName = formatMatchKey(match.key)
   return (
-    <Card class={style.matchCard} {...rest}>
+    <Card class={style.matchCard} href={href}>
       <div class={style.matchTitle}>
         {matchName.num ? <div>{matchName.group}</div> : matchName.group}
         {matchName.num && (
