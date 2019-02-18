@@ -6,8 +6,6 @@ const apiUrl =
       ? 'https://api.peregrine.ga:8081'
       : 'https://edge.api.peregrine.ga:8081')) + '/'
 
-type PeregrineResponse<T> = Readonly<{ data: T } | { error: string }>
-
 const qs = (
   q: { [key: string]: string | number | undefined } | null | undefined,
 ) => {
@@ -34,11 +32,9 @@ export const request = async <T extends any>(
   })
 
   const contentType = resp.headers.get('Content-Type')
-  if (resp.status === 204 || resp.status === 201) {
-    return resp.text()
-  } else if (resp.ok) {
+  if (resp.ok) {
     if (contentType === 'application/json') {
-      return resp.json() as PeregrineResponse<T>
+      return resp.json() as Promise<T>
     }
 
     throw new Error('got unexpected Content-Type: ' + contentType)

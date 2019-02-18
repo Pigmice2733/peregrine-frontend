@@ -1,7 +1,6 @@
 import { render, fireEvent, wait } from 'preact-testing-library'
 import Authenticted from '.'
 import { h } from 'preact'
-import { Response, Headers } from 'node-fetch'
 
 const jwtBody = {
   exp: Date.now() / 1000 + 100,
