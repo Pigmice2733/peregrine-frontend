@@ -25,7 +25,13 @@
       "plugin:caleb/jest"
     ],
     "rules": {
-      "caleb/react/display-name": "off"
+      "caleb/react/display-name": "off",
+      "no-else-return": [
+        "error",
+        {
+          "allowElseIf": true
+        }
+      ]
     }
   },
   "dependencies": {

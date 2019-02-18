@@ -42,11 +42,9 @@ export const request = async <T extends any>(
     }
 
     throw new Error('got unexpected Content-Type: ' + contentType)
+  } else if (contentType === 'application/json') {
+    throw new Error((await resp.json()).error)
   } else {
-    if (contentType === 'application/json') {
-      throw new Error((await resp.json()).error)
-    } else {
-      throw new Error(await resp.text())
-    }
+    throw new Error(await resp.text())
   }
 }
