@@ -1,6 +1,7 @@
 import { render, fireEvent, wait } from 'preact-testing-library'
 import Authenticted from '.'
 import { h } from 'preact'
+import { Response, Headers } from 'node-fetch'
 
 const jwtBody = {
   exp: Date.now() / 1000 + 100,
@@ -32,7 +33,11 @@ test('renders login page then renders contents', async () => {
           headers: {},
           method: 'POST',
         })
-        resolve(new Response(JSON.stringify({ data: { accessToken: jwt } })))
+        resolve(
+          new Response(JSON.stringify({ data: { accessToken: jwt } }), {
+            headers: { 'Content-Type': 'application/json' },
+          }),
+        )
       }),
   )
 
@@ -68,7 +73,12 @@ test('displays error for incorrect username/pw', async () => {
           headers: {},
           method: 'POST',
         })
-        resolve(new Response('Unauthorized', { status: 401 }))
+        resolve(
+          new Response('Unauthorized', {
+            status: 401,
+            headers: { 'Content-Type': 'text/plain' },
+          }),
+        )
       }),
   )
 

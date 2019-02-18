@@ -43,16 +43,19 @@ const report: BaseReport = {
   data: {
     teleop: [
       { name: 'Scale Cubes', attempts: 5, successes: 3 },
-      { name: 'Climbed', attempted: false, succeeded: false },
+      { name: 'Climbed', attempts: 0, successes: 0 },
     ],
     auto: [
-      { name: 'Crossed Line', attempted: true, succeeded: false },
+      { name: 'Crossed Line', attempts: 1, successes: 0 },
       { name: 'Switch Cubes', attempts: 0, successes: 0 },
     ],
   },
 }
 
-const createResponse = (data: any) => new Response(JSON.stringify({ data }))
+const createResponse = (data: any) =>
+  new Response(JSON.stringify({ data }), {
+    headers: { 'Content-Type': 'application/json' },
+  })
 
 test('renders and submits', async () => {
   jest.spyOn(window, 'fetch').mockImplementation(async (req: RequestInfo) => {

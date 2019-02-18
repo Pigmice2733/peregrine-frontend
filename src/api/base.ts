@@ -35,13 +35,13 @@ export const request = async <T extends any>(
 
   const contentType = resp.headers.get('Content-Type')
   if (resp.status === 204 || resp.status === 201) {
-    return null
+    return resp.text()
   } else if (resp.ok) {
     if (contentType === 'application/json') {
       return resp.json() as PeregrineResponse<T>
-    } else {
-      throw new Error('got unexpected Content-Type: ' + contentType)
     }
+
+    throw new Error('got unexpected Content-Type: ' + contentType)
   } else {
     if (contentType === 'application/json') {
       throw new Error((await resp.json()).error)
