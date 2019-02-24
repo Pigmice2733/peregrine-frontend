@@ -72,7 +72,7 @@
     "cpy": "7.0.1",
     "eslint": "5.14.0",
     "eslint-plugin-caleb": "2.0.0",
-    "hygen": "1.6.2",
+    "hygen": "2.1.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.1.0",
     "node-fetch": "2.3.0",
