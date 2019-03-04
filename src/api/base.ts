@@ -36,7 +36,7 @@ export const request = async <T extends any>(
   const parsed =
     resp.headers.get('Content-Type') === 'application/json' && text !== ''
       ? (JSON.parse(text) as T)
-      : text
+      : ((text as unknown) as T)
 
   if (resp.ok) {
     return parsed

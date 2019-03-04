@@ -43,9 +43,8 @@ const isReportReady = (s: State): s is ReadyState =>
 
 const createEmptyField = (s: StatDescription) => ({
   name: s.name,
-  ...(s.type === 'boolean'
-    ? { attempted: false, succeeded: false }
-    : { attempts: 0, successes: 0 }),
+  attempts: 0,
+  successes: 0,
 })
 
 export class ScoutPage extends Component<Props, State> {
