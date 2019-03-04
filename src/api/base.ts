@@ -31,16 +31,15 @@ export const request = async <T extends any>(
     headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
   })
 
-  const contentType = resp.headers.get('Content-Type')
-  if (resp.ok) {
-    if (contentType === 'application/json') {
-      return resp.json() as Promise<T>
-    }
+  const text = await resp.text()
 
-    throw new Error('got unexpected Content-Type: ' + contentType)
-  } else if (contentType === 'application/json') {
-    throw new Error((await resp.json()).error)
-  } else {
-    throw new Error(await resp.text())
+  const parsed =
+    resp.headers.get('Content-Type') === 'application/json' && text !== ''
+      ? (JSON.parse(text) as T)
+      : text
+
+  if (resp.ok) {
+    return parsed
   }
+  throw new Error(typeof parsed === 'string' ? parsed : parsed.error)
 }
