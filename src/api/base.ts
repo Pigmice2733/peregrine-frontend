@@ -6,8 +6,6 @@ const apiUrl =
       ? 'https://api.peregrine.ga:8081'
       : 'https://edge.api.peregrine.ga:8081')) + '/'
 
-type PeregrineResponse<T> = Readonly<{ data: T } | { error: string }>
-
 const qs = (
   q: { [key: string]: string | number | undefined } | null | undefined,
 ) => {
@@ -27,19 +25,21 @@ export const request = async <T extends any>(
   notAuthenticated?: true,
 ) => {
   const jwt = notAuthenticated ? false : await getJWT()
-  const text = await fetch(apiUrl + endpoint + qs(params), {
+  const resp = await fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
     headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
-  }).then(d => d.text())
-  try {
-    const data = JSON.parse(text) as PeregrineResponse<T>
-    if ('error' in data) {
-      throw new Error(data.error)
-    }
+  })
 
-    return data.data
-  } catch (error) {
-    throw new Error(text)
+  const text = await resp.text()
+
+  const parsed =
+    resp.headers.get('Content-Type') === 'application/json' && text !== ''
+      ? (JSON.parse(text) as T)
+      : ((text as unknown) as T)
+
+  if (resp.ok) {
+    return parsed
   }
+  throw new Error(typeof parsed === 'string' ? parsed : parsed.error)
 }

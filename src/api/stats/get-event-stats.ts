@@ -8,24 +8,27 @@ const normalizeMinMax = (stat: Stat['attempts']) =>
     : { max: stat.max, avg: stat.avg, type: 'number' as 'percent' }
 
 /**
- * Converts an array of stats, to an object of normalized stats
+ * Converts an object of stats, to an object of normalized stats
  */
-const normalizeStat = (input: Stat[]) =>
-  input.reduce<{ [key: string]: NormalizedStat }>((acc, stat) => {
-    acc[stat.name] = {
-      attempts: normalizeMinMax(stat.attempts),
-      successes: normalizeMinMax(stat.successes),
-    }
-    return acc
-  }, {})
+const normalizeStat = (input: { [team: string]: Stat }) =>
+  Object.keys(input).reduce<{ [team: string]: NormalizedStat }>(
+    (acc, statName) => {
+      acc[statName] = {
+        attempts: normalizeMinMax(input[statName].attempts),
+        successes: normalizeMinMax(input[statName].successes),
+      }
+      return acc
+    },
+    {},
+  )
 
 // These are the stats for every team at an event, describing their performance
 // only at that event
 export const getEventStats = (eventKey: string) =>
-  request<TeamStats[]>('GET', `events/${eventKey}/stats`).then(stats =>
-    stats.map(team => ({
+  request<TeamStats[]>('GET', `events/${eventKey}/stats`).then(teamStats => {
+    return teamStats.map(team => ({
       team: formatTeamNumber(team.team),
-      auto: normalizeStat(team.auto),
-      teleop: normalizeStat(team.teleop),
-    })),
-  )
+      auto: team.auto && normalizeStat(team.auto),
+      teleop: team.teleop && normalizeStat(team.teleop),
+    }))
+  })

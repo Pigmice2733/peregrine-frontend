@@ -13,9 +13,6 @@ import FieldCard from '../../components/field-card'
 import Button from '@/components/button'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventInfo } from '@/api/event-info/get-event-info'
-import TextInput from '@/components/text-input'
-import Card from '@/components/card'
-import { formatTitle } from '@/utils/format-title'
 import { route } from 'preact-router'
 
 interface Props {
@@ -28,7 +25,13 @@ interface State {
   blueAlliance: string[] | null
   team: string | null
   schema: Schema | null
-  report: BaseReport
+  report: {
+    data: {
+      teleop: { [key: string]: Field }
+      auto: { [key: string]: Field }
+    }
+    autoName: string
+  }
   submitting: boolean
 }
 
@@ -39,13 +42,26 @@ interface ReadyState extends State {
 }
 
 const isReportReady = (s: State): s is ReadyState =>
-  s.team !== null && s.schema !== null && s.report.autoName !== ''
+  s.team !== null && s.schema !== null
 
-const createEmptyField = (s: StatDescription) => ({
-  name: s.name,
-  ...(s.type === 'boolean'
-    ? { attempted: false, succeeded: false }
-    : { attempts: 0, successes: 0 }),
+const createEmptyFields = (
+  previousFields: { [key: string]: Field },
+  field: StatDescription,
+) => ({
+  ...previousFields,
+  [field.name]: {
+    name: field.name,
+    attempts: 0,
+    successes: 0,
+  },
+})
+
+const processReport = (report: State['report']): BaseReport => ({
+  ...report,
+  data: {
+    teleop: Object.values(report.data.teleop),
+    auto: Object.values(report.data.auto),
+  },
 })
 
 export class ScoutPage extends Component<Props, State> {
@@ -58,8 +74,8 @@ export class ScoutPage extends Component<Props, State> {
     report: {
       autoName: '',
       data: {
-        teleop: [],
-        auto: [],
+        teleop: {},
+        auto: {},
       },
     },
   }
@@ -74,8 +90,8 @@ export class ScoutPage extends Component<Props, State> {
             report: {
               ...s.report,
               data: {
-                teleop: schema.teleop.map(createEmptyField),
-                auto: schema.auto.map(createEmptyField),
+                teleop: schema.teleop.reduce(createEmptyFields, {}),
+                auto: schema.auto.reduce(createEmptyFields, {}),
               },
             },
           }),
@@ -97,7 +113,7 @@ export class ScoutPage extends Component<Props, State> {
         this.props.eventKey,
         this.props.matchKey,
         this.state.team,
-        this.state.report,
+        processReport(this.state.report),
       ).then(() =>
         route(`/events/${this.props.eventKey}/matches/${this.props.matchKey}`),
       )
@@ -113,9 +129,10 @@ export class ScoutPage extends Component<Props, State> {
           ...s.report,
           data: {
             ...s.report.data,
-            [gameStage]: s.report.data[gameStage].map(f =>
-              f.name === name ? value : f,
-            ),
+            [gameStage]: {
+              ...s.report.data[gameStage],
+              [name]: value,
+            },
           },
         },
       }),
@@ -130,7 +147,6 @@ export class ScoutPage extends Component<Props, State> {
       <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
         <form class={style.scout} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
-          {schema || <Spinner />}
           {blueAlliance && redAlliance && (
             <TeamPicker
               onChange={team => this.setState({ team })}
@@ -138,40 +154,28 @@ export class ScoutPage extends Component<Props, State> {
               redAlliance={redAlliance}
             />
           )}
+          {schema || <Spinner />}
           <h2>Auto</h2>
-          {report.data.auto.map(field => (
-            <FieldCard
-              key={'auto' + field.name}
-              field={field}
-              onChange={this.updateField('auto', field.name)}
-            />
-          ))}
-          <Card class={style.autoNameCard}>
-            <TextInput
-              label="Auto Name"
-              onInput={e =>
-                this.setState(
-                  (s: State): Partial<State> => ({
-                    report: {
-                      ...s.report,
-                      autoName: formatTitle(
-                        (e.target as HTMLInputElement).value,
-                      ),
-                    },
-                  }),
-                )
-              }
-            />
-          </Card>
+          {schema &&
+            schema.auto.map(stat => (
+              <FieldCard
+                type={stat.type}
+                key={'auto' + stat.name}
+                field={report.data.auto[stat.name]}
+                onChange={this.updateField('auto', stat.name)}
+              />
+            ))}
           <h2>Teleop</h2>
-          {report.data.teleop.map(field => (
-            <FieldCard
-              key={'teleop' + field.name}
-              field={field}
-              onChange={this.updateField('teleop', field.name)}
-            />
-          ))}
-          <Button disabled={!isReportReady(this.state) || submitting}>
+          {schema &&
+            schema.teleop.map(stat => (
+              <FieldCard
+                key={'teleop' + stat.name}
+                type={stat.type}
+                field={report.data.teleop[stat.name]}
+                onChange={this.updateField('teleop', stat.name)}
+              />
+            ))}
+          <Button disabled={submitting || !isReportReady(this.state)}>
             {submitting ? 'Submitting' : 'Submit'}
           </Button>
         </form>

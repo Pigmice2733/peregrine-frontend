@@ -19,7 +19,7 @@ export const setRefreshToken = (token: string) =>
 
 let refreshPromise: Promise<JWT> | null = null
 
-export const getJWT = () => {
+export const getJWT = (): Promise<JWT> | JWT | void => {
   const j = jwt || localStorage.getItem('jwt')
 
   const parsed = j && parseJWT(j)
