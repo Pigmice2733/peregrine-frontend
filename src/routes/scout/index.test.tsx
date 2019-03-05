@@ -39,7 +39,7 @@ const schema: Schema = {
 }
 
 const report: BaseReport = {
-  autoName: 'Very Cool Auto',
+  autoName: '',
   data: {
     teleop: [
       { name: 'Scale Cubes', attempts: 5, successes: 3 },
@@ -53,11 +53,11 @@ const report: BaseReport = {
 }
 
 const createResponse = (data: any) =>
-  new Response(JSON.stringify({ data }), {
+  new Response(JSON.stringify(data), {
     headers: { 'Content-Type': 'application/json' },
   })
 
-test('renders and submits', async () => {
+test.only('renders and submits', async () => {
   jest.spyOn(window, 'fetch').mockImplementation(async (req: RequestInfo) => {
     const url = typeof req === 'string' ? req : req.url
     if (url.endsWith('/events/2018orwil/matches/qm3')) {
@@ -105,10 +105,6 @@ test('renders and submits', async () => {
   fireEvent.click(scoutPage.getByLabelText('254'))
 
   expect(submitButton).toBeDisabled()
-
-  const autoInput = scoutPage.getByLabelText(/auto name/i) as HTMLInputElement
-  autoInput.value = 'very  cool auto'
-  autoInput.dispatchEvent(new Event('input'))
 
   const scaleCubesDiv = scoutPage.getByText(/scale cubes/i)
     .parentElement as HTMLDivElement

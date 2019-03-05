@@ -1,4 +1,4 @@
-interface Field {
+export interface Field {
   name: string
   attempts: number
   successes: number

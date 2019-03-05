@@ -33,7 +33,7 @@ test('renders login page then renders contents', async () => {
           method: 'POST',
         })
         resolve(
-          new Response(JSON.stringify({ data: { accessToken: jwt } }), {
+          new Response(JSON.stringify({ accessToken: jwt }), {
             headers: { 'Content-Type': 'application/json' },
           }),
         )
