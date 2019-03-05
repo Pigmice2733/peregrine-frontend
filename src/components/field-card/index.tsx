@@ -58,7 +58,7 @@ const FieldCard = ({
         onChange={val => {
           onChange({
             ...field,
-            attempts: Number(val === NO_ATTEMPT),
+            attempts: Number(val !== NO_ATTEMPT),
             successes: Number(val === SUCCESS),
           })
         }}
