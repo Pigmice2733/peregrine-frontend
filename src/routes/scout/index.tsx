@@ -13,9 +13,6 @@ import FieldCard from '../../components/field-card'
 import Button from '@/components/button'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventInfo } from '@/api/event-info/get-event-info'
-import TextInput from '@/components/text-input'
-import Card from '@/components/card'
-import { formatTitle } from '@/utils/format-title'
 import { route } from 'preact-router'
 
 interface Props {

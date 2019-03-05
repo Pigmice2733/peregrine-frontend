@@ -25,10 +25,10 @@ const normalizeStat = (input: { [team: string]: Stat }) =>
 // These are the stats for every team at an event, describing their performance
 // only at that event
 export const getEventStats = (eventKey: string) =>
-  request<TeamStats[]>('GET', `events/${eventKey}/stats`).then(stats => {
-    return stats.map(stat => ({
-      team: formatTeamNumber(stat.team),
-      auto: stat.auto && normalizeStat(stat.auto),
-      teleop: stat.teleop && normalizeStat(stat.teleop),
+  request<TeamStats[]>('GET', `events/${eventKey}/stats`).then(teamStats => {
+    return teamStats.map(team => ({
+      team: formatTeamNumber(team.team),
+      auto: team.auto && normalizeStat(team.auto),
+      teleop: team.teleop && normalizeStat(team.teleop),
     }))
   })

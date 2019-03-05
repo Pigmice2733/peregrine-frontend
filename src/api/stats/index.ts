@@ -25,6 +25,6 @@ export interface NormalizedStat {
 
 export interface TeamStats {
   team: string
-  teleop: Stat[]
-  auto: Stat[]
+  teleop: { [key: string]: Stat }
+  auto: { [key: string]: Stat }
 }
