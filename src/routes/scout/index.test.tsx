@@ -57,7 +57,7 @@ const createResponse = (data: any) =>
     headers: { 'Content-Type': 'application/json' },
   })
 
-test.only('renders and submits', async () => {
+test('renders and submits', async () => {
   jest.spyOn(window, 'fetch').mockImplementation(async (req: RequestInfo) => {
     const url = typeof req === 'string' ? req : req.url
     if (url.endsWith('/events/2018orwil/matches/qm3')) {
