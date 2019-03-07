@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "preact": "8.4.2",
-    "preact-router": "2.6.1",
+    "preact-router": "3.0.0",
     "systemjs": "3.0.0"
   },
   "jest": {
