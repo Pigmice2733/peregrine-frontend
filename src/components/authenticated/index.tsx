@@ -1,5 +1,5 @@
 import { h, Component } from 'preact'
-import { getJWT } from '@/jwt'
+import { getJWT, JWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import style from './style.css'
@@ -16,6 +16,7 @@ const maxPasswordLength = 128
 interface Props {
   render: () => JSX.Element
   label?: string
+  requiresAdmin?: true
 }
 
 interface State {
@@ -23,6 +24,7 @@ interface State {
   password: string
   invalid: boolean
   loading: boolean
+  jwt?: JWT | void
 }
 
 class Authenticted extends Component<Props, State> {
@@ -54,8 +56,15 @@ class Authenticted extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  render({ render, label }: Props, { invalid, loading }: State) {
-    const jwt = getJWT()
+  render(
+    { render, label, requiresAdmin }: Props,
+    { invalid, loading, jwt }: State,
+  ) {
+    if (jwt === undefined) {
+      Promise.resolve<JWT | void>(getJWT()).then(j => {
+        if (j) this.setState({ jwt: j })
+      })
+    }
     if (!jwt) {
       return (
         <Page name={label || 'Log In'} back={() => window.history.back()}>
@@ -86,6 +95,7 @@ class Authenticted extends Component<Props, State> {
         </Page>
       )
     }
+    console.log({ jwt })
     return render()
   }
 }
