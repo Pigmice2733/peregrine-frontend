@@ -3,7 +3,7 @@ import { Router, Route } from 'preact-router'
 import LoadData from './load-data'
 
 import './style'
-import { initDevTools } from 'preact/devtools/devtools'
+import 'preact/debug'
 import Spinner from './components/spinner'
 
 const asyncRoute = <Props extends any>(
@@ -53,8 +53,4 @@ if (process.env.NODE_ENV !== 'production') {
   }
 }
 
-render(<App />, document.body, document.body.lastElementChild || undefined)
-
-if (process.env.NODE_ENV !== 'production') {
-  initDevTools()
-}
+render(<App />, document.body)
