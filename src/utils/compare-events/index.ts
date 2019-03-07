@@ -4,7 +4,7 @@ interface PartialEvent {
 }
 
 /**
- * Compares 2 events. Returns negative if a comes first, positive if b comes first
+ * Compares 2 events by date. Returns negative if a comes first, positive if b comes first
  * @param a First Event
  * @param b Second Event
  */
