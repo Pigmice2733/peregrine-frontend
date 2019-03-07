@@ -28,8 +28,8 @@ export const compareEvents = (a: PartialEvent, b: PartialEvent) => {
     return 1
   }
 
-  return Math.abs(Number(now) - Number(a.startDate)) <
-    Math.abs(Number(now) - Number(b.startDate))
+  return Math.abs(now - Number(a.startDate)) <
+    Math.abs(now - Number(b.startDate))
     ? -1
     : 1
 }
