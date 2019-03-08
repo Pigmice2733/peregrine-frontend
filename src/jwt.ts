@@ -3,7 +3,7 @@ import { refreshToken } from './api/refresh-token'
 
 let jwt: string | null = null
 
-interface JWT {
+export interface JWT {
   exp: number
   pigmiceRealm: number
   pigmiceRoles: Roles

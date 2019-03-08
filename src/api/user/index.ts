@@ -8,6 +8,7 @@ export interface BaseUserInfo {
   username: string
   firstName: string
   lastName: string
+  realmId: number
   roles: Roles
   stars: string[]
 }
@@ -17,7 +18,7 @@ export interface UserInfo extends BaseUserInfo {
 }
 
 export interface EditableUser extends BaseUserInfo {
-  password: string
+  password?: string
   // Only admins can set roles, and they can do so for any user in their realm.
   // Super-admins can set roles for any user.
   roles: Roles

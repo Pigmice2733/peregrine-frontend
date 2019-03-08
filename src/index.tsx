@@ -36,6 +36,14 @@ const App = () => (
       path="/events/:eventKey/teams/:teamNum"
       component={asyncRoute(() => import('./routes/event-team'))}
     />
+    <Route<{}>
+      path="/users"
+      component={asyncRoute(() => import('./routes/users'))}
+    />
+    <Route<{}>
+      path="/register"
+      component={asyncRoute(() => import('./routes/register'))}
+    />
   </Router>
 )
 
