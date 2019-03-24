@@ -10,16 +10,3 @@ declare const process: {
 declare module 'preact/devtools/devtools' {
   export const initDevTools: () => void
 }
-
-declare module 'clsx' {
-  type Item =
-    | boolean
-    | string
-    | number
-    | Item[]
-    | null
-    | undefined
-    | { [key: string]: Item }
-  const clsx: (...input: Item[]) => string
-  export default clsx
-}
