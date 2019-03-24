@@ -2,6 +2,8 @@ import { render, fireEvent, wait } from 'preact-testing-library'
 import Authenticated from '.'
 import { h } from 'preact'
 
+const nextTick = () => new Promise(resolve => setImmediate(resolve))
+
 const jwtBody = {
   exp: Date.now() / 1000 + 100,
   sub: 'name',
@@ -90,7 +92,7 @@ test('displays error for incorrect username/pw', async () => {
   expect(localStorage.getItem('jwt')).toBeNull()
 })
 
-test('renders content directly with jwt in localstorage', () => {
+test('renders content directly with jwt in localstorage', async () => {
   localStorage.setItem('jwt', jwt)
   const { getByText } = render(
     <Authenticated
@@ -101,6 +103,8 @@ test('renders content directly with jwt in localstorage', () => {
       )}
     />,
   )
+
+  await nextTick()
 
   getByText('Roles')
 })
