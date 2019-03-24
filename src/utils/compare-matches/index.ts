@@ -1,4 +1,4 @@
-interface PartialEvent {
+interface PartialMatch {
   key: string
 }
 
@@ -18,7 +18,7 @@ const digitRegex = /\d+/g
  * @param a First Event
  * @param b Second Event
  */
-export const compareMatches = (a: PartialEvent, b: PartialEvent) => {
+export const compareMatches = (a: PartialMatch, b: PartialMatch) => {
   const aType = getMatchType(a.key) as keyof typeof matchTypes
   const bType = getMatchType(b.key) as keyof typeof matchTypes
   if (aType !== bType) return matchTypes[aType] - matchTypes[bType]

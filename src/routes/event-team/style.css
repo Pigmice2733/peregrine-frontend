@@ -5,8 +5,14 @@
 }
 
 .comments {
-  width: 100%;
-  padding: 0 3rem;
+  margin: 1.2rem auto;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+  padding: 1.1rem 0.5rem;
+
+  & ul {
+    margin: 0;
+  }
 
   & li {
     padding: 0.3em 0.1em;

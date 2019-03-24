@@ -22,6 +22,7 @@ export interface PartialComment {
 }
 
 export interface Comment extends PartialComment {
+  id: number
   matchKey: string
   reporterId?: string
 }

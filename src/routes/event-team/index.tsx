@@ -13,13 +13,12 @@ import { getEventTeamInfo } from '@/api/get-event-team-info'
 import { getEventMatches } from '@/api/match-info/get-event-matches'
 import { getMatchTeamComments } from '@/api/report/get-match-team-comments'
 import { compareMatches } from '@/utils/compare-matches'
+import Card from '@/components/card'
 
 interface Props {
   eventKey: string
   teamNum: string
 }
-
-const trimMatchKey = (a: string) => a.substr(a.indexOf('_') + 1)
 
 const EventTeam = ({ eventKey, teamNum }: Props) => (
   <LoadData
@@ -72,21 +71,22 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
             ]}
           />
           {teamComments && (
-            <ul class={style.comments}>
-              {teamComments
-                .sort((a, b) =>
-                  compareMatches(
-                    { key: trimMatchKey(a.matchKey) },
-                    { key: trimMatchKey(b.matchKey) },
-                  ),
-                )
-                .map(c => (
-                  <li key={c.matchKey}>
-                    {formatMatchKey(trimMatchKey(c.matchKey)).group}:{' '}
-                    {c.comment}
-                  </li>
-                ))}
-            </ul>
+            <Card class={style.comments}>
+              <ul>
+                {teamComments
+                  .sort((a, b) =>
+                    compareMatches({ key: a.matchKey }, { key: b.matchKey }),
+                  )
+                  .map(c => (
+                    <li key={c.id}>
+                      <a href={`/events/${eventKey}/matches/${c.matchKey}`}>
+                        {formatMatchKey(c.matchKey).group}
+                      </a>
+                      : {c.comment}
+                    </li>
+                  ))}
+              </ul>
+            </Card>
           )}
         </Page>
       )
