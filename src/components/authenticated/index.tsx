@@ -91,7 +91,6 @@ class Authenticated extends Component<Props, State> {
         </Page>
       )
     }
-    console.log({ jwt })
     return render()
   }
 }
