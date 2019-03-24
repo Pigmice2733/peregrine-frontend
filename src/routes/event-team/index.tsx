@@ -70,7 +70,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
               },
             ]}
           />
-          {teamComments && (
+          {teamComments && teamComments.length > 0 && (
             <Card class={style.comments}>
               <ul>
                 {teamComments
