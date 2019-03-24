@@ -14,6 +14,8 @@ import Button from '@/components/button'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventInfo } from '@/api/event-info/get-event-info'
 import { route } from 'preact-router'
+import TextInput from '@/components/text-input'
+import { submitComment } from '@/api/report/submit-comment'
 
 interface Props {
   eventKey: string
@@ -25,6 +27,7 @@ interface State {
   blueAlliance: string[] | null
   team: string | null
   schema: Schema | null
+  comment: string
   report: {
     data: {
       teleop: { [key: string]: Field }
@@ -71,6 +74,7 @@ export class ScoutPage extends Component<Props, State> {
     blueAlliance: null,
     team: null,
     schema: null,
+    comment: '',
     report: {
       autoName: '',
       data: {
@@ -114,9 +118,20 @@ export class ScoutPage extends Component<Props, State> {
         this.props.matchKey,
         this.state.team,
         processReport(this.state.report),
-      ).then(() =>
-        route(`/events/${this.props.eventKey}/matches/${this.props.matchKey}`),
       )
+        .then(() =>
+          submitComment(
+            this.props.eventKey,
+            this.props.matchKey,
+            this.state.team || '',
+            { comment: this.state.comment },
+          ),
+        )
+        .then(() =>
+          route(
+            `/events/${this.props.eventKey}/matches/${this.props.matchKey}`,
+          ),
+        )
     }
   }
 
@@ -138,6 +153,8 @@ export class ScoutPage extends Component<Props, State> {
       }),
     )
   }
+
+  updateComment = e => this.setState({ comment: e.target.value })
 
   render(
     { eventKey, matchKey }: Props,
@@ -175,6 +192,7 @@ export class ScoutPage extends Component<Props, State> {
                 onChange={this.updateField('teleop', stat.name)}
               />
             ))}
+          <TextInput label="Comment" onChange={this.updateComment} />
           <Button disabled={submitting || !isReportReady(this.state)}>
             {submitting ? 'Submitting' : 'Submit'}
           </Button>

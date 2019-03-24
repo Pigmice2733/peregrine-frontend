@@ -3,3 +3,12 @@
   text-align: center;
   font-size: 1.2rem;
 }
+
+.comments {
+  width: 100%;
+  padding: 0 3rem;
+
+  & li {
+    padding: 0.3em 0.1em;
+  }
+}

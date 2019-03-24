@@ -17,6 +17,12 @@ export interface BaseReport {
   autoName: string
 }
 
+export interface Comment {
+  comment: string
+  matchKey: string
+  reporterId?: string
+}
+
 export interface GetReport extends BaseReport {
   // Not sent if the reporter account has been deleted.
   reporterId?: string
