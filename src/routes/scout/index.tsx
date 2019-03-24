@@ -192,7 +192,7 @@ export class ScoutPage extends Component<Props, State> {
                 onChange={this.updateField('teleop', stat.name)}
               />
             ))}
-          <TextInput label="Comment" onChange={this.updateComment} />
+          <TextInput label="Comments" onChange={this.updateComment} />
           <Button disabled={submitting || !isReportReady(this.state)}>
             {submitting ? 'Submitting' : 'Submit'}
           </Button>
