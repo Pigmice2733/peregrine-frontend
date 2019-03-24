@@ -113,27 +113,24 @@ export class ScoutPage extends Component<Props, State> {
     e.preventDefault()
     if (isReportReady(this.state)) {
       this.setState({ submitting: true })
-      submitReport(
-        this.props.eventKey,
-        this.props.matchKey,
-        this.state.team,
-        processReport(this.state.report),
-      )
-        .then(() => {
-          if (this.state.comment) {
-            submitComment(
+      Promise.all([
+        submitReport(
+          this.props.eventKey,
+          this.props.matchKey,
+          this.state.team,
+          processReport(this.state.report),
+        ),
+        this.state.comment
+          ? submitComment(
               this.props.eventKey,
               this.props.matchKey,
               this.state.team || '',
               { comment: this.state.comment },
             )
-          }
-        })
-        .then(() =>
-          route(
-            `/events/${this.props.eventKey}/matches/${this.props.matchKey}`,
-          ),
-        )
+          : Promise.resolve(),
+      ]).then(() =>
+        route(`/events/${this.props.eventKey}/matches/${this.props.matchKey}`),
+      )
     }
   }
 
