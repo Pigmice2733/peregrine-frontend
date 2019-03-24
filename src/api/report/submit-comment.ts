@@ -1,11 +1,11 @@
 import { request } from '../base'
-import { Comment } from '.'
+import { PartialComment } from '.'
 
 export const submitComment = (
   eventKey: string,
   matchKey: string,
   team: string,
-  comment: Comment,
+  comment: PartialComment,
 ) =>
   request<null>(
     'PUT',

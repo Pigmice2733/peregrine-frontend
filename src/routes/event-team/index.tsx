@@ -16,11 +16,10 @@ import { compareMatches } from '@/utils/compare-matches'
 
 interface Props {
   eventKey: string
-  matchKey: string
   teamNum: string
 }
 
-const trimMatchKey = a => a.substr(a.indexOf('_') + 1)
+const trimMatchKey = (a: string) => a.substr(a.indexOf('_') + 1)
 
 const EventTeam = ({ eventKey, teamNum }: Props) => (
   <LoadData

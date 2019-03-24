@@ -119,14 +119,16 @@ export class ScoutPage extends Component<Props, State> {
         this.state.team,
         processReport(this.state.report),
       )
-        .then(() =>
-          submitComment(
-            this.props.eventKey,
-            this.props.matchKey,
-            this.state.team || '',
-            { comment: this.state.comment },
-          ),
-        )
+        .then(() => {
+          if (this.state.comment) {
+            submitComment(
+              this.props.eventKey,
+              this.props.matchKey,
+              this.state.team || '',
+              { comment: this.state.comment },
+            )
+          }
+        })
         .then(() =>
           route(
             `/events/${this.props.eventKey}/matches/${this.props.matchKey}`,
@@ -154,7 +156,8 @@ export class ScoutPage extends Component<Props, State> {
     )
   }
 
-  updateComment = e => this.setState({ comment: e.target.value })
+  updateComment = (e: Event) =>
+    this.setState({ comment: (e.target as HTMLInputElement).value })
 
   render(
     { eventKey, matchKey }: Props,

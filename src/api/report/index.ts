@@ -17,8 +17,11 @@ export interface BaseReport {
   autoName: string
 }
 
-export interface Comment {
+export interface PartialComment {
   comment: string
+}
+
+export interface Comment extends PartialComment {
   matchKey: string
   reporterId?: string
 }
