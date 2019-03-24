@@ -1,0 +1,9 @@
+{
+  "assignees": ["calebeby"],
+  "reviewers": ["calebeby"],
+  "automerge": true,
+  "automergeType": "branch",
+  "major": {
+    "automerge": false
+  }
+}
