@@ -82,7 +82,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
                   ),
                 )
                 .map(c => (
-                  <li>
+                  <li key={c.matchKey}>
                     {formatMatchKey(trimMatchKey(c.matchKey)).group}:{' '}
                     {c.comment}
                   </li>
