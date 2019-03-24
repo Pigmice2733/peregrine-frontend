@@ -18,7 +18,7 @@ interface State {
   lastName: string
 }
 
-export default class Authenticted extends Component<{}, State> {
+export default class Register extends Component<{}, State> {
   state: State = {
     username: '',
     password: '',

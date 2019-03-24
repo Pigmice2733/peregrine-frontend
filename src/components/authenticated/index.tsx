@@ -16,7 +16,6 @@ const maxPasswordLength = 128
 interface Props {
   render: () => JSX.Element
   label?: string
-  requiresAdmin?: true
 }
 
 interface State {
@@ -27,7 +26,7 @@ interface State {
   jwt?: JWT | void
 }
 
-class Authenticted extends Component<Props, State> {
+class Authenticated extends Component<Props, State> {
   state = {
     username: '',
     password: '',
@@ -56,10 +55,7 @@ class Authenticted extends Component<Props, State> {
     this.setState({ loading: false })
   }
 
-  render(
-    { render, label, requiresAdmin }: Props,
-    { invalid, loading, jwt }: State,
-  ) {
+  render({ render, label }: Props, { invalid, loading, jwt }: State) {
     if (jwt === undefined) {
       Promise.resolve<JWT | void>(getJWT()).then(j => {
         if (j) this.setState({ jwt: j })
@@ -100,4 +96,4 @@ class Authenticted extends Component<Props, State> {
   }
 }
 
-export default Authenticted
+export default Authenticated

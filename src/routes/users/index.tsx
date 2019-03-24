@@ -4,13 +4,12 @@ import Page from '@/components/page'
 import LoadData from '@/load-data'
 import { getUsers } from '@/api/user/get-users'
 import Spinner from '@/components/spinner'
-import Authenticted from '@/components/authenticated'
+import Authenticated from '@/components/authenticated'
 import { UserRow } from '@/components/user-row'
 
 const Users = () => {
   return (
-    <Authenticted
-      requiresAdmin
+    <Authenticated
       render={() => (
         <Page name="Users" back="/">
           <LoadData

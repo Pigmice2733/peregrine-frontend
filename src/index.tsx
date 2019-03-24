@@ -1,4 +1,4 @@
-import { h, render } from 'preact'
+import { h, render, AnyComponent } from 'preact'
 import { Router, Route } from 'preact-router'
 import LoadData from './load-data'
 
@@ -6,8 +6,8 @@ import './style'
 import { initDevTools } from 'preact/devtools/devtools'
 import Spinner from './components/spinner'
 
-const asyncRoute = <Props extends {}>(
-  modulePromise: () => Promise<{ default: (props: Props) => JSX.Element }>,
+const asyncRoute = <Props extends any>(
+  modulePromise: () => Promise<{ default: AnyComponent<Props, any> }>,
 ) => (props: Props) => (
   <LoadData
     data={{ Module: modulePromise }}
