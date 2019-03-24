@@ -1,21 +1,17 @@
-import { h, render, AnyComponent } from 'preact'
+import { h, render, FunctionalComponent } from 'preact'
 import { Router, Route } from 'preact-router'
-import LoadData from './load-data'
 
 import './style'
 import 'preact/debug'
 import Spinner from './components/spinner'
+import { usePromise } from './utils/use-promise'
 
 const asyncRoute = <Props extends any>(
-  modulePromise: () => Promise<{ default: AnyComponent<Props, any> }>,
-) => (props: Props) => (
-  <LoadData
-    data={{ Module: modulePromise }}
-    renderSuccess={({ Module }) =>
-      Module ? <Module.default {...props} /> : <Spinner />
-    }
-  />
-)
+  modulePromise: () => Promise<{ default: FunctionalComponent<Props> }>,
+) => (props: Props) => {
+  const Module = usePromise(modulePromise)
+  return Module ? <Module.default {...props} /> : <Spinner />
+}
 
 const App = () => (
   <Router>
@@ -42,6 +38,7 @@ const App = () => (
     />
     <Route<{}>
       path="/register"
+      // @ts-ignore
       component={asyncRoute(() => import('./routes/register'))}
     />
   </Router>
