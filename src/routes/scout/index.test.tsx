@@ -72,6 +72,9 @@ test('renders and submits', async () => {
     if (url.endsWith('/reports/frc254')) {
       return createResponse(null)
     }
+    if (url.endsWith('/comments/frc254')) {
+      return createResponse(null)
+    }
     throw new Error(`Unrecognized parameters to fetch: ${url}`)
   })
 

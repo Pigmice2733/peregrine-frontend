@@ -1,6 +1,8 @@
 import { render, fireEvent, wait } from 'preact-testing-library'
-import Authenticted from '.'
+import Authenticated from '.'
 import { h } from 'preact'
+
+const nextTick = () => new Promise(resolve => setImmediate(resolve))
 
 const jwtBody = {
   exp: Date.now() / 1000 + 100,
@@ -11,7 +13,7 @@ const jwt = `asdf.${btoa(JSON.stringify(jwtBody))}.asdf`
 
 test('renders login page then renders contents', async () => {
   const { getByLabelText, getByText } = render(
-    <Authenticted render={() => <div>Rendered</div>} />,
+    <Authenticated render={() => <div>Rendered</div>} />,
   )
   const usernameInput = getByLabelText(/username/i) as HTMLInputElement
 
@@ -51,7 +53,7 @@ test('renders login page then renders contents', async () => {
 
 test('displays error for incorrect username/pw', async () => {
   const { getByLabelText, getByText } = render(
-    <Authenticted render={() => <div>Rendered</div>} />,
+    <Authenticated render={() => <div>Rendered</div>} />,
   )
   const usernameInput = getByLabelText(/username/i) as HTMLInputElement
 
@@ -90,10 +92,10 @@ test('displays error for incorrect username/pw', async () => {
   expect(localStorage.getItem('jwt')).toBeNull()
 })
 
-test('renders content directly with jwt in localstorage', () => {
+test('renders content directly with jwt in localstorage', async () => {
   localStorage.setItem('jwt', jwt)
   const { getByText } = render(
-    <Authenticted
+    <Authenticated
       render={() => (
         <div>
           <h1>Roles</h1>
@@ -102,6 +104,8 @@ test('renders content directly with jwt in localstorage', () => {
     />,
   )
 
+  await nextTick()
+
   getByText('Roles')
 })
 
@@ -109,7 +113,7 @@ test('deletes expired jwt', async () => {
   const expiredJWTBody = { exp: Date.now() / 1000 - 100 }
   const expiredJWT = `asdf.${btoa(JSON.stringify(expiredJWTBody))}.asdf`
   localStorage.setItem('jwt', expiredJWT)
-  const { getByText } = render(<Authenticted render={() => <h1>Hi</h1>} />)
+  const { getByText } = render(<Authenticated render={() => <h1>Hi</h1>} />)
 
   await wait(() => getByText('Submit'))
 

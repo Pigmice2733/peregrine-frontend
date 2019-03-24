@@ -7,9 +7,13 @@ import { sortAscending } from '@/icons/sort-ascending'
 import { history } from '@/icons/history'
 import { MatchCard } from '@/components/match-card'
 import { round } from '@/utils/round'
+import { formatMatchKey } from '@/utils/format-match-key'
 import { getEventInfo } from '@/api/event-info/get-event-info'
 import { getEventTeamInfo } from '@/api/get-event-team-info'
 import { getEventMatches } from '@/api/match-info/get-event-matches'
+import { getMatchTeamComments } from '@/api/report/get-match-team-comments'
+import { compareMatches } from '@/utils/compare-matches'
+import Card from '@/components/card'
 
 interface Props {
   eventKey: string
@@ -22,8 +26,14 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
       eventInfo: () => getEventInfo(eventKey),
       eventTeamInfo: () => getEventTeamInfo(eventKey, 'frc' + teamNum),
       eventMatches: () => getEventMatches(eventKey, 'frc' + teamNum),
+      teamComments: () => getMatchTeamComments(eventKey, 'frc' + teamNum),
     }}
-    renderSuccess={({ eventInfo, eventTeamInfo, eventMatches }) => {
+    renderSuccess={({
+      eventInfo,
+      eventTeamInfo,
+      eventMatches,
+      teamComments,
+    }) => {
       const nextMatch =
         eventMatches &&
         eventMatches.find(
@@ -60,6 +70,24 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
               },
             ]}
           />
+          {teamComments && teamComments.length > 0 && (
+            <Card class={style.comments}>
+              <ul>
+                {teamComments
+                  .sort((a, b) =>
+                    compareMatches({ key: a.matchKey }, { key: b.matchKey }),
+                  )
+                  .map(c => (
+                    <li key={c.id}>
+                      <a href={`/events/${eventKey}/matches/${c.matchKey}`}>
+                        {formatMatchKey(c.matchKey).group}
+                      </a>
+                      : {c.comment}
+                    </li>
+                  ))}
+              </ul>
+            </Card>
+          )}
         </Page>
       )
     }}

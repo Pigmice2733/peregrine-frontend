@@ -4,6 +4,12 @@
   align-items: center;
   padding: 2rem;
 
+  /* Comments box */
+  & > label {
+    width: 25rem;
+    max-width: 80%;
+  }
+
   & > button {
     margin: 1rem;
   }
