@@ -110,16 +110,14 @@ class AnalysisTable extends Component<Props, State> {
   }
 
   sortBy = (sortType: SortType, sortStat: string | null = null) => () => {
-    this.setState(
-      (s: State): Partial<State> => ({
-        sortType,
-        sortStat,
-        reversed:
-          s.sortStat === sortStat && s.sortType === sortType
-            ? !s.reversed
-            : false,
-      }),
-    )
+    this.setState((s: State) => ({
+      sortType,
+      sortStat,
+      reversed:
+        s.sortStat === sortStat && s.sortType === sortType
+          ? !s.reversed
+          : false,
+    }))
   }
 
   render(

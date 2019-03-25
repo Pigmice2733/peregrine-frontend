@@ -88,18 +88,16 @@ export class ScoutPage extends Component<Props, State> {
     getEventInfo(this.props.eventKey)
       .then(event => getSchema(event.schemaId))
       .then(schema =>
-        this.setState(
-          (s: State): Partial<State> => ({
-            schema,
-            report: {
-              ...s.report,
-              data: {
-                teleop: schema.teleop.reduce(createEmptyFields, {}),
-                auto: schema.auto.reduce(createEmptyFields, {}),
-              },
+        this.setState((s: State) => ({
+          schema,
+          report: {
+            ...s.report,
+            data: {
+              teleop: schema.teleop.reduce(createEmptyFields, {}),
+              auto: schema.auto.reduce(createEmptyFields, {}),
             },
-          }),
-        ),
+          },
+        })),
       )
     getEventMatchInfo(this.props.eventKey, this.props.matchKey).then(m => {
       this.setState({
@@ -137,20 +135,18 @@ export class ScoutPage extends Component<Props, State> {
   updateField = (gameStage: 'auto' | 'teleop', name: string) => (
     value: Field,
   ) => {
-    this.setState(
-      (s: State): Partial<State> => ({
-        report: {
-          ...s.report,
-          data: {
-            ...s.report.data,
-            [gameStage]: {
-              ...s.report.data[gameStage],
-              [name]: value,
-            },
+    this.setState((s: State) => ({
+      report: {
+        ...s.report,
+        data: {
+          ...s.report.data,
+          [gameStage]: {
+            ...s.report.data[gameStage],
+            [name]: value,
           },
         },
-      }),
-    )
+      },
+    }))
   }
 
   updateComment = (e: Event) =>
