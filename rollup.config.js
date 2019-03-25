@@ -1,6 +1,7 @@
 const node = require('rollup-plugin-node-resolve')
 const { terser } = require('rollup-plugin-terser')
 const babel = require('rollup-plugin-babel')
+const cjs = require('rollup-plugin-commonjs')
 const postcss = require('rollup-plugin-postcss')
 const postcssConfig = require('./postcss.config')
 const cssModulesConfig = postcssConfig.plugins['postcss-modules']
@@ -39,6 +40,7 @@ module.exports = {
     chunkGroupingSize: 37000,
     plugins: [
       node(rollupNodeOptions),
+      cjs(),
       postcss({
         extract: 'dist/style.css',
         modules: cssModulesConfig,

@@ -41,5 +41,6 @@ module.exports = {
         },
       },
     ],
+    'babel-plugin-minify-dead-code-elimination',
   ],
 }

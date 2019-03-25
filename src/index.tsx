@@ -2,7 +2,6 @@ import { h, render, FunctionalComponent } from 'preact'
 import { Router, Route } from 'preact-router'
 
 import './style'
-import 'preact/debug'
 import Spinner from './components/spinner'
 import { usePromise } from './utils/use-promise'
 
@@ -44,7 +43,8 @@ const App = () => (
   </Router>
 )
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
+  import('preact/debug')
   while (document.body.lastChild) {
     document.body.removeChild(document.body.lastChild)
   }
