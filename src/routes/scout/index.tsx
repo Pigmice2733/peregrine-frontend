@@ -167,7 +167,7 @@ export class ScoutPage extends Component<Props, State> {
               redAlliance={redAlliance}
             />
           )}
-          {schema || <Spinner />}
+          {schema ? null : <Spinner />}
           <h2>Auto</h2>
           {schema &&
             schema.auto.map(stat => (
