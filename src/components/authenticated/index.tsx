@@ -69,12 +69,14 @@ class Authenticated extends Component<Props, State> {
               <form onSubmit={this.onSubmit}>
                 {invalid && <Alert>Invalid Username or Password</Alert>}
                 <TextInput
+                  key="username"
                   label="Username"
                   onInput={this.updateUsername}
                   minLength={minUsernameLength}
                   maxLength={maxUsernameLength}
                 />
                 <TextInput
+                  key="password"
                   name="password"
                   label="Password"
                   type="password"
