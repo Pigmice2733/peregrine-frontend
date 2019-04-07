@@ -1,6 +1,6 @@
 import { h } from 'preact'
 import Icon from '@/components/icon'
-import { falsy } from '@/type-utils'
+import { Falsy } from '@/type-utils'
 import Card, { CardProps } from '@/components/card'
 
 import style from './style.css'
@@ -10,12 +10,12 @@ interface Props {
     | CardProps<{
         icon: string
         title: string | JSX.Element
-        action?: falsy | JSX.Element | JSX.Element[] | string | number
+        action?: Falsy | JSX.Element | JSX.Element[] | string | number
       }>
-    | falsy)[]
+    | Falsy)[]
 }
 
-const isTruthy = <T extends object>(i: T | falsy): i is T => Boolean(i)
+const isTruthy = <T extends object>(i: T | Falsy): i is T => Boolean(i)
 
 const InfoGroupCard = ({ info }: Props) => (
   <Card class={style.infoCard}>
