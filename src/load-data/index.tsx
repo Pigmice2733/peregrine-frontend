@@ -1,4 +1,4 @@
-import { Component } from 'preact'
+import { Component, JSX } from 'preact'
 
 type OptionalKeys<T> = { [K in keyof T]?: T[K] }
 

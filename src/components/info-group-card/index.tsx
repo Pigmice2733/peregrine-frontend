@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, JSX } from 'preact'
 import Icon from '@/components/icon'
 import { Falsy } from '@/type-utils'
 import Card, { CardProps } from '@/components/card'

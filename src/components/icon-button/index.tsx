@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, JSX } from 'preact'
 import { Merge } from '@/type-utils'
 import Icon from '@/components/icon'
 import style from './style.css'

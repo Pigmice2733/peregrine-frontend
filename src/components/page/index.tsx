@@ -1,4 +1,4 @@
-import { h, ComponentChildren, Component } from 'preact'
+import { h, ComponentChildren, Component, JSX } from 'preact'
 import style from './style.css'
 import { menu } from '@/icons/menu'
 import { arrowLeft } from '@/icons/arrow-left'

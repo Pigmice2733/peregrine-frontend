@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { h, Component, JSX } from 'preact'
 import { getJWT, JWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'

@@ -7,6 +7,4 @@ declare const process: {
   env: { [key: string]: string }
 }
 
-declare module 'preact/devtools/devtools' {
-  export const initDevTools: () => void
-}
+declare module 'preact/debug' {}
