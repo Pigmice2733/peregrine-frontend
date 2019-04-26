@@ -81,7 +81,7 @@
     "hygen": "1.6.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.1.0",
-    "node-fetch": "2.3.0",
+    "node-fetch": "2.4.0",
     "parcel-bundler": "1.12.3",
     "postcss": "7.0.14",
     "postcss-calc": "7.0.1",
