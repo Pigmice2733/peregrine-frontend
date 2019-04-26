@@ -1,4 +1,4 @@
-import { h, render, ComponentType } from 'preact'
+import { h, render, ComponentType, VNode } from 'preact'
 import { parse, match, Segment, exec } from 'matchit'
 
 import './style'
@@ -6,7 +6,9 @@ import Spinner from './components/spinner'
 import { usePromise } from './utils/use-promise'
 import { useEffect, useState } from 'preact/hooks'
 
-type ComponentModule = { default: ComponentType<any> }
+type ComponentModule = {
+  default: ComponentType<any> | ((props: any) => VNode<any> | null)
+}
 
 interface Route {
   path: string
