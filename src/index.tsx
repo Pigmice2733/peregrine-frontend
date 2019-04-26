@@ -1,26 +1,12 @@
-import {
-  h,
-  render,
-  FunctionalComponent,
-  AnyComponent,
-  Fragment,
-  FunctionComponent,
-} from 'preact'
+import { h, render, ComponentType } from 'preact'
 import { parse, match, Segment, exec } from 'matchit'
 
 import './style'
 import Spinner from './components/spinner'
 import { usePromise } from './utils/use-promise'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 
-const asyncRoute = <Props extends any>(
-  modulePromise: () => Promise<{ default: FunctionalComponent<Props> }>,
-) => (props: Props) => {
-  const Module = usePromise(modulePromise)
-  return Module ? <Module.default {...props} /> : <Spinner />
-}
-
-type ComponentModule = { default: AnyComponent<any, any> }
+type ComponentModule = { default: ComponentType<any> }
 
 interface Route {
   path: string
@@ -94,7 +80,7 @@ const useRouter = (routes: Route[]) => {
     return () => window.removeEventListener('click', clickListener)
   }, [parsedRoutes])
 
-  if (!parsedRoutes) return
+  if (!parsedRoutes) return <Spinner />
 
   const matchingRoute = match(url, parsedRoutes)
 
@@ -107,7 +93,7 @@ const useRouter = (routes: Route[]) => {
   const routeProps = exec(url, matchingRoute)
 
   const component = usePromise(components[matchingFullRoute])
-  const Comp = component && (component.default as FunctionComponent<any>)
+  const Comp = component && component.default
   const v = Comp ? (
     <div>
       <Comp {...routeProps} />
