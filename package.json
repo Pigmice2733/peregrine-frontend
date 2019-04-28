@@ -10,6 +10,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "check-lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "lint": "eslint --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "type:watch": "tsc --watch",
@@ -67,7 +68,10 @@
     "@babel/plugin-proposal-class-properties": "7.4.4",
     "@babel/plugin-proposal-object-rest-spread": "7.4.4",
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.3",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/plugin-transform-template-literals": "7.4.4",
+    "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "7.3.3",
     "@types/jest": "24.0.5",
     "@types/node-fetch": "2.3.3",
