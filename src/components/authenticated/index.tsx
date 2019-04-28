@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { h, Component, JSX } from 'preact'
 import { getJWT, JWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
@@ -69,12 +69,14 @@ class Authenticated extends Component<Props, State> {
               <form onSubmit={this.onSubmit}>
                 {invalid && <Alert>Invalid Username or Password</Alert>}
                 <TextInput
+                  key="username"
                   label="Username"
                   onInput={this.updateUsername}
                   minLength={minUsernameLength}
                   maxLength={maxUsernameLength}
                 />
                 <TextInput
+                  key="password"
                   name="password"
                   label="Password"
                   type="password"

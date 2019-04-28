@@ -128,6 +128,8 @@ test('renders and submits', async () => {
   attemptedBox.checked = true
   fireEvent.change(attemptedBox)
 
+  await nextTick()
+
   expect(submitButton).not.toBeDisabled()
 
   fireEvent.submit(scoutPage.container.querySelector('form') as HTMLFormElement)
