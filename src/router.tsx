@@ -1,5 +1,5 @@
 import { ComponentType, VNode, h } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useMemo } from 'preact/hooks'
 import { Segment, parse, match, exec } from 'matchit'
 import Spinner from './components/spinner'
 import { usePromise } from './utils/use-promise'
@@ -26,26 +26,22 @@ export const route = (url: string) => {
 }
 
 export const useRouter = (routes: Route[]) => {
-  const [parsedRoutes, setParsedRoutes] = useState<Segment[][] | null>(null)
-  const [components, setComponents] = useState<URLComponentMap>({})
   const [url, setUrl] = useState(window.location.pathname)
   const updateUrl = (url: string) => {
     setUrl(url)
     history.pushState(null, '', url)
   }
 
-  useEffect(() => {
-    setComponents(
+  const components = useMemo(
+    () =>
       routes.reduce<URLComponentMap>((acc, r) => {
         acc[r.path] = r.component
         return acc
       }, {}),
-    )
-  }, [])
+    [],
+  )
 
-  useEffect(() => {
-    setParsedRoutes(routes.map(route => parse(route.path)))
-  }, [])
+  const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [])
 
   useEffect(() => {
     routers.push(updateUrl)
@@ -65,8 +61,6 @@ export const useRouter = (routes: Route[]) => {
   }, [])
 
   useEffect(() => {
-    if (!parsedRoutes) return
-
     // when a link is clicked, don't do a full reload, intercept and update state
     const clickListener = (e: MouseEvent) => {
       // ignore events the browser takes care of already:
@@ -94,8 +88,6 @@ export const useRouter = (routes: Route[]) => {
 
     return () => window.removeEventListener('click', clickListener)
   }, [parsedRoutes])
-
-  if (!parsedRoutes) return <Spinner />
 
   const matchingRoute = match(url, parsedRoutes)
 
