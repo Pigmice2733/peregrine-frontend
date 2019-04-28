@@ -20,7 +20,12 @@ module.exports = {
     'postcss-css-variables': { variables },
     'postcss-calc': {},
     'postcss-modules': {
-      generateScopedName: (local, path) => {
+      generateScopedName: (local, path /* @type string */) => {
+        // ignore linaria classes
+        if (/\.[tj]sx?_[a-z0-9]*\.css/.test(path)) {
+          console.log(path)
+          return local
+        }
         const h = createHash('md5')
           .update(prod ? local + path : path)
           .digest('hex')

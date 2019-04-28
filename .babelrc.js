@@ -9,6 +9,7 @@ module.exports = {
         exclude: ['transform-regenerator'],
       },
     ],
+    'linaria/babel',
   ],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],

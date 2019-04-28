@@ -6,12 +6,20 @@ import Spinner from '@/components/spinner'
 import { getEvents } from '@/api/event-info/get-events'
 import { compareEvents } from '@/utils/compare-events'
 
+import { css } from 'linaria'
+
+const foo = css`
+  background: #123456;
+`
+
+console.log(foo)
+
 const Home = () => (
   <Page name="Home">
     <LoadData
       data={{ events: getEvents }}
       renderSuccess={({ events }) => (
-        <div>
+        <div class={foo}>
           {events ? (
             events
               .sort(compareEvents)
