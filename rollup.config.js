@@ -9,7 +9,7 @@ const babelConfig = require('./.babelrc')
 const extensions = ['.js', '.jsx', '.es', '.mjs', '.ts', '.tsx', '.css']
 
 const prod = process.env.NODE_ENV === 'production'
-const rollupNodeOptions = { extensions, jsnext: true }
+const rollupNodeOptions = { extensions }
 
 const terserOptions = prod => ({
   ecma: 8,

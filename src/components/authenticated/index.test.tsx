@@ -25,6 +25,8 @@ test('renders login page then renders contents', async () => {
   passwordInput.value = 'pwd'
   fireEvent.input(passwordInput)
 
+  await nextTick()
+
   jest.spyOn(window, 'fetch').mockImplementation(
     (url, options) =>
       new Promise(resolve => {
@@ -64,6 +66,8 @@ test('displays error for incorrect username/pw', async () => {
 
   passwordInput.value = 'incorrect'
   fireEvent.input(passwordInput)
+
+  await nextTick()
 
   jest.spyOn(window, 'fetch').mockImplementation(
     (url, options) =>

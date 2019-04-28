@@ -24,13 +24,10 @@ export class UserRow extends Component<Props, State> {
     }
   }
   setUserState = (cb: (oldUser: EditableUser) => EditableUser) => {
-    this.setState(
-      (s: State) =>
-        ({
-          modifiedUser: cb(s.modifiedUser),
-          hasUnsaved: true,
-        } as Partial<State>),
-    )
+    this.setState((s: State) => ({
+      modifiedUser: cb(s.modifiedUser),
+      hasUnsaved: true,
+    }))
   }
   save = () => {
     this.setState({ saving: true })

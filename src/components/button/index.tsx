@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, JSX } from 'preact'
 import style from './style.css'
 import clsx from 'clsx'
 

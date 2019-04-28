@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, JSX } from 'preact'
 import { Merge } from '@/type-utils'
 import style from './style.css'
 import { InnerTextInput } from '../text-input'
