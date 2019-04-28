@@ -1,6 +1,6 @@
 import { ComponentType, VNode, h } from 'preact'
 import { useState, useEffect, useMemo } from 'preact/hooks'
-import { Segment, parse, match, exec } from 'matchit'
+import { parse, match, exec } from 'matchit'
 import Spinner from './components/spinner'
 import { usePromise } from './utils/use-promise'
 
