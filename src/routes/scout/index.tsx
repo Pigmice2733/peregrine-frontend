@@ -13,7 +13,7 @@ import FieldCard from '../../components/field-card'
 import Button from '@/components/button'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventInfo } from '@/api/event-info/get-event-info'
-import { route } from 'preact-router'
+import { route } from '@/router'
 import TextInput from '@/components/text-input'
 import { submitComment } from '@/api/report/submit-comment'
 
