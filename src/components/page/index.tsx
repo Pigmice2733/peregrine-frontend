@@ -10,7 +10,7 @@ interface Tab {
   contents: ComponentChildren | undefined
 }
 
-type Props = {
+interface Props {
   name: string | JSX.Element | JSX.Element[]
   children?: ComponentChildren
   back?: string | (() => void)

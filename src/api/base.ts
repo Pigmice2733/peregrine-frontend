@@ -11,7 +11,7 @@ const qs = (
 ) => {
   if (!q) return ''
   const v = Object.entries(q)
-    .filter(([_key, val]) => val !== undefined)
+    .filter(([, val]) => val !== undefined)
     .map(([key, val]) => `${key}=${val}`)
     .join('&')
   return v ? `?${v}` : ''
