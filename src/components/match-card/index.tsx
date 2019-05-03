@@ -6,7 +6,7 @@ import Card from '@/components/card'
 
 import style from './style.css'
 
-type MatchCardProps = {
+interface MatchCardProps {
   match: {
     key: string
     redAlliance: string[]

@@ -82,7 +82,7 @@
     "clsx": "1.0.4",
     "cpy": "7.2.0",
     "eslint": "5.16.0",
-    "eslint-plugin-caleb": "2.0.0",
+    "eslint-plugin-caleb": "3.0.0",
     "hygen": "1.6.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.1.0",

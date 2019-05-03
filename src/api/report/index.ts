@@ -32,12 +32,12 @@ export interface GetReport extends BaseReport {
   reporterId?: string
 }
 
-type EventKey = {
+interface EventKey {
   // 2018orwil
   eventKey: string
 }
 
-export type SingleTeamStats = {
+export interface SingleTeamStats {
   auto: ({
     modeName: string
     // in order by match time
@@ -46,7 +46,7 @@ export type SingleTeamStats = {
   teleop: (EventKey & GraphableField)[]
 }
 
-export type EventSingleTeamStats = {
+export interface EventSingleTeamStats {
   auto: ({
     modeName: string
     // in order by match time

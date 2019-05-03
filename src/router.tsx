@@ -4,7 +4,7 @@ import { parse, match, exec } from 'matchit'
 import Spinner from './components/spinner'
 import { usePromise } from './utils/use-promise'
 
-type ComponentModule = {
+interface ComponentModule {
   default: ComponentType<any> | ((props: any) => VNode<any> | null)
 }
 
