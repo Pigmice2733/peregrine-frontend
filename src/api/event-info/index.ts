@@ -23,12 +23,13 @@ export interface EventInfo {
   endDate: string
 }
 
-export const processEvent = (e: EventInfo) =>
-  ({
-    ...e,
-    startDate: new Date(e.startDate),
-    endDate: new Date(e.endDate),
-  } as Merge<EventInfo, { startDate: Date; endDate: Date }>)
+export const processEvent = (
+  e: EventInfo,
+): Merge<EventInfo, { startDate: Date; endDate: Date }> => ({
+  ...e,
+  startDate: new Date(e.startDate),
+  endDate: new Date(e.endDate),
+})
 // need this coercion otherwise ts will have startDate as string & Date
 // rest spread creates intersection types which is slightly inaccurate
 // startDate will be string & Date instead of just Date
