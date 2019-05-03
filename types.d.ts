@@ -4,7 +4,7 @@ declare module '*.css' {
 }
 
 declare const process: {
-  env: { [key: string]: string }
+  env: { NODE_ENV?: string }
 }
 
 declare module 'preact/debug' {}

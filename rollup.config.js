@@ -1,4 +1,4 @@
-const linaria = require('linaria/rollup')
+const linaria = require('linaria-preact/rollup')
 const node = require('rollup-plugin-node-resolve')
 const { terser } = require('rollup-plugin-terser')
 const babel = require('rollup-plugin-babel')
@@ -59,7 +59,7 @@ module.exports = {
         },
       }),
       babel({ extensions, babelrc: false, ...babelConfig }),
-      terser(terserOptions(prod)),
+      // terser(terserOptions(prod)),
     ],
   },
 }
