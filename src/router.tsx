@@ -2,10 +2,11 @@ import { ComponentType, VNode, h } from 'preact'
 import { useState, useEffect, useMemo } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
 import Spinner from './components/spinner'
-import { usePromise } from './utils/use-promise'
+
+type AnyComponent = ComponentType<any> | ((props: any) => VNode<any> | null)
 
 interface ComponentModule {
-  default: ComponentType<any> | ((props: any) => VNode<any> | null)
+  default: AnyComponent
 }
 
 interface Route {
@@ -13,8 +14,12 @@ interface Route {
   component: () => Promise<ComponentModule>
 }
 
-interface URLComponentMap {
+interface URLComponentPromiseMap {
   [url: string]: () => Promise<ComponentModule>
+}
+
+interface URLComponentMap {
+  [url: string]: AnyComponent
 }
 
 const routers: ((url: string) => void)[] = []
@@ -27,6 +32,10 @@ export const route = (url: string) => {
 
 export const useRouter = (routes: Route[]) => {
   const [url, setUrl] = useState(window.location.pathname)
+  const [resolvedComponentMap, setResolvedComponentMap] = useState<
+    URLComponentMap
+  >({})
+
   const updateUrl = (url: string) => {
     setUrl(url)
     history.pushState(null, '', url)
@@ -34,7 +43,7 @@ export const useRouter = (routes: Route[]) => {
 
   const components = useMemo(
     () =>
-      routes.reduce<URLComponentMap>((acc, r) => {
+      routes.reduce<URLComponentPromiseMap>((acc, r) => {
         acc[r.path] = r.component
         return acc
       }, {}),
@@ -99,15 +108,16 @@ export const useRouter = (routes: Route[]) => {
 
   const routeProps = exec(url, matchingRoute)
 
-  const component = usePromise(components[matchingFullRoute])
-  const Comp = component && component.default
-  const v = Comp ? (
-    <div>
-      <Comp {...routeProps} />
-    </div>
-  ) : (
-    <Spinner />
-  )
+  const ResolvedComponent = resolvedComponentMap[matchingFullRoute]
 
-  return v
+  if (ResolvedComponent) return <ResolvedComponent {...routeProps} />
+
+  components[matchingFullRoute]().then(c => {
+    setResolvedComponentMap(prevMap => ({
+      ...prevMap,
+      [matchingFullRoute]: c.default,
+    }))
+  })
+
+  return <Spinner />
 }

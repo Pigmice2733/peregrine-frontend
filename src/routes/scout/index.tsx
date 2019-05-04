@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { h, Component, Fragment } from 'preact'
 import Page from '@/components/page'
 import style from './style.css'
 import Authenticated from '@/components/authenticated'
@@ -199,10 +199,14 @@ export class ScoutPage extends Component<Props, State> {
 }
 
 const Scout = ({ eventKey, matchKey }: Props) => (
-  <Authenticated
-    label="Log In to Scout"
-    render={() => <ScoutPage eventKey={eventKey} matchKey={matchKey} />}
-  />
+  // Fragment is a workaround to a preact bug
+  // without it, when you change away from this route, it sticks around behind the new route
+  <Fragment>
+    <Authenticated
+      label="Log In to Scout"
+      render={() => <ScoutPage eventKey={eventKey} matchKey={matchKey} />}
+    />
+  </Fragment>
 )
 
 export default Scout
