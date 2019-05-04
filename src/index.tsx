@@ -1,6 +1,7 @@
 import './style.css'
 import { useRouter } from './router'
 import { h, render } from 'preact'
+import 'preact/debug'
 
 const App = () =>
   useRouter([
@@ -35,8 +36,6 @@ const App = () =>
   ])
 
 if (process.env.NODE_ENV === 'development') {
-  import('preact/debug')
-
   if (module.hot) {
     module.hot.accept()
   }
