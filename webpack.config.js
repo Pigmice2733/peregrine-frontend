@@ -1,12 +1,17 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssConfig = require('./postcss.config')
+const WebpackBar = require('webpackbar')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+
+const webpack = require('webpack')
 
 module.exports = {
   mode: 'development',
   output: {
     publicPath: '/',
   },
+  devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
       {
@@ -16,7 +21,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: { hmr: true },
+          },
           {
             loader: 'css-loader',
             options: {
@@ -51,6 +59,14 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin(),
     new MiniCssExtractPlugin({ filename: 'styles.css' }),
+    new webpack.HotModuleReplacementPlugin({}),
+    new WebpackBar(),
+    new FriendlyErrorsWebpackPlugin(),
   ],
-  devServer: { historyApiFallback: true },
+  devServer: {
+    historyApiFallback: true,
+    hot: true,
+    overlay: true,
+    quiet: true,
+  },
 }

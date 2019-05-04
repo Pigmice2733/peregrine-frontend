@@ -6,12 +6,6 @@ import Spinner from '@/components/spinner'
 import { getEvents } from '@/api/event-info/get-events'
 import { compareEvents } from '@/utils/compare-events'
 
-import { styled } from 'linaria-styled-preact'
-
-const Container = styled.div`
-  background-color: blue;
-`
-
 const Home = () => (
   <Page name="Home">
     <LoadData

@@ -26,7 +26,6 @@ module.exports = {
           /\.[tj]sx?_[a-z0-9]*\.css/.test(path) ||
           /\.linaria\.css$/.test(path)
         ) {
-          console.log(path)
           return local
         }
         const h = createHash('md5')

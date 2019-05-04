@@ -1,6 +1,6 @@
-import { h, render } from 'preact'
 import './style.css'
 import { useRouter } from './router'
+import { h, render } from 'preact'
 
 const App = () =>
   useRouter([
@@ -36,6 +36,11 @@ const App = () =>
 
 if (process.env.NODE_ENV === 'development') {
   import('preact/debug')
+
+  if (module.hot) {
+    module.hot.accept()
+  }
+
   while (document.body.lastChild) {
     document.body.removeChild(document.body.lastChild)
   }

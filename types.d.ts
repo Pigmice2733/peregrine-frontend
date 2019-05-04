@@ -3,6 +3,12 @@ declare module '*.css' {
   export default styles
 }
 
+declare const module: {
+  hot?: {
+    accept: () => void
+  }
+}
+
 declare const process: {
   env: { NODE_ENV?: string }
 }
