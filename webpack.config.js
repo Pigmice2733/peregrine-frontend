@@ -3,6 +3,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssConfig = require('./postcss.config')
 const WebpackBar = require('webpackbar')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+//   .BundleAnalyzerPlugin
 
 const webpack = require('webpack')
 
@@ -16,7 +18,13 @@ module.exports = {
     rules: [
       {
         test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
         use: ['babel-loader', 'linaria-preact/loader'],
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /src/,
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/,
@@ -62,6 +70,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin({}),
     new WebpackBar(),
     new FriendlyErrorsWebpackPlugin(),
+    // new BundleAnalyzerPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
