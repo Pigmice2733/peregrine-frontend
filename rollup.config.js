@@ -59,7 +59,7 @@ module.exports = {
         },
       }),
       babel({ extensions, babelrc: false, ...babelConfig }),
-      // terser(terserOptions(prod)),
+      terser(terserOptions(prod)),
     ],
   },
 }
