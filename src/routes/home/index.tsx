@@ -14,8 +14,6 @@ const Container = styled.div`
 
 const Home = () => (
   <Page name="Home">
-    <h1>Foo</h1>
-    <Container>Foo</Container>
     <LoadData
       data={{ events: getEvents }}
       renderSuccess={({ events }) => (

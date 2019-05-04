@@ -1,5 +1,5 @@
 import { h, render } from 'preact'
-import './style'
+import './style.css'
 import { useRouter } from './router'
 
 const App = () =>
