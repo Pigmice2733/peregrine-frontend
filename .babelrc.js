@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    'linaria-preact/babel',
+    ['linaria-preact/babel', { evaluate: true }],
     ['@babel/preset-typescript', { jsxPragma: 'h' }],
     // [
     //   '@babel/preset-env',

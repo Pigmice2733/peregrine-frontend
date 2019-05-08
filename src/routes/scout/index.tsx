@@ -1,6 +1,5 @@
 import { h, Component, Fragment } from 'preact'
 import Page from '@/components/page'
-import style from './style.css'
 import Authenticated from '@/components/authenticated'
 import { Schema, StatDescription } from '@/api/schema'
 import { submitReport } from '@/api/report/submit-report'
@@ -16,6 +15,22 @@ import { getEventInfo } from '@/api/event-info/get-event-info'
 import { route } from '@/router'
 import TextInput from '@/components/text-input'
 import { submitComment } from '@/api/report/submit-comment'
+import { css } from 'linaria'
+
+const scoutStyles = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+`
+
+const commentStyles = css`
+  width: 25rem;
+  max-width: 80%;
+`
+const buttonStyles = css`
+  margin: 1rem;
+`
 
 interface Props {
   eventKey: string
@@ -158,7 +173,7 @@ export class ScoutPage extends Component<Props, State> {
   ) {
     return (
       <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
-        <form class={style.scout} onSubmit={this.onSubmit}>
+        <form class={scoutStyles} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
           {blueAlliance && redAlliance && (
             <TeamPicker
@@ -188,8 +203,15 @@ export class ScoutPage extends Component<Props, State> {
                 onChange={this.updateField('teleop', stat.name)}
               />
             ))}
-          <TextInput label="Comments" onChange={this.updateComment} />
-          <Button disabled={submitting || !isReportReady(this.state)}>
+          <TextInput
+            class={commentStyles}
+            label="Comments"
+            onChange={this.updateComment}
+          />
+          <Button
+            disabled={submitting || !isReportReady(this.state)}
+            class={buttonStyles}
+          >
             {submitting ? 'Submitting' : 'Submit'}
           </Button>
         </form>
