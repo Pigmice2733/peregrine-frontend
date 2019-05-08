@@ -2,14 +2,14 @@ module.exports = {
   presets: [
     ['linaria-preact/babel', { evaluate: true }],
     ['@babel/preset-typescript', { jsxPragma: 'h' }],
-    // [
-    //   '@babel/preset-env',
-    //   {
-    //     loose: true,
-    //     spec: false,
-    //     exclude: ['transform-regenerator'],
-    //   },
-    // ],
+    [
+      '@babel/preset-env',
+      {
+        loose: true,
+        spec: false,
+        exclude: ['transform-regenerator'],
+      },
+    ],
   ],
   plugins: [
     ['@babel/plugin-proposal-class-properties', { loose: true }],
@@ -25,7 +25,7 @@ module.exports = {
     // This is included in preset-env but we want to manually enable it even in
     // environments that natively support template literals because "" + "" is
     // usually less code
-    // ['@babel/plugin-transform-template-literals', { loose: true }],
+    ['@babel/plugin-transform-template-literals', { loose: true }],
     [
       '@babel/plugin-proposal-object-rest-spread',
       {
