@@ -5,9 +5,11 @@ import EventCard from '@/components/event-card'
 import Spinner from '@/components/spinner'
 import { getEvents } from '@/api/event-info/get-events'
 import { compareEvents } from '@/utils/compare-events'
+import Button from '@/components/button'
 
 const Home = () => (
   <Page name="Home">
+    <Button href="/login">LOGIN</Button>
     <LoadData
       data={{ events: getEvents }}
       renderSuccess={({ events }) => (

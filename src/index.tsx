@@ -33,6 +33,10 @@ const App = () =>
       path: '/register',
       component: () => import('./routes/register'),
     },
+    {
+      path: '/login',
+      component: () => import('./routes/login'),
+    },
   ])
 
 if (process.env.NODE_ENV === 'development') {

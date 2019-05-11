@@ -2,11 +2,29 @@ import { h, Component, JSX } from 'preact'
 import { getJWT, JWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
-import style from './style.css'
 import { authenticate } from '@/api/authenticate'
 import Page from '../page'
 import Button from '../button'
 import Alert from '../alert'
+import { css } from 'linaria'
+
+const loginStyle = css`
+  padding: 1.5rem;
+`
+
+const cardStyle = css`
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1.5rem 2rem;
+  width: 15rem;
+`
+
+const formStyle = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const minUsernameLength = 4
 const maxUsernameLength = 32
@@ -64,9 +82,9 @@ class Authenticated extends Component<Props, State> {
     if (!jwt) {
       return (
         <Page name={label || 'Log In'} back={() => window.history.back()}>
-          <div class={style.login}>
-            <Card>
-              <form onSubmit={this.onSubmit}>
+          <div class={loginStyle}>
+            <Card class={cardStyle}>
+              <form onSubmit={this.onSubmit} class={formStyle}>
                 {invalid && <Alert>Invalid Username or Password</Alert>}
                 <TextInput
                   key="username"
