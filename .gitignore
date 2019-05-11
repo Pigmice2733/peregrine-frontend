@@ -3,3 +3,5 @@
 /.cache
 /.vscode
 /coverage
+/.linaria-cache
+*.css.json

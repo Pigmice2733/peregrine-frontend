@@ -21,6 +21,13 @@ module.exports = {
     'postcss-calc': {},
     'postcss-modules': {
       generateScopedName: (local, path) => {
+        // ignore linaria classes
+        if (
+          /\.[tj]sx?_[a-z0-9]*\.css/.test(path) ||
+          /\.linaria\.css$/.test(path)
+        ) {
+          return local
+        }
         const h = createHash('md5')
           .update(prod ? local + path : path)
           .digest('hex')

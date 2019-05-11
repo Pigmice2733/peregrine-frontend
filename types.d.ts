@@ -3,8 +3,18 @@ declare module '*.css' {
   export default styles
 }
 
+declare const module: {
+  hot?: {
+    accept: () => void
+  }
+}
+
 declare const process: {
-  env: { [key: string]: string }
+  env: {
+    NODE_ENV?: string
+    PEREGRINE_API_URL?: string
+    BRANCH?: string
+  }
 }
 
 declare module 'preact/debug' {}
