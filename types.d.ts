@@ -10,7 +10,11 @@ declare const module: {
 }
 
 declare const process: {
-  env: { NODE_ENV?: string }
+  env: {
+    NODE_ENV?: string
+    PEREGRINE_API_URL?: string
+    BRANCH?: string
+  }
 }
 
 declare module 'preact/debug' {}
