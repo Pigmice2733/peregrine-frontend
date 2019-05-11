@@ -3,8 +3,8 @@ import { getJWT } from '@/jwt'
 const apiUrl =
   (process.env.PEREGRINE_API_URL ||
     (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
-      ? 'https://api.peregrine.ga:8081'
-      : 'https://edge.api.peregrine.ga:8081')) + '/'
+      ? 'https://api.peregrine.ga'
+      : 'https://edge.api.peregrine.ga')) + '/'
 
 const qs = (
   q: { [key: string]: string | number | undefined } | null | undefined,
