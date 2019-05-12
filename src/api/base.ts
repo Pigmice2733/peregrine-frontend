@@ -1,14 +1,13 @@
-import { getJWT } from '@/jwt'
+import { apiUrl } from '@/api/api-url'
+import { removeAccessToken, getWorkingJWT } from '@/jwt'
 
-const apiUrl =
-  (process.env.PEREGRINE_API_URL ||
-    (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
-      ? 'https://api.peregrine.ga'
-      : 'https://edge.api.peregrine.ga')) + '/'
+type HTTPMethod = 'GET' | 'DELETE' | 'POST' | 'PUT' | 'PATCH'
+type QueryParams =
+  | { [key: string]: string | number | undefined }
+  | null
+  | undefined
 
-const qs = (
-  q: { [key: string]: string | number | undefined } | null | undefined,
-) => {
+const qs = (q: QueryParams) => {
   if (!q) return ''
   const v = Object.entries(q)
     .filter(([, val]) => val !== undefined)
@@ -18,13 +17,12 @@ const qs = (
 }
 
 export const request = async <T extends any>(
-  method: 'GET' | 'DELETE' | 'POST' | 'PUT' | 'PATCH',
+  method: HTTPMethod,
   endpoint: string,
-  params?: { [key: string]: string | number | undefined } | null,
+  params?: QueryParams,
   body?: any,
-  notAuthenticated?: true,
 ) => {
-  const jwt = notAuthenticated ? false : await getJWT()
+  const jwt = await getWorkingJWT()
   const resp = await fetch(apiUrl + endpoint + qs(params), {
     method,
     body: JSON.stringify(body),
@@ -41,5 +39,7 @@ export const request = async <T extends any>(
   if (resp.ok) {
     return parsed
   }
+  if (resp.status === 401) removeAccessToken()
+
   throw new Error(typeof parsed === 'string' ? parsed : parsed.error)
 }

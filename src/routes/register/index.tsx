@@ -1,85 +1,118 @@
-import { h, Component } from 'preact'
+import { h } from 'preact'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import Page from '@/components/page'
 import { createUser } from '@/api/user/create-user'
 import Button from '@/components/button'
+import {
+  minUsernameLength,
+  maxUsernameLength,
+  minPasswordLength,
+  maxPasswordLength,
+} from '@/constants'
+import { useState } from 'preact/hooks'
+import { css } from 'linaria'
+import { Form } from '@/components/form'
+import { Dropdown } from '@/components/dropdown'
+import { getRealms } from '@/api/realm/get-realms'
+import { usePromise } from '@/utils/use-promise'
+import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
+import { authenticate } from '@/api/authenticate'
+import { route } from '@/router'
 
-const minUsernameLength = 4
-const maxUsernameLength = 32
-const minPasswordLength = 8
-const maxPasswordLength = 128
+const registerStyle = css`
+  padding: 1.5rem;
+`
 
-interface State {
-  username: string
-  password: string
-  loading: boolean
-  firstName: string
-  lastName: string
-}
-
-export default class Register extends Component<{}, State> {
-  state: State = {
-    username: '',
-    password: '',
-    firstName: '',
-    lastName: '',
-    loading: false,
+const cardStyle = css`
+  padding: 1.5rem 2rem;
+  width: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+  & > * {
+    margin-left: 0;
+    margin-right: 0;
   }
+`
 
-  updateField = (key: keyof State) => (e: Event) =>
-    // @ts-ignore
-    this.setState({ [key]: (e.target as HTMLInputElement).value })
+const dropdownClass = css`
+  padding: 0.4rem;
+  margin: 0.4rem;
+  width: auto;
+`
 
-  onSubmit = async (e: Event) => {
+const RegisterForm = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [realmId, setRealmId] = useState(1)
+  const realms = usePromise(getRealms) || []
+  const emitError = useErrorEmitter()
+
+  const onSubmit = async (e: Event) => {
     e.preventDefault()
-    this.setState({ loading: true })
+    setIsLoading(true)
     createUser({
-      username: this.state.username,
-      password: this.state.password,
-      firstName: this.state.firstName,
-      lastName: this.state.lastName,
-      realmId: 1,
+      username,
+      password,
+      firstName,
+      lastName,
+      realmId,
       roles: { isAdmin: false, isVerified: false, isSuperAdmin: false },
       stars: [],
     })
+      .then(() => authenticate(username, password))
+      .then(() => route('/'))
+      .catch(emitError)
+      .finally(() => setIsLoading(false))
   }
 
-  render(_: any, { loading }: State) {
-    return (
-      <Page name="Register" back={() => window.history.back()}>
-        <div>
-          <Card>
-            <form onSubmit={this.onSubmit}>
-              <TextInput
-                label="First Name"
-                onInput={this.updateField('firstName')}
-              />
-              <TextInput
-                label="Last Name"
-                onInput={this.updateField('lastName')}
-              />
-              <TextInput
-                label="Username"
-                onInput={this.updateField('username')}
-                minLength={minUsernameLength}
-                maxLength={maxUsernameLength}
-              />
-              <TextInput
-                name="password"
-                label="Password"
-                type="password"
-                onInput={this.updateField('password')}
-                minLength={minPasswordLength}
-                maxLength={maxPasswordLength}
-              />
-              <Button disabled={loading}>
-                {loading ? 'Submitting' : 'Submit'}
-              </Button>
-            </form>
-          </Card>
-        </div>
-      </Page>
-    )
-  }
+  return (
+    <Form onSubmit={onSubmit}>
+      <TextInput label="First Name" onInput={setFirstName} />
+      <TextInput label="Last Name" onInput={setLastName} />
+      <TextInput
+        label="Username"
+        onInput={setUsername}
+        minLength={minUsernameLength}
+        maxLength={maxUsernameLength}
+      />
+      <TextInput
+        name="password"
+        label="Password"
+        type="password"
+        onInput={setPassword}
+        minLength={minPasswordLength}
+        maxLength={maxPasswordLength}
+      />
+      <Dropdown
+        class={dropdownClass}
+        options={realms}
+        onChange={v => {
+          setRealmId(v.id)
+        }}
+        getKey={v => v.id}
+        getText={v => v.name}
+      />
+      <Button disabled={isLoading}>
+        {isLoading ? 'Submitting' : 'Submit'}
+      </Button>
+    </Form>
+  )
 }
+
+const Register = () => (
+  <Page name="Register" back={() => window.history.back()}>
+    <div class={registerStyle}>
+      <Card class={cardStyle}>
+        <ErrorBoundary>
+          <RegisterForm />
+        </ErrorBoundary>
+      </Card>
+    </div>
+  </Page>
+)
+
+export default Register

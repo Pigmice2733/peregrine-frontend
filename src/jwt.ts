@@ -1,7 +1,12 @@
 import { Roles } from '@/api/user'
-import { refreshToken } from './api/refresh-token'
+import { apiUrl } from '@/api/api-url'
 
-let jwt: string | null = null
+const REFRESH_TOKEN = 'refreshToken'
+const ACCESS_TOKEN = 'accessToken'
+
+// in-memory cache so we aren't constantly checking localstorage
+let accessToken: string | null = null
+let refreshToken: string | null = null
 
 export interface JWT {
   exp: number
@@ -14,39 +19,6 @@ export interface JWT {
 const isExpired = (jwt: JWT) =>
   jwt.exp <= Math.floor(new Date().getTime() / 1000)
 
-export const setRefreshToken = (token: string) =>
-  localStorage.setItem('refreshToken', token)
-
-let refreshPromise: Promise<JWT> | null = null
-
-export const getJWT = (): Promise<JWT> | JWT | void => {
-  const j = jwt || localStorage.getItem('jwt')
-
-  const parsed = j && parseJWT(j)
-
-  if (!parsed || isExpired(parsed)) {
-    setJWT(null)
-    const rToken = localStorage.getItem('refreshToken')
-
-    // request a new access token using the refresh token
-    if (rToken && !isExpired(parseJWT(rToken))) {
-      // if there is an existing request, use that instead of making a new one
-      return (
-        refreshPromise ||
-        (refreshPromise = refreshToken(rToken).then(({ accessToken }) => {
-          setJWT(accessToken)
-          refreshPromise = null
-          return parseJWT(accessToken)
-        }))
-      )
-    }
-    return localStorage.removeItem('refreshToken')
-  }
-
-  jwt = j
-  return parsed
-}
-
 const parseJWT = (jwt: string) => {
   const payload = jwt.split('.', 2)[1]
   const data = JSON.parse(atob(payload))
@@ -54,7 +26,86 @@ const parseJWT = (jwt: string) => {
   return data as JWT
 }
 
-export const setJWT = (newJWT: string | null) => {
-  jwt = newJWT
-  jwt ? localStorage.setItem('jwt', jwt) : localStorage.removeItem('jwt')
+// These are "dumb" methods - they just get/modify the values from localstorage/cache
+const getAccessToken = () =>
+  accessToken || (accessToken = localStorage.getItem(ACCESS_TOKEN))
+
+const getRefreshToken = () =>
+  refreshToken || (refreshToken = localStorage.getItem(REFRESH_TOKEN))
+
+export const setAccessToken = (newToken: string) =>
+  localStorage.setItem(ACCESS_TOKEN, (accessToken = newToken))
+
+export const setRefreshToken = (newToken: string) =>
+  localStorage.setItem(REFRESH_TOKEN, (refreshToken = newToken))
+
+export const removeAccessToken = () => {
+  localStorage.removeItem(ACCESS_TOKEN)
+  accessToken = null
+}
+
+export const removeRefreshToken = () => {
+  localStorage.removeItem(REFRESH_TOKEN)
+  refreshToken = null
+}
+
+export const logout = () => {
+  removeAccessToken()
+  removeRefreshToken()
+}
+
+// These never return an expired token. If it is expired, they delete it
+const getUnexpiredAccessToken = (): JWT | undefined => {
+  const rawToken = getAccessToken()
+  if (!rawToken) return
+  const parsed = parseJWT(rawToken)
+  if (isExpired(parsed)) {
+    removeAccessToken()
+    return
+  }
+  return parsed
+}
+const getUnexpiredRefreshToken = (): JWT | undefined => {
+  const rawToken = getRefreshToken()
+  if (!rawToken) return
+  const parsed = parseJWT(rawToken)
+  if (isExpired(parsed)) {
+    removeRefreshToken()
+    return
+  }
+  return parsed
+}
+
+const createAccessToken = async (refreshToken: JWT): Promise<JWT | null> => {
+  const res = await fetch(apiUrl + 'refresh', {
+    method: 'POST',
+    body: JSON.stringify({ refreshToken: refreshToken.raw }),
+  })
+  if (!res.ok) {
+    // if the api did not like it, remove it because it is invalid
+    removeRefreshToken()
+    return null
+  }
+  const { accessToken } = (await res.json()) as { accessToken: string }
+  setAccessToken(accessToken)
+  return parseJWT(accessToken)
+}
+
+export const getWorkingJWT = async (): Promise<JWT | null> => {
+  const accessToken = getUnexpiredAccessToken()
+  if (accessToken) return accessToken
+  const refreshToken = getUnexpiredRefreshToken()
+  if (refreshToken) return createAccessToken(refreshToken)
+  return null
+}
+
+/**
+ * Reads from localstorage, deletes expires tokens, creates a new token if a
+ * refresh token is available. Intended to be called when the app starts
+ */
+export const cleanupTokens = () => {
+  const refreshToken = getUnexpiredRefreshToken()
+  const accessToken = getUnexpiredAccessToken()
+  // access token doesn't exist or was expired, grab a new one
+  if (refreshToken && !accessToken) createAccessToken(refreshToken)
 }

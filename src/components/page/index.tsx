@@ -4,6 +4,8 @@ import { menu } from '@/icons/menu'
 import { arrowLeft } from '@/icons/arrow-left'
 import IconButton from '../icon-button'
 import clsx from 'clsx'
+import Alert from '../alert'
+import { ErrorBoundary } from '../error-boundary'
 
 interface Tab {
   name: string
@@ -19,13 +21,14 @@ interface Props {
 
 interface State {
   selectedTab: string | undefined
+  error?: Error
 }
 class Page extends Component<Props, State> {
   state = {
     selectedTab: this.props.tabs && this.props.tabs[0].name,
   }
   selectTab = (selectedTab: string) => this.setState({ selectedTab })
-  render({ name, children, back, tabs }: Props, { selectedTab }: State) {
+  render({ name, children, back, tabs }: Props, { selectedTab, error }: State) {
     return (
       <div class={clsx(style.page, tabs && style.hasTabs)}>
         <header>
@@ -53,18 +56,21 @@ class Page extends Component<Props, State> {
             </div>
           )}
         </header>
-        <main>
-          {tabs
-            ? tabs.map(t => (
-                <div
-                  key={t.name}
-                  class={t.name === selectedTab ? style.active : ''}
-                >
-                  {t.contents}
-                </div>
-              ))
-            : children}
-        </main>
+        {error && <Alert>{error.message}</Alert>}
+        <ErrorBoundary>
+          <main>
+            {tabs
+              ? tabs.map(t => (
+                  <div
+                    key={t.name}
+                    class={t.name === selectedTab ? style.active : ''}
+                  >
+                    {t.contents}
+                  </div>
+                ))
+              : children}
+          </main>
+        </ErrorBoundary>
       </div>
     )
   }

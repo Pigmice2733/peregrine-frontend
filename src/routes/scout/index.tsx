@@ -164,9 +164,6 @@ export class ScoutPage extends Component<Props, State> {
     }))
   }
 
-  updateComment = (e: Event) =>
-    this.setState({ comment: (e.target as HTMLInputElement).value })
-
   render(
     { eventKey, matchKey }: Props,
     { schema, redAlliance, blueAlliance, team, report, submitting }: State,
@@ -206,7 +203,7 @@ export class ScoutPage extends Component<Props, State> {
           <TextInput
             class={commentStyles}
             label="Comments"
-            onChange={this.updateComment}
+            onInput={v => this.setState({ comment: v })}
           />
           <Button
             disabled={submitting || !isReportReady(this.state)}

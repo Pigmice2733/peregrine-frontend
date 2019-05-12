@@ -1,5 +1,5 @@
 import { request } from './base'
-import { setJWT, setRefreshToken } from '@/jwt'
+import { setAccessToken, setRefreshToken } from '@/jwt'
 
 export const authenticate = (username: string, password: string) =>
   request<{ refreshToken: string; accessToken: string }>(
@@ -8,6 +8,7 @@ export const authenticate = (username: string, password: string) =>
     {},
     { username, password },
   ).then(({ refreshToken, accessToken }) => {
-    setJWT(accessToken)
+    setAccessToken(accessToken)
     setRefreshToken(refreshToken)
+    return accessToken
   })

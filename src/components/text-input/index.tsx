@@ -14,6 +14,7 @@ export const InnerTextInput = styled.input`
   border-radius: 0;
   transition: border-bottom-color 0.2s ease;
   background: transparent;
+  font-family: inherit;
 
   &:focus {
     border-bottom-color: var(--pigmice-purple);
@@ -37,13 +38,19 @@ const labeledInputClass = css`
   }
 `
 
-type Props = Merge<JSX.HTMLAttributes, { label: string; labelClass?: string }>
+type Props = Merge<
+  JSX.HTMLAttributes,
+  { label: string; labelClass?: string; onInput?: (val: string) => void }
+>
 
-const TextInput = ({ label, labelClass, ...rest }: Props) => {
+const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
   return (
     <label class={clsx(labeledInputClass, labelClass)}>
       {label}
-      <InnerTextInput {...rest} />
+      <InnerTextInput
+        {...rest}
+        onInput={e => onInput && onInput((e.target as HTMLInputElement).value)}
+      />
     </label>
   )
 }
