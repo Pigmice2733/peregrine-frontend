@@ -52,7 +52,7 @@ export const UserRow = ({ user, refresh = () => {} }: Props) => {
       description: `This will remove ${user.firstName} ${user.lastName}`,
     })
       .then(confirmed => {
-        if (confirmed) deleteUser(user.id).then(refresh)
+        if (confirmed) return deleteUser(user.id).then(refresh)
       })
       .catch(emitError)
   }
