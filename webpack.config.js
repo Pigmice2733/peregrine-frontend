@@ -65,7 +65,9 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      meta: { viewport: 'width=device-width, initial-scale=1.0' },
+    }),
     new MiniCssExtractPlugin({ filename: 'styles.css' }),
     new webpack.HotModuleReplacementPlugin({}),
     new WebpackBar(),
