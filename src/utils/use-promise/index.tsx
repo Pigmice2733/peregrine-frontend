@@ -16,6 +16,6 @@ export const usePromise = <T extends any>(promise: () => Promise<T>) => {
         setVal(v)
       })
       .catch(emitError)
-  }, [promise])
+  }, [emitError, promise])
   return lastResolved === promise ? val : undefined
 }
