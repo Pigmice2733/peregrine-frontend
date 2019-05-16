@@ -53,7 +53,6 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
         onSuccess()
       })
       .catch((error: Error) => {
-        console.log(error.message)
         if (error.message.match(/unauthorized/i)) {
           emitError(new Error('Incorrect username or password'))
         } else {
@@ -99,7 +98,6 @@ const Authenticated = ({ label, render }: Props) => {
 
   useEffect(checkForWorkingJWT, [])
 
-  console.log({ jwt })
   if (!jwt) {
     return (
       <Page name={label || 'Log In'} back={() => window.history.back()}>

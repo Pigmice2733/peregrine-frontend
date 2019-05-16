@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useState, useRef } from 'preact/hooks'
 import { h } from 'preact'
 import { css } from 'linaria'
 import { rgba } from 'polished'
@@ -73,6 +73,7 @@ const dialogWrapperStyle = css`
 
 export const DialogDisplayer = () => {
   const [dialogs, setDialogs] = useState<Dialog[]>([])
+  const dialogEl = useRef<HTMLDivElement | null>(null)
   createDialog = opts => {
     let resolvePromise: (value: boolean) => void
     const promise = new Promise<boolean>(resolve => {
@@ -91,14 +92,25 @@ export const DialogDisplayer = () => {
     setDialogs(dialogs => dialogs.slice(1))
   }
 
+  const dismiss = handleClick(false)
+  const confirm = handleClick(true)
+
   return (
-    <div class={dialogWrapperStyle} onClick={handleClick(false)}>
-      <div class={dialogStyle} onClick={e => e.stopPropagation()}>
+    <div
+      class={dialogWrapperStyle}
+      onClick={e => {
+        // make sure click is from _this_ element, not a descendant
+        if (e.target === dialogEl.current) dismiss()
+      }}
+      role="none"
+      ref={dialogEl}
+    >
+      <div class={dialogStyle} aria-modal="true" role="dialog">
         {dialog.title && <h1>{dialog.title}</h1>}
         <p>{dialog.description}</p>
         <div class={actionsStyle}>
-          <TextButton onClick={handleClick(false)}>{dialog.dismiss}</TextButton>
-          <TextButton onClick={handleClick(true)}>{dialog.confirm}</TextButton>
+          <TextButton onClick={dismiss}>{dialog.dismiss}</TextButton>
+          <TextButton onClick={confirm}>{dialog.confirm}</TextButton>
         </div>
       </div>
     </div>

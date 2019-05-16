@@ -50,7 +50,9 @@ export const useRouter = (routes: Route[]) => {
     [routes],
   )
 
-  const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [routes])
+  const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [
+    routes,
+  ])
 
   useEffect(() => {
     routers.push(updateUrl)
