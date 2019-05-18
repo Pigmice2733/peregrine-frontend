@@ -7,6 +7,7 @@ import Card from '@/components/card'
 import { getUser } from '@/api/user/get-user'
 import { useCallback } from 'preact/hooks'
 import { css } from 'linaria'
+import Authenticated from '@/components/authenticated'
 
 const cardStyle = css`
   padding: 0.6rem 1rem;
@@ -52,9 +53,13 @@ const LeaderboardList = () => {
 
 const Leaderboard = () => {
   return (
-    <Page name="Leaderboard" back="/">
-      <LeaderboardList />
-    </Page>
+    <Authenticated
+      render={() => (
+        <Page name="Leaderboard" back="/">
+          <LeaderboardList />
+        </Page>
+      )}
+    />
   )
 }
 
