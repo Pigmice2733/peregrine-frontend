@@ -79,5 +79,6 @@ module.exports = {
     hot: true,
     overlay: true,
     quiet: true,
+    port: 2733,
   },
 }
