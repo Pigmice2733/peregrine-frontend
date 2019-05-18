@@ -45,7 +45,7 @@ module.exports = {
     'postcss-font-magician': {
       variants: {
         'Roboto Condensed': { '400': [] },
-        Roboto: { '400': [], '700': [] },
+        Roboto: { '400': [], '700': [], '500': [] },
       },
       foundries: ['google'],
       display: 'swap',

@@ -13,12 +13,12 @@ test('button', () => {
   fireEvent.click(button)
   expect(clickHandler).toHaveBeenCalledTimes(1)
   expect(container.firstChild).toMatchInlineSnapshot(`
-<button
-  class="button"
->
-  Hello
-</button>
-`)
+    <button
+      class="buttonStyle_b1uioams"
+    >
+      Hello
+    </button>
+  `)
 })
 
 test('renders an `a` element for `href`', () => {
@@ -28,11 +28,11 @@ test('renders an `a` element for `href`', () => {
     </Button>,
   )
   expect(container.firstChild).toMatchInlineSnapshot(`
-<a
-  class="button caleb"
-  href="google.com"
->
-  Googlez
-</a>
-`)
+    <a
+      class="buttonStyle_b1uioams caleb"
+      href="google.com"
+    >
+      Googlez
+    </a>
+  `)
 })

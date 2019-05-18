@@ -6,5 +6,4 @@ export const refreshToken = (token: string) =>
     'refresh',
     {},
     { refreshToken: token },
-    true,
   )

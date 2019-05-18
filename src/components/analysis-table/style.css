@@ -154,17 +154,3 @@ th.tableHeader {
     color: var(--off-black);
   }
 }
-
-.dropdown {
-  background: transparent;
-  border: none;
-  font-size: 0.8rem;
-  color: var(--off-black);
-  font-weight: bold;
-  height: 100%;
-  width: 100%;
-
-  & option {
-    text-transform: none;
-  }
-}

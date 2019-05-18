@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import { compareTeams } from '@/utils/compare-teams'
 import { formatPercent } from '@/utils/format-percent'
 import { round } from '@/utils/round'
+import { Dropdown } from '@/components/dropdown'
 
 const TableHeader = ({
   children,
@@ -63,24 +64,6 @@ const getValueByStatType = (stat: NormalizedStat, statType: StatType) => {
   }
 }
 
-const Dropdown = <T extends string>({
-  options,
-  onChange,
-}: {
-  options: T[]
-  onChange: (v: T) => void
-}) => (
-  // eslint-disable-next-line caleb/jsx-a11y/no-onchange
-  <select
-    class={style.dropdown}
-    onChange={e => onChange((e.target as HTMLSelectElement).value as T)}
-  >
-    {options.map(o => (
-      <option key={o}>{o}</option>
-    ))}
-  </select>
-)
-
 interface Props {
   teams: {
     team: string
@@ -133,7 +116,9 @@ class AnalysisTable extends Component<Props, State> {
               <tr class={style.groupHeader}>
                 <th>
                   <Dropdown
-                    options={['Successes', 'Attempts', '% Success']}
+                    options={
+                      ['Successes', 'Attempts', '% Success'] as StatType[]
+                    }
                     onChange={v => {
                       this.setState({ statType: v })
                     }}

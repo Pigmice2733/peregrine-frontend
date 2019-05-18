@@ -23,7 +23,6 @@ const Home = () => (
           )}
         </div>
       )}
-      renderError={({ events }) => <h1>ERROR: {events && events.message}</h1>}
     />
   </Page>
 )

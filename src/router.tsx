@@ -47,10 +47,12 @@ export const useRouter = (routes: Route[]) => {
         acc[r.path] = r.component
         return acc
       }, {}),
-    [],
+    [routes],
   )
 
-  const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [])
+  const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [
+    routes,
+  ])
 
   useEffect(() => {
     routers.push(updateUrl)

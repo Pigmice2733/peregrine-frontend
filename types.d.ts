@@ -19,6 +19,11 @@ declare const process: {
 
 declare module 'preact/debug' {}
 
+// so that autocomplete does not try to import from 'preact/hooks/src'
+declare module 'preact/hooks' {
+  export * from 'preact/hooks/src'
+}
+
 declare module 'matchit' {
   enum SegmentType {
     static = 0,

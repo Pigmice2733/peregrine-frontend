@@ -1,4 +1,5 @@
 import { Component, JSX } from 'preact'
+import { ErrorEmitter } from '@/components/error-boundary'
 
 type OptionalKeys<T> = { [K in keyof T]?: T[K] }
 
@@ -8,18 +9,15 @@ interface Props<T> {
     data: OptionalKeys<T>,
     refresh: () => void,
   ) => JSX.Element | number | string | null
-  renderError?: (
-    errors: { [K in keyof T]?: { message: string } },
-  ) => JSX.Element
 }
 
 interface State<T> {
   data: OptionalKeys<T>
-  errors: { [K in keyof T]?: { message: string } }
 }
 
 export default class LoadData<T> extends Component<Props<T>, State<T>> {
-  state: State<T> = { data: {}, errors: {} }
+  static contextType = ErrorEmitter
+  state: State<T> = { data: {} }
   componentDidMount() {
     this.load()
   }
@@ -33,18 +31,10 @@ export default class LoadData<T> extends Component<Props<T>, State<T>> {
             data: Object.assign(data, { [key]: resolvedData }),
           }))
         })
-        .catch(error => {
-          console.error(error)
-          this.setState(({ errors }: State<T>) => ({
-            errors: Object.assign(errors, { [key]: error }),
-          }))
-        })
+        .catch(this.context)
     }
   }
-  render({ renderSuccess, renderError }: Props<T>, { data, errors }: State<T>) {
-    if (renderError && Object.keys(errors).length > 0) {
-      return renderError(errors)
-    }
+  render({ renderSuccess }: Props<T>, { data }: State<T>) {
     return renderSuccess(data, this.load)
   }
 }
