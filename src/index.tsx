@@ -40,6 +40,10 @@ const App = () => (
         path: '/login',
         component: () => import('./routes/login'),
       },
+      {
+        path: '/leaderboard',
+        component: () => import('./routes/leaderboard'),
+      },
     ])}
     <DialogDisplayer />
   </Fragment>
