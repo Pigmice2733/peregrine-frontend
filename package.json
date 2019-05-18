@@ -85,7 +85,7 @@
     "cpy": "7.2.0",
     "css-loader": "^2.1.1",
     "eslint": "5.16.0",
-    "eslint-plugin-caleb": "3.0.0",
+    "eslint-plugin-caleb": "4.0.0",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "html-webpack-plugin": "^3.2.0",
     "hygen": "1.6.2",
