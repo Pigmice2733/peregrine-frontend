@@ -23,9 +23,12 @@ export interface EventInfo {
   endDate: string
 }
 
-export const processEvent = (
-  e: EventInfo,
-): Merge<EventInfo, { startDate: Date; endDate: Date }> => ({
+export type ProcessedEventInfo = Merge<
+  EventInfo,
+  { startDate: Date; endDate: Date }
+>
+
+export const processEvent = (e: EventInfo): ProcessedEventInfo => ({
   ...e,
   startDate: new Date(e.startDate),
   endDate: new Date(e.endDate),

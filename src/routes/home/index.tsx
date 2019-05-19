@@ -1,30 +1,27 @@
 import { h } from 'preact'
-import LoadData from '@/load-data'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
 import Spinner from '@/components/spinner'
-import { getEvents } from '@/api/event-info/get-events'
 import { compareEvents } from '@/utils/compare-events'
+import { useEvents } from '@/cache/events'
 
-const Home = () => (
-  <Page name="Home">
-    <LoadData
-      data={{ events: getEvents }}
-      renderSuccess={({ events }) => (
-        <div>
-          {events ? (
-            events
-              .sort(compareEvents)
-              .map(e => (
-                <EventCard href={`/events/${e.key}`} key={e.key} event={e} />
-              ))
-          ) : (
-            <Spinner />
-          )}
-        </div>
-      )}
-    />
-  </Page>
-)
+const Home = () => {
+  const events = useEvents()
+  return (
+    <Page name="Home">
+      <div>
+        {events ? (
+          events
+            .sort(compareEvents)
+            .map(e => (
+              <EventCard href={`/events/${e.key}`} key={e.key} event={e} />
+            ))
+        ) : (
+          <Spinner />
+        )}
+      </div>
+    </Page>
+  )
+}
 
 export default Home
