@@ -2,13 +2,10 @@ const DB_NAME = 'CACHE'
 const DB_VERSION = 1
 
 const EVENT_STORE = 'events'
-const SCHEMA_STORE = 'schemas'
 
 const initDB = (db: IDBDatabase) => {
   if (!db.objectStoreNames.contains(EVENT_STORE))
     db.createObjectStore(EVENT_STORE)
-  if (!db.objectStoreNames.contains(SCHEMA_STORE))
-    db.createObjectStore(SCHEMA_STORE)
 }
 
 const getDB = (dbName: string): Promise<IDBDatabase> =>
