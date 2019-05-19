@@ -1,17 +1,7 @@
-import {
-  Component,
-  h,
-  ComponentChildren,
-  RenderableProps,
-  createContext,
-} from 'preact'
+import { Component, h, RenderableProps, createContext } from 'preact'
 import Alert from '../alert'
 import { css } from 'linaria'
 import { useContext } from 'preact/hooks'
-
-interface Props {
-  catcher?: (error: Error) => ComponentChildren
-}
 
 interface State {
   error: Error | null
@@ -31,7 +21,7 @@ export const ErrorEmitter = createContext<(error: Error) => void>(error => {
 
 export const useErrorEmitter = () => useContext(ErrorEmitter)
 
-export class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends Component<RenderableProps<{}>, State> {
   state = {
     error: null,
   }
@@ -40,20 +30,17 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({ error })
   }
 
-  render({ catcher, children }: RenderableProps<Props>, { error }: State) {
+  render({ children }: RenderableProps<{}>, { error }: State) {
     return (
       <ErrorEmitter.Provider value={this.componentDidCatch}>
-        {error &&
-          (catcher ? (
-            catcher(error)
-          ) : (
-            <Alert class={alertStyle}>
-              <details>
-                <summary>{error.message}</summary>
-                <pre class={codeStyle}>{error.stack}</pre>
-              </details>
-            </Alert>
-          ))}
+        {error && (
+          <Alert class={alertStyle}>
+            <details>
+              <summary>{error.message}</summary>
+              <pre class={codeStyle}>{error.stack}</pre>
+            </details>
+          </Alert>
+        )}
         {children}
       </ErrorEmitter.Provider>
     )
