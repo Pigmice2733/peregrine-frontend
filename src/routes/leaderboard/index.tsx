@@ -5,7 +5,6 @@ import { getLeaderboard, LeaderboardItem } from '@/api/get-leaderboard'
 import Spinner from '@/components/spinner'
 import Card from '@/components/card'
 import { getUser } from '@/api/user/get-user'
-import { useCallback } from 'preact/hooks'
 import { css } from 'linaria'
 import Authenticated from '@/components/authenticated'
 
@@ -25,7 +24,7 @@ const cardStyle = css`
 const LeaderboardCard = ({
   item,
 }: RenderableProps<{ item: LeaderboardItem }>) => {
-  const user = usePromise(useCallback(() => getUser(item.reporterId), [item]))
+  const user = usePromise(() => getUser(item.reporterId), [item])
 
   return (
     <Card class={cardStyle}>
