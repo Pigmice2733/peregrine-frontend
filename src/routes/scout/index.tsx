@@ -11,11 +11,11 @@ import { formatTeamNumber } from '@/utils/format-team-number'
 import FieldCard from '../../components/field-card'
 import Button from '@/components/button'
 import { getSchema } from '@/api/schema/get-schema'
-import { getEventInfo } from '@/api/event-info/get-event-info'
 import { route } from '@/router'
 import TextInput from '@/components/text-input'
 import { submitComment } from '@/api/report/submit-comment'
 import { css } from 'linaria'
+import { getFastestEventInfo } from '@/cache/event-info'
 
 const scoutStyles = css`
   display: flex;
@@ -100,7 +100,7 @@ export class ScoutPage extends Component<Props, State> {
   }
 
   componentDidMount() {
-    getEventInfo(this.props.eventKey)
+    getFastestEventInfo(this.props.eventKey)
       .then(event => getSchema(event.schemaId))
       .then(schema =>
         this.setState((s: State) => ({
