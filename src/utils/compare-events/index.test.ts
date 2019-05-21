@@ -1,4 +1,4 @@
-import { compareEvents } from '.'
+import { compareEvents, PartialEvent } from '.'
 
 test.each([
   [
@@ -57,6 +57,9 @@ test.each([
     },
     1,
   ],
-])('compare %s and %s', (a, b, expected) => {
-  expect(Math.sign(compareEvents(a, b))).toEqual(expected)
-})
+] as [PartialEvent, PartialEvent, 1 | -1][])(
+  'compare %s and %s',
+  (a, b, expected) => {
+    expect(Math.sign(compareEvents(a, b))).toEqual(expected)
+  },
+)

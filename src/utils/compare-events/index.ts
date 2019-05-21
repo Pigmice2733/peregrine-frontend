@@ -1,4 +1,4 @@
-interface PartialEvent {
+export interface PartialEvent {
   startDate: Date
   endDate: Date
   week?: number
