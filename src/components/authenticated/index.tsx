@@ -1,4 +1,4 @@
-import { h, JSX } from 'preact'
+import { h, JSX, Fragment } from 'preact'
 import { JWT, getWorkingJWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
@@ -6,7 +6,7 @@ import { authenticate } from '@/api/authenticate'
 import Page from '../page'
 import Button from '../button'
 import { css } from 'linaria'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useRef } from 'preact/hooks'
 import { Roles } from '@/api/user'
 import {
   minUsernameLength,
@@ -38,6 +38,7 @@ interface Props {
 }
 
 const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
+  const formRef = useRef<HTMLFormElement>()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -63,26 +64,32 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   }
 
   return (
-    <Form onSubmit={onSubmit}>
-      <TextInput
-        key="username"
-        label="Username"
-        onInput={setUsername}
-        minLength={minUsernameLength}
-        maxLength={maxUsernameLength}
-      />
-      <TextInput
-        key="password"
-        name="password"
-        label="Password"
-        type="password"
-        onInput={setPassword}
-        minLength={minPasswordLength}
-        maxLength={maxPasswordLength}
-      />
-      <Button disabled={isLoading}>
-        {isLoading ? 'Submitting' : 'Submit'}
-      </Button>
+    <Form onSubmit={onSubmit} ref={formRef}>
+      {isValid => (
+        <Fragment>
+          <TextInput
+            required
+            key="username"
+            label="Username"
+            onInput={setUsername}
+            minLength={minUsernameLength}
+            maxLength={maxUsernameLength}
+          />
+          <TextInput
+            required
+            key="password"
+            name="password"
+            label="Password"
+            type="password"
+            onInput={setPassword}
+            minLength={minPasswordLength}
+            maxLength={maxPasswordLength}
+          />
+          <Button disabled={isLoading || !isValid}>
+            {isLoading ? 'Submitting' : 'Submit'}
+          </Button>
+        </Fragment>
+      )}
     </Form>
   )
 }

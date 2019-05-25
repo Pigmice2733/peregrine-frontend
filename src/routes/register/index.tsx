@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import Page from '@/components/page'
@@ -71,34 +71,40 @@ const RegisterForm = () => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <TextInput label="First Name" onInput={setFirstName} />
-      <TextInput label="Last Name" onInput={setLastName} />
-      <TextInput
-        label="Username"
-        onInput={setUsername}
-        minLength={minUsernameLength}
-        maxLength={maxUsernameLength}
-      />
-      <TextInput
-        name="password"
-        label="Password"
-        type="password"
-        onInput={setPassword}
-        minLength={minPasswordLength}
-        maxLength={maxPasswordLength}
-      />
-      <Dropdown
-        class={dropdownClass}
-        options={realms}
-        onChange={v => {
-          setRealmId(v.id)
-        }}
-        getKey={v => v.id}
-        getText={v => v.name}
-      />
-      <Button disabled={isLoading}>
-        {isLoading ? 'Submitting' : 'Submit'}
-      </Button>
+      {isValid => (
+        <Fragment>
+          <TextInput label="First Name" onInput={setFirstName} required />
+          <TextInput label="Last Name" onInput={setLastName} required />
+          <TextInput
+            label="Username"
+            required
+            onInput={setUsername}
+            minLength={minUsernameLength}
+            maxLength={maxUsernameLength}
+          />
+          <TextInput
+            name="password"
+            label="Password"
+            type="password"
+            required
+            onInput={setPassword}
+            minLength={minPasswordLength}
+            maxLength={maxPasswordLength}
+          />
+          <Dropdown
+            class={dropdownClass}
+            options={realms}
+            onChange={v => {
+              setRealmId(v.id)
+            }}
+            getKey={v => v.id}
+            getText={v => v.name}
+          />
+          <Button disabled={isLoading || !isValid}>
+            {isLoading ? 'Submitting' : 'Submit'}
+          </Button>
+        </Fragment>
+      )}
     </Form>
   )
 }

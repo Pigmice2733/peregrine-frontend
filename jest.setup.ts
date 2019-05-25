@@ -1,4 +1,4 @@
-import { cleanup } from 'preact-testing-library'
+import { cleanup } from '@calebeby/preact-testing-library'
 import fetch, { Response, Headers } from 'node-fetch'
 import 'jest-dom/extend-expect'
 import 'fake-indexeddb/auto'
