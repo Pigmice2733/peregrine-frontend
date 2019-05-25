@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import { render, fireEvent, wait } from '@calebeby/preact-testing-library'
 import Authenticated from '.'
-import { mockFetch } from '@/utils/mockFetch'
+import { mockFetch } from '@/utils/mock-fetch'
 
 const createToken = (data: any) => `asdf.${btoa(JSON.stringify(data))}.asdf`
 

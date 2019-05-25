@@ -10,7 +10,7 @@ import { MatchInfo } from '@/api/match-info'
 import { EventInfo } from '@/api/event-info'
 import { Schema } from '@/api/schema'
 import { BaseReport } from '@/api/report'
-import { mockFetch } from '@/utils/mockFetch'
+import { mockFetch } from '@/utils/mock-fetch'
 
 const matchInfo: MatchInfo = {
   key: 'qm3',

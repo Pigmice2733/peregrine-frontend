@@ -1,6 +1,6 @@
 import { apiUrl } from '@/api/api-url'
 import { removeAccessToken, getWorkingJWT } from '@/jwt'
-import { HTTPMethod } from '@/utils/httpMethod'
+import { HTTPMethod } from '@/utils/http-method'
 
 type QueryParams =
   | { [key: string]: string | number | undefined }
