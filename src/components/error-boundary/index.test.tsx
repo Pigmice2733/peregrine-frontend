@@ -39,7 +39,7 @@ test('catches emitted error', async () => {
     const emitError = useErrorEmitter()
     useEffect(() => {
       Promise.reject(new Error('its an error')).catch(emitError)
-    }, [])
+    }, [emitError])
     return <div>Inner Component</div>
   }
   const container = render(

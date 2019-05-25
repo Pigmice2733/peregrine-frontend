@@ -17,6 +17,7 @@ const createHandler = (urls: URLMap): typeof window.fetch => async req => {
       if (url.startsWith('/') && reqUrl.endsWith(url)) return handler
       // otherwise match the whole url
       if (url === reqUrl) return handler
+      return undefined
     },
     undefined,
   )
