@@ -1,5 +1,5 @@
 import Button from '.'
-import { render, cleanup, fireEvent } from 'preact-testing-library'
+import { render, cleanup, fireEvent } from '@calebeby/preact-testing-library'
 import { h } from 'preact'
 import 'jest-dom/extend-expect'
 
