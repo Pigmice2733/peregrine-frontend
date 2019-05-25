@@ -1,12 +1,12 @@
 import LoadData from '.'
-import { render, wait } from 'preact-testing-library'
+import { render } from '@calebeby/preact-testing-library'
 import { h } from 'preact'
 
 test('resolving promise', async () => {
   let resolveData: (value: string) => void = Promise.resolve
   const fakePromise = new Promise<string>(resolve => (resolveData = resolve))
   const getData = () => fakePromise
-  const { container, getByTestId } = render(
+  const { container, findByTestId } = render(
     <LoadData
       data={{ theData: getData }}
       renderSuccess={({ theData }) =>
@@ -20,8 +20,7 @@ test('resolving promise', async () => {
 </h1>
 `)
   resolveData('HIYA')
-  await wait(() => getByTestId('data'))
-  expect(container.firstElementChild).toMatchInlineSnapshot(`
+  expect(await findByTestId('data')).toMatchInlineSnapshot(`
 <pre
   data-testid="data"
 >

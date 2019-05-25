@@ -36,7 +36,8 @@ export const transaction = <T = void>(
         const handleResult = handler(tx.objectStore(storeName))
         if (handleResult) {
           ;(handleResult as IDBRequest<T>).onsuccess = event => {
-            resolve(((event.target as unknown) as { result: T }).result)
+            const { result } = (event.target as unknown) as { result: T }
+            if (result !== undefined) resolve(result)
           }
         } else {
           tx.oncomplete = () => resolve()

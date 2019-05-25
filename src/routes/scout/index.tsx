@@ -102,7 +102,7 @@ export class ScoutPage extends Component<Props, State> {
   componentDidMount() {
     getFastestEventInfo(this.props.eventKey)
       .then(event => getSchema(event.schemaId))
-      .then(schema =>
+      .then(schema => {
         this.setState((s: State) => ({
           schema,
           report: {
@@ -112,8 +112,8 @@ export class ScoutPage extends Component<Props, State> {
               auto: schema.auto.reduce(createEmptyFields, {}),
             },
           },
-        })),
-      )
+        }))
+      })
     getEventMatchInfo(this.props.eventKey, this.props.matchKey).then(m => {
       this.setState({
         redAlliance: m.redAlliance,

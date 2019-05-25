@@ -33,8 +33,3 @@ export const processEvent = (e: EventInfo): ProcessedEventInfo => ({
   startDate: new Date(e.startDate),
   endDate: new Date(e.endDate),
 })
-// need this coercion otherwise ts will have startDate as string & Date
-// rest spread creates intersection types which is slightly inaccurate
-// startDate will be string & Date instead of just Date
-// https://github.com/Microsoft/TypeScript/pull/28234
-// https://github.com/Microsoft/TypeScript/issues/10727

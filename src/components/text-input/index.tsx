@@ -1,10 +1,12 @@
 import { h, JSX } from 'preact'
 import { Merge } from '@/type-utils'
 import { css } from 'linaria'
-import { styled } from 'linaria-styled-preact'
 import clsx from 'clsx'
+import { useState } from 'preact/hooks'
 
-export const InnerTextInput = styled.input`
+const hasFocusedClass = css``
+
+const innerClass = css`
   padding: 0.2rem 0;
   font-size: 1.1rem;
   display: block;
@@ -21,11 +23,26 @@ export const InnerTextInput = styled.input`
     outline: none;
   }
 
-  &:invalid {
+  &${'.' + hasFocusedClass}:invalid {
     border-bottom-color: red;
     box-shadow: none;
   }
 `
+
+export const InnerTextInput = (props: JSX.HTMLAttributes) => {
+  const [hasFocused, setHasFocused] = useState(false)
+  const updateHasFocused = (e: FocusEvent) => {
+    setHasFocused(true)
+    if (props.onBlur) props.onBlur(e)
+  }
+  return (
+    <input
+      {...props}
+      onBlur={updateHasFocused}
+      class={clsx(props.class, hasFocused && hasFocusedClass, innerClass)}
+    />
+  )
+}
 
 const labeledInputClass = css`
   margin: 0.8rem 0;
