@@ -1,5 +1,7 @@
 import { h } from 'preact'
-import style from './style.css'
+import { css } from 'linaria'
+
+const toggleStyle = css``
 
 const Toggle = ({
   onChange,
@@ -9,7 +11,7 @@ const Toggle = ({
   checked?: boolean
   key?: string | number
 }) => (
-  <div class={style.toggle}>
+  <div class={toggleStyle}>
     <input
       type="checkbox"
       onChange={e => onChange((e.target as HTMLInputElement).checked)}
