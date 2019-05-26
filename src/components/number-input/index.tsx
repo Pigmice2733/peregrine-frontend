@@ -1,7 +1,7 @@
 import { h, JSX } from 'preact'
 import { Merge } from '@/type-utils'
-import style from './style.css'
 import { InnerTextInput } from '../text-input'
+import { css } from 'linaria'
 
 type Props = Merge<
   JSX.HTMLAttributes,
@@ -13,6 +13,48 @@ type Props = Merge<
   }
 >
 
+const numberInputStyle = css`
+  display: flex;
+  align-items: center;
+
+  & > button {
+    --bg: #00000022;
+    background: var(--bg);
+    border: none;
+    border-radius: 9in;
+    height: 1.7rem;
+    width: 1.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      background: color-mod(var(--bg) lightness(+30%));
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px var(--focus-ring);
+    }
+  }
+
+  & > input {
+    margin: 0.3rem;
+    width: 2rem;
+    -moz-appearance: textfield;
+    text-align: center;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+`
+
 const NumberInput = ({ onChange, value, ...rest }: Props) => {
   const { min, max } = rest
   if (min !== undefined && value < min) {
@@ -21,7 +63,7 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
     onChange(max)
   }
   return (
-    <div class={style.numberInput}>
+    <div class={numberInputStyle}>
       <button
         tabIndex={-1}
         onClick={e => {

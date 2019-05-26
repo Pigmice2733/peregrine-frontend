@@ -5,7 +5,6 @@ import LoadData from '@/load-data'
 import { MatchCard } from '@/components/match-card'
 import Spinner from '@/components/spinner'
 import Button from '@/components/button'
-import style from './style.css'
 import AnalysisTable from '@/components/analysis-table'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventStats } from '@/api/stats/get-event-stats'
@@ -13,11 +12,39 @@ import clsx from 'clsx'
 import { useEventInfo } from '@/cache/event-info'
 import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
 import { usePromise } from '@/utils/use-promise'
+import { css } from 'linaria'
 
 interface Props {
   eventKey: string
   matchKey: string
 }
+
+const tableTeamStyle = css``
+
+const redStyle = css``
+const blueStyle = css``
+
+const matchStyle = css`
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & > div, /* increase specificity */
+  & > * {
+    margin: 1.5rem 0 0 0;
+    max-width: 100%;
+  }
+
+  /* extra selectors for specificity */
+  a.${tableTeamStyle}.${redStyle} {
+    color: var(--alliance-red);
+  }
+
+  a.${tableTeamStyle}.${blueStyle} {
+    color: var(--alliance-blue);
+  }
+`
 
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
@@ -36,7 +63,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         (eventInfo ? eventInfo.name : eventKey)
       }
     >
-      <div class={style.match}>
+      <div class={matchStyle}>
         <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
           Scout Match
         </Button>
@@ -59,10 +86,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                   renderTeam={team => (
                     <a
                       class={clsx(
-                        style.tableTeam,
+                        tableTeamStyle,
                         matchInfo.redAlliance.includes('frc' + team)
-                          ? style.red
-                          : style.blue,
+                          ? redStyle
+                          : blueStyle,
                       )}
                       href={`/events/${eventKey}/teams/${team}`}
                     >
