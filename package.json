@@ -16,6 +16,7 @@
     "type:watch": "tsc --watch",
     "type": "tsc",
     "start": "webpack-dev-server",
+    "webpack-build": "webpack",
     "build": "node build.js",
     "new-route": "hygen route new"
   },

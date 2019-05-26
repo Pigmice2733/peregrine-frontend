@@ -2,8 +2,57 @@ import { h, JSX } from 'preact'
 import Icon from '@/components/icon'
 import { Falsy } from '@/type-utils'
 import Card, { CardProps } from '@/components/card'
+import { css } from 'linaria'
 
-import style from './style.css'
+const infoCardStyle = css`
+  overflow: hidden;
+  flex-direction: column;
+  margin: 1.2rem auto;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+`
+
+const rowStyle = css`
+  display: flex;
+  font-size: 0.9rem;
+  align-items: center;
+  border-bottom: 0.1em solid #eee;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+
+  &[href]:hover,
+  &:focus {
+    background: #f1f1f1;
+    outline: none;
+  }
+
+  &:last-child {
+    border: none;
+  }
+
+  & svg {
+    margin: 0.8em;
+    flex-shrink: 0;
+  }
+
+  & path {
+    fill: currentColor;
+  }
+
+  & > :last-child:not(:nth-child(2)) {
+    margin-left: auto;
+    min-width: 6rem;
+    display: flex;
+    justify-content: center;
+  }
+`
+
+const titleStyle = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
 
 interface Props {
   info: (
@@ -18,13 +67,13 @@ interface Props {
 const isTruthy = <T extends object>(i: T | Falsy): i is T => Boolean(i)
 
 const InfoGroupCard = ({ info }: Props) => (
-  <Card class={style.infoCard}>
+  <Card class={infoCardStyle}>
     {info.filter(isTruthy).map(({ icon, action, title, ...i }) => {
       const El = i.href ? 'a' : 'div'
       return (
-        <El class={style.row} key={icon} {...i}>
+        <El class={rowStyle} key={icon} {...i}>
           <Icon icon={icon} />
-          <div class={style.title}>{title}</div>
+          <div class={titleStyle}>{title}</div>
           {action && <div>{action}</div>}
         </El>
       )

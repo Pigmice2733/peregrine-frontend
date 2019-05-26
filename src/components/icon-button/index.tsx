@@ -1,14 +1,37 @@
 import { h, JSX } from 'preact'
 import { Merge } from '@/type-utils'
 import Icon from '@/components/icon'
-import style from './style.css'
+import { css } from 'linaria'
+
+const iconButtonStyle = css`
+  cursor: pointer;
+  transition: all 0.1s ease;
+  border-radius: 50%;
+  --side: 2.5rem;
+  width: var(--side);
+  height: var(--side);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.4rem 0;
+  color: inherit;
+  background: transparent;
+  border: none;
+  padding: 0;
+
+  &:hover,
+  &:focus {
+    background: color-mod(#aaa alpha(25%));
+    outline: none;
+  }
+`
 
 type Props = Merge<JSX.HTMLAttributes, { icon: string }>
 
 const IconButton = ({ icon, ...attrs }: Props) => {
   const El = attrs.href ? 'a' : 'button'
   return (
-    <El class={style.iconButton} {...attrs}>
+    <El class={iconButtonStyle} {...attrs}>
       <Icon icon={icon} />
     </El>
   )

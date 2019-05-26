@@ -1,6 +1,5 @@
 import { h } from 'preact'
 import Page from '@/components/page'
-import style from './style.css'
 import LoadData from '@/load-data'
 import InfoGroupCard from '@/components/info-group-card'
 import { sortAscending } from '@/icons/sort-ascending'
@@ -14,6 +13,28 @@ import { getEventMatches } from '@/api/match-info/get-event-matches'
 import { getMatchTeamComments } from '@/api/report/get-match-team-comments'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from '@/components/card'
+import { css } from 'linaria'
+
+const sectionStyle = css`
+  font-weight: normal;
+  text-align: center;
+  font-size: 1.2rem;
+`
+
+const commentsStyle = css`
+  margin: 1.2rem auto;
+  width: 23rem;
+  max-width: calc(100% - 2rem);
+  padding: 1.1rem 0.5rem;
+
+  & ul {
+    margin: 0;
+  }
+
+  & li {
+    padding: 0.3em 0.1em;
+  }
+`
 
 interface Props {
   eventKey: string
@@ -46,7 +67,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
         >
           {nextMatch && (
             <div>
-              <h2 class={style.section}>Next Match</h2>
+              <h2 class={sectionStyle}>Next Match</h2>
               <MatchCard
                 match={nextMatch}
                 href={`/events/${eventKey}/matches/${nextMatch.key}`}
@@ -71,7 +92,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => (
             ]}
           />
           {teamComments && teamComments.length > 0 && (
-            <Card class={style.comments}>
+            <Card class={commentsStyle}>
               <ul>
                 {teamComments
                   .sort((a, b) =>

@@ -2,12 +2,35 @@ import { h } from 'preact'
 import { Field } from '@/api/report'
 import Card from '@/components/card'
 import EnumSelector from '../enum-selector'
-import style from './style.css'
 import NumberInput from '../number-input'
+import { css } from 'linaria'
 
 const NO_ATTEMPT = 'No'
 const FAIL = 'Attempted'
 const SUCCESS = 'Succeeded'
+
+const fieldCardStyle = css`
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  margin: 0.6rem auto;
+  justify-content: space-between;
+
+  & > * {
+    margin: 0.5rem;
+  }
+`
+
+const nameStyle = css`
+  font-weight: bold;
+`
+
+const numInputLabelStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 12rem;
+`
 
 const FieldCard = ({
   field,
@@ -19,11 +42,11 @@ const FieldCard = ({
   type: 'boolean' | 'number'
   key?: string
 }) => (
-  <Card class={style.fieldCard}>
-    <div class={style.name}>{field.name}</div>
+  <Card class={fieldCardStyle}>
+    <div class={nameStyle}>{field.name}</div>
     {type === 'number' ? (
       <div>
-        <div class={style.numInputLabel}>
+        <div class={numInputLabelStyle}>
           <span>Successes</span>
           <NumberInput
             value={field.successes}
@@ -35,7 +58,7 @@ const FieldCard = ({
             }}
           />
         </div>
-        <div class={style.numInputLabel}>
+        <div class={numInputLabelStyle}>
           <span>Failures</span>
           <NumberInput
             value={field.attempts - field.successes}
