@@ -1,12 +1,12 @@
 import { h, JSX, Fragment } from 'preact'
-import { JWT, getWorkingJWT } from '@/jwt'
+import { useJWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import { authenticate } from '@/api/authenticate'
 import Page from '../page'
 import Button from '../button'
 import { css } from 'linaria'
-import { useState, useEffect, useRef } from 'preact/hooks'
+import { useState, useRef } from 'preact/hooks'
 import { Roles } from '@/api/user'
 import {
   minUsernameLength,
@@ -95,15 +95,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
 }
 
 const Authenticated = ({ label, render }: Props) => {
-  // undefined means we don't know if user has a token
-  // null means user has no token
-  const [jwt, setJWT] = useState<JWT | null | undefined>(undefined)
-
-  const checkForWorkingJWT = () => {
-    getWorkingJWT().then(setJWT)
-  }
-
-  useEffect(checkForWorkingJWT, [])
+  const { jwt, checkForWorkingJWT } = useJWT()
 
   if (!jwt) {
     return (
@@ -122,7 +114,7 @@ const Authenticated = ({ label, render }: Props) => {
     )
   }
 
-  return render(jwt.pigmiceRoles)
+  return render(jwt.peregrineRoles)
 }
 
 export default Authenticated

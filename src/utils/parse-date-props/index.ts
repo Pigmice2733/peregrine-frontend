@@ -1,5 +1,5 @@
 export const parseDateProps = <
-  T extends { [key: string]: unknown },
+  T extends { [key: string]: any },
   S extends string
 >(
   input: T,

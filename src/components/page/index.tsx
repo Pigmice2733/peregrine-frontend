@@ -1,79 +1,98 @@
-import { h, ComponentChildren, Component, JSX } from 'preact'
-import style from './style.css'
-import { menu } from '@/icons/menu'
-import { arrowLeft } from '@/icons/arrow-left'
-import IconButton from '../icon-button'
-import clsx from 'clsx'
-import Alert from '../alert'
+import { h, RenderableProps, ComponentChildren, Fragment } from 'preact'
 import { ErrorBoundary } from '../error-boundary'
+import { css } from 'linaria'
+import { createShadow } from '@/utils/create-shadow'
+import { pigmicePurple } from '@/colors'
+import IconButton from '../icon-button'
+import { arrowLeft } from '@/icons/arrow-left'
+import { menu } from '@/icons/menu'
+import clsx from 'clsx'
+import { useState } from 'preact/hooks'
+import { Menu } from '@/components/menu'
 
-interface Tab {
-  name: string
-  contents: ComponentChildren | undefined
-}
+const spacing = '0.15rem'
+
+const iconButtonStyle = css``
+const headerStyle = css`
+  box-shadow: ${createShadow(4)};
+  position: sticky;
+  top: 0;
+  background: ${pigmicePurple};
+  color: white;
+  padding: ${spacing};
+  display: flex;
+  justify-content: space-between;
+  z-index: 4;
+
+  & > * {
+    display: flex;
+    align-items: center;
+  }
+
+  & > * > *,
+  & > * > .${iconButtonStyle} {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: ${spacing};
+  }
+`
+
+const headerText = css`
+  padding: 0 0.6rem;
+`
 
 interface Props {
-  name: string | JSX.Element | JSX.Element[]
-  children?: ComponentChildren
-  back?: string | (() => void)
-  tabs?: Tab[]
+  name: ComponentChildren
+  back: string | (() => void) | false
+  class?: string
 }
 
-interface State {
-  selectedTab: string | undefined
-  error?: Error
-}
-class Page extends Component<Props, State> {
-  state = {
-    selectedTab: this.props.tabs && this.props.tabs[0].name,
-  }
-  selectTab = (selectedTab: string) => this.setState({ selectedTab })
-  render({ name, children, back, tabs }: Props, { selectedTab, error }: State) {
-    return (
-      <div class={clsx(style.page, tabs && style.hasTabs)}>
-        <header>
-          <div class={style.topRow}>
+const mainStyle = css``
+
+const Header = ({ back, name }: Omit<Props, 'class'>) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => setIsMenuOpen(isOpen => !isOpen)
+  const hideMenu = () => setIsMenuOpen(false)
+
+  return (
+    <Fragment>
+      <header class={headerStyle}>
+        <div>
+          {back && (
             <IconButton
-              icon={back ? arrowLeft : menu}
-              aria-label={back ? 'back' : 'menu'}
-              {...(typeof back === 'string'
-                ? { href: back }
-                : { onClick: back })}
+              icon={arrowLeft}
+              class={iconButtonStyle}
+              {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
             />
-            <span>{name}</span>
-          </div>
-          {tabs && (
-            <div class={style.tabs}>
-              {tabs.map(t => (
-                <button
-                  class={t.name === selectedTab ? style.active : undefined}
-                  key={t.name}
-                  onClick={() => this.selectTab(t.name)}
-                >
-                  {t.name}
-                </button>
-              ))}
-            </div>
           )}
-        </header>
-        {error && <Alert>{error.message}</Alert>}
-        <ErrorBoundary>
-          <main>
-            {tabs
-              ? tabs.map(t => (
-                  <div
-                    key={t.name}
-                    class={t.name === selectedTab ? style.active : ''}
-                  >
-                    {t.contents}
-                  </div>
-                ))
-              : children}
-          </main>
-        </ErrorBoundary>
-      </div>
-    )
-  }
+          <h1 class={headerText}>{name}</h1>
+        </div>
+        <div>
+          <IconButton
+            icon={menu}
+            class={iconButtonStyle}
+            onClick={toggleMenu}
+          />
+        </div>
+      </header>
+      <Menu onHide={hideMenu} visible={isMenuOpen} />
+    </Fragment>
+  )
+}
+
+const Page = ({
+  children,
+  name,
+  back,
+  class: className,
+}: RenderableProps<Props>) => {
+  return (
+    <ErrorBoundary>
+      <Header back={back} name={name} />
+      <main class={clsx(className, mainStyle)}>{children}</main>
+    </ErrorBoundary>
+  )
 }
 
 export default Page

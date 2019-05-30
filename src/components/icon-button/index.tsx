@@ -2,6 +2,7 @@ import { h, JSX } from 'preact'
 import { Merge } from '@/type-utils'
 import Icon from '@/components/icon'
 import { css } from 'linaria'
+import clsx from 'clsx'
 
 const iconButtonStyle = css`
   cursor: pointer;
@@ -31,7 +32,7 @@ type Props = Merge<JSX.HTMLAttributes, { icon: string }>
 const IconButton = ({ icon, ...attrs }: Props) => {
   const El = attrs.href ? 'a' : 'button'
   return (
-    <El class={iconButtonStyle} {...attrs}>
+    <El {...attrs} class={clsx(iconButtonStyle, attrs.class)}>
       <Icon icon={icon} />
     </El>
   )

@@ -8,7 +8,7 @@ import { useEvents } from '@/cache/events'
 const Home = () => {
   const events = useEvents()
   return (
-    <Page name="Home">
+    <Page name="Home" back={false}>
       <div>
         {events ? (
           events

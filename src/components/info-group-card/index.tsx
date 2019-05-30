@@ -1,8 +1,9 @@
 import { h, JSX } from 'preact'
 import Icon from '@/components/icon'
-import { Falsy } from '@/type-utils'
+import { Falsy, Merge } from '@/type-utils'
 import Card, { CardProps } from '@/components/card'
 import { css } from 'linaria'
+import clsx from 'clsx'
 
 const infoCardStyle = css`
   overflow: hidden;
@@ -66,8 +67,11 @@ interface Props {
 
 const isTruthy = <T extends object>(i: T | Falsy): i is T => Boolean(i)
 
-const InfoGroupCard = ({ info }: Props) => (
-  <Card class={infoCardStyle}>
+const InfoGroupCard = ({
+  info,
+  ...props
+}: Merge<Props, JSX.HTMLAttributes>) => (
+  <Card {...props} class={clsx(infoCardStyle, props.class)}>
     {info.filter(isTruthy).map(({ icon, action, title, ...i }) => {
       const El = i.href ? 'a' : 'div'
       return (

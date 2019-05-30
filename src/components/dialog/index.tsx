@@ -1,10 +1,10 @@
-import { useState, useRef } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 import { h } from 'preact'
 import { css } from 'linaria'
-import { rgba } from 'polished'
 import { createShadow } from '@/utils/create-shadow'
 import { TextButton } from '@/components/text-button'
 import { pxToRem } from '@/utils/px-to-rem'
+import { Scrim, scrimHiddenClass } from '../scrim'
 
 interface DialogOpts {
   confirm: string
@@ -25,6 +25,14 @@ const dialogStyle = css`
   border-radius: 4px;
   overflow: hidden;
   min-width: 15rem;
+  transition: inherit;
+  transition-timing-function: cubic-bezier(0.15, 0.24, 0.13, 1.42);
+  will-change: transform, opacity;
+
+  .${scrimHiddenClass} & {
+    transform: scale(0.7);
+    opacity: 0;
+  }
 
   & > * {
     margin: 0;
@@ -58,22 +66,9 @@ const actionsStyle = css`
   }
 `
 
-const dialogWrapperStyle = css`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: ${rgba('#000000', 0.32)};
-  z-index: 99;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
 export const DialogDisplayer = () => {
   const [dialogs, setDialogs] = useState<Dialog[]>([])
-  const dialogEl = useRef<HTMLDivElement | null>(null)
+  const [wasVisibleLastFrame, setWasVisibleLastFrame] = useState(false)
   createDialog = opts => {
     let resolvePromise: (value: boolean) => void
     const promise = new Promise<boolean>(resolve => {
@@ -83,7 +78,10 @@ export const DialogDisplayer = () => {
     return promise
   }
 
-  if (dialogs.length === 0) return null
+  if (dialogs.length === 0) {
+    setWasVisibleLastFrame(false)
+    return <Scrim visible={false} />
+  }
 
   const dialog = dialogs[0]
 
@@ -95,17 +93,12 @@ export const DialogDisplayer = () => {
   const dismiss = handleClick(false)
   const confirm = handleClick(true)
 
+  setImmediate(() => setWasVisibleLastFrame(true))
+
   return (
-    <div
-      class={dialogWrapperStyle}
-      onClick={e => {
-        // make sure click is from _this_ element, not a descendant
-        if (e.target === dialogEl.current) dismiss()
-      }}
-      role="none"
-      ref={dialogEl}
-    >
-      <div class={dialogStyle} aria-modal="true" role="dialog">
+    <Scrim visible={wasVisibleLastFrame} onClickOutside={dismiss}>
+      {/* eslint-disable-next-line caleb/jsx-a11y/no-noninteractive-tabindex */}
+      <div tabIndex={0} class={dialogStyle} aria-modal="true" role="dialog">
         {dialog.title && <h1>{dialog.title}</h1>}
         <p>{dialog.description}</p>
         <div class={actionsStyle}>
@@ -113,6 +106,6 @@ export const DialogDisplayer = () => {
           <TextButton onClick={confirm}>{dialog.confirm}</TextButton>
         </div>
       </div>
-    </div>
+    </Scrim>
   )
 }

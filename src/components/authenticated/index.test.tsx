@@ -8,8 +8,8 @@ const createToken = (data: any) => `asdf.${btoa(JSON.stringify(data))}.asdf`
 test('renders login form', async () => {
   mockFetch({
     '/authenticate': {
-      refreshToken: createToken({ pigmiceRoles: { foo: true } }),
-      accessToken: createToken({ pigmiceRoles: { foo: true } }),
+      refreshToken: createToken({ peregrineRoles: { foo: true } }),
+      accessToken: createToken({ peregrineRoles: { foo: true } }),
     },
   })
   const container = render(

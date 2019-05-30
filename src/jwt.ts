@@ -1,5 +1,6 @@
 import { Roles } from '@/api/user'
 import { apiUrl } from '@/api/api-url'
+import { useState, useEffect } from 'preact/hooks'
 
 const REFRESH_TOKEN = 'refreshToken'
 const ACCESS_TOKEN = 'accessToken'
@@ -10,8 +11,8 @@ let refreshToken: string | null = null
 
 export interface JWT {
   exp: number
-  pigmiceRealm: number
-  pigmiceRoles: Roles
+  peregrineRealm: number
+  peregrineRoles: Roles
   sub: string
   raw: string
 }
@@ -97,6 +98,19 @@ export const getWorkingJWT = async (): Promise<JWT | null> => {
   const refreshToken = getUnexpiredRefreshToken()
   if (refreshToken) return createAccessToken(refreshToken)
   return null
+}
+
+export const useJWT = () => {
+  // undefined means we don't know if user has a token
+  // null means user has no token
+  const [jwt, setJWT] = useState<JWT | null | undefined>(undefined)
+
+  const checkForWorkingJWT = () => {
+    getWorkingJWT().then(setJWT)
+  }
+
+  useEffect(checkForWorkingJWT, [])
+  return { jwt, checkForWorkingJWT }
 }
 
 /**
