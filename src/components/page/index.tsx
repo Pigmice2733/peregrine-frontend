@@ -12,6 +12,7 @@ import { Menu } from '@/components/menu'
 
 const spacing = '0.15rem'
 
+const iconButtonStyle = css``
 const headerStyle = css`
   box-shadow: ${createShadow(4)};
   position: sticky;
@@ -28,7 +29,8 @@ const headerStyle = css`
     align-items: center;
   }
 
-  & > * > * {
+  & > * > *,
+  & > * > .${iconButtonStyle} {
     font-size: 1rem;
     font-weight: 700;
     margin: ${spacing};
@@ -60,13 +62,18 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
           {back && (
             <IconButton
               icon={arrowLeft}
+              class={iconButtonStyle}
               {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
             />
           )}
           <h1 class={headerText}>{name}</h1>
         </div>
         <div>
-          <IconButton icon={menu} onClick={toggleMenu} />
+          <IconButton
+            icon={menu}
+            class={iconButtonStyle}
+            onClick={toggleMenu}
+          />
         </div>
       </header>
       <Menu onHide={hideMenu} visible={isMenuOpen} />
