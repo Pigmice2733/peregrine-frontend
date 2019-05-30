@@ -31,7 +31,6 @@ type Props = Merge<JSX.HTMLAttributes, { icon: string }>
 
 const IconButton = ({ icon, ...attrs }: Props) => {
   const El = attrs.href ? 'a' : 'button'
-  console.log(attrs)
   return (
     <El {...attrs} class={clsx(iconButtonStyle, attrs.class)}>
       <Icon icon={icon} />
