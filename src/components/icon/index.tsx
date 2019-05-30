@@ -1,7 +1,8 @@
-import { h } from 'preact'
+import { h, JSX } from 'preact'
 import { css } from 'linaria'
+import clsx from 'clsx'
 
-interface Props {
+interface Props extends JSX.HTMLAttributes {
   icon: string
 }
 
@@ -11,8 +12,8 @@ const iconStyle = css`
   fill: currentColor;
 `
 
-const Icon = ({ icon }: Props) => (
-  <svg class={iconStyle} viewBox="0 0 24 24">
+const Icon = ({ icon, ...props }: Props) => (
+  <svg {...props} class={clsx(iconStyle, props.class)} viewBox="0 0 24 24">
     <path d={icon} />
   </svg>
 )

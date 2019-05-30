@@ -1,67 +1,90 @@
-import { h, ComponentChildren, JSX } from 'preact'
-import style from './style.css'
-import { menu } from '@/icons/menu'
-import { arrowLeft } from '@/icons/arrow-left'
-import IconButton from '../icon-button'
-import clsx from 'clsx'
+import { h, RenderableProps, ComponentChildren, Fragment } from 'preact'
 import { ErrorBoundary } from '../error-boundary'
+import { css } from 'linaria'
+import { createShadow } from '@/utils/create-shadow'
+import { pigmicePurple } from '@/colors'
+import IconButton from '../icon-button'
+import { arrowLeft } from '@/icons/arrow-left'
+import { menu } from '@/icons/menu'
+import clsx from 'clsx'
 import { useState } from 'preact/hooks'
+import { Menu } from '@/components/menu'
 
-interface Tab {
-  name: string
-  contents: ComponentChildren | undefined
-}
+const spacing = '0.15rem'
+
+const headerStyle = css`
+  box-shadow: ${createShadow(4)};
+  position: sticky;
+  top: 0;
+  background: ${pigmicePurple};
+  color: white;
+  padding: ${spacing};
+  display: flex;
+  justify-content: space-between;
+  z-index: 4;
+
+  & > * {
+    display: flex;
+    align-items: center;
+  }
+
+  & > * > * {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: ${spacing};
+  }
+`
+
+const headerText = css`
+  padding: 0 0.6rem;
+`
 
 interface Props {
-  name: string | JSX.Element | JSX.Element[]
-  children?: ComponentChildren
-  back?: string | (() => void)
-  tabs?: Tab[]
+  name: ComponentChildren
+  back: string | (() => void) | false
+  class?: string
 }
 
-const Page = ({ tabs, back, children, name }: Props) => {
-  const [selectedTab, setSelectedTab] = useState(tabs && tabs[0].name)
+const mainStyle = css``
+
+const Header = ({ back, name }: Omit<Props, 'class'>) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const toggleMenu = () => setIsMenuOpen(isOpen => !isOpen)
+  const hideMenu = () => setIsMenuOpen(false)
 
   return (
-    <div class={clsx(style.page, tabs && style.hasTabs)}>
-      <header>
-        <div class={style.topRow}>
-          <IconButton
-            icon={back ? arrowLeft : menu}
-            aria-label={back ? 'back' : 'menu'}
-            {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
-          />
-          <span>{name}</span>
+    <Fragment>
+      <header class={headerStyle}>
+        <div>
+          {back && (
+            <IconButton
+              icon={arrowLeft}
+              {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
+            />
+          )}
+          <h1 class={headerText}>{name}</h1>
         </div>
-        {tabs && (
-          <div class={style.tabs}>
-            {tabs.map(t => (
-              <button
-                class={t.name === selectedTab ? style.active : undefined}
-                key={t.name}
-                onClick={() => setSelectedTab(t.name)}
-              >
-                {t.name}
-              </button>
-            ))}
-          </div>
-        )}
+        <div>
+          <IconButton icon={menu} onClick={toggleMenu} />
+        </div>
       </header>
-      <ErrorBoundary>
-        <main>
-          {tabs
-            ? tabs.map(t => (
-                <div
-                  key={t.name}
-                  class={t.name === selectedTab ? style.active : ''}
-                >
-                  {t.contents}
-                </div>
-              ))
-            : children}
-        </main>
-      </ErrorBoundary>
-    </div>
+      <Menu onHide={hideMenu} visible={isMenuOpen} />
+    </Fragment>
+  )
+}
+
+const Page = ({
+  children,
+  name,
+  back,
+  class: className,
+}: RenderableProps<Props>) => {
+  return (
+    <ErrorBoundary>
+      <Header back={back} name={name} />
+      <main class={clsx(className, mainStyle)}>{children}</main>
+    </ErrorBoundary>
   )
 }
 
