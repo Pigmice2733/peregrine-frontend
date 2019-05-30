@@ -28,6 +28,10 @@ export const compareEvents = (a: PartialEvent, b: PartialEvent) => {
     return 1
   }
 
+  if (Number(a.startDate) === Number(b.startDate)) {
+    return a.name < b.name ? -1 : 1
+  }
+
   return Math.abs(now - Number(a.startDate)) <
     Math.abs(now - Number(b.startDate))
     ? -1
