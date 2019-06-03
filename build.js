@@ -52,15 +52,15 @@ function createLink(path, type, crossorigin = true) {
 const pages = [
   {
     path: '/',
-    file: './src/routes/home/index.tsx',
+    file: './src/routes/home.tsx',
   },
   {
     path: '/events/:eventKey',
-    file: './src/routes/event/index.tsx',
+    file: './src/routes/event.tsx',
   },
   {
     path: '/events/:eventKey/matches/:matchKey',
-    file: './src/routes/event-match/index.tsx',
+    file: './src/routes/event-match.tsx',
   },
   {
     path: '/events/:eventKey/matches/:matchKey/scout',
@@ -68,7 +68,23 @@ const pages = [
   },
   {
     path: '/events/:eventKey/teams/:teamNum',
-    file: './src/routes/event-team/index.tsx',
+    file: './src/routes/event-team.tsx',
+  },
+  {
+    path: '/users',
+    file: './src/routes/users.tsx',
+  },
+  {
+    path: '/register',
+    file: './src/routes/register.tsx',
+  },
+  {
+    path: '/login',
+    file: './src/routes/login.tsx',
+  },
+  {
+    path: '/leaderboard',
+    file: './src/routes/leaderboard.tsx',
   },
 ]
 
