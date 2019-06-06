@@ -69,7 +69,6 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
         <Fragment>
           <TextInput
             required
-            key="username"
             label="Username"
             onInput={setUsername}
             minLength={minUsernameLength}
@@ -77,7 +76,6 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
           />
           <TextInput
             required
-            key="password"
             name="password"
             label="Password"
             type="password"

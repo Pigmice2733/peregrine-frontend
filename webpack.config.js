@@ -19,12 +19,15 @@ module.exports = {
       {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'linaria-preact/loader'],
+        use: [
+          { loader: 'babel-loader', options: { cacheDirectory: true } },
+          'linaria-preact/loader',
+        ],
       },
       {
         test: /\.m?js$/,
         exclude: /src/,
-        use: ['babel-loader'],
+        use: [{ loader: 'babel-loader', options: { cacheDirectory: true } }],
       },
       {
         test: /\.css$/,

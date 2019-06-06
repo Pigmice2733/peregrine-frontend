@@ -30,7 +30,7 @@ export const route = (url: string) => {
   })
 }
 
-export const useRouter = (routes: Route[]) => {
+export const Router = ({ routes }: { routes: Route[] }) => {
   const [url, setUrl] = useState(window.location.pathname)
   const [resolvedComponentMap, setResolvedComponentMap] = useState<
     URLComponentMap

@@ -102,7 +102,7 @@ export const Menu = ({ onHide, visible }: Props) => {
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
 
   return (
-    <Scrim visible={visible} onClickOutside={onHide} key="scrim">
+    <Scrim visible={visible} onClickOutside={onHide}>
       <aside class={menuStyle}>
         <IconButton
           icon={closeIcon}
