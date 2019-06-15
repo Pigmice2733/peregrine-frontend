@@ -40,7 +40,7 @@
   "dependencies": {
     "matchit": "1.0.8",
     "polished": "3.4.0",
-    "preact": "preactjs/preact#f36535d1e7df589b4fefcae621d88a5b1b36f376",
+    "preact": "preactjs/preact#3a4f5686bde881c22a0aae2ae1427af3c5914331",
     "qss": "^2.0.3",
     "systemjs": "3.1.6"
   },
