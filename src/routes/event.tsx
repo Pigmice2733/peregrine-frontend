@@ -15,6 +15,7 @@ import {
   getMatchType,
   MatchType,
 } from '@/utils/match-type'
+import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 
 interface Props {
   eventKey: string
@@ -41,15 +42,7 @@ const eventStyle = css`
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const newestIncompleteMatch =
-    matches &&
-    matches.reduce<ProcessedMatch | null>((prev, match) => {
-      // if match is complete, it is not a candidate
-      if (match.redScore !== undefined) return prev
-      // nothing to compare against so this one must be the best so far
-      if (!prev) return match
-      return compareMatches(prev, match) > 1 ? match : prev
-    }, null)
+  const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
 
   const matchGroups =
     matches &&
