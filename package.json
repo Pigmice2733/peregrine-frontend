@@ -19,7 +19,7 @@
     "webpack-build": "webpack",
     "build": "node build.js",
     "new-route": "hygen route new",
-    "prepare": "cd node_modules/preact && npm i && npm run build"
+    "prepare": "cd node_modules/preact && git init && git remote add origin https://github.com/preactjs/preact && git fetch && git reset --hard origin/master && npm i && npm run build && rm -rf .git"
   },
   "eslintConfig": {
     "extends": [
