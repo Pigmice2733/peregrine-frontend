@@ -35,13 +35,18 @@ module.exports = {
   },
   main: {
     input: './src/index.tsx',
-    output: { dir: 'dist', format: 'system', preferConst: true },
+    output: {
+      dir: 'dist',
+      format: 'system',
+      preferConst: true,
+      sourcemap: true,
+    },
     experimentalOptimizeChunks: true,
     chunkGroupingSize: 37000,
     plugins: [
       node(rollupNodeOptions),
       linaria({
-        sourceMap: process.env.NODE_ENV !== 'production',
+        sourceMap: true,
       }),
       postcss({
         extract: 'dist/style.css',
