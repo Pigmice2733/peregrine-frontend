@@ -62,7 +62,7 @@ type Props = Merge<
 
 const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
   return (
-    <label class={clsx(labeledInputClass, labelClass)}>
+    <label class={clsx(labeledInputClass, labelClass)} key="asdfasdf">
       {label}
       <InnerTextInput
         {...rest}

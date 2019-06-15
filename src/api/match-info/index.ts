@@ -9,12 +9,11 @@ export interface MatchInfo {
   key: string
   redScore?: number
   blueScore?: number
-}
-
-export type MatchList = (MatchInfo & {
   // UTC date - scheduled match time
   scheduledTime?: string
-})[]
+}
 
-export const processMatch = <T extends MatchInfo | MatchList[0]>(match: T) =>
+export const processMatch = (match: MatchInfo) =>
   parseDateProps(match, ['time', 'scheduledTime'])
+
+export type ProcessedMatch = ReturnType<typeof processMatch>

@@ -16,9 +16,11 @@ interface MatchCardProps {
   href?: string
 }
 
+export const matchCardWidth = '23rem'
+
 const matchCardStyle = css`
   margin: 0.7rem auto;
-  width: 23rem;
+  width: ${matchCardWidth};
   font-size: 0.93rem;
   align-items: center;
   display: grid;

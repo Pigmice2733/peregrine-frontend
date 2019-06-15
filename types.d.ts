@@ -55,3 +55,13 @@ declare module 'matchit' {
    */
   export function exec(url: string, match: Route): { [key: string]: string }
 }
+
+declare module 'qss' {
+  type RawVal = string | number | boolean
+  type Val = RawVal | RawVal[]
+  interface QueryObj {
+    [key: string]: Val
+  }
+  export const encode = (params: QueryObj, prefix?: string) => string
+  export const decode = (query: string) => QueryObj
+}

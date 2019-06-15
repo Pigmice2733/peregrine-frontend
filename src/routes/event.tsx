@@ -2,14 +2,19 @@ import { h } from 'preact'
 import Page from '@/components/page'
 import { MatchCard } from '@/components/match-card'
 import Spinner from '@/components/spinner'
-import { getEventMatches } from '@/api/match-info/get-event-matches'
-import { getSchema } from '@/api/schema/get-schema'
-import AnalysisTable from '@/components/analysis-table'
-import { getEventStats } from '@/api/stats/get-event-stats'
-import { usePromise } from '@/utils/use-promise'
-import { useEventInfo, getFastestEventInfo } from '@/cache/event-info'
+import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
+import Button from '@/components/button'
+import { compareMatches } from '@/utils/compare-matches'
+import { useEventMatches } from '@/cache/matches'
+import { ProcessedMatch } from '@/api/match-info'
+import {
+  matchNames,
+  matchTypes,
+  getMatchType,
+  MatchType,
+} from '@/utils/match-type'
 
 interface Props {
   eventKey: string
@@ -34,13 +39,27 @@ const eventStyle = css`
 `
 
 const Event = ({ eventKey }: Props) => {
-  const matches = usePromise(() => getEventMatches(eventKey), [eventKey])
+  const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
-  const schema = usePromise(
-    () => getFastestEventInfo(eventKey).then(e => getSchema(e.schemaId)),
-    [eventKey],
-  )
+  const newestIncompleteMatch =
+    matches &&
+    matches.reduce<ProcessedMatch | null>((prev, match) => {
+      // if match is complete, it is not a candidate
+      if (match.redScore !== undefined) return prev
+      // nothing to compare against so this one must be the best so far
+      if (!prev) return match
+      return compareMatches(prev, match) > 1 ? match : prev
+    }, null)
+
+  const matchGroups =
+    matches &&
+    [
+      ...matches.reduce((groups, match) => {
+        const matchType = getMatchType(match.key)
+        groups.add(matchType)
+        return groups
+      }, new Set<MatchType>()),
+    ].sort((a, b) => matchTypes[a] - matchTypes[b])
 
   return (
     <Page
@@ -48,28 +67,23 @@ const Event = ({ eventKey }: Props) => {
       back="/"
       class={eventStyle}
     >
+      <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
       {eventInfo && <EventInfoCard event={eventInfo} />}
-      {eventStats && schema ? (
-        <AnalysisTable
-          teams={eventStats}
-          schema={schema}
-          renderTeam={team => (
-            <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
-          )}
+      {newestIncompleteMatch && (
+        <MatchCard
+          key={newestIncompleteMatch.key}
+          match={newestIncompleteMatch}
+          href={`/events/${eventKey}/match/${newestIncompleteMatch.key}`}
         />
-      ) : (
-        <Spinner />
       )}
-      {matches ? (
-        matches.length === 0 ? (
+      {matchGroups ? (
+        matchGroups.length === 0 ? (
           <div class={noMatches}>No matches yet</div>
         ) : (
-          matches.map(m => (
-            <MatchCard
-              key={m.key}
-              match={m}
-              href={`/events/${eventKey}/matches/${m.key}`}
-            />
+          matchGroups.map(g => (
+            <Button key={g} href={`/events/${eventKey}/matches/${g}`}>
+              {g === 'qm' ? 'Qualifications' : matchNames[g]}
+            </Button>
           ))
         )
       ) : (

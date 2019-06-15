@@ -27,6 +27,8 @@ const iconButtonStyle = css`
   }
 `
 
+export { iconButtonStyle as iconButtonClass }
+
 type Props = Merge<JSX.HTMLAttributes, { icon: string }>
 
 const IconButton = ({ icon, ...attrs }: Props) => {

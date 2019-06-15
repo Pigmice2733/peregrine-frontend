@@ -15,7 +15,7 @@ import { route } from '@/router'
 import TextInput from '@/components/text-input'
 import { submitComment } from '@/api/report/submit-comment'
 import { css } from 'linaria'
-import { getFastestEventInfo } from '@/cache/event-info'
+import { getFastestEventInfo } from '@/cache/events'
 
 const scoutStyles = css`
   display: flex;
@@ -169,7 +169,7 @@ export class ScoutPage extends Component<Props, State> {
     { schema, redAlliance, blueAlliance, team, report, submitting }: State,
   ) {
     return (
-      <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
+      <Page name="Scout" back={`/events/${eventKey}/match/${matchKey}`}>
         <form class={scoutStyles} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
           {blueAlliance && redAlliance && (
