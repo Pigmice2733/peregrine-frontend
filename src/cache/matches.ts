@@ -7,12 +7,20 @@ import { createMatchDbKey } from '@/utils/create-match-db-key'
 import { preventEmptyArrResolve } from '@/utils/prevent-empty-arr-resolve'
 import { createPromiseRace } from '@/utils/fastest-promise'
 
-const getCachedEventMatches = (eventKey: string) =>
+const getCachedEventMatches = (eventKey: string, team?: string) =>
   transaction('matches', async matchStore => {
     return matchStore.getAll(
       IDBKeyRange.bound(`${eventKey}-`, `${eventKey}-z`),
     ) as IDBRequest<ProcessedMatch[]>
-  }).then(preventEmptyArrResolve)
+  })
+    .then(results =>
+      team
+        ? results.filter(
+            r => r.redAlliance.includes(team) || r.blueAlliance.includes(team),
+          )
+        : results,
+    )
+    .then(preventEmptyArrResolve)
 
 const getCachedEventMatchInfo = (eventKey: string, matchKey: string) =>
   transaction('matches', async matchStore => {
