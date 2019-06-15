@@ -42,7 +42,7 @@ module.exports = {
       sourcemap: true,
     },
     experimentalOptimizeChunks: true,
-    chunkGroupingSize: 37000,
+    chunkGroupingSize: 2000,
     plugins: [
       node(rollupNodeOptions),
       linaria({
