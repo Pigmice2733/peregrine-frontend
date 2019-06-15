@@ -5,6 +5,7 @@ import { useNetworkCache } from '@/utils/use-network-cache'
 import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
 import { createMatchDbKey } from '@/utils/create-match-db-key'
 import { preventEmptyArrResolve } from '@/utils/prevent-empty-arr-resolve'
+import { createPromiseRace } from '@/utils/fastest-promise'
 
 const getCachedEventMatches = (eventKey: string) =>
   transaction('matches', async matchStore => {
@@ -19,6 +20,11 @@ const getCachedEventMatchInfo = (eventKey: string, matchKey: string) =>
       ProcessedMatch
     >
   })
+
+export const getFastestEventMatchInfo = createPromiseRace(
+  getEventMatchInfo,
+  getCachedEventMatchInfo,
+)
 
 export const useEventMatches = useNetworkCache(
   getEventMatches,

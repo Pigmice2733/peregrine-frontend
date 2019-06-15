@@ -5,7 +5,7 @@ import { Schema, StatDescription } from '@/api/schema'
 import { submitReport } from '@/api/report/submit-report'
 import { BaseReport, Field } from '@/api/report'
 import Spinner from '@/components/spinner'
-import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
+import { getFastestEventMatchInfo } from '@/cache/matches'
 import TeamPicker from '@/components/team-picker'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import FieldCard from '../../components/field-card'
@@ -114,12 +114,14 @@ export class ScoutPage extends Component<Props, State> {
           },
         }))
       })
-    getEventMatchInfo(this.props.eventKey, this.props.matchKey).then(m => {
-      this.setState({
-        redAlliance: m.redAlliance,
-        blueAlliance: m.blueAlliance,
-      })
-    })
+    getFastestEventMatchInfo(this.props.eventKey, this.props.matchKey).then(
+      m => {
+        this.setState({
+          redAlliance: m.redAlliance,
+          blueAlliance: m.blueAlliance,
+        })
+      },
+    )
   }
 
   onSubmit = (e: Event) => {
