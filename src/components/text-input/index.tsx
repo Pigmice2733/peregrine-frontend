@@ -45,7 +45,8 @@ export const InnerTextInput = (props: JSX.HTMLAttributes) => {
 }
 
 const labeledInputClass = css`
-  margin: 0.8rem 0;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
   background: transparent;
   font-size: 0.85rem;
   color: #666;

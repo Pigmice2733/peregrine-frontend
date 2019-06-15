@@ -14,7 +14,6 @@ const iconButtonStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0.4rem 0;
   color: inherit;
   background: transparent;
   border: none;
