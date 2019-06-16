@@ -1,4 +1,6 @@
 {
+  "name": "peregrine-frontend",
+  "private": true,
   "prettier": {
     "semi": false,
     "singleQuote": true,
