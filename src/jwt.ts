@@ -1,7 +1,6 @@
 import { Roles } from '@/api/user'
 import { apiUrl } from '@/api/api-url'
 import { useState, useEffect } from 'preact/hooks'
-import { clearPrefs } from './preferences'
 
 const REFRESH_TOKEN = 'refreshToken'
 const ACCESS_TOKEN = 'accessToken'
@@ -54,7 +53,6 @@ export const removeRefreshToken = () => {
 export const logout = () => {
   removeAccessToken()
   removeRefreshToken()
-  clearPrefs()
 }
 
 // These never return an expired token. If it is expired, they delete it
