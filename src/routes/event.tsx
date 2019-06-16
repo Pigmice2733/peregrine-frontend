@@ -6,9 +6,7 @@ import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
 import Button from '@/components/button'
-import { compareMatches } from '@/utils/compare-matches'
 import { useEventMatches } from '@/cache/matches'
-import { ProcessedMatch } from '@/api/match-info'
 import {
   matchNames,
   matchTypes,
