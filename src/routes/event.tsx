@@ -25,7 +25,6 @@ const spacing = '1.4rem'
 const noMatches = css`
   display: flex;
   justify-content: center;
-  padding: 2rem;
   opacity: 0.5;
 `
 
