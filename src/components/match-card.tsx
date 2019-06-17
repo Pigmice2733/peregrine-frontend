@@ -4,6 +4,7 @@ import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Card from '@/components/card'
 import { css } from 'linaria'
+import { memo } from '@/utils/memo'
 
 interface MatchCardProps {
   match: {
@@ -16,11 +17,7 @@ interface MatchCardProps {
   href?: string
 }
 
-export const matchCardWidth = '23rem'
-
 const matchCardStyle = css`
-  margin: 0.7rem auto;
-  width: ${matchCardWidth};
   font-size: 0.93rem;
   align-items: center;
   display: grid;
@@ -54,7 +51,7 @@ const matchNumStyle = css`
   text-transform: uppercase;
   font-weight: normal;
   font-size: 0.8rem;
-  font-family: 'Roboto Condensed', 'Roboto';
+  font-family: 'Roboto Condensed', 'Roboto', sans-serif;
   color: var(--grey-text);
 `
 
@@ -77,7 +74,7 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
-export const MatchCard = ({ match, href }: MatchCardProps) => {
+export const MatchCard = memo(({ match, href }: MatchCardProps) => {
   const matchName = formatMatchKey(match.key)
   return (
     <Card class={matchCardStyle} href={href}>
@@ -100,4 +97,29 @@ export const MatchCard = ({ match, href }: MatchCardProps) => {
       </div>
     </Card>
   )
-}
+})
+
+// export const MatchCard = ({ match, href }: MatchCardProps) => {
+//   const matchName = formatMatchKey(match.key)
+//   return (
+//     <Card class={matchCardStyle} href={href}>
+//       <div class={matchTitleStyle}>
+//         {matchName.num ? <div>{matchName.group}</div> : matchName.group}
+//         {matchName.num && (
+//           <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+//         )}
+//       </div>
+//       {match.time && (
+//         <time dateTime={match.time.toISOString()}>
+//           {formatTime(match.time)}
+//         </time>
+//       )}
+//       <div class={`${redStyle} ${allianceStyle}`}>
+//         {match.redAlliance.map(t => formatTeamNumber(t)).join(' ')}
+//       </div>
+//       <div class={`${blueStyle} ${allianceStyle}`}>
+//         {match.blueAlliance.map(t => formatTeamNumber(t)).join(' ')}
+//       </div>
+//     </Card>
+//   )
+// }

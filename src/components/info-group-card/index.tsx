@@ -9,7 +9,6 @@ const infoCardStyle = css`
   overflow: hidden;
   flex-direction: column;
   width: 23rem;
-  max-width: calc(100% - 2rem);
 `
 
 const rowStyle = css`

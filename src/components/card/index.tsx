@@ -11,7 +11,7 @@ const cardStyle = css`
   background: white;
   text-decoration: none;
   color: inherit;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
 
   &[href]:hover,
   &:focus:not(:active),
