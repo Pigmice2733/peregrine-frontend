@@ -1,5 +1,6 @@
 import { h } from 'preact'
 import { css } from 'linaria'
+import { useEffect, useState } from 'preact/hooks'
 
 const spinnerStyle = css`
   width: 7rem;
@@ -80,6 +81,15 @@ const spinnerStyle = css`
   }
 `
 
-const Spinner = () => <div class={spinnerStyle} />
+const Spinner = () => {
+  const [isShown, setIsShown] = useState(false)
+  // delay showing until 100ms
+  // prevents spinner from showing when loading is < 100ms
+  // makes user experience less jarring
+  useEffect(() => {
+    setTimeout(() => setIsShown(true), 100)
+  }, [])
+  return isShown ? <div class={spinnerStyle} /> : null
+}
 
 export default Spinner

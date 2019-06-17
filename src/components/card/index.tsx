@@ -11,7 +11,7 @@ const cardStyle = css`
   background: white;
   text-decoration: none;
   color: inherit;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, background 0.3s ease;
 
   &[href]:hover,
   &:focus:not(:active),
@@ -25,9 +25,11 @@ const cardStyle = css`
   }
 `
 
-export type CardProps<T = {}> = Merge<JSX.HTMLAttributes, T>
+type Props = JSX.HTMLAttributes
 
-const Card = (props: JSX.HTMLAttributes) => {
+export type CardProps<T = {}> = Merge<Props, T>
+
+const Card = (props: Props) => {
   const El = props.href ? 'a' : 'div'
   return <El {...props} class={clsx(cardStyle, props.class)} />
 }

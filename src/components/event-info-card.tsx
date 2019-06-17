@@ -46,7 +46,11 @@ const gcalUrl = ({
     1,
   )}&location=${encodeURIComponent(locationName)}`
 
-export const EventInfoCard = ({ event }: { event: ProcessedEventInfo }) =>
+interface Props {
+  event: ProcessedEventInfo
+}
+
+export const EventInfoCard = ({ event }: Props) =>
   event ? (
     <InfoGroupCard
       info={[

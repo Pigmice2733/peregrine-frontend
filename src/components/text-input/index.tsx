@@ -45,7 +45,8 @@ export const InnerTextInput = (props: JSX.HTMLAttributes) => {
 }
 
 const labeledInputClass = css`
-  margin: 0.8rem 0;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
   background: transparent;
   font-size: 0.85rem;
   color: #666;
@@ -62,7 +63,7 @@ type Props = Merge<
 
 const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
   return (
-    <label class={clsx(labeledInputClass, labelClass)}>
+    <label class={clsx(labeledInputClass, labelClass)} key="asdfasdf">
       {label}
       <InnerTextInput
         {...rest}

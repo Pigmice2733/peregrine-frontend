@@ -14,7 +14,6 @@ const iconButtonStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0.4rem 0;
   color: inherit;
   background: transparent;
   border: none;
@@ -26,6 +25,8 @@ const iconButtonStyle = css`
     outline: none;
   }
 `
+
+export { iconButtonStyle as iconButtonClass }
 
 type Props = Merge<JSX.HTMLAttributes, { icon: string }>
 

@@ -1,35 +1,26 @@
-import { useState, useEffect } from 'preact/hooks'
 import { ProcessedEventInfo } from '@/api/event-info'
 import { transaction } from '.'
 import { getEvents } from '@/api/event-info/get-events'
+import { getEventInfo } from '@/api/event-info/get-event-info'
+import { useNetworkCache } from '@/utils/use-network-cache'
+import { createPromiseRace } from '@/utils/fastest-promise'
+import { preventEmptyArrResolve } from '@/utils/prevent-empty-arr-resolve'
 
 const getCachedEvents = () =>
-  transaction<ProcessedEventInfo[]>('events', eventStore => eventStore.getAll())
+  transaction<ProcessedEventInfo[]>('events', eventStore =>
+    eventStore.getAll(),
+  ).then(preventEmptyArrResolve)
 
-export const updateCachedEvents = (events: ProcessedEventInfo[]) =>
-  transaction(
-    'events',
-    eventStore => {
-      events.forEach(event => eventStore.put(event, event.key))
-    },
-    'readwrite',
+const getCachedEventInfo = (eventKey: string) =>
+  transaction<ProcessedEventInfo>('events', eventStore =>
+    eventStore.get(eventKey),
   )
 
-export const useEvents = () => {
-  const [events, setEvents] = useState<ProcessedEventInfo[] | undefined>(
-    undefined,
-  )
+export const getFastestEventInfo = createPromiseRace(
+  getEventInfo,
+  getCachedEventInfo,
+)
 
-  useEffect(() => {
-    getCachedEvents().then(cachedEvents =>
-      // don't update state using the cached data if network has already returned
-      setEvents(events => events || cachedEvents),
-    )
+export const useEventInfo = useNetworkCache(getEventInfo, getCachedEventInfo)
 
-    getEvents().then(networkEvents => {
-      setEvents(networkEvents)
-    })
-  }, [])
-
-  return events
-}
+export const useEvents = useNetworkCache(getEvents, getCachedEvents)

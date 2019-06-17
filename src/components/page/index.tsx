@@ -3,7 +3,7 @@ import { ErrorBoundary } from '../error-boundary'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { pigmicePurple } from '@/colors'
-import IconButton from '../icon-button'
+import IconButton, { iconButtonClass } from '../icon-button'
 import { arrowLeft } from '@/icons/arrow-left'
 import { menu } from '@/icons/menu'
 import clsx from 'clsx'
@@ -12,7 +12,6 @@ import { Menu } from '@/components/menu'
 
 const spacing = '0.15rem'
 
-const iconButtonStyle = css``
 const headerStyle = css`
   box-shadow: ${createShadow(4)};
   position: sticky;
@@ -21,33 +20,39 @@ const headerStyle = css`
   color: white;
   padding: ${spacing};
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   z-index: 4;
+  align-items: center;
 
   & > * {
-    display: flex;
-    align-items: center;
-  }
-
-  & > * > *,
-  & > * > .${iconButtonStyle} {
     font-size: 1rem;
     font-weight: 700;
     margin: ${spacing};
+  }
+
+  & > .${iconButtonClass} {
+    flex-shrink: 0;
+  }
+
+  & > .${iconButtonClass}:last-child {
+    margin-left: auto;
   }
 `
 
 const headerText = css`
   padding: 0 0.6rem;
+  white-space: nowrap;
+  flex-shrink: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 interface Props {
   name: ComponentChildren
   back: string | (() => void) | false
   class?: string
+  wrapperClass?: string
 }
-
-const mainStyle = css``
 
 const Header = ({ back, name }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -58,23 +63,14 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
   return (
     <Fragment>
       <header class={headerStyle}>
-        <div>
-          {back && (
-            <IconButton
-              icon={arrowLeft}
-              class={iconButtonStyle}
-              {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
-            />
-          )}
-          <h1 class={headerText}>{name}</h1>
-        </div>
-        <div>
+        {back && (
           <IconButton
-            icon={menu}
-            class={iconButtonStyle}
-            onClick={toggleMenu}
+            icon={arrowLeft}
+            {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
           />
-        </div>
+        )}
+        <h1 class={headerText}>{name}</h1>
+        <IconButton icon={menu} onClick={toggleMenu} />
       </header>
       <Menu onHide={hideMenu} visible={isMenuOpen} />
     </Fragment>
@@ -83,14 +79,16 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
 
 const Page = ({
   children,
-  name,
-  back,
   class: className,
+  wrapperClass,
+  ...rest
 }: RenderableProps<Props>) => {
   return (
     <ErrorBoundary>
-      <Header back={back} name={name} />
-      <main class={clsx(className, mainStyle)}>{children}</main>
+      <div class={clsx(wrapperClass)}>
+        <Header {...rest} />
+        <main class={clsx(className)}>{children}</main>
+      </div>
     </ErrorBoundary>
   )
 }

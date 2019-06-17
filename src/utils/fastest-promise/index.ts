@@ -18,3 +18,8 @@ export const fastestPromise = <T>(a: Promise<T>, b: Promise<T>): Promise<T> =>
     a.then(resolveIfNotResolved).catch(rejectIfOtherRejected)
     b.then(resolveIfNotResolved).catch(rejectIfOtherRejected)
   })
+
+export const createPromiseRace = <DataType, ArgsType extends any[]>(
+  a: (...args: ArgsType) => Promise<DataType>,
+  b: (...args: ArgsType) => Promise<DataType>,
+) => (...args: ArgsType) => fastestPromise(a(...args), b(...args))

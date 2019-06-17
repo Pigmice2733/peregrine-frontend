@@ -5,7 +5,7 @@ import { Schema, StatDescription } from '@/api/schema'
 import { submitReport } from '@/api/report/submit-report'
 import { BaseReport, Field } from '@/api/report'
 import Spinner from '@/components/spinner'
-import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
+import { getFastestEventMatchInfo } from '@/cache/matches'
 import TeamPicker from '@/components/team-picker'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import FieldCard from '../../components/field-card'
@@ -15,7 +15,7 @@ import { route } from '@/router'
 import TextInput from '@/components/text-input'
 import { submitComment } from '@/api/report/submit-comment'
 import { css } from 'linaria'
-import { getFastestEventInfo } from '@/cache/event-info'
+import { getFastestEventInfo } from '@/cache/events'
 
 const scoutStyles = css`
   display: flex;
@@ -114,12 +114,14 @@ export class ScoutPage extends Component<Props, State> {
           },
         }))
       })
-    getEventMatchInfo(this.props.eventKey, this.props.matchKey).then(m => {
-      this.setState({
-        redAlliance: m.redAlliance,
-        blueAlliance: m.blueAlliance,
-      })
-    })
+    getFastestEventMatchInfo(this.props.eventKey, this.props.matchKey).then(
+      m => {
+        this.setState({
+          redAlliance: m.redAlliance,
+          blueAlliance: m.blueAlliance,
+        })
+      },
+    )
   }
 
   onSubmit = (e: Event) => {
@@ -169,7 +171,7 @@ export class ScoutPage extends Component<Props, State> {
     { schema, redAlliance, blueAlliance, team, report, submitting }: State,
   ) {
     return (
-      <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
+      <Page name="Scout" back={`/events/${eventKey}/match/${matchKey}`}>
         <form class={scoutStyles} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
           {blueAlliance && redAlliance && (

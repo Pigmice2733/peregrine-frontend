@@ -27,13 +27,6 @@ module.exports = {
     // usually less code
     ['@babel/plugin-transform-template-literals', { loose: true }],
     [
-      '@babel/plugin-proposal-object-rest-spread',
-      {
-        loose: true,
-        useBuiltIns: true, // object.assign instead of _extends
-      },
-    ],
-    [
       'module-resolver',
       {
         root: ['./src'],

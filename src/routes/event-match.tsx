@@ -9,10 +9,10 @@ import AnalysisTable from '@/components/analysis-table'
 import { getSchema } from '@/api/schema/get-schema'
 import { getEventStats } from '@/api/stats/get-event-stats'
 import clsx from 'clsx'
-import { useEventInfo } from '@/cache/event-info'
-import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
-import { usePromise } from '@/utils/use-promise'
+import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
+import { getMatchType } from '@/utils/match-type'
+import { useEventMatchInfo } from '@/cache/matches'
 
 interface Props {
   eventKey: string
@@ -49,13 +49,10 @@ const matchStyle = css`
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const eventInfo = useEventInfo(eventKey)
-  const matchInfo = usePromise(() => getEventMatchInfo(eventKey, matchKey), [
-    eventKey,
-    matchKey,
-  ])
+  const matchInfo = useEventMatchInfo(eventKey, matchKey)
   return (
     <Page
-      back={`/events/${eventKey}`}
+      back={`/events/${eventKey}/matches/${getMatchType(matchKey)}`}
       name={
         m.group +
         (m.num ? ' Match ' + m.num : '') +
@@ -64,7 +61,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
     >
       <div class={matchStyle}>
-        <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+        <Button href={`/events/${eventKey}/match/${matchKey}/scout`}>
           Scout Match
         </Button>
         {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}

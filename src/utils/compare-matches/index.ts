@@ -1,15 +1,8 @@
+import { getMatchType, matchTypes } from '../match-type'
+
 interface PartialMatch {
   key: string
 }
-
-const matchTypes = {
-  qm: 0,
-  qf: 1,
-  sf: 2,
-  f: 3,
-}
-
-const getMatchType = (k: string) => (k.match(/^[\D]+/) as [string])[0]
 
 const digitRegex = /\d+/g
 
@@ -19,8 +12,9 @@ const digitRegex = /\d+/g
  * @param b Second Event
  */
 export const compareMatches = (a: PartialMatch, b: PartialMatch) => {
-  const aType = getMatchType(a.key) as keyof typeof matchTypes
-  const bType = getMatchType(b.key) as keyof typeof matchTypes
+  const aType = getMatchType(a.key)
+  const bType = getMatchType(b.key)
+
   if (aType !== bType) return matchTypes[aType] - matchTypes[bType]
 
   const aDigits = a.key.match(digitRegex) as [string, string?]

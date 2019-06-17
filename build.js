@@ -59,11 +59,19 @@ const pages = [
     file: './src/routes/event.tsx',
   },
   {
-    path: '/events/:eventKey/matches/:matchKey',
+    path: '/events/:eventKey/analysis',
+    file: './src/routes/event-analysis.tsx',
+  },
+  {
+    path: '/events/:eventKey/matches/:matchType',
+    file: './src/routes/event-match-group.tsx',
+  },
+  {
+    path: '/events/:eventKey/match/:matchKey',
     file: './src/routes/event-match.tsx',
   },
   {
-    path: '/events/:eventKey/matches/:matchKey/scout',
+    path: '/events/:eventKey/match/:matchKey/scout',
     file: './src/routes/scout/index.tsx',
   },
   {
@@ -88,41 +96,44 @@ const pages = [
   },
 ]
 
-function trackDependencies(chunk, chunks) {
+function trackDependencies(chunk, allChunks) {
   return [
-    ...new Set([
-      ...chunk.imports,
-      ...chunk.imports.flatMap(c =>
-        trackDependencies(chunks.find(ch => ch.fileName === c), chunks),
-      ),
-    ]),
+    ...chunk.imports,
+    ...chunk.imports.flatMap(c =>
+      trackDependencies(allChunks.find(ch => ch.fileName === c), allChunks),
+    ),
   ]
 }
 
-const baseDependencies =
-  [
-    createLink('systemjs-entry.js', 'script', false),
-    createLink('index.js', 'script'),
-    createLink('style.css', 'style'),
-  ].join('\n') + '\n'
+/**
+ * @param {string[]} values
+ */
+const dedupe = values => [...new Set(values)]
 
 async function buildHeaders(output) {
   const outputValues = Object.values(output)
+
+  const printChunkDependencies = path => {
+    const srcPath = require.resolve(path)
+    const chunk = outputValues.find(v => v.facadeModuleId === srcPath)
+    const dependencies = [chunk.fileName, ...trackDependencies(chunk, output)]
+    return dependencies.map(d => createLink(d, 'script'))
+  }
+
+  const baseDependencies = [
+    createLink('systemjs-entry.js', 'script', false),
+    ...printChunkDependencies('./src/index.tsx'),
+    createLink('style.css', 'style'),
+  ]
+
   const contents = pages
-    .map(p => {
-      const srcPath = require.resolve(p.file)
-      const chunk = outputValues.find(v => v.facadeModuleId === srcPath)
-      return {
-        path: p.path,
-        dependencies: [chunk.fileName, ...trackDependencies(chunk, output)],
-      }
-    })
     .map(
       p =>
         p.path +
         '\n' +
-        baseDependencies +
-        p.dependencies.map(d => createLink(d, 'script')).join('\n'),
+        dedupe([...baseDependencies, ...printChunkDependencies(p.file)]).join(
+          '\n',
+        ),
     )
     .join('\n\n')
 

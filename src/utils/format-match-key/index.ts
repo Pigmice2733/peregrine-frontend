@@ -1,13 +1,7 @@
+import { getMatchType, matchNames } from '../match-type'
+
 export const formatMatchKey = (key: string) => {
-  const matchType = key.startsWith('qm')
-    ? 'Qual'
-    : key.startsWith('qf')
-    ? 'Quarters'
-    : key.startsWith('sf')
-    ? 'Semis'
-    : key.startsWith('f')
-    ? 'Finals'
-    : ''
+  const matchType = matchNames[getMatchType(key)]
   const matchNum = key.match(/(\d+)$/)
   if (!matchNum || matchType === '') return { group: key.toUpperCase() }
   const groupNum = key.match(/(\d+)m\d+$/)

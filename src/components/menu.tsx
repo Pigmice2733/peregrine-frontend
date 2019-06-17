@@ -63,7 +63,9 @@ const MenuItem = ({ href, children, icon }: MenuItemProps) => {
 const menuStyle = css`
   position: fixed;
   right: 0;
+  top: 0;
   width: 20rem;
+  max-width: 90vw;
   height: 100%;
   background: white;
   box-shadow: ${createShadow(16)};

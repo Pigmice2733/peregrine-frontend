@@ -1,46 +1,72 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { MatchCard } from '@/components/match-card'
 import Spinner from '@/components/spinner'
-import { getEventMatches } from '@/api/match-info/get-event-matches'
-import { getSchema } from '@/api/schema/get-schema'
-import AnalysisTable from '@/components/analysis-table'
-import { getEventStats } from '@/api/stats/get-event-stats'
-import { usePromise } from '@/utils/use-promise'
-import { useEventInfo, getFastestEventInfo } from '@/cache/event-info'
+import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
+import Button from '@/components/button'
+import { useEventMatches } from '@/cache/matches'
+import {
+  matchNames,
+  matchTypes,
+  getMatchType,
+  MatchType,
+} from '@/utils/match-type'
+import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { Heading } from '@/components/heading'
 
 interface Props {
   eventKey: string
 }
 
+const spacing = '1.4rem'
+
 const noMatches = css`
   display: flex;
   justify-content: center;
-  padding: 2rem;
   opacity: 0.5;
 `
 
 const eventStyle = css`
-  display: flex;
-  flex-direction: column;
-  --spacing: 1rem;
-  padding: calc(var(--spacing) / 2) 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  align-items: start;
+  grid-gap: ${spacing};
+  padding: ${spacing};
+  margin-top: 0.5rem;
 
-  & > * {
-    margin: calc(var(--spacing) / 2) auto;
+  @media (min-width: 950px) {
+    grid-template-columns: auto auto;
   }
 `
 
+const sectionStyle = css`
+  display: grid;
+  grid-template-columns: auto;
+  justify-items: center;
+  grid-gap: ${spacing};
+`
+
+const headingStyle = css`
+  font-size: 1.2rem;
+`
+
 const Event = ({ eventKey }: Props) => {
-  const matches = usePromise(() => getEventMatches(eventKey), [eventKey])
+  const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
-  const schema = usePromise(
-    () => getFastestEventInfo(eventKey).then(e => getSchema(e.schemaId)),
-    [eventKey],
-  )
+  const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
+
+  const matchGroups =
+    matches &&
+    [
+      ...matches.reduce((groups, match) => {
+        const matchType = getMatchType(match.key)
+        groups.add(matchType)
+        return groups
+      }, new Set<MatchType>()),
+    ].sort((a, b) => matchTypes[a] - matchTypes[b])
 
   return (
     <Page
@@ -48,33 +74,37 @@ const Event = ({ eventKey }: Props) => {
       back="/"
       class={eventStyle}
     >
-      {eventInfo && <EventInfoCard event={eventInfo} />}
-      {eventStats && schema ? (
-        <AnalysisTable
-          teams={eventStats}
-          schema={schema}
-          renderTeam={team => (
-            <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
-          )}
-        />
-      ) : (
-        <Spinner />
-      )}
-      {matches ? (
-        matches.length === 0 ? (
-          <div class={noMatches}>No matches yet</div>
-        ) : (
-          matches.map(m => (
+      <div class={sectionStyle}>
+        {eventInfo && <EventInfoCard event={eventInfo} />}
+        <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+      </div>
+      <div class={sectionStyle}>
+        {newestIncompleteMatch && (
+          <Fragment>
+            <Heading level={2} class={headingStyle}>
+              Next Match
+            </Heading>
             <MatchCard
-              key={m.key}
-              match={m}
-              href={`/events/${eventKey}/matches/${m.key}`}
+              key={newestIncompleteMatch.key}
+              match={newestIncompleteMatch}
+              href={`/events/${eventKey}/match/${newestIncompleteMatch.key}`}
             />
-          ))
-        )
-      ) : (
-        <Spinner />
-      )}
+          </Fragment>
+        )}
+        {matchGroups ? (
+          matchGroups.length === 0 ? (
+            <div class={noMatches}>No matches yet</div>
+          ) : (
+            matchGroups.map(g => (
+              <Button key={g} href={`/events/${eventKey}/matches/${g}`}>
+                {g === 'qm' ? 'Qualifications' : matchNames[g]}
+              </Button>
+            ))
+          )
+        ) : (
+          <Spinner />
+        )}
+      </div>
     </Page>
   )
 }

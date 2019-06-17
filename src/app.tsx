@@ -18,11 +18,19 @@ const App = () => (
             component: () => import('./routes/event'),
           },
           {
-            path: '/events/:eventKey/matches/:matchKey',
+            path: '/events/:eventKey/analysis',
+            component: () => import('./routes/event-analysis'),
+          },
+          {
+            path: '/events/:eventKey/matches/:matchType',
+            component: () => import('./routes/event-match-group'),
+          },
+          {
+            path: '/events/:eventKey/match/:matchKey',
             component: () => import('./routes/event-match'),
           },
           {
-            path: '/events/:eventKey/matches/:matchKey/scout',
+            path: '/events/:eventKey/match/:matchKey/scout',
             component: () => import('./routes/scout'),
           },
           {
