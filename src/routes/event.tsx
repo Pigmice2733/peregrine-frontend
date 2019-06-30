@@ -9,6 +9,7 @@ import { useEventMatches } from '@/cache/matches'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
+import Spinner from '@/components/spinner'
 
 interface Props {
   eventKey: string
@@ -39,6 +40,13 @@ const sectionStyle = css`
 const headingStyle = css`
   font-size: 1.2rem;
   justify-self: center;
+`
+
+const noMatchesStyle = css`
+  color: gray;
+  text-align: center;
+  /* it seemed like there was a little too much space above without this change */
+  margin: -0.35rem 0 0;
 `
 
 const Event = ({ eventKey }: Props) => {
@@ -73,7 +81,15 @@ const Event = ({ eventKey }: Props) => {
             />
           </Fragment>
         )}
-        {matches && <EventMatches matches={matches} eventKey={eventKey} />}
+        {matches ? (
+          matches.length > 0 ? (
+            <EventMatches matches={matches} eventKey={eventKey} />
+          ) : (
+            <p class={noMatchesStyle}>No matches yet</p>
+          )
+        ) : (
+          <Spinner />
+        )}
       </div>
     </Page>
   )
