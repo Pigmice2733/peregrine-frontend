@@ -6,9 +6,8 @@ import clsx from 'clsx'
 
 const formStyles = css`
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-gap: 1.6rem;
 `
 
 type Props = Merge<
