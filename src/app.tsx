@@ -22,15 +22,11 @@ const App = () => (
             component: () => import('./routes/event-analysis'),
           },
           {
-            path: '/events/:eventKey/matches/:matchType',
-            component: () => import('./routes/event-match-group'),
-          },
-          {
-            path: '/events/:eventKey/match/:matchKey',
+            path: '/events/:eventKey/matches/:matchKey',
             component: () => import('./routes/event-match'),
           },
           {
-            path: '/events/:eventKey/match/:matchKey/scout',
+            path: '/events/:eventKey/matches/:matchKey/scout',
             component: () => import('./routes/scout'),
           },
           {

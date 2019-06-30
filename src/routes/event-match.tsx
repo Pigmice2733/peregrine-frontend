@@ -52,7 +52,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const matchInfo = useEventMatchInfo(eventKey, matchKey)
   return (
     <Page
-      back={`/events/${eventKey}/matches/${getMatchType(matchKey)}`}
+      back={`/events/${eventKey}`}
       name={
         m.group +
         (m.num ? ' Match ' + m.num : '') +
@@ -61,7 +61,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
     >
       <div class={matchStyle}>
-        <Button href={`/events/${eventKey}/match/${matchKey}/scout`}>
+        <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
           Scout Match
         </Button>
         {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}

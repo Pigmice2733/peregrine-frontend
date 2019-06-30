@@ -171,7 +171,7 @@ export class ScoutPage extends Component<Props, State> {
     { schema, redAlliance, blueAlliance, team, report, submitting }: State,
   ) {
     return (
-      <Page name="Scout" back={`/events/${eventKey}/match/${matchKey}`}>
+      <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
         <form class={scoutStyles} onSubmit={this.onSubmit}>
           <h1>Scout {team && formatTeamNumber(team)}</h1>
           {blueAlliance && redAlliance && (
