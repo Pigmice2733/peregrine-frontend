@@ -2,7 +2,7 @@ import { h } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getEventStats } from '@/api/stats/get-event-stats'
-import { getFastestEventInfo, useEventInfo } from '@/cache/events'
+import { useEventInfo } from '@/cache/events'
 import { getSchema } from '@/api/schema/get-schema'
 import AnalysisTable from '@/components/analysis-table'
 import Spinner from '@/components/spinner'
@@ -15,10 +15,10 @@ interface Props {
 const analysisPageStyle = css`
   padding: 1rem;
   overflow: hidden;
+`
 
-  & > * {
-    height: 100%;
-  }
+const analysisTableStyle = css`
+  height: 100%;
 `
 
 const wrapperStyle = css`
@@ -47,6 +47,7 @@ const EventAnalysis = ({ eventKey }: Props) => {
     >
       {eventStats && schema ? (
         <AnalysisTable
+          class={analysisTableStyle}
           teams={eventStats}
           schema={schema}
           renderTeam={team => (
