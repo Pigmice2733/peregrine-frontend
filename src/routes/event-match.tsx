@@ -11,7 +11,6 @@ import { getEventStats } from '@/api/stats/get-event-stats'
 import clsx from 'clsx'
 import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
-import { getMatchType } from '@/utils/match-type'
 import { useEventMatchInfo } from '@/cache/matches'
 
 interface Props {
