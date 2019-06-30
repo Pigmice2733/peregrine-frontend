@@ -6,8 +6,8 @@ const buttonStyle = css`
   text-align: center;
   background: var(--pigmice-purple);
   border: none;
-  padding: 0.4rem 0.7rem;
-  border-radius: 99in;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.2rem;
   color: white;
   cursor: pointer;
   box-shadow: 0.1rem 0.1rem 0.6rem #00000059;

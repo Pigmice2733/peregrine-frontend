@@ -63,15 +63,11 @@ const pages = [
     file: './src/routes/event-analysis.tsx',
   },
   {
-    path: '/events/:eventKey/matches/:matchType',
-    file: './src/routes/event-match-group.tsx',
-  },
-  {
-    path: '/events/:eventKey/match/:matchKey',
+    path: '/events/:eventKey/matches/:matchKey',
     file: './src/routes/event-match.tsx',
   },
   {
-    path: '/events/:eventKey/match/:matchKey/scout',
+    path: '/events/:eventKey/matches/:matchKey/scout',
     file: './src/routes/scout/index.tsx',
   },
   {

@@ -1,72 +1,58 @@
 import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { MatchCard } from '@/components/match-card'
-import Spinner from '@/components/spinner'
 import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
 import Button from '@/components/button'
 import { useEventMatches } from '@/cache/matches'
-import {
-  matchNames,
-  matchTypes,
-  getMatchType,
-  MatchType,
-} from '@/utils/match-type'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { Heading } from '@/components/heading'
+import { EventMatches } from '@/components/event-matches'
+import Spinner from '@/components/spinner'
 
 interface Props {
   eventKey: string
 }
 
-const spacing = '1.4rem'
-
-const noMatches = css`
-  display: flex;
-  justify-content: center;
-  opacity: 0.5;
-`
+const spacing = '1.5rem'
 
 const eventStyle = css`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(21rem, 23rem);
   justify-content: center;
   align-items: start;
   grid-gap: ${spacing};
   padding: ${spacing};
   margin-top: 0.5rem;
 
-  @media (min-width: 950px) {
-    grid-template-columns: auto auto;
+  @media (min-width: 800px) {
+    grid-template-columns: minmax(20rem, 25rem) 21rem;
   }
 `
 
 const sectionStyle = css`
   display: grid;
   grid-template-columns: auto;
-  justify-items: center;
-  grid-gap: ${spacing};
+  grid-gap: 2.5rem;
 `
 
 const headingStyle = css`
   font-size: 1.2rem;
+  justify-self: center;
+`
+
+const noMatchesStyle = css`
+  color: gray;
+  text-align: center;
+  /* it seemed like there was a little too much space above without this change */
+  margin: -0.35rem 0 0;
 `
 
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
   const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
-
-  const matchGroups =
-    matches &&
-    [
-      ...matches.reduce((groups, match) => {
-        const matchType = getMatchType(match.key)
-        groups.add(matchType)
-        return groups
-      }, new Set<MatchType>()),
-    ].sort((a, b) => matchTypes[a] - matchTypes[b])
 
   return (
     <Page
@@ -75,15 +61,19 @@ const Event = ({ eventKey }: Props) => {
       class={eventStyle}
     >
       <div class={sectionStyle}>
+        <Heading level={2} class={headingStyle}>
+          Information
+        </Heading>
         {eventInfo && <EventInfoCard event={eventInfo} />}
         <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
       </div>
+
       <div class={sectionStyle}>
+        <Heading level={2} class={headingStyle}>
+          {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+        </Heading>
         {newestIncompleteMatch && (
           <Fragment>
-            <Heading level={2} class={headingStyle}>
-              Next Match
-            </Heading>
             <MatchCard
               key={newestIncompleteMatch.key}
               match={newestIncompleteMatch}
@@ -91,15 +81,11 @@ const Event = ({ eventKey }: Props) => {
             />
           </Fragment>
         )}
-        {matchGroups ? (
-          matchGroups.length === 0 ? (
-            <div class={noMatches}>No matches yet</div>
+        {matches ? (
+          matches.length > 0 ? (
+            <EventMatches matches={matches} eventKey={eventKey} />
           ) : (
-            matchGroups.map(g => (
-              <Button key={g} href={`/events/${eventKey}/matches/${g}`}>
-                {g === 'qm' ? 'Qualifications' : matchNames[g]}
-              </Button>
-            ))
+            <p class={noMatchesStyle}>No matches yet</p>
           )
         ) : (
           <Spinner />

@@ -60,13 +60,13 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum),
     [eventKey, teamNum],
   )
-  const eventMatches = useEventMatches(eventKey, 'frc' + teamNum)
+  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
   const teamComments = usePromise(
     () => getMatchTeamComments(eventKey, 'frc' + teamNum),
     [eventKey, teamNum],
   )
 
-  const nextMatch = eventMatches && nextIncompleteMatch(eventMatches)
+  const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
   return (
     <Page

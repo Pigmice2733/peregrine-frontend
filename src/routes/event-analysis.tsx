@@ -2,7 +2,7 @@ import { h } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getEventStats } from '@/api/stats/get-event-stats'
-import { getFastestEventInfo } from '@/cache/events'
+import { useEventInfo } from '@/cache/events'
 import { getSchema } from '@/api/schema/get-schema'
 import AnalysisTable from '@/components/analysis-table'
 import Spinner from '@/components/spinner'
@@ -15,10 +15,10 @@ interface Props {
 const analysisPageStyle = css`
   padding: 1rem;
   overflow: hidden;
+`
 
-  & > * {
-    height: 100%;
-  }
+const analysisTableStyle = css`
+  height: 100%;
 `
 
 const wrapperStyle = css`
@@ -30,13 +30,12 @@ const wrapperStyle = css`
 
 const EventAnalysis = ({ eventKey }: Props) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
+  const eventInfo = useEventInfo(eventKey)
+  const eventName = eventInfo && eventInfo.name
   const schema = usePromise(
-    () => getFastestEventInfo(eventKey).then(e => getSchema(e.schemaId)),
-    [eventKey],
-  )
-  const eventName = usePromise(
-    () => getFastestEventInfo(eventKey).then(e => e.name),
-    [eventKey],
+    () =>
+      eventInfo ? getSchema(eventInfo.schemaId) : Promise.resolve(undefined),
+    [eventKey, eventInfo],
   )
 
   return (
@@ -48,6 +47,7 @@ const EventAnalysis = ({ eventKey }: Props) => {
     >
       {eventStats && schema ? (
         <AnalysisTable
+          class={analysisTableStyle}
           teams={eventStats}
           schema={schema}
           renderTeam={team => (

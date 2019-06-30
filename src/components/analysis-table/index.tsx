@@ -72,6 +72,7 @@ interface Props {
   }[]
   schema: Schema
   renderTeam: (team: string) => JSX.Element
+  class?: string
 }
 
 type SortType = 'teamNum' | 'auto' | 'teleop'
@@ -104,12 +105,12 @@ class AnalysisTable extends Component<Props, State> {
   }
 
   render(
-    { teams, schema, renderTeam }: Props,
+    { teams, schema, renderTeam, class: className }: Props,
     { sortStat, sortType, reversed, statType }: State,
   ) {
     const transformedStats = eachStat(schema)
     return (
-      <Card class={style.analysisTable}>
+      <Card class={clsx(className, style.analysisTable)}>
         <div class={style.wrapper}>
           <table>
             <thead>

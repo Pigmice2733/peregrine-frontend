@@ -37,8 +37,6 @@ const cardStyle = css`
 
 const dropdownClass = css`
   padding: 0.4rem;
-  margin: 0.4rem;
-  width: auto;
 `
 
 const RegisterForm = () => {

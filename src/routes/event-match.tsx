@@ -11,7 +11,6 @@ import { getEventStats } from '@/api/stats/get-event-stats'
 import clsx from 'clsx'
 import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
-import { getMatchType } from '@/utils/match-type'
 import { useEventMatchInfo } from '@/cache/matches'
 
 interface Props {
@@ -52,7 +51,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const matchInfo = useEventMatchInfo(eventKey, matchKey)
   return (
     <Page
-      back={`/events/${eventKey}/matches/${getMatchType(matchKey)}`}
+      back={`/events/${eventKey}`}
       name={
         m.group +
         (m.num ? ' Match ' + m.num : '') +
@@ -61,7 +60,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
     >
       <div class={matchStyle}>
-        <Button href={`/events/${eventKey}/match/${matchKey}/scout`}>
+        <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
           Scout Match
         </Button>
         {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
