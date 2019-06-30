@@ -62,7 +62,7 @@ const Event = ({ eventKey }: Props) => {
     >
       <div class={sectionStyle}>
         <Heading level={2} class={headingStyle}>
-          Event Info
+          Information
         </Heading>
         {eventInfo && <EventInfoCard event={eventInfo} />}
         <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
