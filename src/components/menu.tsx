@@ -75,6 +75,7 @@ const menuStyle = css`
   display: flex;
   flex-direction: column;
   padding: ${spacing};
+  will-change: transform;
 
   & ul {
     list-style-type: none;
@@ -106,6 +107,7 @@ export const Menu = ({ onHide, visible }: Props) => {
     <Scrim visible={visible} onClickOutside={onHide}>
       <aside class={menuStyle}>
         <IconButton
+          aria-label="Close Menu"
           icon={closeIcon}
           onClick={onHide}
           class={closeButtonStyle}
