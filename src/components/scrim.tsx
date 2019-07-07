@@ -32,6 +32,7 @@ const scrimStyle = css`
     background: ${rgba('#000000', 0.32)};
     transition: all ${transitionDuration} ease;
     opacity: 1;
+    will-change: opacity;
   }
 `
 
@@ -58,7 +59,7 @@ export const Scrim = ({
   ...props
 }: Props) => {
   const scrimEl = useRef<HTMLDivElement | null>(null)
-  const lastOutsideFocusedElement = useRef<HTMLElement | null>(null)
+  const previouslyFocusedElement = useRef<HTMLElement | null>(null)
   const handleClick = (e: MouseEvent) => {
     if (props.onClick) props.onClick(e)
     // make sure click is from _this_ element, not a descendant
@@ -82,7 +83,7 @@ export const Scrim = ({
       const transitionEndHandler = (e: TransitionEvent) => {
         if ((e.target !== firstChild && e.target !== scrim) || hasFired) return
         hasFired = true
-        lastOutsideFocusedElement.current = document.activeElement as HTMLElement | null
+        previouslyFocusedElement.current = document.activeElement as HTMLElement | null
         if (firstChild) moveFocusInside(firstChild)
       }
 
@@ -90,8 +91,10 @@ export const Scrim = ({
       return () =>
         scrim.removeEventListener('transitionend', transitionEndHandler)
     }
-    if (lastOutsideFocusedElement.current)
-      lastOutsideFocusedElement.current.focus()
+    if (previouslyFocusedElement.current) {
+      // reset focus back to where it was
+      previouslyFocusedElement.current.focus()
+    }
   }, [visible])
 
   useEffect(() => {
