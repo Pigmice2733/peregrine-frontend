@@ -21,6 +21,7 @@ const cssModulesConfig = postcssPlugins['postcss-modules']
 
 const extensions = ['.js', '.jsx', '.es', '.mjs', '.ts', '.tsx', '.css']
 
+process.env.ROLLUP = 'true'
 const prod = process.env.NODE_ENV === 'production'
 const rollupNodeOptions = { extensions }
 
@@ -42,6 +43,8 @@ const terserOptions = prod => ({
 
 const outDir = 'dist'
 
+const babelOptions = { extensions, babelrc: false, ...babelConfig }
+
 export default [
   {
     input: './src/systemjs-entry.js',
@@ -49,20 +52,26 @@ export default [
     plugins: [node(rollupNodeOptions), terser(terserOptions(true))],
   },
   {
+    input: './src/sw.ts',
+    output: {
+      dir: 'dist',
+      format: 'esm',
+    },
+    plugins: [babel(babelOptions), terser(terserOptions(prod))],
+  },
+  {
     input: './src/index.tsx',
     output: {
       dir: 'dist',
       format: 'system',
       preferConst: true,
-      sourcemap: true,
+      sourcemap: false,
     },
     experimentalOptimizeChunks: true,
     chunkGroupingSize: 25000,
     plugins: [
       node(rollupNodeOptions),
-      linaria({
-        sourceMap: true,
-      }),
+      linaria({ sourceMap: false }),
       postcss({
         extract: 'dist/style.css',
         modules: cssModulesConfig,
@@ -74,11 +83,9 @@ export default [
           [],
         ),
         config: false,
-        minimize: {
-          zindex: false,
-        },
+        minimize: { zindex: false },
       }),
-      babel({ extensions, babelrc: false, ...babelConfig }),
+      babel(babelOptions),
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
@@ -95,6 +102,19 @@ export default [
           const htmlSrc = await readFileAsync('rollup-index.html', 'utf8')
           const htmlOut = templite(htmlSrc, { apiUrl })
           writeFileAsync(join(outDir, 'index.html'), htmlOut)
+        },
+      },
+      {
+        name: 'rollup-plugin-chunks-json',
+        async writeBundle(bundle) {
+          const chunksJSON = Object.values(bundle)
+            .filter(chunk => !chunk.isAsset)
+            .map(chunk => `/${chunk.fileName}`)
+            .concat(['/systemjs-entry'])
+          await writeFileAsync(
+            join(outDir, 'chunks.json'),
+            JSON.stringify(chunksJSON),
+          )
         },
       },
       {

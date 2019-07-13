@@ -14,6 +14,7 @@ declare const process: {
     NODE_ENV?: string
     PEREGRINE_API_URL?: string
     BRANCH?: string
+    ROLLUP?: 'true' | 'false'
   }
 }
 
