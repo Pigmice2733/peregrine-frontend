@@ -110,7 +110,7 @@ export default [
           const chunksJSON = Object.values(bundle)
             .filter(chunk => !chunk.isAsset)
             .map(chunk => `/${chunk.fileName}`)
-            .concat(['/systemjs-entry.js'])
+            .concat(['/systemjs-entry.js', '/style.css'])
           await writeFileAsync(
             join(outDir, 'chunks.json'),
             JSON.stringify(chunksJSON),
