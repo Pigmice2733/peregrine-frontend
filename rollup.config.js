@@ -1,19 +1,32 @@
-const linaria = require('linaria-preact/rollup')
-const node = require('rollup-plugin-node-resolve')
-const { terser } = require('rollup-plugin-terser')
-const babel = require('rollup-plugin-babel')
-const postcss = require('rollup-plugin-postcss')
-const postcssConfig = require('./postcss.config')
-const cssModulesConfig = postcssConfig.plugins['postcss-modules']
+import linaria from 'linaria-preact/rollup'
+import node from 'rollup-plugin-node-resolve'
+import { terser } from 'rollup-plugin-terser'
+import babel from 'rollup-plugin-babel'
+import postcss from 'rollup-plugin-postcss'
+import netlifyPush, { printPush } from 'rollup-plugin-netlify-push'
+import parseRoutes from 'rollup-plugin-netlify-push/parse-routes'
+import { apiUrl } from './src/api/api-url.ts'
+import { promisify } from 'util'
+import { writeFile, readFile } from 'fs'
+import { join } from 'path'
+import cpy from 'cpy'
+import templite from 'templite'
+const postcssPlugins = require('./postcss.config').plugins
 const babelConfig = require('./.babelrc')
+
+const writeFileAsync = promisify(writeFile)
+const readFileAsync = promisify(readFile)
+
+const cssModulesConfig = postcssPlugins['postcss-modules']
 
 const extensions = ['.js', '.jsx', '.es', '.mjs', '.ts', '.tsx', '.css']
 
 const prod = process.env.NODE_ENV === 'production'
 const rollupNodeOptions = { extensions }
 
+/** @param {boolean} prod */
 const terserOptions = prod => ({
-  ecma: 8,
+  ecma: /** @type {8} */ (8),
   module: true,
   compress: {
     passes: 4,
@@ -27,13 +40,15 @@ const terserOptions = prod => ({
   },
 })
 
-module.exports = {
-  systemEntry: {
+const outDir = 'dist'
+
+export default [
+  {
     input: './src/systemjs-entry.js',
-    output: { file: 'dist/systemjs-entry.js', format: 'iife' },
+    output: { file: join(outDir, 'systemjs-entry.js'), format: 'iife' },
     plugins: [node(rollupNodeOptions), terser(terserOptions(true))],
   },
-  main: {
+  {
     input: './src/index.tsx',
     output: {
       dir: 'dist',
@@ -51,7 +66,7 @@ module.exports = {
       postcss({
         extract: 'dist/style.css',
         modules: cssModulesConfig,
-        plugins: Object.entries(postcssConfig.plugins).reduce(
+        plugins: Object.entries(postcssPlugins).reduce(
           (plugins, [key, value]) =>
             key === 'postcss-modules'
               ? plugins
@@ -65,6 +80,29 @@ module.exports = {
       }),
       babel({ extensions, babelrc: false, ...babelConfig }),
       terser(terserOptions(prod)),
+      netlifyPush({
+        getRoutes: () => parseRoutes('./src/routes.ts'),
+        from: './src/routes.ts',
+        everyRouteHeaders: [
+          printPush({ path: '/style.css', as: 'style' }),
+          printPush({ path: '/systemjs-entry.js', as: 'script' }),
+          printPush({ path: '/index.js', as: 'script', crossOrigin: true }),
+        ],
+      }),
+      {
+        name: 'rollup-write-html',
+        async writeBundle() {
+          const htmlSrc = await readFileAsync('rollup-index.html', 'utf8')
+          const htmlOut = templite(htmlSrc, { apiUrl })
+          writeFileAsync(join(outDir, 'index.html'), htmlOut)
+        },
+      },
+      {
+        name: 'rollup-plugin-copy',
+        async writeBundle() {
+          await cpy('_redirects', outDir)
+        },
+      },
     ],
   },
-}
+]
