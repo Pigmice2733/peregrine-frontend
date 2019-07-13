@@ -66,3 +66,8 @@ declare module 'qss' {
   export const encode = (params: QueryObj, prefix?: string) => string
   export const decode = (query: string) => QueryObj
 }
+
+declare module 'chunks' {
+  const chunks: string[]
+  export default chunks
+}

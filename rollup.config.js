@@ -42,6 +42,7 @@ const terserOptions = prod => ({
 })
 
 const outDir = 'dist'
+const chunksFile = join(outDir, 'chunks.json')
 
 const babelOptions = { extensions, babelrc: false, ...babelConfig }
 
@@ -50,14 +51,6 @@ export default [
     input: './src/systemjs-entry.js',
     output: { file: join(outDir, 'systemjs-entry.js'), format: 'iife' },
     plugins: [node(rollupNodeOptions), terser(terserOptions(true))],
-  },
-  {
-    input: './src/sw.ts',
-    output: {
-      dir: 'dist',
-      format: 'esm',
-    },
-    plugins: [babel(babelOptions), terser(terserOptions(prod))],
   },
   {
     input: './src/index.tsx',
@@ -110,11 +103,8 @@ export default [
           const chunksJSON = Object.values(bundle)
             .filter(chunk => !chunk.isAsset)
             .map(chunk => `/${chunk.fileName}`)
-            .concat(['/systemjs-entry.js', '/style.css'])
-          await writeFileAsync(
-            join(outDir, 'chunks.json'),
-            JSON.stringify(chunksJSON),
-          )
+            .concat(['/systemjs-entry.js'])
+          await writeFileAsync(chunksFile, JSON.stringify(chunksJSON))
         },
       },
       {
@@ -123,6 +113,31 @@ export default [
           await cpy('_redirects', outDir)
         },
       },
+    ],
+  },
+  {
+    input: './src/sw.ts',
+    output: {
+      dir: 'dist',
+      format: 'esm',
+    },
+    plugins: [
+      {
+        // Regenerate the SW whenever the main bundle changes
+        name: 'chunks',
+        resolveId(source) {
+          if (source === 'chunks') return chunksFile
+          return null
+        },
+        async load(source) {
+          if (source !== chunksFile) return null
+          const chunks = await readFileAsync(chunksFile, 'utf8')
+          return `const chunks = ${chunks}; export default chunks`
+        },
+      },
+      node(rollupNodeOptions),
+      babel(babelOptions),
+      terser(terserOptions(prod)),
     ],
   },
 ]
