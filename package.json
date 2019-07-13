@@ -89,7 +89,7 @@
     "clsx": "1.0.4",
     "cpy": "7.3.0",
     "css-loader": "2.1.1",
-    "eslint": "5.16.0",
+    "eslint": "6.0.1",
     "eslint-plugin-caleb": "5.0.0",
     "fake-indexeddb": "2.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
