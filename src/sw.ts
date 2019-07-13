@@ -1,15 +1,12 @@
 declare var self: ServiceWorkerGlobalScope
 export {}
 
-const chunksPromise = fetch('/chunks.json').then(d => d.json()) as Promise<
-  string[]
->
-
 const cachePromise = caches.open('v1')
 
 const populateCache = async () => {
   const cache = await cachePromise
-  await cache.addAll([...(await chunksPromise), '/'])
+  const chunks: string[] = await fetch('/chunks.json').then(d => d.json())
+  await cache.addAll([...chunks, '/'])
 }
 
 self.addEventListener('install', function(event) {
