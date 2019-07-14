@@ -7,7 +7,9 @@ interface URLMap {
   [url: string]: any
 }
 
-const createHandler = (urls: URLMap): typeof window.fetch => async req => {
+const createHandler = (urls: URLMap): typeof window.fetch => async (
+  req: RequestInfo,
+) => {
   const reqUrl = typeof req === 'string' ? req : req.url
   const matchingRoute = Object.entries(urls).reduce<any>(
     (matchingRoute, [url, handler]) => {

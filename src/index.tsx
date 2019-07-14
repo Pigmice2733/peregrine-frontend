@@ -18,3 +18,7 @@ document.body.append(el)
 cleanupTokens()
 
 render(<App />, el)
+
+if ('serviceWorker' in navigator && process.env.ROLLUP === 'true') {
+  navigator.serviceWorker.register('/sw.js')
+}

@@ -33,4 +33,4 @@ const requestIdleCallbackPolyfill: typeof window.requestIdleCallback = callback 
 }
 
 export const requestIdleCallback =
-  window.requestIdleCallback || requestIdleCallbackPolyfill
+  self.requestIdleCallback || requestIdleCallbackPolyfill
