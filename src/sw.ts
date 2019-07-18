@@ -15,7 +15,6 @@ const urlInWhitelist = (whitelist: string[], url: string) =>
 const setupCache = async () => {
   const cache = await cachePromise
   const cacheItems: string[] = [...chunks, root, '/style.css']
-  console.log(cacheItems)
   await cache.addAll(cacheItems)
   ;(await cache.keys()).forEach(req => {
     if (!urlInWhitelist(cacheItems, req.url)) cache.delete(req)

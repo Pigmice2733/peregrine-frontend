@@ -40,6 +40,7 @@
     }
   },
   "dependencies": {
+    "ganalytics": "^3.1.2",
     "matchit": "1.0.8",
     "polished": "3.4.1",
     "preact": "10.0.0-rc.0",
