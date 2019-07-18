@@ -1,5 +1,5 @@
-import App from './app'
-import { cleanupTokens } from './jwt'
+import App from '@/app'
+import { cleanupTokens } from '@/jwt'
 import { render, h } from 'preact'
 
 if (process.env.NODE_ENV === 'development') {
