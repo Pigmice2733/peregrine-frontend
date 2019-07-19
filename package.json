@@ -78,7 +78,7 @@
     "@babel/plugin-transform-modules-commonjs": "7.5.0",
     "@babel/plugin-transform-react-jsx": "7.3.0",
     "@babel/plugin-transform-template-literals": "7.4.4",
-    "@babel/preset-env": "7.5.4",
+    "@babel/preset-env": "7.5.5",
     "@babel/preset-typescript": "7.3.3",
     "@calebeby/preact-testing-library": "0.0.2",
     "@testing-library/jest-dom": "^4.0.0",
