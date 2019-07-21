@@ -28,9 +28,7 @@ self.addEventListener('install', function(event) {
 
 const handleGETRequest = async (request: Request): Promise<Response> => {
   const cache = await cachePromise
-  const cacheResult = await cache.match(request)
-  if (!cacheResult) return fetch(request)
-  return cacheResult
+  return (await cache.match(request)) || fetch(request, { mode: 'same-origin' })
 }
 
 const handleFontsRequest = async (request: Request) => {
