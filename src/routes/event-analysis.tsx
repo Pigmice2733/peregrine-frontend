@@ -15,7 +15,8 @@ interface Props {
 const analysisPageStyle = css`
   padding: 1rem;
   overflow: hidden;
-
+  display: flex;
+  justify-content: center;
   @media (max-width: 600px) {
     padding: 0;
   }
