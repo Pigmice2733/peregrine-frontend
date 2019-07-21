@@ -17,6 +17,9 @@ const analysisPageStyle = css`
   overflow: hidden;
   display: flex;
   justify-content: center;
+  @media (max-width: 600px) {
+    padding: 0;
+  }
 `
 
 const analysisTableStyle = css`
