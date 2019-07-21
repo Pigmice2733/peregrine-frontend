@@ -15,6 +15,8 @@ interface Props {
 const analysisPageStyle = css`
   padding: 1rem;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 `
 
 const analysisTableStyle = css`
