@@ -12,10 +12,10 @@ interface Props extends JSX.HTMLAttributes {
 const headingStyle = css`
   margin: 0;
   border-bottom: 0.13rem solid ${pigmicePurple};
-  padding-bottom: 0.25rem;
+  padding: 0 1rem 0.25rem;
 `
 
 export const Heading = ({ level, ...props }: Props) => {
   const Element = 'h' + level
-  return <Element {...props} class={clsx(headingStyle, props.class)}></Element>
+  return <Element {...props} class={clsx(headingStyle, props.class)} />
 }

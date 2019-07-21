@@ -3,58 +3,28 @@ import { Router } from './router'
 import { h, Fragment } from 'preact'
 import 'preact/debug'
 import { DialogDisplayer } from './components/dialog'
+import routes from './routes'
+import GAnalytics from 'ganalytics'
+import { requestIdleCallback } from '@/utils/request-idle-callback'
+
+const ga = GAnalytics('UA-144107080-1', {}, true)
+
+const sendGa =
+  process.env.NODE_ENV === 'production'
+    ? () =>
+        requestIdleCallback(() => {
+          ga.send('pageview', {
+            dl: location.href,
+            dt: document.title,
+            dh: location.hostname,
+          })
+        })
+    : () => {}
 
 const App = () => (
   <Fragment>
     <div>
-      <Router
-        routes={[
-          {
-            path: '/',
-            component: () => import('./routes/home'),
-          },
-          {
-            path: '/events/:eventKey',
-            component: () => import('./routes/event'),
-          },
-          {
-            path: '/events/:eventKey/analysis',
-            component: () => import('./routes/event-analysis'),
-          },
-          {
-            path: '/events/:eventKey/matches/:matchType',
-            component: () => import('./routes/event-match-group'),
-          },
-          {
-            path: '/events/:eventKey/match/:matchKey',
-            component: () => import('./routes/event-match'),
-          },
-          {
-            path: '/events/:eventKey/match/:matchKey/scout',
-            component: () => import('./routes/scout'),
-          },
-          {
-            path: '/events/:eventKey/teams/:teamNum',
-            component: () => import('./routes/event-team'),
-          },
-          {
-            path: '/users',
-            component: () => import('./routes/users'),
-          },
-          {
-            path: '/register',
-            component: () => import('./routes/register'),
-          },
-          {
-            path: '/login',
-            component: () => import('./routes/login'),
-          },
-          {
-            path: '/leaderboard',
-            component: () => import('./routes/leaderboard'),
-          },
-        ]}
-      />
+      <Router routes={routes} onChange={sendGa} />
     </div>
     <DialogDisplayer />
   </Fragment>

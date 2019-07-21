@@ -8,7 +8,6 @@ import clsx from 'clsx'
 const infoCardStyle = css`
   overflow: hidden;
   flex-direction: column;
-  width: 23rem;
 `
 
 const rowStyle = css`

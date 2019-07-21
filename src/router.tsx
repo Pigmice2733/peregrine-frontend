@@ -30,7 +30,13 @@ export const route = (url: string) => {
   })
 }
 
-export const Router = ({ routes }: { routes: Route[] }) => {
+export const Router = ({
+  routes,
+  onChange,
+}: {
+  routes: Route[]
+  onChange: () => void
+}) => {
   const [url, setUrl] = useState(window.location.pathname)
   const [resolvedComponentMap, setResolvedComponentMap] = useState<
     URLComponentMap
@@ -70,6 +76,10 @@ export const Router = ({ routes }: { routes: Route[] }) => {
     window.addEventListener('popstate', historyListener)
     return () => window.removeEventListener('popstate', historyListener)
   }, [])
+
+  useEffect(() => {
+    onChange()
+  }, [url, onChange])
 
   useEffect(() => {
     // when a link is clicked, don't do a full reload, intercept and update state

@@ -66,11 +66,12 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
         {back && (
           <IconButton
             icon={arrowLeft}
+            aria-label="Back"
             {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
           />
         )}
         <h1 class={headerText}>{name}</h1>
-        <IconButton icon={menu} onClick={toggleMenu} />
+        <IconButton icon={menu} onClick={toggleMenu} aria-label="Open Menu" />
       </header>
       <Menu onHide={hideMenu} visible={isMenuOpen} />
     </Fragment>

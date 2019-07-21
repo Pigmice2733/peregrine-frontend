@@ -1,9 +1,6 @@
 import Button from '.'
-import { render, cleanup, fireEvent } from '@calebeby/preact-testing-library'
+import { render, fireEvent } from '@calebeby/preact-testing-library'
 import { h } from 'preact'
-import 'jest-dom/extend-expect'
-
-afterEach(cleanup)
 
 test('button', () => {
   const clickHandler = jest.fn()

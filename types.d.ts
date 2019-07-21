@@ -14,6 +14,7 @@ declare const process: {
     NODE_ENV?: string
     PEREGRINE_API_URL?: string
     BRANCH?: string
+    ROLLUP?: 'true' | 'false'
   }
 }
 
@@ -64,4 +65,9 @@ declare module 'qss' {
   }
   export const encode = (params: QueryObj, prefix?: string) => string
   export const decode = (query: string) => QueryObj
+}
+
+declare module 'chunks' {
+  const chunks: string[]
+  export default chunks
 }

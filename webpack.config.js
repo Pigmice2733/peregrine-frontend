@@ -82,6 +82,7 @@ module.exports = {
     hot: true,
     overlay: true,
     quiet: true,
+    host: '0.0.0.0',
     port: 2733,
   },
 }
