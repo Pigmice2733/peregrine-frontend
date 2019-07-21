@@ -11,6 +11,8 @@ import { writeFile, readFile } from 'fs'
 import { join } from 'path'
 import cpy from 'cpy'
 import templite from 'templite'
+import sharp from 'sharp'
+import mkdirplz from 'mkdirplz'
 const postcssPlugins = require('./postcss.config').plugins
 const babelConfig = require('./.babelrc')
 
@@ -138,6 +140,36 @@ export default [
       node(rollupNodeOptions),
       babel(babelOptions),
       terser(terserOptions(prod)),
+      {
+        name: 'write-manifest',
+        async writeBundle() {
+          const manifestSrc = await readFileAsync('./src/manifest.json', 'utf8')
+          await writeFileAsync(
+            join(outDir, 'manifest.json'),
+            JSON.stringify(JSON.parse(manifestSrc)),
+          )
+        },
+      },
+      {
+        name: 'write-icons',
+        async writeBundle() {
+          const iconSrc = await readFileAsync('./src/logo.png')
+          const iconDir = join(outDir, 'icons')
+          await mkdirplz(iconDir)
+          const background = 'transparent'
+          await Promise.all(
+            [512, 192].map(async width =>
+              writeFileAsync(
+                join(iconDir, `${width}.png`),
+                await sharp(iconSrc)
+                  .resize(width, width, { fit: 'contain', background })
+                  .png()
+                  .toBuffer(),
+              ),
+            ),
+          )
+        },
+      },
     ],
   },
 ]

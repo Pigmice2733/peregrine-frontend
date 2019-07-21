@@ -15,6 +15,10 @@ interface Props {
 const analysisPageStyle = css`
   padding: 1rem;
   overflow: hidden;
+
+  @media (max-width: 600px) {
+    padding: 0;
+  }
 `
 
 const analysisTableStyle = css`

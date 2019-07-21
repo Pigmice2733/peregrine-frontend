@@ -9,8 +9,6 @@ import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
 // Scrim is a partially transparent dark full-screen backdrop used to focus the
 // user's attention
 
-const transitionDuration = '0.15s'
-
 const scrimStyle = css`
   position: fixed;
   top: 0;
@@ -21,7 +19,7 @@ const scrimStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all ${transitionDuration} ease;
+  transition: all 0.15s ease;
 
   &::before {
     z-index: -1; /* display behind other contents */
@@ -30,7 +28,7 @@ const scrimStyle = css`
     width: 100%;
     height: 100%;
     background: ${rgba('#000000', 0.32)};
-    transition: all ${transitionDuration} ease;
+    transition: inherit;
     opacity: 1;
     will-change: opacity;
   }
