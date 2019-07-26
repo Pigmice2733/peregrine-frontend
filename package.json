@@ -127,7 +127,7 @@
     "sharp": "^0.22.1",
     "templite": "1.1.0",
     "typescript": "3.5.3",
-    "webpack": "4.37.0",
+    "webpack": "4.38.0",
     "webpack-bundle-analyzer": "3.3.2",
     "webpack-cli": "3.3.6",
     "webpack-dev-server": "3.7.2",
