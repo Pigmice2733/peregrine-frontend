@@ -93,7 +93,7 @@ export const DialogDisplayer = () => {
   const dismiss = handleClick(false)
   const confirm = handleClick(true)
 
-  setImmediate(() => setWasVisibleLastFrame(true))
+  setTimeout(() => setWasVisibleLastFrame(true))
 
   return (
     <Scrim visible={wasVisibleLastFrame} onClickOutside={dismiss}>
