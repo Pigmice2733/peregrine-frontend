@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { h } from 'preact'
+import { h, JSX } from 'preact'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { TextButton } from '@/components/text-button'
@@ -8,9 +8,9 @@ import { Scrim, scrimHiddenClass } from '../scrim'
 
 interface DialogOpts {
   confirm: string
-  dismiss: string
+  dismiss?: string
   title?: string
-  description: string
+  description: string | JSX.Element
 }
 
 interface Dialog extends DialogOpts {
@@ -24,7 +24,7 @@ const dialogStyle = css`
   box-shadow: ${createShadow(24)};
   border-radius: 4px;
   overflow: hidden;
-  min-width: 15rem;
+  min-width: 13rem;
   transition: inherit;
   transition-timing-function: cubic-bezier(0.15, 0.24, 0.13, 1.42);
   will-change: transform, opacity;
@@ -100,9 +100,15 @@ export const DialogDisplayer = () => {
       {/* eslint-disable-next-line caleb/jsx-a11y/no-noninteractive-tabindex */}
       <div tabIndex={0} class={dialogStyle} aria-modal="true" role="dialog">
         {dialog.title && <h1>{dialog.title}</h1>}
-        <p>{dialog.description}</p>
+        {typeof dialog.description === 'string' ? (
+          <p>{dialog.description}</p>
+        ) : (
+          dialog.description
+        )}
         <div class={actionsStyle}>
-          <TextButton onClick={dismiss}>{dialog.dismiss}</TextButton>
+          {dialog.dismiss && (
+            <TextButton onClick={dismiss}>{dialog.dismiss}</TextButton>
+          )}
           <TextButton onClick={confirm}>{dialog.confirm}</TextButton>
         </div>
       </div>

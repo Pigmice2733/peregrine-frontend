@@ -1,12 +1,12 @@
-import { h } from 'preact'
+import { h, FunctionComponent } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getEventStats } from '@/api/stats/get-event-stats'
 import { useEventInfo } from '@/cache/events'
-import { getSchema } from '@/api/schema/get-schema'
 import AnalysisTable from '@/components/analysis-table'
 import Spinner from '@/components/spinner'
 import { css } from 'linaria'
+import { useSchema } from '@/cache/schemas'
 
 interface Props {
   eventKey: string
@@ -33,19 +33,15 @@ const wrapperStyle = css`
   flex-direction: column;
 `
 
-const EventAnalysis = ({ eventKey }: Props) => {
+const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
-  const eventName = eventInfo && eventInfo.name
-  const schema = usePromise(
-    () =>
-      eventInfo ? getSchema(eventInfo.schemaId) : Promise.resolve(undefined),
-    [eventKey, eventInfo],
-  )
+
+  const schema = useSchema(eventInfo && eventInfo.schemaId)
 
   return (
     <Page
-      name={`Analysis - ${eventName || eventKey}`}
+      name={`Analysis - ${eventInfo ? eventInfo.name : eventKey}`}
       back={`/events/${eventKey}`}
       class={analysisPageStyle}
       wrapperClass={wrapperStyle}
