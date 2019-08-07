@@ -14,11 +14,11 @@ import {
 import { formatPercent } from '@/utils/format-percent'
 import { round } from '@/utils/round'
 import { useState } from 'preact/hooks'
-import { Dropdown } from '../dropdown'
+import { Dropdown } from './dropdown'
 import { css } from 'linaria'
-import { createDialog } from '../dialog'
+import { createDialog } from './dialog'
 import { blue, red, gray, lightGrey } from '@/colors'
-import Icon from '../icon'
+import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 
 interface Props {
