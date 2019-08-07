@@ -181,9 +181,12 @@ const tableRowStyle = css`
   }
 
   & td,
-  th {
+  & th {
     font-size: 1rem;
     font-weight: normal;
+  }
+
+  & td {
     padding: 0.8rem 0.6rem;
   }
 

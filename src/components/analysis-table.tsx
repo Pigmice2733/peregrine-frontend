@@ -149,9 +149,20 @@ const dropdownStyle = css`
   padding: 0.2rem;
 `
 
+const teamNumCellStyle = css`
+  padding: 0;
+
+  & a {
+    display: block;
+    padding: 0.8rem 0.6rem;
+    text-decoration: none;
+  }
+`
+
 const AnalysisTable: FunctionComponent<Props> = ({
   teams,
   schema,
+  renderTeam,
   class: className,
 }) => {
   const [statType, setStatType] = useState<StatType>('Successes')
@@ -160,7 +171,11 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: cell => <th scope="row">{`${cell}`}</th>,
+    renderCell: team => (
+      <th scope="row" class={teamNumCellStyle}>
+        {renderTeam(team)}
+      </th>
+    ),
     sortOrder: SortOrder.ASC,
   }
   const columns = [

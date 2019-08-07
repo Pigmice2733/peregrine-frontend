@@ -12,6 +12,8 @@ import clsx from 'clsx'
 import { useEventInfo } from '@/cache/events'
 import { css } from 'linaria'
 import { useEventMatchInfo } from '@/cache/matches'
+import { useSchema } from '@/cache/schemas'
+import { usePromise } from '@/utils/use-promise'
 
 interface Props {
   eventKey: string
@@ -49,6 +51,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const eventInfo = useEventInfo(eventKey)
   const matchInfo = useEventMatchInfo(eventKey, matchKey)
+  const schema = useSchema(eventInfo && eventInfo.schemaId)
+  const teams = usePromise(() => getEventStats(eventKey), [eventKey])
+
   return (
     <Page
       back={`/events/${eventKey}`}
@@ -64,38 +69,27 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           Scout Match
         </Button>
         {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
-        {eventInfo && (
-          <LoadData
-            data={{
-              schema: () => getSchema(eventInfo.schemaId),
-              teams: () => getEventStats(eventKey),
-            }}
-            renderSuccess={({ schema, teams }) =>
-              (matchInfo && schema && teams && (
-                <AnalysisTable
-                  teams={teams.filter(
-                    t =>
-                      matchInfo.redAlliance.includes('frc' + t.team) ||
-                      matchInfo.blueAlliance.includes('frc' + t.team),
-                  )}
-                  schema={schema}
-                  renderTeam={team => (
-                    <a
-                      class={clsx(
-                        tableTeamStyle,
-                        matchInfo.redAlliance.includes('frc' + team)
-                          ? redStyle
-                          : blueStyle,
-                      )}
-                      href={`/events/${eventKey}/teams/${team}`}
-                    >
-                      {team}
-                    </a>
-                  )}
-                />
-              )) ||
-              null
-            }
+        {matchInfo && schema && teams && (
+          <AnalysisTable
+            teams={teams.filter(
+              t =>
+                matchInfo.redAlliance.includes('frc' + t.team) ||
+                matchInfo.blueAlliance.includes('frc' + t.team),
+            )}
+            schema={schema}
+            renderTeam={team => (
+              <a
+                class={clsx(
+                  tableTeamStyle,
+                  matchInfo.redAlliance.includes('frc' + team)
+                    ? redStyle
+                    : blueStyle,
+                )}
+                href={`/events/${eventKey}/teams/${team}`}
+              >
+                {team}
+              </a>
+            )}
           />
         )}
       </div>

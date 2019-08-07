@@ -33,6 +33,10 @@ const wrapperStyle = css`
   flex-direction: column;
 `
 
+const teamStyle = css`
+  color: inherit;
+`
+
 const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
@@ -52,7 +56,9 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
           teams={eventStats}
           schema={schema}
           renderTeam={team => (
-            <a href={`/events/${eventKey}/teams/${team}`}>{team}</a>
+            <a class={teamStyle} href={`/events/${eventKey}/teams/${team}`}>
+              {team}
+            </a>
           )}
         />
       ) : (
