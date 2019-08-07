@@ -39,7 +39,11 @@ const tableHeaderCellStyle = css`
 
   &.${activeStyle}:not(:first-child) {
     ${activeBorderBottomOnly}
-    background: ${faintGrey}
+  }
+
+  &.${activeStyle}:not(:first-child),
+  &:focus-within {
+    background: ${faintGrey};
   }
 
   &:hover {
