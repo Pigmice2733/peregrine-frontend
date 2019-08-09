@@ -42,10 +42,7 @@ const tableHeaderCellStyle = css`
   }
 
   &.${activeStyle}:not(:first-child),
-  &:focus-within {
-    background: ${faintGrey};
-  }
-
+  &:focus-within,
   &:hover {
     background: ${faintGrey};
   }
