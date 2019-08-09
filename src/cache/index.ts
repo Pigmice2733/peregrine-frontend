@@ -34,15 +34,16 @@ export const transaction = async <ResolvedResult = void>(
   handler: (
     store: IDBObjectStore,
   ) =>
-    | Promise<void | IDBRequest<ResolvedResult>>
-    | (void | IDBRequest<ResolvedResult>),
+    | Promise<ResolvedResult | IDBRequest<ResolvedResult>>
+    | (ResolvedResult | IDBRequest<ResolvedResult>),
   transactionType: IDBTransactionMode = 'readonly',
 ) => {
   const tx = (await db).transaction(storeName, transactionType)
   const store = tx.objectStore(storeName)
   const handlerResult = await handler(store)
-  if (handlerResult) {
-    return idbPromise(handlerResult)
-  }
-  await new Promise(resolve => (tx.oncomplete = resolve))
+  // wait for transaction to finish
+  await new Promise(resolve => (tx.oncomplete = resolve as () => {}))
+  return handlerResult instanceof IDBRequest
+    ? idbPromise(handlerResult)
+    : handlerResult
 }

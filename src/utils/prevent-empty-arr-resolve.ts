@@ -1,11 +1,8 @@
-/**
- * Promise that never resolves
- */
-const EMPTY_PROMISE = new Promise<never>(() => {})
+import { EMPTY_PROMISE } from './empty-promise'
 
 /**
- * Prevents a promise from resolving if it resolves with an empty array
- * For use in a .then() callback
+ * Prevents a promise from resolving if it resolves with an empty array.
+ * For use in a .then() callback.
  * @example
  * foo().then(preventEmptyArrResolve)
  */
