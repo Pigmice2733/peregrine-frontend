@@ -41,9 +41,11 @@ export const transaction = async <ResolvedResult = void>(
   const tx = (await db).transaction(storeName, transactionType)
   const store = tx.objectStore(storeName)
   const handlerResult = await handler(store)
+  const data =
+    handlerResult instanceof IDBRequest
+      ? idbPromise(handlerResult)
+      : handlerResult
   // wait for transaction to finish
   await new Promise(resolve => (tx.oncomplete = resolve as () => {}))
-  return handlerResult instanceof IDBRequest
-    ? idbPromise(handlerResult)
-    : handlerResult
+  return data
 }
