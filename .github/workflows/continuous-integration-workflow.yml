@@ -1,0 +1,44 @@
+on: [push]
+
+name: On Commit
+jobs:
+  test:
+    name: Testing
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Install Node
+      uses: actions/setup-node@master
+      with:
+        version: latest
+
+    - name: Install
+      run: npm ci
+
+    - name: Test
+      run: npm run test
+
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        nodejs_version: [8, 10]
+        platform: [ubuntu-latest, windows-latest, macos-latest]
+
+    name: ${{matrix.platform}} w/ Node.js ${{matrix.nodejs_version}}
+    runs-on: ${{matrix.platform}}
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Use Node.js ${{matrix.nodejs_version}}.x
+      uses: actions/setup-node@master
+      with:
+        version: ${{matrix.nodejs_version}}.x
+      
+    - name: Install
+      run: npm ci
+
+    - name: Lint
+      run: npm run lint
