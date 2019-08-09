@@ -2,11 +2,14 @@ import { request } from '../base'
 import { EventInfo, processEvent, ProcessedEventInfo } from '.'
 import { transaction } from '@/cache'
 import { requestIdleCallback } from '@/utils/request-idle-callback'
+import { idbPromise } from '@/utils/idb-promise'
 
 const updateCachedEvents = (events: ProcessedEventInfo[]) =>
   transaction(
     'events',
-    eventStore => {
+    async eventStore => {
+      // remove all existing events, in case any have been deleted
+      await idbPromise(eventStore.clear())
       events.forEach(event => eventStore.put(event, event.key))
     },
     'readwrite',
