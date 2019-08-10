@@ -6,13 +6,12 @@ import { getEventMatchInfo } from '@/api/match-info/get-event-match-info'
 import { createMatchDbKey } from '@/utils/create-match-db-key'
 import { preventEmptyArrResolve } from '@/utils/prevent-empty-arr-resolve'
 import { createPromiseRace } from '@/utils/fastest-promise'
+import { preventUndefinedResolve } from '@/utils/prevent-undefined-resolve'
 
 const getCachedEventMatches = (eventKey: string, team?: string) =>
-  transaction('matches', async matchStore => {
-    return matchStore.getAll(
-      IDBKeyRange.bound(`${eventKey}-`, `${eventKey}-z`),
-    ) as IDBRequest<ProcessedMatch[]>
-  })
+  transaction<ProcessedMatch[]>('matches', async matchStore =>
+    matchStore.getAll(IDBKeyRange.bound(`${eventKey}-`, `${eventKey}-z`)),
+  )
     .then(results =>
       team
         ? results.filter(
@@ -23,11 +22,9 @@ const getCachedEventMatches = (eventKey: string, team?: string) =>
     .then(preventEmptyArrResolve)
 
 const getCachedEventMatchInfo = (eventKey: string, matchKey: string) =>
-  transaction('matches', async matchStore => {
-    return matchStore.get(createMatchDbKey(eventKey, matchKey)) as IDBRequest<
-      ProcessedMatch
-    >
-  })
+  transaction<ProcessedMatch | undefined>('matches', async matchStore => {
+    return matchStore.get(createMatchDbKey(eventKey, matchKey))
+  }).then(preventUndefinedResolve)
 
 export const getFastestEventMatchInfo = createPromiseRace(
   getEventMatchInfo,

@@ -30,6 +30,7 @@
       "plugin:caleb/jest"
     ],
     "rules": {
+      "no-return-await": "off",
       "caleb/react/display-name": "off",
       "no-else-return": [
         "error",
@@ -80,7 +81,7 @@
     "@babel/plugin-transform-template-literals": "7.4.4",
     "@babel/preset-env": "7.5.5",
     "@babel/preset-typescript": "7.3.3",
-    "@calebeby/preact-testing-library": "0.0.2",
+    "@calebeby/preact-testing-library": "0.0.4",
     "@testing-library/jest-dom": "^4.0.0",
     "@types/jest": "24.0.17",
     "@types/node-fetch": "2.5.0",
@@ -132,8 +133,8 @@
     "webpack": "4.39.1",
     "webpack-bundle-analyzer": "3.4.1",
     "webpack-cli": "3.3.6",
-    "webpack-dev-server": "3.7.2",
-    "webpackbar": "3.2.0"
+    "webpack-dev-server": "3.8.0",
+    "webpackbar": "4.0.0"
   },
   "engines": {
     "node": "12",
