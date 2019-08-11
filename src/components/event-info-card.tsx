@@ -54,14 +54,16 @@ export const EventInfoCard = ({ event }: Props) =>
   event ? (
     <InfoGroupCard
       info={[
-        event.locationName && {
-          icon: mapMarker,
-          title: event.locationName,
-          href: gmapsUrl(event.lat, event.lon),
-          target: '_blank',
-          rel: 'noopener',
-          action: <Icon icon={googleMaps} />,
-        },
+        event.locationName &&
+          event.lat &&
+          event.lon && {
+            icon: mapMarker,
+            title: event.locationName,
+            href: gmapsUrl(event.lat, event.lon),
+            target: '_blank',
+            rel: 'noopener',
+            action: <Icon icon={googleMaps} />,
+          },
         event.district && {
           icon: infoOutline,
           title: (
