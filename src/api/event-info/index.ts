@@ -38,8 +38,10 @@ const parseDateInCurrentTZ = (str: string) => {
 
 export const processEvent = (e: EventInfo): ProcessedEventInfo => {
   const startDate = parseDateInCurrentTZ(e.startDate)
+  // Force it to beginning of the day
   startDate.setHours(0, 0, 0, 0)
   const endDate = parseDateInCurrentTZ(e.endDate)
+  // Force it to end of day, so the event is active for the whole day
   endDate.setHours(23, 59, 59, 999)
   return { ...e, startDate, endDate }
 }
