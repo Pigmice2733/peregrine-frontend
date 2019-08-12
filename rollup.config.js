@@ -84,12 +84,12 @@ export default [
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
-        from: './src/routes.ts',
+        resolveFrom: './src/routes.ts',
         everyRouteHeaders: [
           printPush({ path: '/style.css', as: 'style' }),
           printPush({ path: '/systemjs-entry.js', as: 'script' }),
-          printPush({ path: '/index.js', as: 'script', crossOrigin: true }),
         ],
+        everyRouteModules: ['./index.tsx'],
       }),
       {
         name: 'rollup-write-html',
