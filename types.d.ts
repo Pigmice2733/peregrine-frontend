@@ -13,6 +13,7 @@ declare const process: {
   env: {
     NODE_ENV?: string
     PEREGRINE_API_URL?: string
+    IPDATA_API_KEY?: string
     BRANCH?: string
     ROLLUP?: 'true' | 'false'
   }
