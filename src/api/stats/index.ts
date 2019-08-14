@@ -1,5 +1,4 @@
 export interface Stat {
-  name: string
   attempts: {
     max: number
     avg: number
@@ -8,23 +7,11 @@ export interface Stat {
     max: number
     avg: number
   }
-}
-
-export interface NormalizedStat {
-  attempts: {
-    max: number
-    avg: number
-    type: 'percent' | 'number'
-  }
-  successes: {
-    max: number
-    avg: number
-    type: 'percent' | 'number'
-  }
+  type: 'boolean' | 'number'
 }
 
 export interface TeamStats {
   team: string
-  teleop: { [key: string]: Stat }
-  auto: { [key: string]: Stat }
+  auto: { [statName: string]: Stat }
+  teleop: { [statName: string]: Stat }
 }

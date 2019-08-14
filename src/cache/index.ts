@@ -1,16 +1,19 @@
 import { idbPromise } from '@/utils/idb-promise'
 
 const DB_NAME = 'CACHE'
-const DB_VERSION = 2
+const DB_VERSION = 3
 
 const EVENT_STORE = 'events'
 const MATCH_STORE = 'matches'
+const SCHEMA_STORE = 'schemas'
 
 const initDB = (db: IDBDatabase) => {
   if (!db.objectStoreNames.contains(EVENT_STORE))
     db.createObjectStore(EVENT_STORE)
   if (!db.objectStoreNames.contains(MATCH_STORE))
     db.createObjectStore(MATCH_STORE)
+  if (!db.objectStoreNames.contains(SCHEMA_STORE))
+    db.createObjectStore(SCHEMA_STORE)
 }
 
 const getDB = (dbName: string) => {

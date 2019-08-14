@@ -9,8 +9,6 @@ const dropdownStyle = css`
   font-size: 0.8rem;
   color: var(--off-black);
   font-weight: bold;
-  height: 100%;
-  width: 100%;
 
   & option {
     text-transform: none;
@@ -27,7 +25,8 @@ const buttonStyles = css`
 type Props<T> = {
   class?: string
   button?: true
-  options: T[]
+  options: readonly T[]
+  value?: T
   onChange: (v: T) => void
   getKey?: (v: T) => string | number
   getText?: (v: T) => string
@@ -39,12 +38,14 @@ export const Dropdown = <T extends any>({
   options,
   button,
   onChange,
+  value,
   getKey = (v: T) => (v as unknown) as string,
   getText = (v: T) => (v as unknown) as string,
   ...props
 }: Props<T>) => (
   // eslint-disable-next-line caleb/jsx-a11y/no-onchange
   <select
+    value={getKey(value || options[0])}
     onChange={e =>
       onChange(options.find(
         o => getKey(o).toString() === (e.target as HTMLSelectElement).value,
