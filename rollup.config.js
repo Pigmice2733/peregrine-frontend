@@ -14,6 +14,7 @@ import templite from 'templite'
 import sharp from 'sharp'
 import mkdirplz from 'mkdirplz'
 const postcssPlugins = require('./postcss.config').plugins
+require('dotenv').config()
 const babelConfig = require('./.babelrc')
 
 const writeFileAsync = promisify(writeFile)

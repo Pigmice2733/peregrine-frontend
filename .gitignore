@@ -5,3 +5,4 @@
 /coverage
 /.linaria-cache
 *.css.json
+.env

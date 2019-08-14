@@ -1,39 +1,74 @@
+import { LatLong } from '../use-geo-location'
+import { distanceBetweenCoordinates } from '../distance-between-coordinates'
+
 export interface PartialEvent {
   startDate: Date
   endDate: Date
   week?: number
   name: string
+  lat?: number
+  lon?: number
 }
 
-const now = new Date().getTime()
+export interface EventWithLocation extends PartialEvent {
+  lat: number
+  lon: number
+}
 
-/**
- * Compares 2 events by date. Returns negative if a comes first, positive if b comes first
- * @param a First Event
- * @param b Second Event
- */
-export const compareEvents = (a: PartialEvent, b: PartialEvent) => {
-  if (a.week === b.week && a.week !== undefined) {
-    return a.name < b.name ? -1 : 1
+const aFirst = -1
+const bFirst = 1
+const equal = 0
+
+const eventHasLocation = (event: PartialEvent): event is EventWithLocation =>
+  event.lat !== undefined && event.lon !== undefined
+
+export const compareEvents = (now: Date, userLocation?: LatLong) => {
+  const compareByDate = (a: PartialEvent, b: PartialEvent) => {
+    const isCurrent = (event: PartialEvent): boolean =>
+      event.startDate <= now && now <= event.endDate
+
+    const aIsCurrent = isCurrent(a)
+    const bIsCurrent = isCurrent(b)
+    const sameWeek = a.week === b.week && a.week !== undefined
+    const bothAreCurrent = aIsCurrent && bIsCurrent
+
+    if (bothAreCurrent) return equal
+    if (aIsCurrent) return aFirst
+    if (bIsCurrent) return bFirst
+
+    if (sameWeek) return equal
+
+    // For two future events, they should be sorted by soonest start
+    if (a.startDate > now && b.startDate > now) {
+      // @ts-ignore
+      return a.startDate - b.startDate
+    }
+
+    // Sort by most recent end
+    // @ts-ignore
+    return b.endDate - a.endDate
   }
 
-  const aDiff = now - Number(a.endDate)
-  const bDiff = now - Number(b.endDate)
-
-  if (aDiff < 0 && bDiff >= 0) {
-    return -1
+  const compareByDistance = (a: PartialEvent, b: PartialEvent) => {
+    if (userLocation && eventHasLocation(a) && eventHasLocation(b)) {
+      return (
+        distanceBetweenCoordinates(userLocation, {
+          latitude: a.lat,
+          longitude: a.lon,
+        }) -
+        distanceBetweenCoordinates(userLocation, {
+          latitude: b.lat,
+          longitude: b.lon,
+        })
+      )
+    }
   }
 
-  if (bDiff < 0 && aDiff >= 0) {
-    return 1
+  return (a: PartialEvent, b: PartialEvent) => {
+    const comparedDate = compareByDate(a, b)
+    if (comparedDate) return comparedDate
+    const comparedDistance = compareByDistance(a, b)
+    if (comparedDistance) return comparedDistance
+    return a.name > b.name ? bFirst : aFirst
   }
-
-  if (Number(a.startDate) === Number(b.startDate)) {
-    return a.name < b.name ? -1 : 1
-  }
-
-  return Math.abs(now - Number(a.startDate)) <
-    Math.abs(now - Number(b.startDate))
-    ? -1
-    : 1
 }
