@@ -14,6 +14,7 @@ import templite from 'templite'
 import sharp from 'sharp'
 import mkdirplz from 'mkdirplz'
 const postcssPlugins = require('./postcss.config').plugins
+require('dotenv').config()
 const babelConfig = require('./.babelrc')
 
 const writeFileAsync = promisify(writeFile)
@@ -84,12 +85,12 @@ export default [
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
-        from: './src/routes.ts',
+        resolveFrom: './src/routes.ts',
         everyRouteHeaders: [
           printPush({ path: '/style.css', as: 'style' }),
           printPush({ path: '/systemjs-entry.js', as: 'script' }),
-          printPush({ path: '/index.js', as: 'script', crossOrigin: true }),
         ],
+        everyRouteModules: ['./index.tsx'],
       }),
       {
         name: 'rollup-write-html',

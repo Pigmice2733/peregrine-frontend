@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssConfig = require('./postcss.config')
 const WebpackBar = require('webpackbar')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+require('dotenv').config()
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 //   .BundleAnalyzerPlugin
 
