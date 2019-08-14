@@ -2,11 +2,11 @@ import { h, FunctionComponent } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getEventStats } from '@/api/stats/get-event-stats'
-import { useEventInfo } from '@/cache/events'
+import { useEventInfo } from '@/cache/event-info/use'
 import AnalysisTable from '@/components/analysis-table'
 import Spinner from '@/components/spinner'
 import { css } from 'linaria'
-import { useSchema } from '@/cache/schemas'
+import { useSchema } from '@/cache/schema/use'
 
 interface Props {
   eventKey: string
