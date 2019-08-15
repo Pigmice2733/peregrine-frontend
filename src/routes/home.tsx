@@ -3,8 +3,8 @@ import Page from '@/components/page'
 import EventCard from '@/components/event-card'
 import Spinner from '@/components/spinner'
 import { compareEvents } from '@/utils/compare-events'
-import { useEvents } from '@/cache/events'
 import { useGeoLocation } from '@/utils/use-geo-location'
+import { useEvents } from '@/cache/events/use'
 
 const now = new Date()
 

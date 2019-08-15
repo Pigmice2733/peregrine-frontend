@@ -7,11 +7,11 @@ import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
 import { getEventStats } from '@/api/stats/get-event-stats'
 import clsx from 'clsx'
-import { useEventInfo } from '@/cache/events'
+import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
-import { useEventMatchInfo } from '@/cache/matches'
-import { useSchema } from '@/cache/schemas'
 import { usePromise } from '@/utils/use-promise'
+import { useMatchInfo } from '@/cache/match-info/use'
+import { useSchema } from '@/cache/schema/use'
 
 interface Props {
   eventKey: string
@@ -48,7 +48,7 @@ const matchStyle = css`
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const eventInfo = useEventInfo(eventKey)
-  const matchInfo = useEventMatchInfo(eventKey, matchKey)
+  const matchInfo = useMatchInfo(eventKey, matchKey)
   const schema = useSchema(eventInfo && eventInfo.schemaId)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
 
