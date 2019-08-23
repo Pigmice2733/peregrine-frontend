@@ -2,45 +2,47 @@ name: CI
 
 on: [push]
 
-defaults: &defaults
-  runs-on: ubuntu-latest
-  
-setup: &setup
-  - uses: actions/checkout@v1
-  - name: Use Node.js 12
-    uses: actions/setup-node@v1
-    with:
-      node-version: 12
-  - name: Install Dependencies
-    run: npm ci
-
-
 jobs:
 
-  build:
-    <<: *defaults
+  build: &defaults
+    runs-on: ubuntu-latest
     steps:
-    - *setup
+    - &checkout
+      uses: actions/checkout@v1
+    - &setup-node
+      name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - &install-dependencies
+      name: Install Dependencies
+      run: npm ci
     - name: Run Build
       run: npm run build
 
   lint:
     <<: *defaults
     steps:
-    - *setup
+    - *checkout
+    - *setup-node
+    - *install-dependencies
     - name: Run Lint
       run: npm run check-lint
 
   test:
     <<: *defaults
     steps:
-    - *setup
+    - *checkout
+    - *setup-node
+    - *install-dependencies
     - name: Run Tests
       run: npm run test
 
   typecheck:
     <<: *defaults
     steps:
-    - *setup
+    - *checkout
+    - *setup-node
+    - *install-dependencies
     - name: Type Check
       run: npm run type
