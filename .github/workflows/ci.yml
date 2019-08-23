@@ -7,42 +7,51 @@ jobs:
   build: &defaults
     runs-on: ubuntu-latest
     steps:
-    - &checkout
-      uses: actions/checkout@v1
-    - &setup-node
-      name: Use Node.js 12
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12
       uses: actions/setup-node@v1
       with:
         node-version: 12
-    - &install-dependencies
-      name: Install Dependencies
+    - name: Install Dependencies
       run: npm ci
     - name: Run Build
       run: npm run build
 
   lint:
-    <<: *defaults
+    runs-on: ubuntu-latest
     steps:
-    - *checkout
-    - *setup-node
-    - *install-dependencies
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install Dependencies
+      run: npm ci
     - name: Run Lint
       run: npm run check-lint
 
   test:
-    <<: *defaults
+    runs-on: ubuntu-latest
     steps:
-    - *checkout
-    - *setup-node
-    - *install-dependencies
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install Dependencies
+      run: npm ci
     - name: Run Tests
       run: npm run test
 
   typecheck:
-    <<: *defaults
+    runs-on: ubuntu-latest
     steps:
-    - *checkout
-    - *setup-node
-    - *install-dependencies
+    - uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install Dependencies
+      run: npm ci
     - name: Type Check
       run: npm run type
