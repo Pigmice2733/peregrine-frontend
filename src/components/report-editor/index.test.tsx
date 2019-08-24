@@ -4,12 +4,12 @@ import {
   wait,
   setPreactOptions,
 } from '@calebeby/preact-testing-library'
-import { ScoutPage } from '.'
+import ScoutPage from '../../routes/scout'
 import { h, options } from 'preact'
 import { MatchInfo } from '@/api/match-info'
 import { EventInfo } from '@/api/event-info'
 import { Schema } from '@/api/schema'
-import { BaseReport } from '@/api/report'
+import { Report } from '@/api/report'
 import { mockFetch } from '@/utils/mock-fetch'
 
 const matchInfo: MatchInfo = {
@@ -32,17 +32,15 @@ const eventInfo: EventInfo = {
 
 const schema: Schema = {
   id: 1000,
-  auto: [
-    { name: 'Crossed Line', type: 'boolean' },
-    { name: 'Switch Cubes', type: 'number' },
-  ],
-  teleop: [
-    { name: 'Scale Cubes', type: 'number' },
-    { name: 'Climbed', type: 'boolean' },
+  schema: [
+    { name: 'Crossed Line', type: 'boolean', period: 'auto' },
+    { name: 'Switch Cubes', type: 'number', period: 'auto' },
+    { name: 'Scale Cubes', type: 'number', period: 'teleop' },
+    { name: 'Climbed', type: 'boolean', period: 'teleop' },
   ],
 }
 
-const report: BaseReport = {
+const report: Report = {
   autoName: '',
   data: {
     teleop: [

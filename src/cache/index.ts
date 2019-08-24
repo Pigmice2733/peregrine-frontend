@@ -1,7 +1,7 @@
 import { idbPromise } from '@/utils/idb-promise'
 
 const DB_NAME = 'CACHE'
-const DB_VERSION = 3
+const DB_VERSION = 4
 
 const EVENT_STORE = 'events'
 const MATCH_STORE = 'matches'
