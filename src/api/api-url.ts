@@ -1,5 +1,1 @@
-export const apiUrl =
-  (process.env.PEREGRINE_API_URL ||
-    (process.env.NODE_ENV === 'production' && process.env.BRANCH === 'master'
-      ? 'https://api.peregrine.ga'
-      : 'https://api.peregrine.ga')) + '/'
+export const apiUrl = '/api/'
