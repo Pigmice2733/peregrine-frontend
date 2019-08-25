@@ -49,6 +49,9 @@ const isFieldReportable = (
 const isAuto = (field: ReportStatDescription) => field.period === 'auto'
 const isTeleop = (field: ReportStatDescription) => field.period === 'teleop'
 
+// Number properties default to 0 and boolean properties default to 0 which represents false
+const defaultFieldValue = 0
+
 export const ReportEditor: FunctionComponent<Props> = ({
   eventKey,
   matchKey,
@@ -65,22 +68,19 @@ export const ReportEditor: FunctionComponent<Props> = ({
 
   const isReady = team !== null
 
-  const updateReportField = (fieldName: string) => (value: number | boolean) =>
+  const updateReportField = (fieldName: string) => (value: number) =>
     setReport(report => ({
       data: report.data.map(
         (f): Field => (f.name === fieldName ? { name: fieldName, value } : f),
       ),
     }))
 
-  const getFieldDefault = (statDescription: ReportStatDescription) =>
-    statDescription.type === 'boolean' ? false : 0
-
   const getReportFieldValue = (statDescription: ReportStatDescription) => {
     const matchingField = report.data.find(
       f => f.name === statDescription.reportReference,
     )
     if (matchingField) return matchingField.value
-    return getFieldDefault(statDescription)
+    return defaultFieldValue
   }
 
   const visibleFields = useMemo(() => schema.schema.filter(isFieldReportable), [
@@ -96,7 +96,7 @@ export const ReportEditor: FunctionComponent<Props> = ({
         statDescription =>
           report.data.find(f => f.name === statDescription.reportReference) || {
             name: statDescription.reportReference,
-            value: getFieldDefault(statDescription),
+            value: defaultFieldValue,
           },
       ),
     }))

@@ -51,16 +51,16 @@ test('renders and saves', async () => {
   const initialReport: Report = {
     data: [
       { name: 'Scale Cubes', value: 2 },
-      { name: 'Climbed', value: false },
-      { name: 'Crossed Line', value: true },
+      { name: 'Climbed', value: 0 },
+      { name: 'Crossed Line', value: 1 },
       { name: 'Switch Cubes', value: 1 },
     ],
   }
   const expectedFinalReport: Report = {
     data: [
       { name: 'Scale Cubes', value: 3 },
-      { name: 'Climbed', value: false },
-      { name: 'Crossed Line', value: false },
+      { name: 'Climbed', value: 0 },
+      { name: 'Crossed Line', value: 0 },
       { name: 'Switch Cubes', value: 0 },
     ],
   }

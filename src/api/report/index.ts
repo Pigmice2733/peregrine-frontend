@@ -1,6 +1,6 @@
 export interface Field {
   name: string
-  value: number | boolean
+  value: number
 }
 
 type GraphableField = {

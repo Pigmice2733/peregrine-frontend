@@ -20,8 +20,8 @@ const nameStyle = css`
 
 interface Props<FieldType extends ReportStatDescription> {
   statDescription: FieldType
-  value: number | boolean
-  onChange: (newValue: number | boolean) => void
+  value: number
+  onChange: (newValue: number) => void
 }
 
 const isNumberField = (
@@ -36,9 +36,12 @@ const FieldCard = <FieldType extends ReportStatDescription>({
   <Card as="label" class={fieldCardStyle}>
     <div class={nameStyle}>{statDescription.name}</div>
     {isNumberField(statDescription) ? (
-      <NumberInput value={value as number} min={0} onChange={onChange} />
+      <NumberInput value={value} min={0} onChange={onChange} />
     ) : (
-      <Toggle checked={value as boolean} onChange={onChange} />
+      <Toggle
+        checked={Boolean(value)}
+        onChange={value => onChange(Number(value))}
+      />
     )}
   </Card>
 )
