@@ -1,8 +1,8 @@
 import { h, RenderableProps } from 'preact'
 import Card from '@/components/card'
-import NumberInput from '../number-input'
+import NumberInput from './number-input'
 import { css } from 'linaria'
-import Toggle from '../toggle'
+import Toggle from './toggle'
 import { ReportStatDescription, NumberStatDescription } from '@/api/schema'
 
 const fieldCardStyle = css`
@@ -33,12 +33,12 @@ const FieldCard = <FieldType extends ReportStatDescription>({
   onChange,
   value,
 }: RenderableProps<Props<FieldType>>) => (
-  <Card class={fieldCardStyle}>
+  <Card as="label" class={fieldCardStyle}>
     <div class={nameStyle}>{statDescription.name}</div>
     {isNumberField(statDescription) ? (
       <NumberInput value={value as number} min={0} onChange={onChange} />
     ) : (
-      <Toggle />
+      <Toggle checked={value as boolean} onChange={onChange} />
     )}
   </Card>
 )

@@ -36,6 +36,7 @@ interface Props {
   match: ProcessedMatchInfo
   /** Callback to be called whenever the report is saved */
   onSaveSuccess?: () => void
+  initialReport?: Report
 }
 
 const emptyReport: Report = {
@@ -54,11 +55,12 @@ export const ReportEditor: FunctionComponent<Props> = ({
   schema,
   match,
   onSaveSuccess = noop,
+  initialReport = emptyReport,
 }) => {
   const [team, setTeam] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [comment, setComment] = useState<string | undefined>(undefined)
-  const [report, setReport] = useState<Report>(emptyReport)
+  const [report, setReport] = useState<Report>(initialReport)
   const emitError = useErrorEmitter()
 
   const isReady = team !== null
@@ -74,7 +76,9 @@ export const ReportEditor: FunctionComponent<Props> = ({
     statDescription.type === 'boolean' ? false : 0
 
   const getReportFieldValue = (statDescription: ReportStatDescription) => {
-    const matchingField = report.data.find(f => f.name === statDescription.name)
+    const matchingField = report.data.find(
+      f => f.name === statDescription.reportReference,
+    )
     if (matchingField) return matchingField.value
     return getFieldDefault(statDescription)
   }
@@ -90,8 +94,8 @@ export const ReportEditor: FunctionComponent<Props> = ({
     setReport(report => ({
       data: visibleFields.map(
         statDescription =>
-          report.data.find(f => f.name === statDescription.name) || {
-            name: statDescription.name,
+          report.data.find(f => f.name === statDescription.reportReference) || {
+            name: statDescription.reportReference,
             value: getFieldDefault(statDescription),
           },
       ),
@@ -123,23 +127,22 @@ export const ReportEditor: FunctionComponent<Props> = ({
         blueAlliance={match.blueAlliance}
         redAlliance={match.redAlliance}
       />
-
       <h2>Auto</h2>
       {autoFields.map(stat => (
         <FieldCard
-          key={'auto' + stat.name}
+          key={'auto' + stat.reportReference}
           statDescription={stat}
           value={getReportFieldValue(stat)}
-          onChange={updateReportField(stat.name)}
+          onChange={updateReportField(stat.reportReference)}
         />
       ))}
       <h2>Teleop</h2>
       {teleopFields.map(stat => (
         <FieldCard
-          key={'teleop' + stat.name}
+          key={'teleop' + stat.reportReference}
           statDescription={stat}
           value={getReportFieldValue(stat)}
-          onChange={updateReportField(stat.name)}
+          onChange={updateReportField(stat.reportReference)}
         />
       ))}
       <TextInput class={commentStyles} label="Comments" onInput={setComment} />

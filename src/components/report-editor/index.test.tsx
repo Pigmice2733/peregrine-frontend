@@ -1,110 +1,109 @@
-import {
-  render,
-  fireEvent,
-  wait,
-  setPreactOptions,
-} from '@calebeby/preact-testing-library'
-import ScoutPage from '../../routes/scout'
-import { h, options } from 'preact'
-import { MatchInfo } from '@/api/match-info'
-import { EventInfo } from '@/api/event-info'
+import { render, fireEvent } from '@calebeby/preact-testing-library'
+import { h } from 'preact'
+import { ProcessedMatchInfo } from '@/api/match-info'
 import { Schema } from '@/api/schema'
 import { Report } from '@/api/report'
-import { mockFetch } from '@/utils/mock-fetch'
+import { ReportEditor } from '.'
+import { submitReport } from '@/api/report/submit-report'
 
-const matchInfo: MatchInfo = {
+const matchInfo: ProcessedMatchInfo = {
   key: 'qm3',
   redAlliance: ['frc254', 'frc2471', 'frc973'],
   blueAlliance: ['frc971', 'frc2733', 'frc118'],
-}
-
-const eventInfo: EventInfo = {
-  name: 'Wilsonville',
-  webcasts: [],
-  schemaId: 1000,
-  startDate: '2018-12-22T16:00:00Z',
-  endDate: '2018-12-23T04:00:00Z',
-  locationName: 'nowhere',
-  lat: 0,
-  lon: 0,
-  key: '2018orwil',
+  time: new Date('2018-12-22'),
 }
 
 const schema: Schema = {
   id: 1000,
   schema: [
-    { name: 'Crossed Line', type: 'boolean', period: 'auto' },
-    { name: 'Switch Cubes', type: 'number', period: 'auto' },
-    { name: 'Scale Cubes', type: 'number', period: 'teleop' },
-    { name: 'Climbed', type: 'boolean', period: 'teleop' },
+    {
+      name: 'Crossed Line',
+      type: 'boolean',
+      period: 'auto',
+      reportReference: 'Crossed Line',
+    },
+    {
+      name: 'Switch Cubes',
+      type: 'number',
+      period: 'auto',
+      reportReference: 'Switch Cubes',
+    },
+    {
+      name: 'Scale Cubes',
+      type: 'number',
+      period: 'teleop',
+      reportReference: 'Scale Cubes',
+    },
+    {
+      name: 'Climbed',
+      type: 'boolean',
+      period: 'teleop',
+      reportReference: 'Climbed',
+    },
   ],
 }
 
-const report: Report = {
-  autoName: '',
-  data: {
-    teleop: [
-      { name: 'Scale Cubes', attempts: 5, successes: 3 },
-      { name: 'Climbed', attempts: 0, successes: 0 },
+jest.mock('@/api/report/submit-report', () => ({
+  submitReport: jest.fn(),
+}))
+
+test('renders and saves', async () => {
+  const initialReport: Report = {
+    data: [
+      { name: 'Scale Cubes', value: 2 },
+      { name: 'Climbed', value: false },
+      { name: 'Crossed Line', value: true },
+      { name: 'Switch Cubes', value: 1 },
     ],
-    auto: [
-      { name: 'Crossed Line', attempts: 1, successes: 0 },
-      { name: 'Switch Cubes', attempts: 0, successes: 0 },
+  }
+  const expectedFinalReport: Report = {
+    data: [
+      { name: 'Scale Cubes', value: 3 },
+      { name: 'Climbed', value: false },
+      { name: 'Crossed Line', value: false },
+      { name: 'Switch Cubes', value: 0 },
     ],
-  },
-}
+  }
 
-setPreactOptions(options)
-
-test('renders and submits', async () => {
-  mockFetch({
-    '/events/2018orwil': eventInfo,
-    '/schemas/1000': schema,
-    '/events/2018orwil/matches/qm3': matchInfo,
-    '/events/2018orwil/matches/qm3/reports/frc254': null,
-    '/events/2018orwil/matches/qm3/comments/frc254': null,
-  })
-  const scoutPage = render(<ScoutPage eventKey="2018orwil" matchKey="qm3" />)
-
-  expect(scoutPage.getByText(/submit/i)).toBeDisabled()
-
-  await scoutPage.findByText('Scale Cubes')
-
-  expect(scoutPage.getByText(/submit/i)).toBeDisabled()
-
-  fireEvent.click(scoutPage.getByLabelText('254'))
-
-  expect(scoutPage.getByText(/submit/i)).not.toBeDisabled()
-
-  const scaleCubesDiv = scoutPage.getByText(/scale cubes/i)
-    .parentElement as HTMLDivElement
-  const [successesInput, failuresInput] = (scaleCubesDiv.querySelectorAll(
-    'input',
-  ) as unknown) as HTMLInputElement[]
-  fireEvent.change(successesInput, { target: { valueAsNumber: 3 } })
-  fireEvent.change(failuresInput, { target: { valueAsNumber: 2 } })
-
-  const crossedLineDiv = scoutPage.getByText(/crossed line/i)
-    .parentElement as HTMLDivElement
-  const attemptedBox = crossedLineDiv.querySelector(
-    'input[value=Attempted]',
-  ) as HTMLInputElement
-  fireEvent.change(attemptedBox, { target: { checked: true } })
-
-  expect(scoutPage.getByText(/submit/i)).not.toBeDisabled()
-
-  fireEvent.click(scoutPage.getByText(/submit/i))
-
-  await wait(() =>
-    expect(window.fetch).toHaveBeenCalledWith(
-      expect.stringMatching(
-        /\/events\/2018orwil\/matches\/qm3\/reports\/frc254$/,
-      ),
-      {
-        body: JSON.stringify(report),
-        headers: {},
-        method: 'PUT',
-      },
-    ),
+  const reportEditor = render(
+    <ReportEditor
+      eventKey="2018orwil"
+      matchKey="qm3"
+      schema={schema}
+      match={matchInfo}
+      initialReport={initialReport}
+    />,
   )
+
+  expect(reportEditor.getByText(/save/i)).toBeDisabled()
+
+  await reportEditor.findByText('Scale Cubes')
+
+  expect(reportEditor.getByText(/save/i)).toBeDisabled()
+  fireEvent.click(reportEditor.getByLabelText('254'))
+  expect(reportEditor.getByText(/save/i)).not.toBeDisabled()
+
+  expect(reportEditor.getByLabelText(/Crossed Line/)).toBeChecked()
+  fireEvent.change(reportEditor.getByLabelText(/Crossed Line/), {
+    target: { checked: false },
+  })
+
+  expect(reportEditor.getByLabelText(/Climbed/)).not.toBeChecked()
+
+  expect(reportEditor.getByLabelText(/Scale Cubes/)).toHaveValue(2)
+  fireEvent.change(reportEditor.getByLabelText(/Scale Cubes/), {
+    target: { valueAsNumber: 3 },
+  })
+
+  expect(reportEditor.getByLabelText(/Switch Cubes/)).toHaveValue(1)
+  fireEvent.change(reportEditor.getByLabelText(/Switch Cubes/), {
+    target: { valueAsNumber: 0 },
+  })
+
+  fireEvent.click(reportEditor.getByText(/save/i))
+
+  expect(submitReport).toHaveBeenCalledWith('2018orwil', 'qm3', 'frc254', {
+    data: expect.arrayContaining(expectedFinalReport.data),
+  })
+  expect(submitReport).toHaveBeenCalledTimes(1)
 })

@@ -1,4 +1,4 @@
-import { h, JSX } from 'preact'
+import { h, JSX, FunctionComponent } from 'preact'
 import { Merge } from '@/type-utils'
 import clsx from 'clsx'
 import { css } from 'linaria'
@@ -25,12 +25,14 @@ const cardStyle = css`
   }
 `
 
-type Props = JSX.HTMLAttributes
+interface Props extends JSX.HTMLAttributes {
+  as?: keyof JSX.IntrinsicElements
+}
 
 export type CardProps<T = {}> = Merge<Props, T>
 
-const Card = (props: Props) => {
-  const El = props.href ? 'a' : 'div'
+const Card: FunctionComponent<Props> = ({ as, ...props }) => {
+  const El = as || (props.href ? 'a' : 'div')
   return <El {...props} class={clsx(cardStyle, props.class)} />
 }
 
