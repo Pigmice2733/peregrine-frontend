@@ -32,6 +32,14 @@ const numberInputStyle = css`
     outline: none;
     cursor: pointer;
 
+    &:first-of-type {
+      order: 0;
+    }
+
+    &:last-of-type {
+      order: 2;
+    }
+
     &:hover {
       background: color-mod(var(--bg) lightness(+30%));
     }
@@ -46,6 +54,7 @@ const numberInputStyle = css`
     width: 2rem;
     -moz-appearance: textfield;
     text-align: center;
+    order: 1;
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
@@ -64,6 +73,12 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
   }
   return (
     <div class={numberInputStyle}>
+      <InnerTextInput
+        {...rest}
+        value={value}
+        type="number"
+        onChange={e => onChange((e.target as HTMLInputElement).valueAsNumber)}
+      />
       <button
         tabIndex={-1}
         onClick={e => {
@@ -73,12 +88,6 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
       >
         -
       </button>
-      <InnerTextInput
-        {...rest}
-        value={value}
-        type="number"
-        onChange={e => onChange((e.target as HTMLInputElement).valueAsNumber)}
-      />
       <button
         tabIndex={-1}
         onClick={e => {

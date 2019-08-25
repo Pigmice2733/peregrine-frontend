@@ -35,6 +35,7 @@ const buttonStyle = css`
     background: #0000000d;
     color: #00000036;
     box-shadow: none;
+    cursor: not-allowed;
   }
 `
 
