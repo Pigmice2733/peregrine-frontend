@@ -40,12 +40,13 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
-              getLocalIdent: (context, localIdentName, localName) =>
-                postcssConfig.plugins['postcss-modules'].generateScopedName(
-                  localName,
-                  context.resourcePath,
-                ),
+              modules: {
+                getLocalIdent: (context, localIdentName, localName) =>
+                  postcssConfig.plugins['postcss-modules'].generateScopedName(
+                    localName,
+                    context.resourcePath,
+                  ),
+              },
               importLoaders: 1,
             },
           },
