@@ -4,7 +4,7 @@ import { lightGrey, pigmicePurple, gray } from '@/colors'
 import { tint, shade, transparentize } from 'polished'
 import { createShadow } from '@/utils/create-shadow'
 
-const trackCenterCenter = 1.1
+const trackCenterCenter = 1
 const trackHeight = 0.9
 const trackRadius = trackHeight / 2
 const circleDiameter = 1.2
