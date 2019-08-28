@@ -15,6 +15,8 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useState, useEffect, useRef } from 'preact/hooks'
+import { initSpring } from '@/spring/use'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -83,6 +85,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           />
         </Fragment>
       )}
+      {/* <TestComponent /> */}
       <InfoGroupCard
         info={[
           {
@@ -123,3 +126,14 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
 }
 
 export default EventTeam
+
+const TestComponent = () => {
+  const [toggle, setToggle] = useState(false)
+  const position = initSpring(toggle ? -200 : 200)
+  return (
+    <div>
+      <h1 style={{ transform: `translate(${position}px)` }}>Hi</h1>
+      <button onClick={() => setToggle(t => !t)}>clickme</button>
+    </div>
+  )
+}

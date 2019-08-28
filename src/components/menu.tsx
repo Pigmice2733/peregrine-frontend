@@ -14,6 +14,8 @@ import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
 import { home } from '@/icons/home'
 import clsx from 'clsx'
 import { resolveUrl } from '@/utils/resolve-url'
+import { initSpring, Animated } from '@/spring/use'
+import { useState } from 'preact/hooks'
 
 const spacing = '0.3rem'
 
@@ -29,7 +31,7 @@ const menuItemStyle = css`
   border-radius: 0.3rem;
   margin: ${spacing};
   color: ${lighten(0.26, 'black')};
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease;
   display: flex;
   align-items: center;
   font-weight: 500;
@@ -70,7 +72,7 @@ const menuStyle = css`
   background: white;
   box-shadow: ${createShadow(16)};
   z-index: 16;
-  transition: inherit;
+  /* transition: inherit; */
   transition-timing-function: cubic-bezier(1, 0, 0.71, 0.88);
   display: flex;
   flex-direction: column;
@@ -84,7 +86,6 @@ const menuStyle = css`
   }
 
   .${scrimHiddenClass} & {
-    transform: translateX(100%);
     box-shadow: none;
   }
 `
@@ -102,10 +103,16 @@ interface Props {
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
+  const spring = initSpring()
 
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
-      <aside class={menuStyle}>
+      <Animated.aside
+        class={menuStyle}
+        style={spring({
+          transform: spring`translateX(${visible ? 0 : 100}%)`,
+        })}
+      >
         <IconButton
           aria-label="Close Menu"
           icon={closeIcon}
@@ -126,7 +133,22 @@ export const Menu = ({ onHide, visible }: Props) => {
             </MenuItem>
           )}
         </ul>
-      </aside>
+      </Animated.aside>
     </Scrim>
+  )
+}
+
+const TextAnimated = () => {
+  const spring = initSpring()
+  const [counter, setCounter] = useState(0)
+  const increment = () => setCounter(c => c + 1)
+  const decrement = () => setCounter(c => c - 1)
+
+  return (
+    <div>
+      <button onClick={increment}>+</button>
+      <Animated.div>{spring(counter)}</Animated.div>
+      <button onClick={decrement}>-</button>
+    </div>
   )
 }

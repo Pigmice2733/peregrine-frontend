@@ -39,6 +39,10 @@ const routes = [
     path: '/leaderboard',
     component: () => import('./routes/leaderboard'),
   },
+  {
+    path: '/springy',
+    component: () => import('./routes/springy'),
+  },
 ]
 
 export default routes
