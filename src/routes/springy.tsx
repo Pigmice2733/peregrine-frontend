@@ -26,6 +26,8 @@ const Springy: FunctionComponent = () => {
   })
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
+  const offsetX = x - width / 2
+  const offsetY = y - width / 2
   return (
     <div
       class={wrapperStyle}
@@ -36,9 +38,7 @@ const Springy: FunctionComponent = () => {
     >
       <Animated.div
         class={circleStyle}
-        style={spring({
-          transform: spring`translate(${x - width / 2}px, ${y - width / 2}px)`,
-        })}
+        style={spring`transform: translate(${offsetX}px, ${offsetY}px)`}
       ></Animated.div>
     </div>
   )

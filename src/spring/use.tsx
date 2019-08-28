@@ -120,7 +120,6 @@ const getSpringFramePosition = (spring: DirectSpring) => {
   // But this makes it "feel" right
   // And it makes everything way easier to tune
   const frictionalForce = spring.opts.friction * state.velocity
-  console.log(state.position)
   const force = springForce - frictionalForce
   // f = ma
   const acceleration = force / spring.opts.mass
@@ -218,8 +217,12 @@ export const Animated = new Proxy<AnimatedObject>({} as any, {
           const element = elementRef.current
           const tweenedProps = computeSpring(propsSpring)
           if (element) {
-            for (const key in tweenedProps.style) {
-              ;(element as HTMLElement).style[key] = tweenedProps.style[key]
+            if (typeof tweenedProps.style === 'string') {
+              ;(element as HTMLElement).style.cssText = tweenedProps.style
+            } else {
+              for (const key in tweenedProps.style) {
+                ;(element as HTMLElement).style[key] = tweenedProps.style[key]
+              }
             }
           }
           timeoutId = setTimeout(
