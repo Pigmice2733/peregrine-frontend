@@ -6,6 +6,7 @@ import { css } from 'linaria'
 const wrapperStyle = css`
   width: 100%;
   height: 100vh;
+  overflow: hidden;
 `
 
 const width = 50
@@ -39,7 +40,7 @@ const Springy: FunctionComponent = () => {
       <Animated.div
         class={circleStyle}
         style={spring`transform: translate(${offsetX}px, ${offsetY}px)`}
-      ></Animated.div>
+      />
     </div>
   )
 }
