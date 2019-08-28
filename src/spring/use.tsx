@@ -107,7 +107,7 @@ export const initSpring = ({
 }
 
 const getSpringFramePosition = (spring: DirectSpring) => {
-  const currentTime = new Date().getTime()
+  const currentTime = Date.now()
   const state: SpringState = spring.state || {
     position: spring.target,
     lastTime: currentTime,
