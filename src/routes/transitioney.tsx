@@ -1,5 +1,4 @@
 import { h, FunctionComponent } from 'preact'
-import { initSpring, Animated } from '@/spring/use'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 
@@ -17,14 +16,10 @@ const circleStyle = css`
   background: purple;
   will-change: transform;
   border-radius: 50%;
+  transition: all 0.8s cubic-bezier(0.28, 0.04, 0.6, 1.21);
 `
 
 const Springy: FunctionComponent = () => {
-  const spring = initSpring({
-    friction: 0.007,
-    mass: 0.0023,
-    springStrength: 0.02,
-  })
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
   const offsetX = x - width / 2
@@ -37,9 +32,9 @@ const Springy: FunctionComponent = () => {
         setY(e.y)
       }}
     >
-      <Animated.div
+      <div
         class={circleStyle}
-        style={spring`transform: translate(${offsetX}px, ${offsetY}px)`}
+        style={`transform: translate(${offsetX}px, ${offsetY}px)`}
       />
     </div>
   )

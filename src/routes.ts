@@ -43,6 +43,10 @@ const routes = [
     path: '/springy',
     component: () => import('./routes/springy'),
   },
+  {
+    path: '/transitioney',
+    component: () => import('./routes/transitioney'),
+  },
 ]
 
 export default routes
