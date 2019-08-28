@@ -103,7 +103,11 @@ interface Props {
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
-  const spring = initSpring()
+  const spring = initSpring({
+    friction: 0.013,
+    mass: 0.005,
+    springStrength: 0.08,
+  })
 
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
