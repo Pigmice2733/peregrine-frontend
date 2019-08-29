@@ -1,6 +1,6 @@
 import chunks from 'chunks'
 
-declare var self: ServiceWorkerGlobalScope
+declare let self: ServiceWorkerGlobalScope
 export {}
 
 const cachePromise = caches.open('v1')
@@ -50,7 +50,7 @@ self.addEventListener('fetch', function(event) {
       ? null // Fall back to network
       : event.respondWith(caches.match(root) as Promise<Response>)
   }
-  if (url.match(/fonts\.gstatic/)) {
+  if (/fonts\.gstatic/.exec(url)) {
     return event.respondWith(handleFontsRequest(request))
   }
   if (

@@ -9,6 +9,7 @@ interface URLMap {
 
 const createHandler = (urls: URLMap): typeof window.fetch => async (
   req: RequestInfo,
+  // eslint-disable-next-line caleb/@typescript-eslint/require-await
 ) => {
   const reqUrl = typeof req === 'string' ? req : req.url
   const matchingRoute = Object.entries(urls).reduce<any>(
