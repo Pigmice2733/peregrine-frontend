@@ -54,7 +54,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
         onSuccess()
       })
       .catch((error: Error) => {
-        if (error.message.match(/unauthorized/i)) {
+        if (/unauthorized/i.exec(error.message)) {
           emitError(new Error('Incorrect username or password'))
         } else {
           emitError(error)

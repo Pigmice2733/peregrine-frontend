@@ -26,7 +26,7 @@ const gcalDate = (date: Date, dateOffset = 0) => {
   )
 }
 
-const webcastIcon = (url: string) => (url.match(/youtube/i) ? youtube : twitch)
+const webcastIcon = (url: string) => (/youtube/i.exec(url) ? youtube : twitch)
 
 const gcalUrl = ({
   name,

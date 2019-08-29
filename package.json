@@ -37,7 +37,8 @@
         {
           "allowElseIf": true
         }
-      ]
+      ],
+      "caleb/@typescript-eslint/ban-ts-ignore": "off"
     }
   },
   "dependencies": {
