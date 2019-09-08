@@ -11,7 +11,6 @@ import { EventMatches } from '@/components/event-matches'
 import Spinner from '@/components/spinner'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useJWT } from '@/jwt'
-import { getMatchType } from '@/utils/match-type'
 
 interface Props {
   eventKey: string
