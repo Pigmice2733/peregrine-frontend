@@ -6,6 +6,7 @@ import { DialogDisplayer } from './components/dialog'
 import routes from './routes'
 import GAnalytics from 'ganalytics'
 import { requestIdleCallback } from '@/utils/request-idle-callback'
+import { ErrorBoundary } from './components/error-boundary'
 
 const ga = GAnalytics('UA-144107080-1', {}, true)
 
@@ -23,10 +24,12 @@ const sendGa =
 
 const App = () => (
   <Fragment>
-    <div>
-      <Router routes={routes} onChange={sendGa} />
-    </div>
-    <DialogDisplayer />
+    <ErrorBoundary>
+      <div>
+        <Router routes={routes} onChange={sendGa} />
+      </div>
+      <DialogDisplayer />
+    </ErrorBoundary>
   </Fragment>
 )
 

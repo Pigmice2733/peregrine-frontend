@@ -88,7 +88,7 @@ const Page = ({
     <ErrorBoundary>
       <div class={clsx(wrapperClass)}>
         <Header {...rest} />
-        <main class={clsx(className)}>{children}</main>
+        <main class={className}>{children}</main>
       </div>
     </ErrorBoundary>
   )

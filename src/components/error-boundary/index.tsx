@@ -15,8 +15,9 @@ const codeStyle = css`
   overflow-x: auto;
 `
 
-export const ErrorEmitter = createContext<(error: Error) => void>(error => {
-  throw error
+const ErrorEmitter = createContext<(error: Error) => void>(error => {
+  console.error('error was thrown:', error)
+  throw new Error('Error emitted from outside of an ErrorBoundary')
 })
 
 export const useErrorEmitter = () => useContext(ErrorEmitter)

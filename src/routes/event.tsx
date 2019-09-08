@@ -10,6 +10,8 @@ import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Spinner from '@/components/spinner'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useJWT } from '@/jwt'
+import { getMatchType } from '@/utils/match-type'
 
 interface Props {
   eventKey: string
@@ -53,6 +55,14 @@ const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
   const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
+  const { jwt } = useJWT()
+
+  const isEventAdmin =
+    jwt &&
+    (jwt.peregrineRoles.isSuperAdmin ||
+      (jwt.peregrineRoles.isAdmin &&
+        eventInfo &&
+        jwt.peregrineRealm === eventInfo.realmId))
 
   return (
     <Page
@@ -66,6 +76,9 @@ const Event = ({ eventKey }: Props) => {
         </Heading>
         {eventInfo && <EventInfoCard event={eventInfo} />}
         <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+        {isEventAdmin && (
+          <Button href={`/events/${eventKey}/admin`}>Event Admin</Button>
+        )}
       </div>
 
       <div class={sectionStyle}>

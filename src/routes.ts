@@ -8,6 +8,14 @@ const routes = [
     component: () => import('./routes/event'),
   },
   {
+    path: '/events/:eventKey/admin',
+    component: () => import('./routes/event-admin'),
+  },
+  {
+    path: '/events/:eventKey/admin/create-match',
+    component: () => import('./routes/create-match'),
+  },
+  {
     path: '/events/:eventKey/analysis',
     component: () => import('./routes/event-analysis'),
   },

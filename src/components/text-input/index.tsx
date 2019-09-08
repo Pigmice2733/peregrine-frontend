@@ -3,8 +3,11 @@ import { Merge } from '@/type-utils'
 import { css } from 'linaria'
 import clsx from 'clsx'
 import { useState } from 'preact/hooks'
+import { pigmicePurple } from '@/colors'
 
 const hasFocusedClass = css``
+
+const focusColor = pigmicePurple
 
 const innerClass = css`
   padding: 0.2rem 0;
@@ -19,7 +22,7 @@ const innerClass = css`
   font-family: inherit;
 
   &:focus {
-    border-bottom-color: var(--pigmice-purple);
+    border-bottom-color: ${focusColor};
     outline: none;
   }
 
@@ -48,6 +51,10 @@ const labeledInputClass = css`
   background: transparent;
   font-size: 0.85rem;
   color: #666;
+
+  &:focus-within {
+    color: ${focusColor};
+  }
 
   & input {
     max-width: 100%;

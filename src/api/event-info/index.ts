@@ -11,7 +11,7 @@ export interface EventInfo {
   lon?: number
   key: string
   // the ID of the realm the event belongs to
-  realmId?: string
+  realmId?: number
   // from TBA short name
   name: string
   // abbreviated district name
