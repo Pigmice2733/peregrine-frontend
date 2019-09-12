@@ -6,6 +6,8 @@ import { useJWT } from '@/jwt'
 import { pigmicePurple } from '@/colors'
 import { rgba, darken, lighten } from 'polished'
 import { crown } from '@/icons/crown'
+import { logout } from '@/icons/logout'
+import { login } from '@/icons/login'
 import { close as closeIcon } from '@/icons/close'
 import { accountCircle } from '@/icons/account-circle'
 import Icon from '@/components/icon'
@@ -102,6 +104,7 @@ interface Props {
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
+  const isLoggedIn = jwt
 
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
@@ -123,6 +126,16 @@ export const Menu = ({ onHide, visible }: Props) => {
           {isAdmin && (
             <MenuItem icon={accountCircle} href="/users">
               Users
+            </MenuItem>
+          )}
+          {isLoggedIn && (
+            <MenuItem icon={logout} href="/logout">
+              Log out
+            </MenuItem>
+          )}
+          {!isLoggedIn && (
+            <MenuItem icon={login} href="/login">
+              Log in
             </MenuItem>
           )}
         </ul>

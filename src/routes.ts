@@ -36,6 +36,10 @@ const routes = [
     component: () => import('./routes/login'),
   },
   {
+    path: '/logout',
+    component: () => import('./routes/logout'),
+  },
+  {
     path: '/leaderboard',
     component: () => import('./routes/leaderboard'),
   },
