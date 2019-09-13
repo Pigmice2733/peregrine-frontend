@@ -20,9 +20,9 @@ import IconButton from './icon-button'
 const spacing = '0.3rem'
 
 interface MenuItemProps {
-  href: string
   children: ComponentChildren
   icon: string
+  href?: string
   onClick?: (e: Event) => void
 }
 
@@ -52,16 +52,18 @@ const menuItemStyle = css`
 const textStyle = css`
   margin-left: 1.2rem;
 `
+
 const MenuItem = ({ href, children, icon, onClick }: MenuItemProps) => {
-  const isActive = resolveUrl(href) === window.location.href
-  return (
-    <li>
-      <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href} onClick={onClick}>
-        <Icon icon={icon} />
-        <span class={textStyle}>{children}</span>
-      </a>
-    </li>
-  )
+    const isActive = href ? resolveUrl(href) === window.location.href : false
+
+    return (
+      <li>
+        <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href} onClick={onClick}>
+          <Icon icon={icon} />
+          <span class={textStyle}>{children}</span>
+        </a>
+      </li>
+    )
 }
 
 const menuStyle = css`
@@ -103,8 +105,7 @@ interface Props {
   visible: boolean
 }
 
-const logoutHandler = (e: Event) => {
-  e.preventDefault();
+const logoutHandler = () => {
   logout();
   window.location.reload();
 }
@@ -137,7 +138,7 @@ export const Menu = ({ onHide, visible }: Props) => {
             </MenuItem>
           )}
           {isLoggedIn && (
-            <MenuItem icon={logoutIcon} href="noop" onClick={logoutHandler}>
+            <MenuItem icon={logoutIcon} onClick={logoutHandler}>
               Log out
             </MenuItem>
           )}
