@@ -54,16 +54,16 @@ const textStyle = css`
 `
 
 const MenuItem = ({ href, children, icon, onClick }: MenuItemProps) => {
-    const isActive = href ? resolveUrl(href) === window.location.href : false
+  const isActive = href ? resolveUrl(href) === window.location.href : false
 
-    return (
-      <li>
-        <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href} onClick={onClick}>
-          <Icon icon={icon} />
-          <span class={textStyle}>{children}</span>
-        </a>
-      </li>
-    )
+  return (
+    <li>
+      <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href} onClick={onClick}>
+        <Icon icon={icon} />
+        <span class={textStyle}>{children}</span>
+      </a>
+    </li>
+  )
 }
 
 const menuStyle = css`
