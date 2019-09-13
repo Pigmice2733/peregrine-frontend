@@ -1,21 +1,21 @@
-import { h, ComponentChildren } from 'preact'
-import { css } from 'linaria'
-import { createShadow } from '@/utils/create-shadow'
-import { Scrim, scrimHiddenClass } from '@/components/scrim'
-import { useJWT } from '@/jwt'
 import { pigmicePurple } from '@/colors'
-import { rgba, darken, lighten } from 'polished'
-import { crown } from '@/icons/crown'
-import { logout } from '@/icons/logout'
-import { login } from '@/icons/login'
-import { close as closeIcon } from '@/icons/close'
-import { accountCircle } from '@/icons/account-circle'
 import Icon from '@/components/icon'
-import IconButton from './icon-button'
-import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
+import { Scrim, scrimHiddenClass } from '@/components/scrim'
+import { accountCircle } from '@/icons/account-circle'
+import { close as closeIcon } from '@/icons/close'
+import { crown } from '@/icons/crown'
 import { home } from '@/icons/home'
-import clsx from 'clsx'
+import { login } from '@/icons/login'
+import { logout as logoutIcon } from '@/icons/logout'
+import { logout, useJWT } from '@/jwt'
+import { createShadow } from '@/utils/create-shadow'
+import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
 import { resolveUrl } from '@/utils/resolve-url'
+import clsx from 'clsx'
+import { css } from 'linaria'
+import { darken, lighten, rgba } from 'polished'
+import { ComponentChildren, h } from 'preact'
+import IconButton from './icon-button'
 
 const spacing = '0.3rem'
 
@@ -23,7 +23,9 @@ interface MenuItemProps {
   href: string
   children: ComponentChildren
   icon: string
+  onClick?: (e: Event) => void
 }
+
 const activeStyle = css``
 const menuItemStyle = css`
   text-decoration: none;
@@ -50,11 +52,11 @@ const menuItemStyle = css`
 const textStyle = css`
   margin-left: 1.2rem;
 `
-const MenuItem = ({ href, children, icon }: MenuItemProps) => {
+const MenuItem = ({ href, children, icon, onClick }: MenuItemProps) => {
   const isActive = resolveUrl(href) === window.location.href
   return (
     <li>
-      <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href}>
+      <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href} onClick={onClick}>
         <Icon icon={icon} />
         <span class={textStyle}>{children}</span>
       </a>
@@ -101,6 +103,12 @@ interface Props {
   visible: boolean
 }
 
+const logoutHandler = (e: Event) => {
+  e.preventDefault();
+  logout();
+  window.location.reload();
+}
+
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
@@ -129,7 +137,7 @@ export const Menu = ({ onHide, visible }: Props) => {
             </MenuItem>
           )}
           {isLoggedIn && (
-            <MenuItem icon={logout} href="/logout">
+            <MenuItem icon={logoutIcon} href="noop" onClick={logoutHandler}>
               Log out
             </MenuItem>
           )}
