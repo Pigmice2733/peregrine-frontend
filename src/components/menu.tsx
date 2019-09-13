@@ -58,7 +58,11 @@ const MenuItem = ({ href, children, icon, onClick }: MenuItemProps) => {
 
   return (
     <li>
-      <a class={clsx(isActive && activeStyle, menuItemStyle)} href={href} onClick={onClick}>
+      <a
+        class={clsx(isActive && activeStyle, menuItemStyle)}
+        href={href}
+        onClick={onClick}
+      >
         <Icon icon={icon} />
         <span class={textStyle}>{children}</span>
       </a>
@@ -106,8 +110,8 @@ interface Props {
 }
 
 const logoutHandler = () => {
-  logout();
-  window.location.reload();
+  logout()
+  window.location.reload()
 }
 
 export const Menu = ({ onHide, visible }: Props) => {
@@ -141,7 +145,7 @@ export const Menu = ({ onHide, visible }: Props) => {
             <MenuItem icon={logoutIcon} onClick={logoutHandler}>
               Log out
             </MenuItem>
-          ): (
+          ) : (
             <MenuItem icon={login} href="/login">
               Log in
             </MenuItem>
