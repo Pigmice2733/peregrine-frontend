@@ -28,7 +28,7 @@ Install these by opening the extensions panel in the side bar and searching for 
 - `git clone https://github.com/pigmice2733/peregrine-frontend`
 - `cd peregrine-frontend`
 - `npm i`
-- `npm start` Starts a local server with HMR on port `1234`
+- `npm start` Starts a local server with HMR on port `2733`
 - `npm run build` Creates an optimized build with code splitting (output is still readable)
 - `NODE_ENV=production npm run build` Creates an optimized build with code splitting (output is mangled and not readable)
 
