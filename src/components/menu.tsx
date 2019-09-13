@@ -137,12 +137,11 @@ export const Menu = ({ onHide, visible }: Props) => {
               Users
             </MenuItem>
           )}
-          {isLoggedIn && (
+          {isLoggedIn ? (
             <MenuItem icon={logoutIcon} onClick={logoutHandler}>
               Log out
             </MenuItem>
-          )}
-          {!isLoggedIn && (
+          ): (
             <MenuItem icon={login} href="/login">
               Log in
             </MenuItem>
