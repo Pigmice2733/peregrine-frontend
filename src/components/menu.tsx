@@ -26,46 +26,52 @@ interface MenuItemProps {
   onClick?: (e: Event) => void
 }
 
-const activeStyle = css``
 const menuItemStyle = css`
-  text-decoration: none;
-  padding: 0.6rem 0.7rem;
-  border-radius: 0.3rem;
-  margin: ${spacing};
-  color: ${lighten(0.26, 'black')};
-  transition: all 0.3s ease;
   display: flex;
-  align-items: center;
-  font-weight: 500;
 
-  &:hover,
-  &:focus {
-    background: ${rgba('black', 0.08)};
-    outline: none;
-  }
-
-  &.${activeStyle} {
-    color: ${darken(0.06, pigmicePurple)};
-    background: ${rgba(pigmicePurple, 0.15)};
+  & > * {
+    &:hover,
+    &:focus {
+      background: ${rgba('black', 0.08)};
+      outline: none;
+    }
+    text-decoration: none;
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.3rem;
+    margin: ${spacing};
+    color: ${lighten(0.26, 'black')};
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    font: inherit;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    width: 100%;
+    cursor: pointer;
   }
 `
+
+const activeStyle = css`
+  color: ${darken(0.06, pigmicePurple)};
+  background: ${rgba(pigmicePurple, 0.15)};
+`
+
 const textStyle = css`
   margin-left: 1.2rem;
 `
 
 const MenuItem = ({ href, children, icon, onClick }: MenuItemProps) => {
-  const isActive = href ? resolveUrl(href) === window.location.href : false
+  const isActive = href && resolveUrl(href) === window.location.href
+
+  const El = href ? 'a' : 'button'
 
   return (
-    <li>
-      <a
-        class={clsx(isActive && activeStyle, menuItemStyle)}
-        href={href}
-        onClick={onClick}
-      >
+    <li class={menuItemStyle}>
+      <El class={clsx(isActive && activeStyle)} href={href} onClick={onClick}>
         <Icon icon={icon} />
         <span class={textStyle}>{children}</span>
-      </a>
+      </El>
     </li>
   )
 }
