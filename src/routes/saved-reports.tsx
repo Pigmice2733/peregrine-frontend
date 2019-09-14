@@ -2,11 +2,9 @@ import { FunctionComponent, h, Fragment } from 'preact'
 import Page from '@/components/page'
 import {
   SavedReport,
-  getSavedReports,
   useSavedReports,
   uploadSavedReports,
 } from '@/api/report/submit-report'
-import { useState, useEffect } from 'preact/hooks'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
