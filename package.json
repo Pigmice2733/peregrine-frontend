@@ -135,7 +135,7 @@
     "type-fest": "^0.7.0",
     "typescript": "3.6.3",
     "webpack": "4.40.2",
-    "webpack-bundle-analyzer": "3.4.1",
+    "webpack-bundle-analyzer": "3.5.0",
     "webpack-cli": "3.3.8",
     "webpack-dev-server": "3.8.0",
     "webpackbar": "4.0.0"
