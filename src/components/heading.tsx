@@ -16,6 +16,6 @@ const headingStyle = css`
 `
 
 export const Heading = ({ level, ...props }: Props) => {
-  const Element = 'h' + level
+  const Element = ('h' + level) as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
   return <Element {...props} class={clsx(headingStyle, props.class)} />
 }
