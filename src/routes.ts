@@ -47,6 +47,10 @@ const routes = [
     path: '/leaderboard',
     component: () => import('./routes/leaderboard'),
   },
+  {
+    path: '/saved-reports',
+    component: () => import('./routes/saved-reports'),
+  },
 ]
 
 export default routes

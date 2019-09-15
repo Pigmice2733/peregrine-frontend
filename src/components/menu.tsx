@@ -16,6 +16,8 @@ import { css } from 'linaria'
 import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren, h } from 'preact'
 import IconButton from './icon-button'
+import { useSavedReports } from '@/api/report/submit-report'
+import { cloudSync } from '@/icons/cloud-sync'
 
 const spacing = '0.3rem'
 
@@ -124,6 +126,7 @@ export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
   const isLoggedIn = jwt
+  const savedReports = useSavedReports()
 
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
@@ -154,6 +157,11 @@ export const Menu = ({ onHide, visible }: Props) => {
           ) : (
             <MenuItem icon={login} href="/login">
               Log in
+            </MenuItem>
+          )}
+          {savedReports.length > 0 && (
+            <MenuItem icon={cloudSync} href="/saved-reports">
+              Offline Saved Reports
             </MenuItem>
           )}
         </ul>
