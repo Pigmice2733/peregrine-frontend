@@ -22,6 +22,7 @@ module.exports = {
         useBuiltIns: true, // object.assign instead of _extends
       },
     ],
+    '@babel/plugin-proposal-numeric-separator',
     'babel-plugin-transform-inline-environment-variables',
     // This is included in preset-env but we want to manually enable it even in
     // environments that natively support template literals because "" + "" is

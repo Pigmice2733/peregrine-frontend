@@ -1,4 +1,4 @@
-import { ProcessedMatch } from '@/api/match-info'
+import { ProcessedMatchInfo } from '@/api/match-info'
 import { Fragment, h } from 'preact'
 import { Dropdown } from './dropdown'
 import {
@@ -15,7 +15,7 @@ import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 
 interface Props {
-  matches: ProcessedMatch[]
+  matches: ProcessedMatchInfo[]
   eventKey: string
 }
 

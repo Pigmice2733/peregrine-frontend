@@ -1,6 +1,6 @@
 import { h, JSX, FunctionComponent, Fragment } from 'preact'
-import { Schema, StatDescription } from '@/api/schema'
-import { TeamStats, Stat } from '@/api/stats'
+import { Schema, StatDescription, StatType } from '@/api/schema'
+import { Stat, ProcessedTeamStats } from '@/api/stats'
 import Card from '@/components/card'
 import clsx from 'clsx'
 import {
@@ -12,7 +12,6 @@ import {
   contextRowHeight,
 } from '@/components/table'
 import { formatPercent } from '@/utils/format-percent'
-import { round } from '@/utils/round'
 import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
 import { css } from 'linaria'
@@ -20,15 +19,15 @@ import { createDialog } from './dialog'
 import { blue, red, gray, lightGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
+import { round } from '@/utils/round'
 
 interface Props {
-  teams: TeamStats[]
+  teams: ProcessedTeamStats[]
   schema: Schema
   renderTeam: (team: string) => JSX.Element
   class?: string
 }
 
-type StatType = 'Successes' | 'Attempts' | '% Success'
 type AvgType = 'Avg' | 'Max'
 
 const tableStyle = css`
@@ -39,41 +38,33 @@ const cellStyle = css`
   text-align: center;
 `
 
-type RowType = TeamStats
+type RowType = ProcessedTeamStats
 
-const createStatCell = (
-  avgType: AvgType,
-  statType: StatType,
-  gamePart: 'auto' | 'teleop',
-) => (statDescription: StatDescription): Column<Stat | undefined, RowType> => {
+type StatWithType = Stat & { type: StatType }
+
+const createStatCell = (avgType: AvgType) => (
+  statDescription: StatDescription,
+): Column<StatWithType | undefined, RowType> => {
   const avgTypeStr = avgType === 'Avg' ? 'avg' : 'max'
   return {
     title: statDescription.name,
-    getCell: row => row[gamePart][statDescription.name] as Stat | undefined,
+    getCell: row => {
+      const matchingCell = row.summary[statDescription.name]
+      if (matchingCell)
+        return {
+          ...matchingCell,
+          type: statDescription.type,
+        }
+    },
     renderCell: cell => {
       const text = cell
-        ? statType === '% Success'
-          ? formatPercent(
-              cell.successes[avgTypeStr] / cell.attempts[avgTypeStr] || 0,
-            )
-          : statType === 'Attempts'
-          ? cell.type === 'boolean'
-            ? formatPercent(cell.attempts[avgTypeStr])
-            : round(cell.attempts[avgTypeStr])
-          : cell.type === 'boolean'
-          ? formatPercent(cell.successes[avgTypeStr])
-          : round(cell.successes[avgTypeStr])
+        ? cell.type === 'boolean'
+          ? formatPercent(cell[avgTypeStr])
+          : round(cell[avgTypeStr])
         : '?'
-      return <td class={cellStyle}>{`${text}`}</td>
+      return <td class={cellStyle}>{text}</td>
     },
-    getCellValue: cell =>
-      cell
-        ? statType === '% Success'
-          ? cell.successes[avgTypeStr] / cell.attempts[avgTypeStr] || 0
-          : statType === 'Attempts'
-          ? cell.attempts[avgTypeStr]
-          : cell.successes[avgTypeStr]
-        : 0,
+    getCellValue: cell => (cell ? cell[avgTypeStr] : -1),
   }
 }
 
@@ -165,7 +156,6 @@ const AnalysisTable: FunctionComponent<Props> = ({
   renderTeam,
   class: className,
 }) => {
-  const [statType, setStatType] = useState<StatType>('Successes')
   const [avgType, setAvgType] = useState<AvgType>('Avg')
   const teamColumn: Column<string, RowType> = {
     title: 'Team',
@@ -178,10 +168,13 @@ const AnalysisTable: FunctionComponent<Props> = ({
     ),
     sortOrder: SortOrder.ASC,
   }
+  const allDisplayableFields = schema.schema.filter(f => !f.hide)
+  const autoFields = allDisplayableFields.filter(f => f.period === 'auto')
+  const teleopFields = allDisplayableFields.filter(f => f.period === 'teleop')
   const columns = [
     teamColumn,
-    ...schema.auto.map(createStatCell(avgType, statType, 'auto')),
-    ...schema.teleop.map(createStatCell(avgType, statType, 'teleop')),
+    ...autoFields.map(createStatCell(avgType)),
+    ...teleopFields.map(createStatCell(avgType)),
   ]
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
@@ -196,12 +189,6 @@ const AnalysisTable: FunctionComponent<Props> = ({
             options={['Avg', 'Max'] as const}
             onChange={v => setAvgType(v)}
             value={avgType}
-          />
-          <Dropdown
-            class={dropdownStyle}
-            options={['Successes', 'Attempts', '% Success'] as const}
-            onChange={v => setStatType(v)}
-            value={statType}
           />
         </div>
       ),
@@ -222,13 +209,13 @@ const AnalysisTable: FunctionComponent<Props> = ({
             </th>
             <th
               class={clsx(contextSectionStyle, autoStyle)}
-              colSpan={schema.auto.length}
+              colSpan={autoFields.length}
             >
               <span>Auto</span>
             </th>
             <th
               class={clsx(contextSectionStyle, teleopStyle)}
-              colSpan={schema.teleop.length}
+              colSpan={teleopFields.length}
             >
               <span>Teleop</span>
             </th>

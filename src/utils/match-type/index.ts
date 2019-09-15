@@ -16,4 +16,5 @@ export const matchNames: { [K in MatchType]: string } = {
   f: 'Finals',
 }
 
-export const getMatchType = (k: string) => (k.match(/^[\D]+/) as [MatchType])[0]
+export const getMatchType = (k: string) =>
+  ((/^[\D]+/.exec(k) as any) as [MatchType])[0]

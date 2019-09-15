@@ -49,7 +49,7 @@ const RegisterForm = () => {
   const realms = usePromise(getRealms) || []
   const emitError = useErrorEmitter()
 
-  const onSubmit = async (e: Event) => {
+  const onSubmit = (e: Event) => {
     e.preventDefault()
     setIsLoading(true)
     createUser({
