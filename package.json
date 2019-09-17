@@ -124,7 +124,7 @@
     "postcss-preset-env": "6.7.0",
     "prettier": "1.18.2",
     "prompts": "1.2.1",
-    "rollup": "1.21.3",
+    "rollup": "1.21.4",
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-netlify-push": "^0.2.0",
     "rollup-plugin-node-resolve": "5.2.0",
@@ -132,12 +132,12 @@
     "rollup-plugin-terser": "5.1.2",
     "sharp": "^0.23.0",
     "templite": "1.1.0",
-    "type-fest": "^0.7.0",
+    "type-fest": "^0.8.0",
     "typescript": "3.6.3",
     "webpack": "4.40.2",
     "webpack-bundle-analyzer": "3.5.0",
     "webpack-cli": "3.3.8",
-    "webpack-dev-server": "3.8.0",
+    "webpack-dev-server": "3.8.1",
     "webpackbar": "4.0.0"
   },
   "engines": {
