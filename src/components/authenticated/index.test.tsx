@@ -20,15 +20,19 @@ test('renders login form', async () => {
     />,
   )
   // wait for form to appear
-  expect(await container.findByText(/submit/i)).toBeDisabled()
+  expect(
+    await container.findByText(/log in/i, { selector: 'button' }),
+  ).toBeDisabled()
   fireEvent.input(container.getByLabelText(/username/i), {
     target: { value: 'user name' },
   })
   fireEvent.input(container.getByLabelText(/password/i), {
     target: { value: 'pass word' },
   })
-  expect(await container.findByText(/submit/i)).not.toBeDisabled()
-  fireEvent.click(container.getByText(/submit/i))
+  expect(
+    await container.findByText(/log in/i, { selector: 'button' }),
+  ).not.toBeDisabled()
+  fireEvent.click(container.getByText(/log in/i, { selector: 'button' }))
   await wait(() =>
     expect(window.fetch).toHaveBeenCalledWith(
       expect.stringMatching(/\/authenticate$/),
