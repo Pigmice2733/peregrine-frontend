@@ -35,7 +35,7 @@ const cardStyle = css`
   }
 `
 
-const registerStyle = css`
+const signUpStyle = css`
   width: 6rem;
   margin-top: 1rem;
 `
@@ -92,7 +92,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
             maxLength={maxPasswordLength}
           />
           <Button disabled={isLoading || !isValid}>
-            {isLoading ? 'Submitting' : 'Submit'}
+            {isLoading ? 'Logging In' : 'Log In'}
           </Button>
         </Fragment>
       )}
@@ -114,8 +114,8 @@ const Authenticated = ({ label, render }: Props) => {
                 <LoginForm onSuccess={checkForWorkingJWT} />
               </ErrorBoundary>
             </Card>
-            <Button href="/register" flat class={registerStyle}>
-              Register
+            <Button href="/signup" flat class={signUpStyle}>
+              Sign Up
             </Button>
           </div>
         ) : null}

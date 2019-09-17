@@ -20,7 +20,7 @@ import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
 import { authenticate } from '@/api/authenticate'
 import { route } from '@/router'
 
-const registerStyle = css`
+const signUpStyle = css`
   padding: 1.5rem;
 `
 
@@ -39,7 +39,7 @@ const dropdownClass = css`
   padding: 0.4rem;
 `
 
-const RegisterForm = () => {
+const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -99,7 +99,7 @@ const RegisterForm = () => {
             getText={v => v.name}
           />
           <Button disabled={isLoading || !isValid}>
-            {isLoading ? 'Submitting' : 'Submit'}
+            {isLoading ? 'Signing Up' : 'Sign Up'}
           </Button>
         </Fragment>
       )}
@@ -107,16 +107,16 @@ const RegisterForm = () => {
   )
 }
 
-const Register = () => (
-  <Page name="Register" back={() => window.history.back()}>
-    <div class={registerStyle}>
+const SignUp = () => (
+  <Page name="Sign Up" back={() => window.history.back()}>
+    <div class={signUpStyle}>
       <Card class={cardStyle}>
         <ErrorBoundary>
-          <RegisterForm />
+          <SignUpForm />
         </ErrorBoundary>
       </Card>
     </div>
   </Page>
 )
 
-export default Register
+export default SignUp

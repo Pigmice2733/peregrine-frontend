@@ -160,8 +160,8 @@ export const Menu = ({ onHide, visible }: Props) => {
               <MenuItem icon={login} href="/login">
                 Log in
               </MenuItem>
-              <MenuItem icon={accountPlus} href="/register">
-                Register
+              <MenuItem icon={accountPlus} href="/signup">
+                Sign Up
               </MenuItem>
             </Fragment>
           )}
