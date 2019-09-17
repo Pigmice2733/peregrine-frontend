@@ -42,21 +42,23 @@ export const Dropdown = <T extends any>({
   getKey = (v: T) => (v as unknown) as string,
   getText = (v: T) => (v as unknown) as string,
   ...props
-}: Props<T>) => (
-  // eslint-disable-next-line caleb/jsx-a11y/no-onchange
-  <select
-    value={getKey(value || options[0])}
-    onChange={e =>
-      onChange(options.find(
-        o => getKey(o).toString() === (e.target as HTMLSelectElement).value,
-      ) as T)
-    }
-    class={clsx(button && buttonStyles, props.class, dropdownStyle)}
-  >
-    {options.map(o => (
-      <option value={getKey(o)} key={getKey(o)}>
-        {getText(o)}
-      </option>
-    ))}
-  </select>
-)
+}: Props<T>) => {
+  return (
+    // eslint-disable-next-line caleb/jsx-a11y/no-onchange
+    <select
+      value={value === undefined ? undefined : getKey(value)}
+      onChange={e =>
+        onChange(options.find(
+          o => getKey(o).toString() === (e.target as HTMLSelectElement).value,
+        ) as T)
+      }
+      class={clsx(button && buttonStyles, props.class, dropdownStyle)}
+    >
+      {options.map(o => (
+        <option value={getKey(o)} key={getKey(o)}>
+          {getText(o)}
+        </option>
+      ))}
+    </select>
+  )
+}
