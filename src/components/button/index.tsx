@@ -1,6 +1,8 @@
 import { h, JSX } from 'preact'
 import clsx from 'clsx'
 import { css } from 'linaria'
+import { tint } from 'polished'
+import { pigmicePurple } from '@/colors'
 
 const buttonStyle = css`
   text-align: center;
@@ -35,12 +37,34 @@ const buttonStyle = css`
     background: #0000000d;
     color: #00000036;
     box-shadow: none;
+    cursor: not-allowed;
   }
 `
 
-const Button = (props: JSX.HTMLAttributes) => {
+const flatButtonStyle = css`
+  background: none;
+  box-shadow: none;
+  color: ${pigmicePurple};
+
+  &:hover,
+  &:focus {
+    background: ${tint(0.8, pigmicePurple)};
+    box-shadow: none;
+  }
+`
+
+interface Props extends JSX.HTMLAttributes {
+  flat?: boolean
+}
+
+const Button = (props: Props) => {
   const El = props.href ? 'a' : 'button'
-  return <El {...props} class={clsx(buttonStyle, props.class)} />
+  return (
+    <El
+      {...props}
+      class={clsx(buttonStyle, props.class, props.flat && flatButtonStyle)}
+    />
+  )
 }
 
 export default Button

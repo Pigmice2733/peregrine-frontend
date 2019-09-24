@@ -6,6 +6,7 @@ import { DialogDisplayer } from './components/dialog'
 import routes from './routes'
 import GAnalytics from 'ganalytics'
 import { requestIdleCallback } from '@/utils/request-idle-callback'
+import { uploadSavedReports } from './api/report/submit-report'
 
 const ga = GAnalytics('UA-144107080-1', {}, true)
 
@@ -20,6 +21,9 @@ const sendGa =
           })
         })
     : () => {}
+
+setTimeout(uploadSavedReports, 2_000)
+setInterval(uploadSavedReports, 30_000)
 
 const App = () => (
   <Fragment>

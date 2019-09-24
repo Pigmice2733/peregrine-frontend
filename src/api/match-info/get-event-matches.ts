@@ -1,12 +1,12 @@
 import { request } from '../base'
-import { processMatch, MatchInfo, ProcessedMatch } from '.'
+import { processMatch, MatchInfo, ProcessedMatchInfo } from '.'
 import { createMatchDbKey } from '@/utils/create-match-db-key'
 import { transaction } from '@/cache'
 import { requestIdleCallback } from '@/utils/request-idle-callback'
 
 const updateCachedEventMatches = (
   eventKey: string,
-  matches: ProcessedMatch[],
+  matches: ProcessedMatchInfo[],
 ) =>
   transaction(
     'matches',

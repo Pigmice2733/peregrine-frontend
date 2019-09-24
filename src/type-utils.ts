@@ -1,7 +1,5 @@
+export * from 'type-fest'
 export type Falsy = null | undefined | false | '' | 0
-
-export type Merge<A, B> = { [K in keyof A]: K extends keyof B ? B[K] : A[K] } &
-  B
 
 export type JSONPatch = ({ path: string } & (
   | {

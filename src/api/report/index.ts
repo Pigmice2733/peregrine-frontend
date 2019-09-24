@@ -1,7 +1,6 @@
 export interface Field {
   name: string
-  attempts: number
-  successes: number
+  value: number
 }
 
 type GraphableField = {
@@ -9,12 +8,8 @@ type GraphableField = {
   match: string
 } & Field
 
-export interface BaseReport {
-  data: {
-    teleop: Field[]
-    auto: Field[]
-  }
-  autoName: string
+export interface Report {
+  data: Field[]
 }
 
 export interface PartialComment {
@@ -27,7 +22,7 @@ export interface Comment extends PartialComment {
   reporterId?: string
 }
 
-export interface GetReport extends BaseReport {
+export interface GetReport extends Report {
   // Not sent if the reporter account has been deleted.
   reporterId?: string
 }

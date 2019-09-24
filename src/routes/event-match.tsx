@@ -1,17 +1,17 @@
 import { h } from 'preact'
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
-import LoadData from '@/load-data'
 import { MatchCard } from '@/components/match-card'
 import Spinner from '@/components/spinner'
 import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
-import { getSchema } from '@/api/schema/get-schema'
 import { getEventStats } from '@/api/stats/get-event-stats'
 import clsx from 'clsx'
-import { useEventInfo } from '@/cache/events'
+import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
-import { useEventMatchInfo } from '@/cache/matches'
+import { usePromise } from '@/utils/use-promise'
+import { useMatchInfo } from '@/cache/match-info/use'
+import { useSchema } from '@/cache/schema/use'
 
 interface Props {
   eventKey: string
@@ -48,7 +48,10 @@ const matchStyle = css`
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const eventInfo = useEventInfo(eventKey)
-  const matchInfo = useEventMatchInfo(eventKey, matchKey)
+  const matchInfo = useMatchInfo(eventKey, matchKey)
+  const schema = useSchema(eventInfo && eventInfo.schemaId)
+  const teams = usePromise(() => getEventStats(eventKey), [eventKey])
+
   return (
     <Page
       back={`/events/${eventKey}`}
@@ -64,38 +67,27 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           Scout Match
         </Button>
         {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
-        {eventInfo && (
-          <LoadData
-            data={{
-              schema: () => getSchema(eventInfo.schemaId),
-              teams: () => getEventStats(eventKey),
-            }}
-            renderSuccess={({ schema, teams }) =>
-              (matchInfo && schema && teams && (
-                <AnalysisTable
-                  teams={teams.filter(
-                    t =>
-                      matchInfo.redAlliance.includes('frc' + t.team) ||
-                      matchInfo.blueAlliance.includes('frc' + t.team),
-                  )}
-                  schema={schema}
-                  renderTeam={team => (
-                    <a
-                      class={clsx(
-                        tableTeamStyle,
-                        matchInfo.redAlliance.includes('frc' + team)
-                          ? redStyle
-                          : blueStyle,
-                      )}
-                      href={`/events/${eventKey}/teams/${team}`}
-                    >
-                      {team}
-                    </a>
-                  )}
-                />
-              )) ||
-              null
-            }
+        {matchInfo && schema && teams && (
+          <AnalysisTable
+            teams={teams.filter(
+              t =>
+                matchInfo.redAlliance.includes('frc' + t.team) ||
+                matchInfo.blueAlliance.includes('frc' + t.team),
+            )}
+            schema={schema}
+            renderTeam={team => (
+              <a
+                class={clsx(
+                  tableTeamStyle,
+                  matchInfo.redAlliance.includes('frc' + team)
+                    ? redStyle
+                    : blueStyle,
+                )}
+                href={`/events/${eventKey}/teams/${team}`}
+              >
+                {team}
+              </a>
+            )}
           />
         )}
       </div>

@@ -19,6 +19,9 @@ import { ErrorBoundary, useErrorEmitter } from '../error-boundary'
 
 const loginStyle = css`
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const cardStyle = css`
@@ -30,6 +33,11 @@ const cardStyle = css`
     margin-left: 0;
     margin-right: auto;
   }
+`
+
+const signUpStyle = css`
+  width: 6rem;
+  margin-top: 1rem;
 `
 
 interface Props {
@@ -54,7 +62,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
         onSuccess()
       })
       .catch((error: Error) => {
-        if (error.message.match(/unauthorized/i)) {
+        if (/unauthorized/i.exec(error.message)) {
           emitError(new Error('Incorrect username or password'))
         } else {
           emitError(error)
@@ -84,7 +92,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
             maxLength={maxPasswordLength}
           />
           <Button disabled={isLoading || !isValid}>
-            {isLoading ? 'Submitting' : 'Submit'}
+            {isLoading ? 'Logging In' : 'Log In'}
           </Button>
         </Fragment>
       )}
@@ -106,6 +114,9 @@ const Authenticated = ({ label, render }: Props) => {
                 <LoginForm onSuccess={checkForWorkingJWT} />
               </ErrorBoundary>
             </Card>
+            <Button href="/signup" flat class={signUpStyle}>
+              Sign Up
+            </Button>
           </div>
         ) : null}
       </Page>

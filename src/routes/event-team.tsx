@@ -11,13 +11,13 @@ import { getMatchTeamComments } from '@/api/report/get-match-team-comments'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from '@/components/card'
 import { css } from 'linaria'
-import { useEventInfo } from '@/cache/events'
+import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
-import { useEventMatches } from '@/cache/matches'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { useState } from 'preact/hooks'
 import Button from '@/components/button'
 import { ChartDisplay } from '@/components/chart'
+import { useEventMatches } from '@/cache/event-matches/use'
 
 const sectionStyle = css`
   font-weight: normal;

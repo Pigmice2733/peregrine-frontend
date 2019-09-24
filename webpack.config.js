@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssConfig = require('./postcss.config')
 const WebpackBar = require('webpackbar')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+require('dotenv').config()
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 //   .BundleAnalyzerPlugin
 
@@ -39,12 +40,13 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
-              getLocalIdent: (context, localIdentName, localName) =>
-                postcssConfig.plugins['postcss-modules'].generateScopedName(
-                  localName,
-                  context.resourcePath,
-                ),
+              modules: {
+                getLocalIdent: (context, localIdentName, localName) =>
+                  postcssConfig.plugins['postcss-modules'].generateScopedName(
+                    localName,
+                    context.resourcePath,
+                  ),
+              },
               importLoaders: 1,
             },
           },

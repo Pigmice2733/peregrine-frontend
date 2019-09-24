@@ -16,4 +16,4 @@ export interface MatchInfo {
 export const processMatch = (match: MatchInfo) =>
   parseDateProps(match, ['time', 'scheduledTime'])
 
-export type ProcessedMatch = ReturnType<typeof processMatch>
+export type ProcessedMatchInfo = ReturnType<typeof processMatch>

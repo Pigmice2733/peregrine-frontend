@@ -98,28 +98,3 @@ export const MatchCard = memo(({ match, href }: MatchCardProps) => {
     </Card>
   )
 })
-
-// export const MatchCard = ({ match, href }: MatchCardProps) => {
-//   const matchName = formatMatchKey(match.key)
-//   return (
-//     <Card class={matchCardStyle} href={href}>
-//       <div class={matchTitleStyle}>
-//         {matchName.num ? <div>{matchName.group}</div> : matchName.group}
-//         {matchName.num && (
-//           <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
-//         )}
-//       </div>
-//       {match.time && (
-//         <time dateTime={match.time.toISOString()}>
-//           {formatTime(match.time)}
-//         </time>
-//       )}
-//       <div class={`${redStyle} ${allianceStyle}`}>
-//         {match.redAlliance.map(t => formatTeamNumber(t)).join(' ')}
-//       </div>
-//       <div class={`${blueStyle} ${allianceStyle}`}>
-//         {match.blueAlliance.map(t => formatTeamNumber(t)).join(' ')}
-//       </div>
-//     </Card>
-//   )
-// }
