@@ -1,8 +1,7 @@
-import { ProcessedMatch } from '@/api/match-info'
-import { FunctionComponent, h } from 'preact'
+import { MatchInfo } from '@/api/match-info'
+import { FunctionComponent, h, Fragment } from 'preact'
 import { useState } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
-import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
 import { formatMatchKey } from '@/utils/format-match-key'
@@ -10,11 +9,13 @@ import { pigmicePurple } from '@/colors'
 import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
+import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
+import { Stat } from '@/api/stats'
 
 interface ChartDisplayProps {
   team: string
   eventKey: string
-  teamMatches: ProcessedMatch[]
+  teamMatches: MatchInfo[]
   fieldName: string
 }
 
@@ -24,29 +25,35 @@ export const ChartDisplay: FunctionComponent<ChartDisplayProps> = ({
   teamMatches,
   fieldName,
 }) => {
-  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null)
-  const matchReports = usePromise(
-    () =>
-      Promise.all(
-        teamMatches.map(async m => {
-          const reports = await getMatchTeamReports(eventKey, m.key, team)
-          return { ...m, reports }
-        }),
-      ),
-    [team, teamMatches, eventKey],
-  )
-  const matchesWithReports = (matchReports || [])
-    .filter(m => m.reports.length > 0)
-    .sort(compareMatches)
-  const dataPoints = matchesWithReports
-    .map(m => {
-      const firstReport = m.reports[0]
-      const matchingField = firstReport.data.teleop.find(
-        f => f.name === fieldName,
-      )
-      return matchingField && matchingField.successes
+  const [hoveredIndex, setHoveredPoint] = useState<number | null>(null)
+  const matchesStats =
+    usePromise(
+      () =>
+        Promise.all(
+          teamMatches.sort(compareMatches).map(async match => ({
+            matchKey: match.key,
+            stats: await getMatchTeamStats(eventKey, match.key, team)
+              .then(s => s.summary || [])
+              .catch(() => []),
+          })),
+        ),
+      [team, teamMatches, eventKey],
+    ) || []
+
+  const matchesWithSelectedStat = matchesStats
+    .map(({ matchKey, stats }) => {
+      const matchingStat = stats.find(f => f.name === fieldName)
+      if (matchingStat) return { matchKey, matchingStat }
+      return null
     })
-    .filter((m): m is number => typeof m === 'number')
+    .filter((f): f is Exclude<typeof f, null> => f !== null)
+
+  const dataPoints = matchesWithSelectedStat.map(s => s.matchingStat.avg)
+
+  console.log(dataPoints)
+
+  const hoveredMatchKey =
+    hoveredIndex !== null && matchesWithSelectedStat[hoveredIndex].matchKey
 
   return dataPoints.length === 0 ? null : (
     <Card>
@@ -54,24 +61,24 @@ export const ChartDisplay: FunctionComponent<ChartDisplayProps> = ({
         points={dataPoints}
         onPointHover={setHoveredPoint}
         onPointUnHover={() => setHoveredPoint(null)}
+        pointLink={index =>
+          `/events/${eventKey}/matches/${matchesWithSelectedStat[index].matchKey}`
+        }
       />
-      <div class={``}>
+      <div>
         <p>Max: {Math.max(...dataPoints)}</p>
         <p>Min: {Math.min(...dataPoints)}</p>
-        {hoveredPoint && (
-          <p>{`${dataPoints[hoveredPoint]} in ${
-            formatMatchKey(matchesWithReports[hoveredPoint].key).group
-          }`}</p>
+        <h1>{fieldName}</h1>
+        {hoveredIndex && (
+          <p>
+            {`${dataPoints[hoveredIndex]} in ${
+              formatMatchKey(hoveredMatchKey as string).group
+            }`}
+          </p>
         )}
       </div>
     </Card>
   )
-}
-
-interface ChartProps {
-  points: number[]
-  onPointHover: (index: number) => void
-  onPointUnHover: (index: number) => void
 }
 
 const baseColor = pigmicePurple
@@ -112,37 +119,48 @@ const polygonStyle = css``
 
 let ids = 0
 
+interface ChartProps {
+  points: number[]
+  onPointHover: (index: number) => void
+  onPointUnHover: () => void
+  pointLink: (index: number) => string
+}
+
 const Chart: FunctionComponent<ChartProps> = ({
   points,
   onPointHover,
   onPointUnHover,
+  pointLink,
 }) => {
   const [id] = useState(ids++)
   const gradientId = `chartGradient-${id}`
   const shadowId = `chartShadow-${id}`
   const outerClipId = `chartShadowClip-${id}`
 
-  const canvasWidth = points.length - 1
+  /**
+   * How "wide" the canvas is, because it gets scaled up
+   * This is arbitrary. It determines the "zoom" of the graph
+   */
+  const canvasWidth = 7
   const canvasHeight = canvasWidth
 
   const highest = Math.max(...points)
   const lowest = Math.min(...points)
 
-  /**
-   * What % of the chart height should be covered by the points height
-   */
+  /** What % of the chart height should be covered by the points vertically */
   const visibleRange = 0.8
 
   const endPaddingPercent = (1 - visibleRange) / 2
   const endPadding = endPaddingPercent * canvasHeight
 
   const yLerper = lerp(lowest, highest, endPadding, canvasHeight - endPadding)
+  const xLerper = lerp(0, points.length - 1, 0, canvasWidth)
 
   const lerpedPoints = points.map(point => canvasHeight - yLerper(point))
 
   const linePoints = lerpedPoints.map((y, x) => {
     // the x is the index, they are sequential and evenly spaced
-    return `${x},${y}`
+    return `${xLerper(x)},${y}`
   })
 
   // adds points at bottom left and bottom right
@@ -198,14 +216,15 @@ const Chart: FunctionComponent<ChartProps> = ({
       </g>
 
       {lerpedPoints.map((y, x) => (
-        <circle
-          key={x}
-          cx={x}
-          cy={y}
-          class={pointStyle}
-          onMouseEnter={() => onPointHover(x)}
-          onMouseLeave={onPointUnHover}
-        />
+        <a href={pointLink(x)} key={x}>
+          <circle
+            cx={xLerper(x)}
+            cy={y}
+            class={pointStyle}
+            onMouseEnter={() => onPointHover(x)}
+            onMouseLeave={onPointUnHover}
+          />
+        </a>
       ))}
     </svg>
   )

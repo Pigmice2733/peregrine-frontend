@@ -128,7 +128,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
             team={'frc' + teamNum}
             eventKey={eventKey}
             teamMatches={teamMatches}
-            fieldName={field ? 'Rocket Hatches Lvl 3' : 'Rocket Hatches Lvl 2'}
+            fieldName={field ? 'Teleop Gamepieces' : 'Teleop Hatches'}
           />
           <Button onClick={() => setField(f => !f)}>Change Field</Button>
         </Fragment>
