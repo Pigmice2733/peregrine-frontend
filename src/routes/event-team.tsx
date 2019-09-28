@@ -113,7 +113,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
               )
               .map(c => (
                 <li key={c.id}>
-                  <a href={`/events/${eventKey}/match/${c.matchKey}`}>
+                  <a href={`/events/${eventKey}/matches/${c.matchKey}`}>
                     {formatMatchKey(c.matchKey).group}
                   </a>
                   : {c.comment}
