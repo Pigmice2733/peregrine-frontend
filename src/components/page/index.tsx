@@ -1,4 +1,4 @@
-import { h, RenderableProps, ComponentChildren, Fragment } from 'preact'
+import { h, RenderableProps, ComponentChildren, Fragment, JSX } from 'preact'
 import { ErrorBoundary } from '../error-boundary'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
@@ -9,6 +9,7 @@ import { menu } from '@/icons/menu'
 import clsx from 'clsx'
 import { useState } from 'preact/hooks'
 import { Menu } from '@/components/menu'
+import { Merge } from 'type-fest'
 
 const spacing = '0.15rem'
 
@@ -21,6 +22,7 @@ const headerStyle = css`
   padding: ${spacing};
   display: flex;
   justify-content: flex-start;
+  flex-shrink: 0;
   z-index: 4;
   align-items: center;
 
@@ -47,12 +49,15 @@ const headerText = css`
   overflow: hidden;
 `
 
-interface Props {
-  name: ComponentChildren
-  back: string | (() => void) | false
-  class?: string
-  wrapperClass?: string
-}
+type Props = Merge<
+  JSX.HTMLAttributes,
+  {
+    name: ComponentChildren
+    back: string | (() => void) | false
+    class?: string
+    wrapperClass?: string
+  }
+>
 
 const Header = ({ back, name }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -82,12 +87,14 @@ const Page = ({
   children,
   class: className,
   wrapperClass,
+  name,
+  back,
   ...rest
 }: RenderableProps<Props>) => {
   return (
     <ErrorBoundary>
-      <div class={clsx(wrapperClass)}>
-        <Header {...rest} />
+      <div class={clsx(wrapperClass)} {...rest}>
+        <Header name={name} back={back} />
         <main class={clsx(className)}>{children}</main>
       </div>
     </ErrorBoundary>
