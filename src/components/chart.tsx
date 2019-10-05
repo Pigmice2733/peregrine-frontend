@@ -1,5 +1,5 @@
-import { MatchInfo } from '@/api/match-info'
-import { FunctionComponent, h, Fragment } from 'preact'
+import { ProcessedMatchInfo } from '@/api/match-info'
+import { FunctionComponent, h } from 'preact'
 import { useState } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
@@ -10,16 +10,15 @@ import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
 import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
-import { Stat } from '@/api/stats'
 
 interface ChartDisplayProps {
   team: string
   eventKey: string
-  teamMatches: MatchInfo[]
+  teamMatches: ProcessedMatchInfo[]
   fieldName: string
 }
 
-export const ChartDisplay: FunctionComponent<ChartDisplayProps> = ({
+export const ChartCard: FunctionComponent<ChartDisplayProps> = ({
   team,
   eventKey,
   teamMatches,
@@ -94,10 +93,24 @@ const chartStyle = css`
   overflow: visible;
 `
 
+const lineWidth = 0.03
+
 const lineStyle = css`
   stroke: ${lighten(0.2, baseColor)};
-  stroke-width: 0.03;
+  stroke-width: ${lineWidth};
   fill: none;
+`
+
+const boundsLineStyle = css`
+  stroke: rgba(256, 256, 256, 0.1);
+  stroke-width: ${lineWidth * 0.75};
+`
+
+const boundsTextStyle = css`
+  font-size: 0.2px;
+  /* Center it on the line vertically, and scoot it back over so it doesn't run off the edge of the chart */
+  transform: translate(-0.23px, 0.1px);
+  fill: ${lighten(0.7, baseColor)};
 `
 
 const pointStyle = css`
@@ -226,6 +239,32 @@ const Chart: FunctionComponent<ChartProps> = ({
           />
         </a>
       ))}
+
+      <line
+        x1={0}
+        x2={canvasWidth}
+        y1={endPadding}
+        y2={endPadding}
+        class={boundsLineStyle}
+      />
+      <text x={canvasWidth} y={endPadding} class={boundsTextStyle}>
+        {Math.max(...points)}
+      </text>
+
+      <line
+        x1={0}
+        x2={canvasWidth}
+        y1={canvasHeight - endPadding}
+        y2={canvasHeight - endPadding}
+        class={boundsLineStyle}
+      />
+      <text
+        x={canvasWidth}
+        y={canvasHeight - endPadding}
+        class={boundsTextStyle}
+      >
+        {Math.min(...points)}
+      </text>
     </svg>
   )
 }

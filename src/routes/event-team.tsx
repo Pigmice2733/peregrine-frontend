@@ -16,7 +16,7 @@ import { usePromise } from '@/utils/use-promise'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { useState } from 'preact/hooks'
 import Button from '@/components/button'
-import { ChartDisplay } from '@/components/chart'
+import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 
 const sectionStyle = css`
@@ -124,7 +124,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       )}
       {teamMatches && (
         <Fragment>
-          <ChartDisplay
+          <ChartCard
             team={'frc' + teamNum}
             eventKey={eventKey}
             teamMatches={teamMatches}
