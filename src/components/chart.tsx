@@ -109,8 +109,9 @@ const boundsLineStyle = css`
 const boundsTextStyle = css`
   font-size: 0.2px;
   /* Center it on the line vertically, and scoot it back over so it doesn't run off the edge of the chart */
-  transform: translate(-0.23px, 0.1px);
+  transform: translate(-0.07px, 0.1px);
   fill: ${lighten(0.7, baseColor)};
+  text-anchor: end;
 `
 
 const pointStyle = css`
