@@ -162,7 +162,7 @@ const Chart: FunctionComponent<ChartProps> = ({
   const lowest = Math.min(...points)
 
   /** What % of the chart height should be covered by the points vertically */
-  const visibleRange = 0.8
+  const visibleRange = 0.85
 
   const endPaddingPercent = (1 - visibleRange) / 2
   const endPadding = endPaddingPercent * canvasHeight
@@ -229,18 +229,6 @@ const Chart: FunctionComponent<ChartProps> = ({
         <polyline class={lineStyle} points={linePoints.join(' ')} />
       </g>
 
-      {lerpedPoints.map((y, x) => (
-        <a href={pointLink(x)} key={x}>
-          <circle
-            cx={xLerper(x)}
-            cy={y}
-            class={pointStyle}
-            onMouseEnter={() => onPointHover(x)}
-            onMouseLeave={onPointUnHover}
-          />
-        </a>
-      ))}
-
       <line
         x1={0}
         x2={canvasWidth}
@@ -266,6 +254,19 @@ const Chart: FunctionComponent<ChartProps> = ({
       >
         {Math.min(...points)}
       </text>
+
+      {lerpedPoints.map((y, x) => (
+        // eslint-disable-next-line caleb/react/no-array-index-key
+        <a href={pointLink(x)} key={x}>
+          <circle
+            cx={xLerper(x)}
+            cy={y}
+            class={pointStyle}
+            onMouseEnter={() => onPointHover(x)}
+            onMouseLeave={onPointUnHover}
+          />
+        </a>
+      ))}
     </svg>
   )
 }
