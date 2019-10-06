@@ -25,8 +25,8 @@ import { formatPercent } from '@/utils/format-percent'
 import clsx from 'clsx'
 import { Merge } from '@/type-utils'
 import Icon from './icon'
-import { check } from '@/icons/check'
-import { x } from '@/icons/close'
+import { checkBold } from '@/icons/check-bold'
+import { xBold } from '@/icons/x-bold'
 
 interface ChartCardProps {
   team: string
@@ -425,7 +425,7 @@ const booleanDisplayStyle = css`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding: 0.2rem;
+  padding: 0.3rem;
 
   button& {
     cursor: pointer;
@@ -457,7 +457,7 @@ const BooleanDisplay: FunctionComponent<
         props.class,
       )}
     >
-      <Icon icon={value ? check : x} />
+      <Icon icon={value ? checkBold : xBold} />
     </El>
   )
 }
