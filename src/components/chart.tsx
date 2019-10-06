@@ -14,6 +14,7 @@ import { round } from '@/utils/round'
 import { Dropdown } from './dropdown'
 import { Schema } from '@/api/schema'
 import { memo } from '@/utils/memo'
+import { useQueryState } from '@/utils/use-query-state'
 
 interface ChartCardProps {
   team: string
@@ -88,7 +89,10 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
   teamMatches,
   schema,
 }) => {
-  const [fieldName, setFieldName] = useState<string>(schema.schema[0].name)
+  const [fieldName, setFieldName] = useQueryState<string>(
+    'stat',
+    schema.schema[0].name,
+  )
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
     usePromise(
@@ -136,6 +140,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
           class={statPickerStyle}
           options={statOptions}
           onChange={setFieldName}
+          value={fieldName}
         />
         <div class={detailsStyle}>
           {selectedIndex === null ? (
@@ -256,7 +261,6 @@ const Chart: FunctionComponent<ChartProps> = memo(
     )
 
     const averageYValue = canvasHeight - yLerper(average(points))
-    console.log(averageYValue)
 
     // adds points at bottom left and bottom right
     const polygonPoints = [
