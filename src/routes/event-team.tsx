@@ -14,7 +14,6 @@ import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
-import { useState } from 'preact/hooks'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
@@ -71,7 +70,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
   )
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
-  const [field, setField] = useState(true)
 
   return (
     <Page

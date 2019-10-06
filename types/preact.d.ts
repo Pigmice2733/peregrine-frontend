@@ -1,4 +1,4 @@
-import * as Preact from 'preact'
+export {}
 
 declare module 'preact' {
   namespace h {
