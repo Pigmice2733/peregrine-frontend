@@ -1,33 +1,90 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { FunctionComponent, h } from 'preact'
+import { FunctionComponent, h, Fragment } from 'preact'
 import { useState } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
 import { formatMatchKey } from '@/utils/format-match-key'
-import { pigmicePurple } from '@/colors'
+import { pigmicePurple, gray, offBlack } from '@/colors'
 import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
 import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
 import { round } from '@/utils/round'
+import { Dropdown } from './dropdown'
+import { Schema } from '@/api/schema'
+import { memo } from '@/utils/memo'
 
-interface ChartDisplayProps {
+interface ChartCardProps {
   team: string
   eventKey: string
   teamMatches: ProcessedMatchInfo[]
-  fieldName: string
+  schema: Schema
 }
 
 const average = (values: number[]) =>
   values.reduce((sum, val) => sum + val) / values.length
 
-export const ChartCard: FunctionComponent<ChartDisplayProps> = ({
+const chartDescriptionStyle = css`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 1.5rem;
+`
+
+const detailsStyle = css`
+  height: 4rem;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  & p,
+  & dl,
+  & dd {
+    margin: 0;
+  }
+
+  & dt,
+  & dd {
+    font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+
+  & dd {
+    font-weight: bold;
+  }
+
+  & dt {
+    color: ${gray};
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 0.5rem;
+    height: 100%;
+    align-content: space-between;
+  }
+`
+
+const statPickerStyle = css`
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  align-self: start;
+  font-size: 1.1rem;
+`
+
+export const ChartCard: FunctionComponent<ChartCardProps> = ({
   team,
   eventKey,
   teamMatches,
-  fieldName,
+  schema,
 }) => {
+  const [fieldName, setFieldName] = useState<string>(schema.schema[0].name)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
     usePromise(
@@ -56,31 +113,42 @@ export const ChartCard: FunctionComponent<ChartDisplayProps> = ({
   const hoveredMatchKey =
     selectedIndex !== null && matchesWithSelectedStat[selectedIndex].matchKey
 
-  // pointLink={index =>
-  //   `/events/${eventKey}/matches/${matchesWithSelectedStat[index].matchKey}`
-  // }
-
   const handleClick = (event: MouseEvent) => {
-    if (!(event.target as Element).matches(`.${pointStyle}`)) {
+    if (!(event.target as Element).matches(`.${pointStyle}`))
       setSelectedIndex(null)
-    }
   }
+
+  const statOptions = schema.schema
+    .filter(stat => !stat.hide)
+    .map(stat => stat.name)
 
   return dataPoints.length === 0 ? null : (
     <Card onClick={handleClick}>
       <Chart points={dataPoints} onPointClick={setSelectedIndex} />
-      <div>
-        <p>Max: {round(Math.max(...dataPoints))}</p>
-        <p>Min: {round(Math.min(...dataPoints))}</p>
-        <p>Avg: {round(average(dataPoints))}</p>
-        <h1>{fieldName}</h1>
-        {selectedIndex && (
-          <p>
-            {`${dataPoints[selectedIndex]} in ${
-              formatMatchKey(hoveredMatchKey as string).group
-            }`}
-          </p>
-        )}
+      <div class={chartDescriptionStyle}>
+        <Dropdown
+          class={statPickerStyle}
+          options={statOptions}
+          onChange={setFieldName}
+        />
+        <div class={detailsStyle}>
+          {selectedIndex === null ? (
+            <dl>
+              <dt>Max</dt> <dd>{round(Math.max(...dataPoints))}</dd>
+              <dt>Avg</dt> <dd>{round(average(dataPoints))}</dd>
+              <dt>Min</dt> <dd>{round(Math.min(...dataPoints))}</dd>
+            </dl>
+          ) : (
+            <p>
+              {dataPoints[selectedIndex]} in{' '}
+              <a
+                href={`/events/${eventKey}/matches/${matchesWithSelectedStat[selectedIndex].matchKey}`}
+              >
+                {formatMatchKey(hoveredMatchKey as string).group}
+              </a>
+            </p>
+          )}
+        </div>
       </div>
     </Card>
   )
@@ -144,139 +212,154 @@ interface ChartProps {
   onPointClick: (index: number) => void
 }
 
-const Chart: FunctionComponent<ChartProps> = ({ points, onPointClick }) => {
-  const [id] = useState(ids++)
-  const gradientId = `chartGradient-${id}`
-  const shadowId = `chartShadow-${id}`
-  const outerClipId = `chartShadowClip-${id}`
+const Chart: FunctionComponent<ChartProps> = memo(
+  ({ points, onPointClick }) => {
+    const [id] = useState(ids++)
+    const gradientId = `chartGradient-${id}`
+    const shadowId = `chartShadow-${id}`
+    const outerClipId = `chartShadowClip-${id}`
 
-  /**
-   * How "wide" the canvas is, because it gets scaled up
-   * This is arbitrary. It determines the "zoom" of the graph
-   */
-  const canvasWidth = 7
-  const canvasHeight = canvasWidth
+    /**
+     * How "wide" the canvas is, because it gets scaled up
+     * This is arbitrary. It determines the "zoom" of the graph
+     */
+    const canvasWidth = 7
+    const canvasHeight = canvasWidth
 
-  const highest = Math.max(...points)
-  const lowest = Math.min(...points)
+    const highest = Math.max(...points)
+    const lowest = Math.min(...points)
 
-  /** What % of the chart height should be covered by the points vertically */
-  const visibleRange = 0.85
+    /** What % of the chart height should be covered by the points vertically */
+    const visibleRange = 0.85
 
-  const endPaddingPercent = (1 - visibleRange) / 2
-  const endPadding = endPaddingPercent * canvasHeight
+    const endPaddingPercent = (1 - visibleRange) / 2
+    const endPadding = endPaddingPercent * canvasHeight
 
-  const yLerper = lerp(lowest, highest, endPadding, canvasHeight - endPadding)
-  const xLerper = lerp(0, points.length - 1, 0, canvasWidth)
+    const yLerper = lerp(lowest, highest, endPadding, canvasHeight - endPadding)
+    const xLerper = lerp(0, points.length - 1, 0, canvasWidth)
 
-  const lerpedPoints = points.map(point => canvasHeight - yLerper(point))
+    /** Whether the value for the field never changes */
+    const isConstant = highest === lowest
 
-  const linePoints = lerpedPoints.map((y, x) => {
-    // the x is the index, they are sequential and evenly spaced
-    return `${xLerper(x)},${y}`
-  })
+    const lerpedPoints = points.map(point =>
+      isConstant ? canvasHeight / 2 : canvasHeight - yLerper(point),
+    )
 
-  const averageYValue = yLerper(average(points))
+    const linePoints = lerpedPoints.map(
+      (y, x) => `${xLerper(x)},${y}`, // the x is the array index, they are sequential and evenly spaced
+    )
 
-  // adds points at bottom left and bottom right
-  const polygonPoints = [
-    `0,${canvasHeight}`,
-    ...linePoints,
-    `${canvasWidth},${canvasHeight}`,
-  ]
+    const averageYValue = canvasHeight - yLerper(average(points))
+    console.log(averageYValue)
 
-  if (points.length === 0) return null
+    // adds points at bottom left and bottom right
+    const polygonPoints = [
+      `0,${canvasHeight}`,
+      ...linePoints,
+      `${canvasWidth},${canvasHeight}`,
+    ]
 
-  return (
-    <svg
-      class={chartStyle}
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
-      width="1"
-      height="1"
-    >
-      <linearGradient id={gradientId} x1={0} x2={0} y1={0} y2={canvasHeight}>
-        <stop offset="0" stop-color={lighten(0.05, baseColor)} />
-        <stop offset="1" stop-color={darken(1, baseColor)} />
-      </linearGradient>
+    if (points.length === 0) return null
 
-      <clipPath id={outerClipId}>
-        <rect x="0" y="0" width={canvasWidth} height={canvasHeight} />
-      </clipPath>
-
-      <filter id={shadowId}>
-        <feGaussianBlur in="SourceAlpha" stdDeviation=".8" />
-        <feOffset dx="0" dy="0" result="offsetblur" />
-        <feComponentTransfer>
-          <feFuncA
-            type="linear"
-            slope="0.17" // Opacity
-          />
-        </feComponentTransfer>
-        <feMerge>
-          <feMergeNode />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-
-      <g clip-path={`url(#${outerClipId})`}>
-        <polygon
-          class={polygonStyle}
-          points={polygonPoints.join(' ')}
-          fill={`url(#${gradientId})`}
-          filter={`url(#${shadowId})`}
-        />
-
-        <polyline class={lineStyle} points={linePoints.join(' ')} />
-      </g>
-
-      <line
-        x1={0}
-        x2={canvasWidth}
-        y1={endPadding}
-        y2={endPadding}
-        class={boundsLineStyle}
-      />
-      <text x={canvasWidth} y={endPadding} class={boundsTextStyle}>
-        {round(Math.max(...points))}
-      </text>
-
-      <line
-        x1={0}
-        x2={canvasWidth}
-        y1={averageYValue}
-        y2={averageYValue}
-        class={boundsLineStyle}
-        stroke-dasharray=".05"
-      />
-      <text x={canvasWidth} y={averageYValue} class={boundsTextStyle}>
-        Avg: {round(average(points))}
-      </text>
-
-      <line
-        x1={0}
-        x2={canvasWidth}
-        y1={canvasHeight - endPadding}
-        y2={canvasHeight - endPadding}
-        class={boundsLineStyle}
-      />
-      <text
-        x={canvasWidth}
-        y={canvasHeight - endPadding}
-        class={boundsTextStyle}
+    return (
+      <svg
+        class={chartStyle}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
+        width="1"
+        height="1"
       >
-        {round(Math.min(...points))}
-      </text>
+        <linearGradient id={gradientId} x1={0} x2={0} y1={0} y2={canvasHeight}>
+          <stop offset="0" stop-color={lighten(0.05, baseColor)} />
+          <stop offset="1" stop-color={darken(1, baseColor)} />
+        </linearGradient>
 
-      {lerpedPoints.map((y, x) => (
-        <circle
-          key={x} // eslint-disable-line caleb/react/no-array-index-key
-          cx={xLerper(x)}
-          cy={y}
-          class={pointStyle}
-          onClick={() => onPointClick(x)}
-        />
-      ))}
-    </svg>
-  )
-}
+        <clipPath id={outerClipId}>
+          <rect x="0" y="0" width={canvasWidth} height={canvasHeight} />
+        </clipPath>
+
+        <filter id={shadowId}>
+          <feGaussianBlur in="SourceAlpha" stdDeviation=".8" />
+          <feOffset dx="0" dy="0" result="offsetblur" />
+          <feComponentTransfer>
+            <feFuncA
+              type="linear"
+              slope="0.17" // Opacity
+            />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+
+        <g clip-path={`url(#${outerClipId})`}>
+          <polygon
+            class={polygonStyle}
+            points={polygonPoints.join(' ')}
+            fill={`url(#${gradientId})`}
+            filter={`url(#${shadowId})`}
+          />
+
+          <polyline class={lineStyle} points={linePoints.join(' ')} />
+        </g>
+
+        {isConstant ? (
+          <text x={canvasWidth} y={canvasHeight / 2} class={boundsTextStyle}>
+            {points[0]}
+          </text>
+        ) : (
+          <Fragment>
+            <line
+              x1={0}
+              x2={canvasWidth}
+              y1={endPadding}
+              y2={endPadding}
+              class={boundsLineStyle}
+            />
+            <text x={canvasWidth} y={endPadding} class={boundsTextStyle}>
+              {round(Math.max(...points))}
+            </text>
+
+            <line
+              x1={0}
+              x2={canvasWidth}
+              y1={averageYValue}
+              y2={averageYValue}
+              class={boundsLineStyle}
+              stroke-dasharray=".05"
+            />
+            <text x={canvasWidth} y={averageYValue} class={boundsTextStyle}>
+              Avg: {round(average(points))}
+            </text>
+
+            <line
+              x1={0}
+              x2={canvasWidth}
+              y1={canvasHeight - endPadding}
+              y2={canvasHeight - endPadding}
+              class={boundsLineStyle}
+            />
+            <text
+              x={canvasWidth}
+              y={canvasHeight - endPadding}
+              class={boundsTextStyle}
+            >
+              {round(Math.min(...points))}
+            </text>
+          </Fragment>
+        )}
+
+        {lerpedPoints.map((y, x) => (
+          <circle
+            key={x} // eslint-disable-line caleb/react/no-array-index-key
+            cx={xLerper(x)}
+            cy={y}
+            class={pointStyle}
+            onClick={() => onPointClick(x)}
+          />
+        ))}
+      </svg>
+    )
+  },
+)

@@ -15,9 +15,9 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { useState } from 'preact/hooks'
-import Button from '@/components/button'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useSchema } from '@/cache/schema/use'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -63,6 +63,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum),
     [eventKey, teamNum],
   )
+  const schema = useSchema(eventInfo && eventInfo.schemaId)
   const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
   const teamComments = usePromise(
     () => getMatchTeamComments(eventKey, 'frc' + teamNum),
@@ -122,15 +123,14 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           </ul>
         </Card>
       )}
-      {teamMatches && (
+      {teamMatches && schema && (
         <Fragment>
           <ChartCard
             team={'frc' + teamNum}
             eventKey={eventKey}
+            schema={schema}
             teamMatches={teamMatches}
-            fieldName={field ? 'Teleop Gamepieces' : 'Teleop Hatches'}
           />
-          <Button onClick={() => setField(f => !f)}>Change Field</Button>
         </Fragment>
       )}
     </Page>
