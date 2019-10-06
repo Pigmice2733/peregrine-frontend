@@ -1,11 +1,17 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { FunctionComponent, h, Fragment } from 'preact'
+import { FunctionComponent, h, Fragment, JSX } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
 import { formatMatchKey } from '@/utils/format-match-key'
-import { pigmicePurple, gray, greenOnPurple, redOnPurple } from '@/colors'
+import {
+  pigmicePurple,
+  gray,
+  greenOnPurple,
+  redOnPurple,
+  focusRing,
+} from '@/colors'
 import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
@@ -17,6 +23,7 @@ import { memo } from '@/utils/memo'
 import { useQueryState } from '@/utils/use-query-state'
 import { formatPercent } from '@/utils/format-percent'
 import clsx from 'clsx'
+import { Merge } from '@/type-utils'
 
 interface ChartCardProps {
   team: string
@@ -125,7 +132,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
   const handleClick = (event: MouseEvent) => {
     if (
       !(event.target as Element).matches(
-        `.${pointStyle},.${booleanChartItemStyle}`,
+        `.${pointStyle},.${booleanDisplayStyle}`,
       )
     )
       setSelectedIndex(null)
@@ -166,7 +173,12 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
             )
           ) : (
             <p>
-              {dataPoints[selectedIndex]} in{' '}
+              {isBooleanStat ? (
+                <BooleanDisplay value={Boolean(dataPoints[selectedIndex])} />
+              ) : (
+                dataPoints[selectedIndex]
+              )}{' '}
+              in{' '}
               <a
                 href={`/events/${eventKey}/matches/${matchesWithSelectedStat[selectedIndex].matchKey}`}
               >
@@ -400,14 +412,24 @@ const booleanChartStyle = css`
   border-top-right-radius: inherit;
 `
 
-const booleanChartItemStyle = css`
+const booleanDisplayStyle = css`
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
   border: none;
-  cursor: pointer;
   outline: none;
   color: white;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  button& {
+    cursor: pointer;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.25rem ${focusRing};
+  }
 `
 
 const trueStyle = css`
@@ -418,6 +440,24 @@ const falseStyle = css`
   background: ${redOnPurple};
 `
 
+const BooleanDisplay: FunctionComponent<
+  Merge<JSX.HTMLAttributes, { value: boolean }>
+> = ({ value, ...props }) => {
+  const El = props.onClick ? 'button' : 'div'
+  return (
+    <El
+      {...props}
+      class={clsx(
+        booleanDisplayStyle,
+        value ? trueStyle : falseStyle,
+        props.class,
+      )}
+    >
+      {value ? '✔' : '✖'}
+    </El>
+  )
+}
+
 const BooleanChart: FunctionComponent<ChartProps> = ({
   points,
   onPointClick,
@@ -425,13 +465,11 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
   return (
     <div class={booleanChartStyle}>
       {points.map((p, i) => (
-        <button
+        <BooleanDisplay
           key={i} // eslint-disable-line caleb/react/no-array-index-key
+          value={Boolean(p)}
           onClick={() => onPointClick(i)}
-          class={clsx(booleanChartItemStyle, p === 1 ? trueStyle : falseStyle)}
-        >
-          {p === 1 ? '✔' : '✖'}
-        </button>
+        />
       ))}
     </div>
   )
