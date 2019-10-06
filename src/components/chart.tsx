@@ -38,9 +38,7 @@ interface ChartCardProps {
 const average = (values: number[]) =>
   values.reduce((sum, val) => sum + val) / values.length
 
-const chartCardStyle = css`
-  width: 25rem;
-`
+const chartCardStyle = css``
 
 const chartDescriptionStyle = css`
   display: grid;
@@ -198,7 +196,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
 const baseColor = pigmicePurple
 
 const chartStyle = css`
-  width: 30rem;
+  width: 24rem;
   max-width: 100%;
   height: auto;
   background: ${baseColor};
@@ -413,6 +411,7 @@ const booleanChartStyle = css`
   align-items: center;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
+  padding: 0.25rem;
 `
 
 const booleanDisplayStyle = css`
@@ -426,6 +425,7 @@ const booleanDisplayStyle = css`
   justify-content: center;
   align-items: center;
   padding: 0.3rem;
+  margin: 0.1rem;
 
   button& {
     cursor: pointer;
