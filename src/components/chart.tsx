@@ -1,6 +1,6 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { FunctionComponent, h, Fragment } from 'preact'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
@@ -24,6 +24,10 @@ interface ChartCardProps {
 
 const average = (values: number[]) =>
   values.reduce((sum, val) => sum + val) / values.length
+
+const chartCardStyle = css`
+  max-width: 25rem;
+`
 
 const chartDescriptionStyle = css`
   display: grid;
@@ -100,6 +104,8 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
       [team, teamMatches, eventKey],
     ) || []
 
+  useEffect(() => setSelectedIndex(null), [fieldName])
+
   const matchesWithSelectedStat = matchesStats
     .map(({ matchKey, stats }) => {
       const matchingStat = stats.find(f => f.name === fieldName)
@@ -123,7 +129,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
     .map(stat => stat.name)
 
   return dataPoints.length === 0 ? null : (
-    <Card onClick={handleClick}>
+    <Card onClick={handleClick} class={chartCardStyle}>
       <Chart points={dataPoints} onPointClick={setSelectedIndex} />
       <div class={chartDescriptionStyle}>
         <Dropdown
