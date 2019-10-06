@@ -5,7 +5,7 @@ import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
 import { formatMatchKey } from '@/utils/format-match-key'
-import { pigmicePurple, gray } from '@/colors'
+import { pigmicePurple, gray, greenOnPurple, redOnPurple } from '@/colors'
 import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
@@ -15,6 +15,8 @@ import { Dropdown } from './dropdown'
 import { Schema } from '@/api/schema'
 import { memo } from '@/utils/memo'
 import { useQueryState } from '@/utils/use-query-state'
+import { formatPercent } from '@/utils/format-percent'
+import clsx from 'clsx'
 
 interface ChartCardProps {
   team: string
@@ -27,7 +29,7 @@ const average = (values: number[]) =>
   values.reduce((sum, val) => sum + val) / values.length
 
 const chartCardStyle = css`
-  max-width: 25rem;
+  width: 25rem;
 `
 
 const chartDescriptionStyle = css`
@@ -89,10 +91,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
   teamMatches,
   schema,
 }) => {
-  const [fieldName, setFieldName] = useQueryState<string>(
-    'stat',
-    schema.schema[0].name,
-  )
+  const [fieldName, setFieldName] = useQueryState('stat', schema.schema[0].name)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
     usePromise(
@@ -124,7 +123,11 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
     selectedIndex !== null && matchesWithSelectedStat[selectedIndex].matchKey
 
   const handleClick = (event: MouseEvent) => {
-    if (!(event.target as Element).matches(`.${pointStyle}`))
+    if (
+      !(event.target as Element).matches(
+        `.${pointStyle},.${booleanChartItemStyle}`,
+      )
+    )
       setSelectedIndex(null)
   }
 
@@ -132,9 +135,17 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
     .filter(stat => !stat.hide)
     .map(stat => stat.name)
 
+  const matchingSchemaStat = schema.schema.find(s => s.name === fieldName)
+  const isBooleanStat =
+    matchingSchemaStat && matchingSchemaStat.type === 'boolean'
+
   return dataPoints.length === 0 ? null : (
     <Card onClick={handleClick} class={chartCardStyle}>
-      <Chart points={dataPoints} onPointClick={setSelectedIndex} />
+      {isBooleanStat ? (
+        <BooleanChart points={dataPoints} onPointClick={setSelectedIndex} />
+      ) : (
+        <Chart points={dataPoints} onPointClick={setSelectedIndex} />
+      )}
       <div class={chartDescriptionStyle}>
         <Dropdown
           class={statPickerStyle}
@@ -144,11 +155,15 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
         />
         <div class={detailsStyle}>
           {selectedIndex === null ? (
-            <dl>
-              <dt>Max</dt> <dd>{round(Math.max(...dataPoints))}</dd>
-              <dt>Avg</dt> <dd>{round(average(dataPoints))}</dd>
-              <dt>Min</dt> <dd>{round(Math.min(...dataPoints))}</dd>
-            </dl>
+            isBooleanStat ? (
+              <p>{formatPercent(average(dataPoints))}</p>
+            ) : (
+              <dl>
+                <dt>Max</dt> <dd>{round(Math.max(...dataPoints))}</dd>
+                <dt>Avg</dt> <dd>{round(average(dataPoints))}</dd>
+                <dt>Min</dt> <dd>{round(Math.min(...dataPoints))}</dd>
+              </dl>
+            )
           ) : (
             <p>
               {dataPoints[selectedIndex]} in{' '}
@@ -373,3 +388,51 @@ const Chart: FunctionComponent<ChartProps> = memo(
     )
   },
 )
+
+const booleanChartStyle = css`
+  background: ${baseColor};
+  height: 6rem;
+  display: flex;
+  justify-content: space-between;
+  justify-content: space-evenly;
+  align-items: center;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+`
+
+const booleanChartItemStyle = css`
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  color: white;
+`
+
+const trueStyle = css`
+  background: ${greenOnPurple};
+`
+
+const falseStyle = css`
+  background: ${redOnPurple};
+`
+
+const BooleanChart: FunctionComponent<ChartProps> = ({
+  points,
+  onPointClick,
+}) => {
+  return (
+    <div class={booleanChartStyle}>
+      {points.map((p, i) => (
+        <button
+          key={i} // eslint-disable-line caleb/react/no-array-index-key
+          onClick={() => onPointClick(i)}
+          class={clsx(booleanChartItemStyle, p === 1 ? trueStyle : falseStyle)}
+        >
+          {p === 1 ? '✔' : '✖'}
+        </button>
+      ))}
+    </div>
+  )
+}
