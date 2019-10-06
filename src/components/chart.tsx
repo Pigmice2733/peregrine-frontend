@@ -28,7 +28,7 @@ const average = (values: number[]) =>
 const chartDescriptionStyle = css`
   display: grid;
   grid-template-columns: 1fr auto;
-  padding: 1.5rem;
+  padding: 1.2rem;
 `
 
 const detailsStyle = css`
