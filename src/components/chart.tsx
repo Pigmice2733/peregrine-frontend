@@ -24,6 +24,9 @@ import { useQueryState } from '@/utils/use-query-state'
 import { formatPercent } from '@/utils/format-percent'
 import clsx from 'clsx'
 import { Merge } from '@/type-utils'
+import Icon from './icon'
+import { check } from '@/icons/check'
+import { x } from '@/icons/close'
 
 interface ChartCardProps {
   team: string
@@ -422,6 +425,7 @@ const booleanDisplayStyle = css`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  padding: 0.2rem;
 
   button& {
     cursor: pointer;
@@ -453,7 +457,7 @@ const BooleanDisplay: FunctionComponent<
         props.class,
       )}
     >
-      {value ? '✔' : '✖'}
+      <Icon icon={value ? check : x} />
     </El>
   )
 }
