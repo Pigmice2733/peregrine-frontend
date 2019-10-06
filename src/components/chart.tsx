@@ -134,7 +134,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
 
   const handleClick = (event: MouseEvent) => {
     if (
-      !(event.target as Element).matches(
+      !(event.target as Element).closest(
         `.${pointStyle},.${booleanDisplayStyle}`,
       )
     )
