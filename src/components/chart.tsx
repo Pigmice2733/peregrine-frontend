@@ -10,6 +10,7 @@ import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
 import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
+import { round } from '@/utils/round'
 
 interface ChartDisplayProps {
   team: string
@@ -18,13 +19,16 @@ interface ChartDisplayProps {
   fieldName: string
 }
 
+const average = (values: number[]) =>
+  values.reduce((sum, val) => sum + val) / values.length
+
 export const ChartCard: FunctionComponent<ChartDisplayProps> = ({
   team,
   eventKey,
   teamMatches,
   fieldName,
 }) => {
-  const [hoveredIndex, setHoveredPoint] = useState<number | null>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
     usePromise(
       () =>
@@ -49,28 +53,30 @@ export const ChartCard: FunctionComponent<ChartDisplayProps> = ({
 
   const dataPoints = matchesWithSelectedStat.map(s => s.matchingStat.avg)
 
-  console.log(dataPoints)
-
   const hoveredMatchKey =
-    hoveredIndex !== null && matchesWithSelectedStat[hoveredIndex].matchKey
+    selectedIndex !== null && matchesWithSelectedStat[selectedIndex].matchKey
+
+  // pointLink={index =>
+  //   `/events/${eventKey}/matches/${matchesWithSelectedStat[index].matchKey}`
+  // }
+
+  const handleClick = (event: MouseEvent) => {
+    if (!(event.target as Element).matches(`.${pointStyle}`)) {
+      setSelectedIndex(null)
+    }
+  }
 
   return dataPoints.length === 0 ? null : (
-    <Card>
-      <Chart
-        points={dataPoints}
-        onPointHover={setHoveredPoint}
-        onPointUnHover={() => setHoveredPoint(null)}
-        pointLink={index =>
-          `/events/${eventKey}/matches/${matchesWithSelectedStat[index].matchKey}`
-        }
-      />
+    <Card onClick={handleClick}>
+      <Chart points={dataPoints} onPointClick={setSelectedIndex} />
       <div>
-        <p>Max: {Math.max(...dataPoints)}</p>
-        <p>Min: {Math.min(...dataPoints)}</p>
+        <p>Max: {round(Math.max(...dataPoints))}</p>
+        <p>Min: {round(Math.min(...dataPoints))}</p>
+        <p>Avg: {round(average(dataPoints))}</p>
         <h1>{fieldName}</h1>
-        {hoveredIndex && (
+        {selectedIndex && (
           <p>
-            {`${dataPoints[hoveredIndex]} in ${
+            {`${dataPoints[selectedIndex]} in ${
               formatMatchKey(hoveredMatchKey as string).group
             }`}
           </p>
@@ -135,17 +141,10 @@ let ids = 0
 
 interface ChartProps {
   points: number[]
-  onPointHover: (index: number) => void
-  onPointUnHover: () => void
-  pointLink: (index: number) => string
+  onPointClick: (index: number) => void
 }
 
-const Chart: FunctionComponent<ChartProps> = ({
-  points,
-  onPointHover,
-  onPointUnHover,
-  pointLink,
-}) => {
+const Chart: FunctionComponent<ChartProps> = ({ points, onPointClick }) => {
   const [id] = useState(ids++)
   const gradientId = `chartGradient-${id}`
   const shadowId = `chartShadow-${id}`
@@ -176,6 +175,8 @@ const Chart: FunctionComponent<ChartProps> = ({
     // the x is the index, they are sequential and evenly spaced
     return `${xLerper(x)},${y}`
   })
+
+  const averageYValue = yLerper(average(points))
 
   // adds points at bottom left and bottom right
   const polygonPoints = [
@@ -237,7 +238,19 @@ const Chart: FunctionComponent<ChartProps> = ({
         class={boundsLineStyle}
       />
       <text x={canvasWidth} y={endPadding} class={boundsTextStyle}>
-        {Math.max(...points)}
+        {round(Math.max(...points))}
+      </text>
+
+      <line
+        x1={0}
+        x2={canvasWidth}
+        y1={averageYValue}
+        y2={averageYValue}
+        class={boundsLineStyle}
+        stroke-dasharray=".05"
+      />
+      <text x={canvasWidth} y={averageYValue} class={boundsTextStyle}>
+        Avg: {round(average(points))}
       </text>
 
       <line
@@ -252,20 +265,17 @@ const Chart: FunctionComponent<ChartProps> = ({
         y={canvasHeight - endPadding}
         class={boundsTextStyle}
       >
-        {Math.min(...points)}
+        {round(Math.min(...points))}
       </text>
 
       {lerpedPoints.map((y, x) => (
-        // eslint-disable-next-line caleb/react/no-array-index-key
-        <a href={pointLink(x)} key={x}>
-          <circle
-            cx={xLerper(x)}
-            cy={y}
-            class={pointStyle}
-            onMouseEnter={() => onPointHover(x)}
-            onMouseLeave={onPointUnHover}
-          />
-        </a>
+        <circle
+          key={x} // eslint-disable-line caleb/react/no-array-index-key
+          cx={xLerper(x)}
+          cy={y}
+          class={pointStyle}
+          onClick={() => onPointClick(x)}
+        />
       ))}
     </svg>
   )
