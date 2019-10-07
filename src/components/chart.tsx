@@ -206,7 +206,7 @@ const chartStyle = css`
   overflow: visible;
 `
 
-const lineWidth = 0.03
+const lineWidth = 0.4
 
 const lineStyle = css`
   stroke: ${lighten(0.2, baseColor)};
@@ -220,20 +220,21 @@ const boundsLineStyle = css`
 `
 
 const boundsTextStyle = css`
-  font-size: 0.2px;
-  /* Center it on the line vertically, and scoot it back over so it doesn't run off the edge of the chart */
-  transform: translate(-0.07px, 0.1px);
+  font-size: 3.1px;
+  /* Scoot it over so it isn't touching the edge of the chart */
+  transform: translateX(-1.2px);
   fill: ${lighten(0.7, baseColor)};
   text-anchor: end;
+  dominant-baseline: middle;
 `
 
 const pointStyle = css`
-  r: 0.15;
+  r: 2;
   -webkit-tap-highlight-color: transparent;
   fill: ${darken(0.05, baseColor)};
   opacity: 0;
   transition: opacity 0.3s ease;
-  stroke-width: 1;
+  stroke-width: 10;
   cursor: pointer;
   stroke: transparent;
 
@@ -262,7 +263,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
      * How "wide" the canvas is, because it gets scaled up
      * This is arbitrary. It determines the "zoom" of the graph
      */
-    const canvasWidth = 7
+    const canvasWidth = 100
     const canvasHeight = canvasWidth
 
     const highest = Math.max(...points)
@@ -307,9 +308,9 @@ const Chart: FunctionComponent<ChartProps> = memo(
         width="1"
         height="1"
       >
-        <linearGradient id={gradientId} x1={0} x2={0} y1={0} y2={canvasHeight}>
-          <stop offset="0" stop-color={lighten(0.05, baseColor)} />
-          <stop offset="1" stop-color={darken(1, baseColor)} />
+        <linearGradient id={gradientId} x1={0} x2={0} y1={0} y2={1}>
+          <stop offset={0} stop-color={lighten(0.05, baseColor)} />
+          <stop offset={1} stop-color={baseColor} />
         </linearGradient>
 
         <clipPath id={outerClipId}>
@@ -317,7 +318,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
         </clipPath>
 
         <filter id={shadowId}>
-          <feGaussianBlur in="SourceAlpha" stdDeviation=".8" />
+          <feGaussianBlur in="SourceAlpha" stdDeviation="11" />
           <feOffset dx="0" dy="0" result="offsetblur" />
           <feComponentTransfer>
             <feFuncA
@@ -365,7 +366,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
               y1={averageYValue}
               y2={averageYValue}
               class={boundsLineStyle}
-              stroke-dasharray=".05"
+              stroke-dasharray="1"
             />
             <text x={canvasWidth} y={averageYValue} class={boundsTextStyle}>
               Avg: {round(average(points))}
