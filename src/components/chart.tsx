@@ -366,7 +366,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
               y1={averageYValue}
               y2={averageYValue}
               class={boundsLineStyle}
-              stroke-dasharray="1"
+              stroke-dasharray="1.1"
             />
             <text x={canvasWidth} y={averageYValue} class={boundsTextStyle}>
               Avg: {round(average(points))}
