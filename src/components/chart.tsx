@@ -1,6 +1,6 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { FunctionComponent, h, Fragment, JSX } from 'preact'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect, useRef } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
@@ -44,45 +44,6 @@ const chartDescriptionStyle = css`
   display: grid;
   grid-template-columns: 1fr auto;
   padding: 1.2rem;
-`
-
-const detailsStyle = css`
-  height: 4rem;
-  grid-column: 1;
-  grid-row: 1;
-  align-self: stretch;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-
-  & p,
-  & dl,
-  & dd {
-    margin: 0;
-  }
-
-  & dt,
-  & dd {
-    font-family: 'Roboto Condensed', 'Roboto', sans-serif;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-  }
-
-  & dd {
-    font-weight: bold;
-  }
-
-  & dt {
-    color: ${gray};
-  }
-
-  dl {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-gap: 0.5rem;
-    height: 100%;
-    align-content: space-between;
-  }
 `
 
 const statPickerStyle = css`
@@ -403,16 +364,69 @@ const Chart: FunctionComponent<ChartProps> = memo(
   },
 )
 
+const overflowLeftStyle = css``
+const overflowRightStyle = css``
+
 const booleanChartStyle = css`
   background: ${baseColor};
-  height: 6rem;
-  display: flex;
-  justify-content: space-between;
-  justify-content: space-evenly;
-  align-items: center;
+  height: 5rem;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
-  padding: 0.25rem;
+  max-width: 27rem;
+  width: 25rem;
+  overflow: auto;
+  position: relative;
+  scrollbar-width: none;
+  display: flex;
+
+  &::before,
+  &::after {
+    border-radius: inherit;
+    content: '';
+    display: block;
+    position: fixed;
+    width: inherit;
+    height: inherit;
+    max-width: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &::before {
+    background: linear-gradient(90deg, transparent 80%, #630063c4);
+  }
+
+  &.${overflowRightStyle}::before {
+    opacity: 1;
+  }
+
+  &::after {
+    background: linear-gradient(-90deg, transparent 80%, #630063c4);
+  }
+  &.${overflowLeftStyle}::after {
+    opacity: 1;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+`
+
+const innerBooleanChartStyle = css`
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 0.4rem;
+  align-content: center;
+  flex-grow: 1;
+  justify-content: center;
+
+  /* Empty before and after children so grid gap gets applied at both ends */
+  /* This is the easiest way to get a margin to apply to the right side of a horizontally scrolling container */
+  &::before,
+  &::after {
+    content: '';
+  }
 `
 
 const booleanDisplayStyle = css`
@@ -426,7 +440,6 @@ const booleanDisplayStyle = css`
   justify-content: center;
   align-items: center;
   padding: 0.3rem;
-  margin: 0.1rem;
 
   button& {
     cursor: pointer;
@@ -463,19 +476,92 @@ const BooleanDisplay: FunctionComponent<
   )
 }
 
+/** The amount that can be scrolled before the gradient appears */
+const scrollThreshold = 5
+
 const BooleanChart: FunctionComponent<ChartProps> = ({
   points,
   onPointClick,
 }) => {
+  const elementRef = useRef<HTMLElement>()
+  const [isOverflowingLeft, setIsOverflowingLeft] = useState<boolean>(false)
+  const [isOverflowingRight, setIsOverflowingRight] = useState<boolean>(false)
+
+  const recomputeScrolling = () => {
+    const element = elementRef.current
+    if (!element) return
+    setIsOverflowingLeft(element.scrollLeft > scrollThreshold)
+    setIsOverflowingRight(
+      element.scrollWidth - element.scrollLeft - element.clientWidth >
+        scrollThreshold,
+    )
+  }
+
+  useEffect(recomputeScrolling, [])
+
   return (
-    <div class={booleanChartStyle}>
-      {points.map((p, i) => (
-        <BooleanDisplay
-          key={i} // eslint-disable-line caleb/react/no-array-index-key
-          value={Boolean(p)}
-          onClick={() => onPointClick(i)}
-        />
-      ))}
+    <div
+      class={clsx(
+        booleanChartStyle,
+        isOverflowingLeft && overflowLeftStyle,
+        isOverflowingRight && overflowRightStyle,
+      )}
+      ref={elementRef}
+      onScroll={recomputeScrolling}
+    >
+      <div class={innerBooleanChartStyle}>
+        {points.map((p, i) => (
+          <BooleanDisplay
+            key={i} // eslint-disable-line caleb/react/no-array-index-key
+            value={Boolean(p)}
+            onClick={() => onPointClick(i)}
+          />
+        ))}
+      </div>
     </div>
   )
 }
+
+const detailsStyle = css`
+  height: 4rem;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: stretch;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  & p .${booleanDisplayStyle} {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  & p,
+  & dl,
+  & dd {
+    margin: 0;
+  }
+
+  & dt,
+  & dd {
+    font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+  }
+
+  & dd {
+    font-weight: bold;
+  }
+
+  & dt {
+    color: ${gray};
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 0.5rem;
+    height: 100%;
+    align-content: space-between;
+  }
+`
