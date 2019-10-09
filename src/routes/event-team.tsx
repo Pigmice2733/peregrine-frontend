@@ -122,14 +122,12 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
         </Card>
       )}
       {teamMatches && schema && (
-        <Fragment>
-          <ChartCard
-            team={'frc' + teamNum}
-            eventKey={eventKey}
-            schema={schema}
-            teamMatches={teamMatches}
-          />
-        </Fragment>
+        <ChartCard
+          team={'frc' + teamNum}
+          eventKey={eventKey}
+          schema={schema}
+          teamMatches={teamMatches}
+        />
       )}
     </Page>
   )
