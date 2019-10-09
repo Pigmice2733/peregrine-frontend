@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
-import { formatMatchKey } from '@/utils/format-match-key'
 import {
   pigmicePurple,
   gray,
@@ -27,6 +26,7 @@ import { Merge } from '@/type-utils'
 import Icon from './icon'
 import { checkBold } from '@/icons/check-bold'
 import { xBold } from '@/icons/x-bold'
+import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 
 interface ChartCardProps {
   team: string
@@ -139,12 +139,12 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
                 <BooleanDisplay value={Boolean(dataPoints[selectedIndex])} />
               ) : (
                 dataPoints[selectedIndex]
-              )}{' '}
-              in{' '}
+              )}
+              {' in '}
               <a
                 href={`/events/${eventKey}/matches/${matchesWithSelectedStat[selectedIndex].matchKey}`}
               >
-                {formatMatchKey(hoveredMatchKey as string).group}
+                {formatMatchKeyShort(hoveredMatchKey as string)}
               </a>
             </p>
           )}
