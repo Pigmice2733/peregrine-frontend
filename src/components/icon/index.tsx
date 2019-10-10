@@ -7,7 +7,7 @@ interface Props extends JSX.HTMLAttributes {
 
 const iconStyle = css`
   width: 1.5rem;
-  height: 1.5rem;
+  height: auto;
   fill: currentColor;
 `
 

@@ -14,7 +14,9 @@ import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useSchema } from '@/cache/schema/use'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -60,6 +62,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum),
     [eventKey, teamNum],
   )
+  const schema = useSchema(eventInfo && eventInfo.schemaId)
   const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
   const teamComments = usePromise(
     () => getMatchTeamComments(eventKey, 'frc' + teamNum),
@@ -117,6 +120,14 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
               ))}
           </ul>
         </Card>
+      )}
+      {teamMatches && schema && (
+        <ChartCard
+          team={'frc' + teamNum}
+          eventKey={eventKey}
+          schema={schema}
+          teamMatches={teamMatches}
+        />
       )}
     </Page>
   )
