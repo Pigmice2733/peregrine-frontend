@@ -133,7 +133,7 @@
     "sharp": "^0.23.0",
     "templite": "1.1.0",
     "type-fest": "^0.8.0",
-    "typescript": "3.6.3",
+    "typescript": "3.6.4",
     "webpack": "4.41.0",
     "webpack-bundle-analyzer": "3.5.2",
     "webpack-cli": "3.3.9",
