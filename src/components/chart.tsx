@@ -372,11 +372,9 @@ const booleanChartStyle = css`
   height: 5rem;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
-  max-width: 27rem;
+  max-width: calc(100vw - 2rem);
   width: 25rem;
-  overflow: auto;
   position: relative;
-  scrollbar-width: none;
   display: flex;
 
   &::before,
@@ -384,10 +382,9 @@ const booleanChartStyle = css`
     border-radius: inherit;
     content: '';
     display: block;
-    position: fixed;
-    width: inherit;
-    height: inherit;
-    max-width: inherit;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -407,10 +404,6 @@ const booleanChartStyle = css`
   &.${overflowLeftStyle}::after {
     opacity: 1;
   }
-
-  &::-webkit-scrollbar {
-    width: 0;
-  }
 `
 
 const innerBooleanChartStyle = css`
@@ -426,6 +419,17 @@ const innerBooleanChartStyle = css`
   &::before,
   &::after {
     content: '';
+  }
+`
+
+const innerBooleanChartWrapperStyle = css`
+  scrollbar-width: none;
+  overflow: auto;
+  width: 100%;
+  display: flex;
+
+  &::-webkit-scrollbar {
+    width: 0;
   }
 `
 
@@ -506,17 +510,21 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
         isOverflowingLeft && overflowLeftStyle,
         isOverflowingRight && overflowRightStyle,
       )}
-      ref={elementRef}
-      onScroll={recomputeScrolling}
     >
-      <div class={innerBooleanChartStyle}>
-        {points.map((p, i) => (
-          <BooleanDisplay
-            key={i} // eslint-disable-line caleb/react/no-array-index-key
-            value={Boolean(p)}
-            onClick={() => onPointClick(i)}
-          />
-        ))}
+      <div
+        class={innerBooleanChartWrapperStyle}
+        ref={elementRef}
+        onScroll={recomputeScrolling}
+      >
+        <div class={innerBooleanChartStyle}>
+          {points.map((p, i) => (
+            <BooleanDisplay
+              key={i} // eslint-disable-line caleb/react/no-array-index-key
+              value={Boolean(p)}
+              onClick={() => onPointClick(i)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )
