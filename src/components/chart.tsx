@@ -351,8 +351,8 @@ const Chart: FunctionComponent<ChartProps> = memo(
         )}
 
         {lerpedPoints.map((y, x) => (
+          // eslint-disable-next-line caleb/react/jsx-key
           <circle
-            key={x} // eslint-disable-line caleb/react/no-array-index-key
             cx={xLerper(x)}
             cy={y}
             class={pointStyle}
@@ -518,8 +518,8 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
       >
         <div class={innerBooleanChartStyle}>
           {points.map((p, i) => (
+            // eslint-disable-next-line caleb/react/jsx-key
             <BooleanDisplay
-              key={i} // eslint-disable-line caleb/react/no-array-index-key
               value={Boolean(p)}
               onClick={() => onPointClick(i)}
             />
