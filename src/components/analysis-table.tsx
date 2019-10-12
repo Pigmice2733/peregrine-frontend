@@ -169,9 +169,9 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: (team, teamIndex) => (
+    renderCell: (team, rowIndex) => (
       <th scope="row" class={teamNumCellStyle}>
-        <div className={teamRankStyle}>{teamIndex + 1}</div>
+        <div className={teamRankStyle}>{rowIndex + 1}</div>
         {renderTeam(team)}
       </th>
     ),

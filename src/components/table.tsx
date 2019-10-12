@@ -71,7 +71,7 @@ const sortButtonStyle = css`
 export interface Column<CellType, RowType> {
   /** Column name, used in title row */
   title: string
-  renderCell: (cellValue: CellType, cellIndex: number) => JSX.Element
+  renderCell: (cellValue: CellType, rowIndex: number) => JSX.Element
   /** Function to retrieve the cell value, used for sorting */
   getCellValue: (cellValue: CellType) => number | string
   getCell: (row: RowType) => CellType
