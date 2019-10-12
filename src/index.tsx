@@ -3,9 +3,8 @@ import { cleanupTokens } from '@/jwt'
 import { render, h } from 'preact'
 
 if (process.env.NODE_ENV === 'development') {
-  if (module.hot) {
-    module.hot.accept()
-  }
+  // @ts-ignore
+  if (module.hot) module.hot.accept()
 
   while (document.body.lastChild) {
     document.body.removeChild(document.body.lastChild)

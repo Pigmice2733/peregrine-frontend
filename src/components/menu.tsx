@@ -14,10 +14,11 @@ import { resolveUrl } from '@/utils/resolve-url'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { darken, lighten, rgba } from 'polished'
-import { ComponentChildren, h } from 'preact'
+import { ComponentChildren, h, Fragment } from 'preact'
 import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
 import { cloudSync } from '@/icons/cloud-sync'
+import { accountPlus } from '@/icons/account-plus'
 
 const spacing = '0.3rem'
 
@@ -155,9 +156,14 @@ export const Menu = ({ onHide, visible }: Props) => {
               Log out
             </MenuItem>
           ) : (
-            <MenuItem icon={login} href="/login">
-              Log in
-            </MenuItem>
+            <Fragment>
+              <MenuItem icon={login} href="/login">
+                Log in
+              </MenuItem>
+              <MenuItem icon={accountPlus} href="/signup">
+                Sign Up
+              </MenuItem>
+            </Fragment>
           )}
           {savedReports.length > 0 && (
             <MenuItem icon={cloudSync} href="/saved-reports">

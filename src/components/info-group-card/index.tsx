@@ -19,6 +19,8 @@ const rowStyle = css`
   text-decoration: none;
   transition: background-color 0.2s ease;
   white-space: nowrap;
+  max-height: 3rem;
+  overflow: hidden;
 
   &[href]:hover,
   &:focus {
