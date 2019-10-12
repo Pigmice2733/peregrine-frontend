@@ -16,7 +16,7 @@ import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
 import { css } from 'linaria'
 import { createDialog } from './dialog'
-import { blue, red, gray, lightGrey } from '@/colors'
+import { blue, red, grey, lightGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
@@ -83,7 +83,7 @@ const topLeftCellStyle = css`
 `
 
 const iconStyle = css`
-  fill: ${gray};
+  fill: ${grey};
   width: calc(${contextRowHeight} - 0.2rem);
   height: calc(${contextRowHeight} - 0.2rem);
   border-radius: 50%;
@@ -155,6 +155,7 @@ const teamRankStyle = css`
   font-size: 0.75rem;
   left: 5%;
   top: 5%;
+  color: ${grey};
 `
 
 const AnalysisTable: FunctionComponent<Props> = ({
