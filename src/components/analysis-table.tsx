@@ -150,6 +150,13 @@ const teamNumCellStyle = css`
   }
 `
 
+const teamRankStyle = css`
+  position: absolute;
+  font-size: 0.75rem;
+  left: 5%;
+  top: 5%;
+`
+
 const AnalysisTable: FunctionComponent<Props> = ({
   teams,
   schema,
@@ -161,8 +168,9 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: team => (
+    renderCell: (team, teamIndex) => (
       <th scope="row" class={teamNumCellStyle}>
+        <div className={teamRankStyle}>{teamIndex + 1}</div>
         {renderTeam(team)}
       </th>
     ),
