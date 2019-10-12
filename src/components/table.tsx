@@ -1,6 +1,5 @@
 import { h, JSX, RenderableProps } from 'preact'
 import { useState } from 'preact/hooks'
-import { memo } from '@/utils/memo'
 import { css } from 'linaria'
 import { lightGrey, faintGrey, pigmicePurple } from '@/colors'
 import clsx from 'clsx'
@@ -195,21 +194,19 @@ const tableRowStyle = css`
   }
 `
 
-const TableRow = memo(
-  <RowType extends any>({
-    row,
-    columns,
-    index,
-  }: RenderableProps<{
-    row: Row<RowType>
-    columns: Column<any, RowType>[]
-    index: number
-  }>) => (
-    <tr class={tableRowStyle}>
-      {columns.map(col => {
-        const cell = col.getCell(row.value)
-        return col.renderCell(cell, index)
-      })}
-    </tr>
-  ),
+const TableRow = <RowType extends any>({
+  row,
+  columns,
+  index,
+}: RenderableProps<{
+  row: Row<RowType>
+  columns: Column<any, RowType>[]
+  index: number
+}>) => (
+  <tr class={tableRowStyle}>
+    {columns.map(col => {
+      const cell = col.getCell(row.value)
+      return col.renderCell(cell, index)
+    })}
+  </tr>
 )
