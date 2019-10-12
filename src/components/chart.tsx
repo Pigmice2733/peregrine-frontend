@@ -6,7 +6,7 @@ import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
 import {
   pigmicePurple,
-  gray,
+  grey,
   greenOnPurple,
   redOnPurple,
   focusRing,
@@ -562,7 +562,7 @@ const detailsStyle = css`
   }
 
   & dt {
-    color: ${gray};
+    color: ${grey};
   }
 
   dl {

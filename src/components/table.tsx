@@ -1,6 +1,5 @@
 import { h, JSX, RenderableProps } from 'preact'
 import { useState } from 'preact/hooks'
-import { memo } from '@/utils/memo'
 import { css } from 'linaria'
 import { lightGrey, faintGrey, pigmicePurple } from '@/colors'
 import clsx from 'clsx'
@@ -71,7 +70,7 @@ const sortButtonStyle = css`
 export interface Column<CellType, RowType> {
   /** Column name, used in title row */
   title: string
-  renderCell: (cellValue: CellType) => JSX.Element
+  renderCell: (cellValue: CellType, rowIndex: number) => JSX.Element
   /** Function to retrieve the cell value, used for sorting */
   getCellValue: (cellValue: CellType) => number | string
   getCell: (row: RowType) => CellType
@@ -161,8 +160,8 @@ export const Table = <RowType extends any>({
         </tr>
       </thead>
       <tbody>
-        {rows.sort(compareRows).map(row => (
-          <TableRow key={row.key} row={row} columns={columns} />
+        {rows.sort(compareRows).map((row, index) => (
+          <TableRow key={row.key} row={row} columns={columns} index={index} />
         ))}
       </tbody>
     </table>
@@ -196,19 +195,19 @@ const tableRowStyle = css`
   }
 `
 
-const TableRow = memo(
-  <RowType extends any>({
-    row,
-    columns,
-  }: RenderableProps<{
-    row: Row<RowType>
-    columns: Column<any, RowType>[]
-  }>) => (
-    <tr class={tableRowStyle}>
-      {columns.map(col => {
-        const cell = col.getCell(row.value)
-        return col.renderCell(cell)
-      })}
-    </tr>
-  ),
+const TableRow = <RowType extends any>({
+  row,
+  columns,
+  index,
+}: RenderableProps<{
+  row: Row<RowType>
+  columns: Column<any, RowType>[]
+  index: number
+}>) => (
+  <tr class={tableRowStyle}>
+    {columns.map(col => {
+      const cell = col.getCell(row.value)
+      return col.renderCell(cell, index)
+    })}
+  </tr>
 )
