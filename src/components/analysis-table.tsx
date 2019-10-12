@@ -16,7 +16,7 @@ import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
 import { css } from 'linaria'
 import { createDialog } from './dialog'
-import { blue, red, gray, lightGrey } from '@/colors'
+import { blue, red, grey, lightGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
@@ -83,7 +83,7 @@ const topLeftCellStyle = css`
 `
 
 const iconStyle = css`
-  fill: ${gray};
+  fill: ${grey};
   width: calc(${contextRowHeight} - 0.2rem);
   height: calc(${contextRowHeight} - 0.2rem);
   border-radius: 50%;
@@ -150,6 +150,14 @@ const teamNumCellStyle = css`
   }
 `
 
+const teamRankStyle = css`
+  position: absolute;
+  font-size: 0.75rem;
+  right: 0.15rem;
+  top: 0.15rem;
+  color: ${grey};
+`
+
 const AnalysisTable: FunctionComponent<Props> = ({
   teams,
   schema,
@@ -161,8 +169,9 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: team => (
+    renderCell: (team, rowIndex) => (
       <th scope="row" class={teamNumCellStyle}>
+        <div className={teamRankStyle}>{rowIndex + 1}</div>
         {renderTeam(team)}
       </th>
     ),
