@@ -153,7 +153,7 @@ const teamNumCellStyle = css`
 const teamRankStyle = css`
   position: absolute;
   font-size: 0.75rem;
-  left: 0.15rem;
+  right: 0.15rem;
   top: 0.15rem;
   color: ${grey};
 `
