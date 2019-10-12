@@ -32,6 +32,7 @@ type AvgType = 'Avg' | 'Max'
 
 const tableStyle = css`
   overflow: auto;
+  max-height: calc(100vh - 3.1rem);
 `
 
 const cellStyle = css`
@@ -78,7 +79,6 @@ const topLeftCellStyle = css`
   font-size: 15px;
   min-width: ${firstColumnWidth};
   padding: 0;
-  display: flex;
   height: ${contextRowHeight};
 `
 
@@ -96,7 +96,7 @@ const iconButtonStyle = css`
   margin: 0;
   border: 0;
   display: flex;
-  flex-grow: 1;
+  width: 100%;
   justify-content: center;
   outline: none;
   cursor: pointer;
