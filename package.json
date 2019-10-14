@@ -85,7 +85,7 @@
     "@babel/preset-typescript": "7.6.0",
     "@calebeby/preact-testing-library": "0.0.4",
     "@testing-library/jest-dom": "^4.0.0",
-    "@types/jest": "24.0.18",
+    "@types/jest": "24.0.19",
     "@types/node-fetch": "2.5.2",
     "@types/sharp": "^0.22.2",
     "babel-jest": "24.9.0",
