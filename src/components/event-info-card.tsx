@@ -15,9 +15,6 @@ import { ProcessedEventInfo } from '@/api/event-info'
 import { youtube } from '@/icons/youtube'
 import { twitch } from '@/icons/twitch'
 
-const gmapsUrl = (lat: number, lon: number) =>
-  `https://www.google.com/maps/?q=${lat},${lon}`
-
 const gcalDate = (date: Date, dateOffset = 0) => {
   return (
     String(date.getFullYear()) +
@@ -55,11 +52,10 @@ export const EventInfoCard = ({ event }: Props) =>
     <InfoGroupCard
       info={[
         event.locationName &&
-          event.lat &&
-          event.lon && {
+          event.gmapsUrl && {
             icon: mapMarker,
             title: event.locationName,
-            href: gmapsUrl(event.lat, event.lon),
+            href: event.gmapsUrl,
             target: '_blank',
             rel: 'noopener',
             action: <Icon icon={googleMaps} />,
