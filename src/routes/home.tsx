@@ -8,14 +8,13 @@ import { useEvents } from '@/cache/events/use'
 import { useState } from 'preact/hooks'
 
 const now = new Date()
-
 const Home = () => {
   const events = useEvents()
   const location = useGeoLocation()
   const [term = '', setTerm] = useState(0);
 
-  function searchingFor(term) {
-    return function (x) {
+  function searchingFor(term: string | number) {
+    return function (x: any) {
       // because not all objects contain properties 'district' and 'fullDistrict' you have to check if particular object contains property 'distict' and if not tell method to not use it. Otherwise this error will occur (Uncaught (in promise) TypeError: Cannot read property 'toString' of undefined)
       if (x.hasOwnProperty('district')) {
         return (x.name.toString().toLowerCase().includes(term.toString().toLowerCase()) || !term) ||
@@ -31,7 +30,7 @@ const Home = () => {
 
     }
   }
-  function searchHandler(event) {
+  function searchHandler(event: any) {
     setTerm(event.target.value);
   }
   return (
