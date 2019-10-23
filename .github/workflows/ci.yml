@@ -1,59 +1,58 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: Install Dependencies
-      run: npm ci
-    - name: Run Build
-      run: npm run build
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Build
+        run: npm run build
 
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: Install Dependencies
-      run: npm ci
-    - name: Run Lint
-      run: npm run check-lint
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Lint
+        run: npm run check-lint
 
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: Install Dependencies
-      run: npm ci
-    - name: Run Tests
-      run: npm test
-      env:
-        CI: true
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Tests
+        run: npm test
+        env:
+          CI: true
 
   typecheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js 12
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: Install Dependencies
-      run: npm ci
-    - name: Type Check
-      run: npm run type
+      - uses: actions/checkout@v1
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install Dependencies
+        run: npm ci
+      - name: Type Check
+        run: npm run type
