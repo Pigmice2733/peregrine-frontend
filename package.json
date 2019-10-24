@@ -113,7 +113,7 @@
     "mini-css-extract-plugin": "0.8.0",
     "mkdirplz": "^1.0.0",
     "node-fetch": "2.6.0",
-    "postcss": "7.0.19",
+    "postcss": "7.0.20",
     "postcss-calc": "7.0.1",
     "postcss-color-mod-function": "3.0.3",
     "postcss-css-variables": "0.13.0",
