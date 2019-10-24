@@ -14,9 +14,6 @@ type Props = CardProps<{
 
 const eventCardStyle = css`
   display: flex;
-  width: 23rem;
-  max-width: calc(100% - 2rem);
-  margin: 0.7rem auto;
   padding: 0.85rem;
   font-size: 0.93rem;
   justify-content: space-between;
