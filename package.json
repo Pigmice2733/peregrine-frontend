@@ -15,6 +15,7 @@
     "test:coverage": "jest --coverage",
     "check-lint": "eslint --format=pretty --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
     "lint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
+    "eslint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx .",
     "type:watch": "tsc --watch",
     "type": "tsc",
     "start": "webpack-dev-server",
