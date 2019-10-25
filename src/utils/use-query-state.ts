@@ -3,7 +3,7 @@ import { decode, encode } from 'qss'
 
 const getParams = () =>
   decode(
-    location.search.substring(1), // removes the "?"
+    location.search.slice(1), // removes the "?"
   )
 const updateQueryParam = (newValue: any, name: string) => {
   const params = getParams()
