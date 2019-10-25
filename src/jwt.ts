@@ -92,6 +92,7 @@ const createAccessToken = async (refreshToken: JWT): Promise<JWT | null> => {
   return parseJWT(accessToken)
 }
 
+// eslint-disable-next-line caleb/@typescript-eslint/require-await
 export const getWorkingJWT = async (): Promise<JWT | null> => {
   const accessToken = getUnexpiredAccessToken()
   if (accessToken) return accessToken
