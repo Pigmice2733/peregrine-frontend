@@ -100,7 +100,7 @@
     "dotenv": "^8.0.0",
     "eslint": "6.5.1",
     "eslint-formatter-pretty": "^2.1.1",
-    "eslint-plugin-caleb": "6.0.9",
+    "eslint-plugin-caleb": "7.0.0",
     "fake-indexeddb": "2.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "html-webpack-plugin": "3.2.0",
