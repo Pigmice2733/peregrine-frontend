@@ -30,6 +30,7 @@ const Springy: FunctionComponent = () => {
   const offsetX = x - width / 2
   const offsetY = y - width / 2
   return (
+    // eslint-disable-next-line caleb/jsx-a11y/no-static-element-interactions, caleb/jsx-a11y/click-events-have-key-events
     <div
       class={wrapperStyle}
       onClick={(e: MouseEvent) => {
