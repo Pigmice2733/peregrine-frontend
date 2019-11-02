@@ -9,6 +9,7 @@ export interface EventInfo {
   locationName: string
   lat?: number
   lon?: number
+  gmapsUrl?: string
   key: string
   // the ID of the realm the event belongs to
   realmId?: string

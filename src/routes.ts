@@ -28,8 +28,8 @@ const routes = [
     component: () => import('./routes/users'),
   },
   {
-    path: '/register',
-    component: () => import('./routes/register'),
+    path: '/signup',
+    component: () => import('./routes/signup'),
   },
   {
     path: '/login',
@@ -46,6 +46,10 @@ const routes = [
   {
     path: '/transitioney',
     component: () => import('./routes/transitioney'),
+  },
+  {
+    path: '/saved-reports',
+    component: () => import('./routes/saved-reports'),
   },
 ]
 

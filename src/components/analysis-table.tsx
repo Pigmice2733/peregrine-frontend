@@ -16,7 +16,7 @@ import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
 import { css } from 'linaria'
 import { createDialog } from './dialog'
-import { blue, red, gray, lightGrey } from '@/colors'
+import { blue, red, grey, lightGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
@@ -32,6 +32,7 @@ type AvgType = 'Avg' | 'Max'
 
 const tableStyle = css`
   overflow: auto;
+  max-height: calc(100vh - 3.1rem);
 `
 
 const cellStyle = css`
@@ -78,12 +79,11 @@ const topLeftCellStyle = css`
   font-size: 15px;
   min-width: ${firstColumnWidth};
   padding: 0;
-  display: flex;
   height: ${contextRowHeight};
 `
 
 const iconStyle = css`
-  fill: ${gray};
+  fill: ${grey};
   width: calc(${contextRowHeight} - 0.2rem);
   height: calc(${contextRowHeight} - 0.2rem);
   border-radius: 50%;
@@ -96,7 +96,7 @@ const iconButtonStyle = css`
   margin: 0;
   border: 0;
   display: flex;
-  flex-grow: 1;
+  width: 100%;
   justify-content: center;
   outline: none;
   cursor: pointer;
@@ -150,6 +150,14 @@ const teamNumCellStyle = css`
   }
 `
 
+const teamRankStyle = css`
+  position: absolute;
+  font-size: 0.75rem;
+  right: 0.15rem;
+  top: 0.15rem;
+  color: ${grey};
+`
+
 const AnalysisTable: FunctionComponent<Props> = ({
   teams,
   schema,
@@ -161,8 +169,9 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: team => (
+    renderCell: (team, rowIndex) => (
       <th scope="row" class={teamNumCellStyle}>
+        <div className={teamRankStyle}>{rowIndex + 1}</div>
         {renderTeam(team)}
       </th>
     ),

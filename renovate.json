@@ -2,8 +2,11 @@
   "assignees": ["calebeby"],
   "reviewers": ["calebeby"],
   "automerge": true,
-  "automergeType": "branch",
   "major": {
     "automerge": false
-  }
+  },
+  "packageRules": [{
+    "depTypeList": ["dependencies"],
+    "automerge": false
+  }]
 }

@@ -80,6 +80,7 @@ module.exports = {
     // new BundleAnalyzerPlugin(),
   ],
   devServer: {
+    disableHostCheck: true,
     historyApiFallback: true,
     hot: true,
     overlay: true,

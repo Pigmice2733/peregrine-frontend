@@ -1,6 +1,6 @@
 import { h } from 'preact'
 import { css } from 'linaria'
-import { lightGrey, pigmicePurple, gray } from '@/colors'
+import { lightGrey, pigmicePurple, grey } from '@/colors'
 import { tint, shade, transparentize } from 'polished'
 import { createShadow } from '@/utils/create-shadow'
 
@@ -54,7 +54,7 @@ const toggleStyle = css`
   &::before {
     width: ${focusCircleDiameter}rem;
     height: ${focusCircleDiameter}rem;
-    background: ${gray};
+    background: ${grey};
     opacity: 0;
   }
 

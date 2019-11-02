@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact'
+import { h } from 'preact'
 import Page from '@/components/page'
 import { MatchCard } from '@/components/match-card'
 import { useEventInfo } from '@/cache/event-info/use'
@@ -73,13 +73,11 @@ const Event = ({ eventKey }: Props) => {
           {newestIncompleteMatch ? 'Next Match' : 'Matches'}
         </Heading>
         {newestIncompleteMatch && (
-          <Fragment>
-            <MatchCard
-              key={newestIncompleteMatch.key}
-              match={newestIncompleteMatch}
-              href={`/events/${eventKey}/match/${newestIncompleteMatch.key}`}
-            />
-          </Fragment>
+          <MatchCard
+            key={newestIncompleteMatch.key}
+            match={newestIncompleteMatch}
+            href={`/events/${eventKey}/matches/${newestIncompleteMatch.key}`}
+          />
         )}
         {matches ? (
           matches.length > 0 ? (
