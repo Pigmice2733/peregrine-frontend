@@ -43,6 +43,10 @@ const routes = [
     path: '/saved-reports',
     component: () => import('./routes/saved-reports'),
   },
+  {
+    path: '/users/:userId',
+    component: () => import('./routes/user'),
+  },
 ]
 
 export default routes

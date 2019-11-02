@@ -1,16 +1,10 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { FunctionComponent, h, Fragment, JSX } from 'preact'
+import { FunctionComponent, h, Fragment } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
-import {
-  pigmicePurple,
-  grey,
-  greenOnPurple,
-  redOnPurple,
-  focusRing,
-} from '@/colors'
+import { pigmicePurple, grey } from '@/colors'
 import { css } from 'linaria'
 import { lighten, darken } from 'polished'
 import { lerp } from '@/utils/lerp'
@@ -22,11 +16,8 @@ import { memo } from '@/utils/memo'
 import { useQueryState } from '@/utils/use-query-state'
 import { formatPercent } from '@/utils/format-percent'
 import clsx from 'clsx'
-import { Merge } from '@/type-utils'
-import Icon from './icon'
-import { checkBold } from '@/icons/check-bold'
-import { xBold } from '@/icons/x-bold'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
+import { BooleanDisplay } from './boolean-display'
 
 interface ChartCardProps {
   team: string
@@ -92,12 +83,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
     selectedIndex !== null && matchesWithSelectedStat[selectedIndex].matchKey
 
   const handleClick = (event: MouseEvent) => {
-    if (
-      !(event.target as Element).closest(
-        `.${pointStyle},.${booleanDisplayStyle}`,
-      )
-    )
-      setSelectedIndex(null)
+    if (!(event.target as Element).closest(`.${point}`)) setSelectedIndex(null)
   }
 
   const statOptions = schema.schema
@@ -136,7 +122,13 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
           ) : (
             <p>
               {isBooleanStat ? (
-                <BooleanDisplay value={Boolean(dataPoints[selectedIndex])} />
+                <BooleanDisplay
+                  value={Boolean(dataPoints[selectedIndex])}
+                  class={css`
+                    width: 1.2rem;
+                    height: 1.2rem;
+                  `}
+                />
               ) : (
                 dataPoints[selectedIndex]
               )}
@@ -355,7 +347,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
           <circle
             cx={xLerper(x)}
             cy={y}
-            class={pointStyle}
+            class={clsx(pointStyle, point)}
             onClick={() => onPointClick(x)}
           />
         ))}
@@ -433,55 +425,10 @@ const innerBooleanChartWrapperStyle = css`
   }
 `
 
-const booleanDisplayStyle = css`
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  border: none;
-  outline: none;
-  color: white;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0.3rem;
-
-  button& {
-    cursor: pointer;
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 0.25rem ${focusRing};
-  }
-`
-
-const trueStyle = css`
-  background: ${greenOnPurple};
-`
-
-const falseStyle = css`
-  background: ${redOnPurple};
-`
-
-const BooleanDisplay: FunctionComponent<
-  Merge<JSX.HTMLAttributes, { value: boolean }>
-> = ({ value, ...props }) => {
-  const El = props.onClick ? 'button' : 'div'
-  return (
-    <El
-      {...props}
-      class={clsx(
-        booleanDisplayStyle,
-        value ? trueStyle : falseStyle,
-        props.class,
-      )}
-    >
-      <Icon icon={value ? checkBold : xBold} />
-    </El>
-  )
-}
-
 /** The amount that can be scrolled before the gradient appears */
 const scrollThreshold = 5
+
+const point = css``
 
 const BooleanChart: FunctionComponent<ChartProps> = ({
   points,
@@ -522,6 +469,7 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
             <BooleanDisplay
               value={Boolean(p)}
               onClick={() => onPointClick(i)}
+              class={point}
             />
           ))}
         </div>
@@ -538,11 +486,6 @@ const detailsStyle = css`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-
-  & p .${booleanDisplayStyle} {
-    width: 1.2rem;
-    height: 1.2rem;
-  }
 
   & p,
   & dl,

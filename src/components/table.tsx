@@ -3,6 +3,7 @@ import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 import { lightGrey, faintGrey, pigmicePurple } from '@/colors'
 import clsx from 'clsx'
+import { BooleanDisplay } from './boolean-display'
 
 const borderBottomAndRight = `box-shadow: inset -1px -1px ${lightGrey}`
 // the 2nd shadow covers a tiny gap between the cells I couldn't otherwise remove
@@ -62,7 +63,7 @@ const sortButtonStyle = css`
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0.7rem 0.4rem;
+  padding: 0.6rem 0.4rem;
   font-size: 0.78rem;
   outline: none;
 `
@@ -70,13 +71,72 @@ const sortButtonStyle = css`
 export interface Column<CellType, RowType> {
   /** Column name, used in title row */
   title: string
-  renderCell: (cellValue: CellType, rowIndex: number) => JSX.Element
+  renderCell: (
+    cellValue: CellType,
+    row: RowType,
+    rowIndex: number,
+  ) => JSX.Element
   /** Function to retrieve the cell value, used for sorting */
-  getCellValue: (cellValue: CellType) => number | string
+  getCellValue: (cellValue: CellType) => number | string | boolean
   getCell: (row: RowType) => CellType
-  /** Sort order, defaults to descending (high to low) */
-  sortOrder?: SortOrder
+  /** Column's intrinsic default sort order. For different columns different values make sense */
+  sortOrder: SortOrder
 }
+
+const cellStyle = css`
+  text-align: center;
+  max-width: 6.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const createTextColumn = <RowType extends any = never>(
+  title: string,
+  getValue: (row: RowType) => string,
+  additionalOpts: Partial<Column<string, RowType>> = {},
+): Column<string, RowType> => ({
+  renderCell: value => (
+    <td class={cellStyle} title={value}>
+      {value}
+    </td>
+  ),
+  title,
+  getCellValue: value => value.toLowerCase(),
+  sortOrder: SortOrder.ASC,
+  getCell: getValue,
+  ...additionalOpts,
+})
+
+export const createNumberColumn = <RowType extends any = never>(
+  title: string,
+  getValue: (row: RowType) => number,
+  additionalOpts: Partial<Column<number, RowType>> = {},
+): Column<number, RowType> => ({
+  renderCell: value => <td class={cellStyle}>{value}</td>,
+  title,
+  getCellValue: value => value,
+  sortOrder: SortOrder.DESC,
+  getCell: getValue,
+  ...additionalOpts,
+})
+
+export const createBooleanColumn = <RowType extends any = never>(
+  title: string,
+  getValue: (row: RowType) => boolean,
+  additionalOpts: Partial<Column<boolean, RowType>> = {},
+): Column<boolean, RowType> => ({
+  renderCell: value => (
+    <td class={cellStyle}>
+      <BooleanDisplay value={value} />
+    </td>
+  ),
+  title,
+  getCellValue: value => value,
+  sortOrder: SortOrder.DESC,
+  getCell: getValue,
+  ...additionalOpts,
+})
 
 export const enum SortOrder {
   /** Low to high */
@@ -85,7 +145,10 @@ export const enum SortOrder {
   DESC,
 }
 
-const defaultSortOrder = SortOrder.DESC
+const enum SortOrderState {
+  DEFAULT = 1,
+  REVERSED,
+}
 
 export interface Row<RowType> {
   key: string | number
@@ -102,36 +165,47 @@ interface Props<RowType> {
 export const Table = <RowType extends any>({
   rows,
   columns,
-  defaultSortColumn = columns[0],
+  defaultSortColumn: defaultSortCol = columns[0],
   contextRow,
 }: RenderableProps<Props<RowType>>) => {
-  const [sortColTitle, setSortColTitle] = useState<string>(
-    defaultSortColumn.title,
-  )
+  const [sortColTitle, setSortColTitle] = useState<string>(defaultSortCol.title)
   const sortCol =
-    columns.find(col => col.title === sortColTitle) || defaultSortColumn
-  const [sortOrder, setSortOrder] = useState<SortOrder>(
-    defaultSortColumn.sortOrder || defaultSortOrder,
+    columns.find(col => col.title === sortColTitle) || defaultSortCol
+  const [sortOrder, setSortOrder] = useState<SortOrderState>(
+    SortOrderState.DEFAULT,
   )
 
   const updateSortCol = (col: Column<any, RowType>) => {
     setSortOrder(
       col.title === sortColTitle
         ? // if the column is already selected, reverse the order
-          sortOrder === SortOrder.ASC
-          ? SortOrder.DESC
-          : SortOrder.ASC
-        : // otherwise use that column's sort order or the default
-          col.sortOrder || defaultSortOrder,
+          sortOrder === SortOrderState.DEFAULT
+          ? SortOrderState.REVERSED
+          : SortOrderState.DEFAULT
+        : // otherwise use the default order
+          SortOrderState.DEFAULT,
     )
     setSortColTitle(col.title)
   }
 
-  const compareRows = (a: Row<RowType>, b: Row<RowType>): number => {
-    const aVal = sortCol.getCellValue(sortCol.getCell(a.value))
-    const bVal = sortCol.getCellValue(sortCol.getCell(b.value))
-    const multiplier = sortOrder === SortOrder.ASC ? -1 : 1
-    return (aVal > bVal ? -1 : bVal > aVal ? 1 : 0) * multiplier
+  const compareRows = (
+    a: Row<RowType>,
+    b: Row<RowType>,
+    col = sortCol,
+  ): number => {
+    const aVal = col.getCellValue(col.getCell(a.value))
+    const bVal = col.getCellValue(col.getCell(b.value))
+    const sortOrderStateMultiplier =
+      sortOrder === SortOrderState.REVERSED ? -1 : 1
+    const columnSortMultiplier = col.sortOrder === SortOrder.ASC ? -1 : 1
+    const result =
+      (aVal > bVal ? -1 : bVal > aVal ? 1 : 0) *
+      sortOrderStateMultiplier *
+      columnSortMultiplier
+    if (result === 0 && col !== defaultSortCol) {
+      return compareRows(a, b, defaultSortCol)
+    }
+    return result
   }
 
   return (
@@ -207,7 +281,7 @@ const TableRow = <RowType extends any>({
   <tr class={tableRowStyle}>
     {columns.map(col => {
       const cell = col.getCell(row.value)
-      return col.renderCell(cell, index)
+      return col.renderCell(cell, row.value, index)
     })}
   </tr>
 )

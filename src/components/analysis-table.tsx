@@ -65,6 +65,7 @@ const createStatCell = (avgType: AvgType) => (
         : '?'
       return <td class={cellStyle}>{text}</td>
     },
+    sortOrder: SortOrder.DESC,
     getCellValue: cell => (cell ? cell[avgTypeStr] : -1),
   }
 }
@@ -169,7 +170,7 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: (team, rowIndex) => (
+    renderCell: (team, _row, rowIndex) => (
       <th scope="row" class={teamNumCellStyle}>
         <div className={teamRankStyle}>{rowIndex + 1}</div>
         {renderTeam(team)}
