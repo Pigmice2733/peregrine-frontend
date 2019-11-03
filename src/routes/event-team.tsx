@@ -17,7 +17,13 @@ import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useState } from 'preact/hooks'
-import { initSpring, Animated } from '@/spring/use'
+import {
+  initSpring,
+  Animated,
+  Springed,
+  tweenColor,
+  tweenLength,
+} from '@/spring/use'
 import { useSchema } from '@/cache/schema/use'
 
 const sectionStyle = css`
@@ -142,15 +148,37 @@ const TestComponent = () => {
   const [toggle, setToggle] = useState(false)
   const spring = initSpring({ mass: 0.0007 })
 
+  const styles = spring({
+    padding: '0.5rem',
+    'border-radius': '0.2rem',
+    transform: spring`translateX(${toggle ? 200 : -200}px)`,
+    'font-family': '"Dank Mono", "Fira Code", "Source Code Pro"',
+    background: tweenColor(spring, toggle ? '#282828' : 'black'),
+    color: tweenColor(spring, toggle ? '#b16286' : '#994cc3'),
+    width: tweenLength(spring, toggle ? '20vw' : '100%', el => el.offsetWidth),
+    // ...(toggle
+    //   ? {
+    //       background: tweenColor(spring, '#282828'),
+    //       color: tweenColor(spring, '#b16286'),
+    //     }
+    //   : {
+    //       background: tweenColor(spring, 'black'),
+    //       color: tweenColor(spring, '#994cc3'),
+    //     }),
+  })
+
   return (
-    <div>
-      <Animated.div
-        style={spring({
-          transform: spring`translate(${toggle ? -200 : 200}px)`,
-        })}
-      >
-        Hi
-      </Animated.div>
+    <div
+      class={css`
+        width: 50vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      `}
+    >
+      <Animated.pre style={styles}>
+        {toggle ? 'hi' : 'hiya long\n\nhi again'}
+      </Animated.pre>
       <button onClick={() => setToggle(t => !t)}>clickme</button>
     </div>
   )

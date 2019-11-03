@@ -11,12 +11,23 @@ const wrapperStyle = css`
 
 const width = 50
 
-const circleStyle = css`
+const boxStyle = css`
   width: ${width}px;
   height: ${width}px;
   background: purple;
   will-change: transform;
-  border-radius: 50%;
+  border-radius: 10%;
+
+  &::before {
+    content: '';
+    display: block;
+    width: ${width / 4}px;
+    height: ${width / 4}px;
+    border-radius: 50%;
+    background: red;
+    margin: 0 auto;
+    transform: translateY(${width / 15}px);
+  }
 `
 
 const Springy: FunctionComponent = () => {
@@ -27,8 +38,18 @@ const Springy: FunctionComponent = () => {
   })
   const [x, setX] = useState(0)
   const [y, setY] = useState(0)
-  const offsetX = x - width / 2
-  const offsetY = y - width / 2
+  const targetX = x - width / 2
+  const targetY = y - width / 2
+  const offsetX = spring(targetX)
+  const offsetY = spring(targetY)
+  const angle = spring(getValue => {
+    const currentX = getValue(offsetX)
+    const currentY = getValue(offsetY)
+    console.log(Math.atan((targetY - currentY) / (targetX - currentX)))
+    // Rise over run
+    return Math.atan((targetY - currentY) / (targetX - currentX)) - Math.PI / 2
+  })
+
   return (
     // eslint-disable-next-line caleb/jsx-a11y/no-static-element-interactions, caleb/jsx-a11y/click-events-have-key-events
     <div
@@ -39,8 +60,10 @@ const Springy: FunctionComponent = () => {
       }}
     >
       <Animated.div
-        class={circleStyle}
-        style={spring`transform: translate(${offsetX}px, ${offsetY}px)`}
+        class={boxStyle}
+        style={spring({
+          transform: spring`translate(${offsetX}px, ${offsetY}px) rotate(${angle}rad)`,
+        })}
       />
     </div>
   )
