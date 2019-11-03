@@ -17,7 +17,7 @@ import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useState } from 'preact/hooks'
-import { initSpring } from '@/spring/use'
+import { initSpring, Animated } from '@/spring/use'
 import { useSchema } from '@/cache/schema/use'
 
 const sectionStyle = css`
@@ -88,7 +88,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           />
         </Fragment>
       )}
-      {/* <TestComponent /> */}
+      <TestComponent />
       <InfoGroupCard
         info={[
           {
@@ -140,10 +140,17 @@ export default EventTeam
 
 const TestComponent = () => {
   const [toggle, setToggle] = useState(false)
-  const position = initSpring(toggle ? -200 : 200)
+  const spring = initSpring({ mass: 0.0007 })
+
   return (
     <div>
-      <h1 style={{ transform: `translate(${position}px)` }}>Hi</h1>
+      <Animated.div
+        style={spring({
+          transform: spring`translate(${toggle ? -200 : 200}px)`,
+        })}
+      >
+        Hi
+      </Animated.div>
       <button onClick={() => setToggle(t => !t)}>clickme</button>
     </div>
   )

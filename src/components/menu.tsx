@@ -127,17 +127,17 @@ const logoutHandler = () => {
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt && jwt.peregrineRoles.isAdmin
-  const spring = initSpring()
+  // const spring = initSpring()
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
 
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
-      <Animated.aside
+      <aside
         class={menuStyle}
-        style={spring({
-          transform: spring`translateX(${visible ? 0 : 100}%)`,
-        })}
+        style={{
+          transform: `translateX(${visible ? 0 : 100}%)`,
+        }}
       >
         <IconButton
           aria-label="Close Menu"
@@ -178,7 +178,7 @@ export const Menu = ({ onHide, visible }: Props) => {
             </MenuItem>
           )}
         </ul>
-      </Animated.aside>
+      </aside>
     </Scrim>
   )
 }
