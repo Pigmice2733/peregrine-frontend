@@ -5,8 +5,10 @@
   "major": {
     "automerge": false
   },
-  "packageRules": [{
-    "depTypeList": ["dependencies"],
-    "automerge": false
-  }]
+  "packageRules": [
+    {
+      "depTypeList": ["dependencies"],
+      "automerge": false
+    }
+  ]
 }

@@ -1,46 +1,27 @@
 {
   "name": "peregrine-frontend",
   "private": true,
-  "prettier": {
-    "semi": false,
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
-  "repository": "Pigmice2733/peregrine-frontend",
   "description": "A scouting app for FRC competitions. This is the frontend, written in TypeScript with Preact",
   "license": "MIT",
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "check-lint": "eslint --format=pretty --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
-    "lint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}\"",
-    "eslint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx .",
-    "type:watch": "tsc --watch",
-    "type": "tsc",
-    "start": "webpack-dev-server",
-    "webpack-build": "webpack",
-    "build": "rollup -c rollup.config.js",
-    "rollup-watch": "rollup -c rollup.config.js --watch",
-    "new-route": "hygen route new"
+  "repository": "Pigmice2733/peregrine-frontend",
+  "engines": {
+    "node": "12",
+    "npm": ">=6.5.0"
   },
-  "eslintConfig": {
-    "extends": [
-      "plugin:caleb/recommended",
-      "plugin:caleb/preact",
-      "plugin:caleb/jest"
-    ],
-    "rules": {
-      "no-return-await": "off",
-      "caleb/react/display-name": "off",
-      "no-else-return": [
-        "error",
-        {
-          "allowElseIf": true
-        }
-      ],
-      "caleb/@typescript-eslint/ban-ts-ignore": "off"
-    }
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "check-lint": "eslint --format=pretty --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}{on,}\"",
+    "eslint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx .",
+    "lint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}{on,}\"",
+    "new-route": "hygen route new",
+    "rollup-watch": "rollup -c rollup.config.js --watch",
+    "start": "webpack-dev-server",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "type": "tsc",
+    "type:watch": "tsc --watch",
+    "webpack-build": "webpack"
   },
   "dependencies": {
     "ganalytics": "^3.1.2",
@@ -50,29 +31,6 @@
     "qss": "^2.0.3",
     "systemjs": "3.1.6"
   },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "moduleNameMapper": {
-      "\\.css$": "identity-obj-proxy"
-    },
-    "transform": {
-      "\\.ts$": "./jest-transform",
-      "\\.tsx$": "./jest-transform"
-    },
-    "setupFilesAfterEnv": [
-      "./jest.setup.ts"
-    ],
-    "testMatch": [
-      "**/?(*.)+(spec|test).(j|t)s?(x)"
-    ]
-  },
-  "browserslist": [
-    ">1% in my stats"
-  ],
   "devDependencies": {
     "@babel/core": "7.6.4",
     "@babel/plugin-proposal-class-properties": "7.5.5",
@@ -124,6 +82,7 @@
     "postcss-modules": "1.4.1",
     "postcss-preset-env": "6.7.0",
     "prettier": "1.18.2",
+    "prettier-plugin-package": "^0.3.1",
     "prompts": "1.2.1",
     "rollup": "1.26.3",
     "rollup-plugin-babel": "4.3.3",
@@ -141,8 +100,50 @@
     "webpack-dev-server": "3.9.0",
     "webpackbar": "4.0.0"
   },
-  "engines": {
-    "node": "12",
-    "npm": ">=6.5.0"
+  "browserslist": [
+    ">1% in my stats"
+  ],
+  "eslintConfig": {
+    "extends": [
+      "plugin:caleb/recommended",
+      "plugin:caleb/preact",
+      "plugin:caleb/jest"
+    ],
+    "rules": {
+      "no-return-await": "off",
+      "caleb/react/display-name": "off",
+      "no-else-return": [
+        "error",
+        {
+          "allowElseIf": true
+        }
+      ],
+      "caleb/@typescript-eslint/ban-ts-ignore": "off"
+    }
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "moduleNameMapper": {
+      "\\.css$": "identity-obj-proxy"
+    },
+    "transform": {
+      "\\.ts$": "./jest-transform",
+      "\\.tsx$": "./jest-transform"
+    },
+    "setupFilesAfterEnv": [
+      "./jest.setup.ts"
+    ],
+    "testMatch": [
+      "**/?(*.)+(spec|test).(j|t)s?(x)"
+    ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
   }
 }
