@@ -17,9 +17,7 @@ interface Route {
 const routers: ((url: string) => void)[] = []
 
 export const route = (url: string) => {
-  routers.forEach(router => {
-    router(url)
-  })
+  routers.forEach(router => router(url))
   history.pushState(null, '', url)
 }
 
@@ -48,6 +46,7 @@ export const Router = ({
       e.stopPropagation()
       e.stopImmediatePropagation()
       setUrl(location.pathname)
+      setResolvedComponent(null)
     }
     window.addEventListener('popstate', historyListener)
     return () => window.removeEventListener('popstate', historyListener)
