@@ -17,9 +17,7 @@ interface Route {
 const routers: ((url: string) => void)[] = []
 
 export const route = (url: string) => {
-  routers.forEach(router => {
-    router(url)
-  })
+  routers.forEach(router => router(url))
   history.pushState(null, '', url)
 }
 
@@ -31,13 +29,17 @@ export const Router = ({
   onChange: () => void
 }) => {
   const [url, setUrl] = useState(window.location.pathname)
+  const updateUrl = (url: string) => {
+    setUrl(url)
+    setResolvedComponent(null)
+  }
 
   const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [
     routes,
   ])
 
   useEffect(() => {
-    routers.push(setUrl)
+    routers.push(updateUrl)
   }, [])
 
   useEffect(() => {
@@ -47,7 +49,7 @@ export const Router = ({
       e.preventDefault()
       e.stopPropagation()
       e.stopImmediatePropagation()
-      setUrl(location.pathname)
+      updateUrl(location.pathname)
     }
     window.addEventListener('popstate', historyListener)
     return () => window.removeEventListener('popstate', historyListener)
