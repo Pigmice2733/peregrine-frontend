@@ -1,4 +1,5 @@
 {
+  "extends": ["group:recommended", "group:monorepos"],
   "assignees": ["calebeby"],
   "reviewers": ["calebeby"],
   "automerge": true,
