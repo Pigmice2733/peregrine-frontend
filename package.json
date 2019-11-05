@@ -63,7 +63,7 @@
     "fake-indexeddb": "2.1.1",
     "friendly-errors-webpack-plugin": "1.7.0",
     "html-webpack-plugin": "3.2.0",
-    "hygen": "1.6.2",
+    "hygen": "5.0.1",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "linaria": "1.3.1",
