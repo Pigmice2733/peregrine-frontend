@@ -16,9 +16,9 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
     (...args: ArgsType): DataType | undefined
     (
       ...args: {
-        [K in keyof ArgsType]: (K extends '0'
+        [K in keyof ArgsType]: K extends '0'
           ? ArgsType[K] | undefined // first parameter can be undefined to skip fetching
-          : ArgsType[K])
+          : ArgsType[K]
       }
     ): DataType | undefined
   }

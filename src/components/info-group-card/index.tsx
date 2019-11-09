@@ -61,7 +61,8 @@ interface Props {
         title: string | JSX.Element
         action?: Falsy | JSX.Element | JSX.Element[] | string | number
       }>
-    | Falsy)[]
+    | Falsy
+  )[]
 }
 
 const isTruthy = <T extends object>(i: T | Falsy): i is T => Boolean(i)
