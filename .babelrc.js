@@ -14,6 +14,8 @@ module.exports = {
   plugins: [
     ['const-enum', { transform: 'constObject' }], // for TS const enum which babel ts doesn't support natively. See https://github.com/babel/babel/issues/8741
     ['@babel/plugin-proposal-class-properties', { loose: true }],
+    ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: true }],
+    ['@babel/plugin-proposal-optional-chaining', { loose: true }],
     '@babel/plugin-syntax-dynamic-import',
     [
       '@babel/transform-react-jsx',

@@ -62,7 +62,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum),
     [eventKey, teamNum],
   )
-  const schema = useSchema(eventInfo && eventInfo.schemaId)
+  const schema = useSchema(eventInfo?.schemaId)
   const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
   const teamComments = usePromise(
     () => getMatchTeamComments(eventKey, 'frc' + teamNum),
@@ -96,10 +96,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           {
             title: 'Ranking Score',
             icon: history,
-            action:
-              eventTeamInfo && eventTeamInfo.rankingScore
-                ? round(eventTeamInfo.rankingScore)
-                : '',
+            action: eventTeamInfo?.rankingScore
+              ? round(eventTeamInfo.rankingScore)
+              : '',
           },
         ]}
       />

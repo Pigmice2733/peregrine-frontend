@@ -16,7 +16,7 @@ interface Props {
 const ScoutPage = ({ eventKey, matchKey }: Props) => {
   const match = useMatchInfo(eventKey, matchKey)
   const event = useEventInfo(eventKey)
-  const schema = useSchema(event && event.schemaId)
+  const schema = useSchema(event?.schemaId)
 
   return (
     <Authenticated

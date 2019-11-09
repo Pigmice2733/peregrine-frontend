@@ -56,7 +56,7 @@ const Event = ({ eventKey }: Props) => {
 
   return (
     <Page
-      name={(eventInfo && eventInfo.name) || <code>{eventKey}</code>}
+      name={eventInfo?.name || <code>{eventKey}</code>}
       back="/"
       class={eventStyle}
     >
