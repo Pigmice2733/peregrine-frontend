@@ -4,8 +4,8 @@ export interface StatDescription {
   name: string
   reportReference?: string
   tbaReference?: string
-  anyOf?: ({ name: string; equals: string })[]
-  sum?: ({ name: string })[]
+  anyOf?: { name: string; equals: string }[]
+  sum?: { name: string }[]
   hide?: boolean
   period: 'auto' | 'teleop'
   type: StatType
