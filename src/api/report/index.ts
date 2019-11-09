@@ -33,19 +33,19 @@ interface EventKey {
 }
 
 export interface SingleTeamStats {
-  auto: ({
+  auto: {
     modeName: string
     // in order by match time
     stats: (EventKey & GraphableField)[]
-  })[]
+  }[]
   teleop: (EventKey & GraphableField)[]
 }
 
 export interface EventSingleTeamStats {
-  auto: ({
+  auto: {
     modeName: string
     // in order by match time
     stats: GraphableField[]
-  })[]
+  }[]
   teleop: GraphableField[]
 }

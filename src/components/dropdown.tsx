@@ -48,9 +48,11 @@ export const Dropdown = <T extends any>({
     <select
       value={value === undefined ? undefined : getKey(value)}
       onChange={e =>
-        onChange(options.find(
-          o => getKey(o).toString() === (e.target as HTMLSelectElement).value,
-        ) as T)
+        onChange(
+          options.find(
+            o => getKey(o).toString() === (e.target as HTMLSelectElement).value,
+          ) as T,
+        )
       }
       class={clsx(button && buttonStyles, props.class, dropdownStyle)}
     >
