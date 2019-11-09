@@ -41,7 +41,7 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
 
-  const schema = useSchema(eventInfo && eventInfo.schemaId)
+  const schema = useSchema(eventInfo?.schemaId)
 
   return (
     <Page

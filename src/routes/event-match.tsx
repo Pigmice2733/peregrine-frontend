@@ -49,7 +49,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const eventInfo = useEventInfo(eventKey)
   const matchInfo = useMatchInfo(eventKey, matchKey)
-  const schema = useSchema(eventInfo && eventInfo.schemaId)
+  const schema = useSchema(eventInfo?.schemaId)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
 
   return (
