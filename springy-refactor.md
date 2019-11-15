@@ -10,9 +10,35 @@ const y = foo ? 2 : 1 // number
 const foo = spring(x)
 
 // Springed<number> - the result of this is directly tied with the x spring, it is not double springed
-const bar = createDerivedSpring(evalSpring => {
-  return y / evalSpring(x)
+const bar = createDerivedSpring([x], ([x]) => {
+  return y / x
 })
+
+// Springed<number> - This is double springed. The return value of the createDerivedSpring got springed
+const asdf = spring(bar)
+
+// Springed<number> - The return value of createDerivedSpring got springed
+const foobar = spring(
+  createDerivedSpring([x], ([x]) => {
+    return x > 10 ? 100 : 35
+  }),
+)
+
+const color = (r, g, b) =>
+  createDerivedSpring([r, g, b].map(spring), ([r, g, b]) => {
+    return `rgba(${r}, ${g}, ${b})`
+  })
+
+// The "expected result" would be a color that smoothly transitions
+// In this case createDerivedSpring(...).compose() will be called
+// We _want_ that to wrap all the input springs with the wrapper springs
+// But that conflicts with above where the return value got springed.
+// We could use typeof on the return value. That might be the best solution
+// NO that won't work because we don't have access to the return value in .compose()
+// So we'll need two separate methods for creating derived springs. One that is for numbers and one that is not
+const respringedColor = spring(
+  asdf ? color(235, 220, 130) : color(130, 250, 120),
+)
 
 // Spring<{background: 'green', asdf: number}> -- asdf is springed but not background
 const css3 = springedObject({
