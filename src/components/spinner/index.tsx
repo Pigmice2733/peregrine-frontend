@@ -87,7 +87,8 @@ const Spinner = () => {
   // prevents spinner from showing when loading is < 100ms
   // makes user experience less jarring
   useEffect(() => {
-    setTimeout(() => setIsShown(true), 100)
+    const t = setTimeout(() => setIsShown(true), 100)
+    return () => clearTimeout(t)
   }, [])
   return isShown ? <div class={spinnerStyle} /> : null
 }

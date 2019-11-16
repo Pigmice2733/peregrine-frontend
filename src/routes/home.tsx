@@ -36,10 +36,8 @@ const Home = () => {
               event.name.toLowerCase().includes(lowerCaseQuery) ||
               event.key.toLowerCase().includes(lowerCaseQuery) ||
               event.locationName.toLowerCase().includes(lowerCaseQuery) ||
-              (event.district !== undefined &&
-                event.district.toLowerCase().includes(lowerCaseQuery)) ||
-              (event.fullDistrict !== undefined &&
-                event.fullDistrict.toLowerCase().includes(lowerCaseQuery))
+              event.district?.toLowerCase().includes(lowerCaseQuery) ||
+              event.fullDistrict?.toLowerCase().includes(lowerCaseQuery)
             )
           })
           .sort(compareEvents(now, location))

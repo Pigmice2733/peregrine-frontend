@@ -14,20 +14,11 @@ interface Route {
   component: () => Promise<ComponentModule>
 }
 
-interface URLComponentPromiseMap {
-  [url: string]: () => Promise<ComponentModule>
-}
-
-interface URLComponentMap {
-  [url: string]: AnyComponent
-}
-
 const routers: ((url: string) => void)[] = []
 
 export const route = (url: string) => {
-  routers.forEach(router => {
-    router(url)
-  })
+  routers.forEach(router => router(url))
+  history.pushState(null, '', url)
 }
 
 export const Router = ({
@@ -38,23 +29,10 @@ export const Router = ({
   onChange: () => void
 }) => {
   const [url, setUrl] = useState(window.location.pathname)
-  const [resolvedComponentMap, setResolvedComponentMap] = useState<
-    URLComponentMap
-  >({})
-
   const updateUrl = (url: string) => {
     setUrl(url)
-    history.pushState(null, '', url)
+    setResolvedComponent(null)
   }
-
-  const components = useMemo(
-    () =>
-      routes.reduce<URLComponentPromiseMap>((acc, r) => {
-        acc[r.path] = r.component
-        return acc
-      }, {}),
-    [routes],
-  )
 
   const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [
     routes,
@@ -71,7 +49,7 @@ export const Router = ({
       e.preventDefault()
       e.stopPropagation()
       e.stopImmediatePropagation()
-      setUrl(location.pathname)
+      updateUrl(location.pathname)
     }
     window.addEventListener('popstate', historyListener)
     return () => window.removeEventListener('popstate', historyListener)
@@ -97,7 +75,7 @@ export const Router = ({
 
       // if link is handled by the router, prevent browser defaults
       if (match(href, parsedRoutes).length !== 0) {
-        updateUrl(href)
+        route(href)
         e.preventDefault()
         e.stopImmediatePropagation()
         e.stopPropagation()
@@ -110,26 +88,30 @@ export const Router = ({
     return () => window.removeEventListener('click', clickListener)
   }, [parsedRoutes])
 
-  const matchingRoute = match(url, parsedRoutes)
+  const matchingRoutes = match(url, parsedRoutes)
+  const matchingFullRoute =
+    matchingRoutes.length > 0 ? matchingRoutes[0].old : null
 
-  if (matchingRoute.length === 0) {
+  const [
+    ResolvedComponent,
+    setResolvedComponent,
+  ] = useState<AnyComponent | null>(null)
+
+  useEffect(() => {
+    const matchingRouteObj = routes.find(r => r.path === matchingFullRoute)
+    if (matchingRouteObj)
+      matchingRouteObj.component().then(comp => {
+        setResolvedComponent(() => comp.default)
+      })
+  }, [routes, matchingFullRoute])
+
+  if (matchingFullRoute === null) {
     return <h1>404</h1>
   }
 
-  const matchingFullRoute = matchingRoute[0].old
-
-  const routeProps = exec(url, matchingRoute)
-
-  const ResolvedComponent = resolvedComponentMap[matchingFullRoute]
+  const routeProps = exec(url, matchingRoutes)
 
   if (ResolvedComponent) return <ResolvedComponent {...routeProps} />
-
-  components[matchingFullRoute]().then(c => {
-    setResolvedComponentMap(prevMap => ({
-      ...prevMap,
-      [matchingFullRoute]: c.default,
-    }))
-  })
 
   return <Spinner />
 }

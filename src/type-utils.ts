@@ -24,7 +24,8 @@ export type JSONPatch = ({ path: string } & (
   | {
       op: 'test'
       value: any
-    }))[]
+    }
+))[]
 
 export type UnPromise<T extends Promise<any>> = T extends Promise<infer Z>
   ? Z

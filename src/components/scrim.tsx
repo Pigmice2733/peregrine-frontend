@@ -47,7 +47,7 @@ interface Props extends JSX.HTMLAttributes {
 }
 
 const updateBodyOverflow = (visible: boolean) => {
-  document.body.style.marginRight = visible ? getScrollbarWidth() : null
+  document.body.style.marginRight = visible ? getScrollbarWidth() : ''
   document.body.style.overflow = visible ? 'hidden' : ''
 }
 

@@ -1,12 +1,15 @@
 {
+  "extends": ["group:recommended", "group:monorepos"],
   "assignees": ["calebeby"],
   "reviewers": ["calebeby"],
   "automerge": true,
   "major": {
     "automerge": false
   },
-  "packageRules": [{
-    "depTypeList": ["dependencies"],
-    "automerge": false
-  }]
+  "packageRules": [
+    {
+      "depTypeList": ["dependencies"],
+      "automerge": false
+    }
+  ]
 }

@@ -125,7 +125,7 @@ const logoutHandler = () => {
 
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
-  const isAdmin = jwt && jwt.peregrineRoles.isAdmin
+  const isAdmin = jwt?.peregrineRoles.isAdmin
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
 

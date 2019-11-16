@@ -28,7 +28,7 @@ expect.extend({
   },
 })
 
-window.fetch = (fetch as unknown) as (typeof window)['fetch']
+window.fetch = (fetch as unknown) as typeof window['fetch']
 ;(window as any).Response = Response
 ;(window as any).Headers = Headers
 
