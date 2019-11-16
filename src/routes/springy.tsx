@@ -2,9 +2,8 @@ import { h, FunctionComponent } from 'preact'
 import {
   initSpring,
   Animated,
-  createDerivedSpring,
   templateSpring,
-  springedObject,
+  createDerivedNumberSpring,
 } from '@/spring/use'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
@@ -40,7 +39,7 @@ const boxStyle = css`
 
 const Springy: FunctionComponent = () => {
   const spring = initSpring({
-    friction: 0.012,
+    friction: 0.01,
     mass: 0.003,
     springStrength: 0.02,
   })
@@ -55,62 +54,59 @@ const Springy: FunctionComponent = () => {
   const targetY = y - width / 2
   const offsetX = spring(targetX)
   const offsetY = spring(targetY)
-  const angle = createDerivedSpring(getValue => {
-    const currentX = getValue(offsetX)
-    const currentY = getValue(offsetY)
-    return -Math.atan2(currentY - targetY, targetX - currentX) + Math.PI / 2
-  })
+  const angle = createDerivedNumberSpring(
+    [offsetX, offsetY],
+    ([offsetX, offsetY]) =>
+      -Math.atan2(offsetY - targetY, targetX - offsetX) + Math.PI / 2,
+  )
   const offsetX2 = spring(offsetX)
   const offsetY2 = spring(offsetY)
-  const angle2 = createDerivedSpring(getValue => {
-    const currentX = getValue(offsetX2)
-    const currentY = getValue(offsetY2)
-    return (
-      -Math.atan2(currentY - getValue(offsetY), getValue(offsetX) - currentX) +
-      Math.PI / 2
-    )
-  })
+  const angle2 = createDerivedNumberSpring(
+    [offsetX2, offsetY2],
+    ([offsetX, offsetY]) =>
+      -Math.atan2(offsetY - targetY, targetX - offsetX) + Math.PI / 2,
+  )
   const offsetX3 = spring(offsetX2)
   const offsetY3 = spring(offsetY2)
-  const angle3 = createDerivedSpring(getValue => {
-    const currentX = getValue(offsetX3)
-    const currentY = getValue(offsetY3)
-    return (
-      -Math.atan2(
-        currentY - getValue(offsetY2),
-        getValue(offsetX2) - currentX,
-      ) +
-      Math.PI / 2
-    )
-  })
+  const angle3 = createDerivedNumberSpring(
+    [offsetX3, offsetY3],
+    ([offsetX, offsetY]) =>
+      -Math.atan2(offsetY - targetY, targetX - offsetX) + Math.PI / 2,
+  )
 
   return (
     // eslint-disable-next-line caleb/jsx-a11y/no-static-element-interactions, caleb/jsx-a11y/click-events-have-key-events
     <div
       class={wrapperStyle}
-      onClick={(e: MouseEvent) => {
+      onMouseMove={(e: MouseEvent) => {
         setX(e.x)
         setY(e.y)
       }}
+      // onClick={(e: MouseEvent) => {
+      //   setX(e.x)
+      //   setY(e.y)
+      // }}
     >
       <Animated.div
         class={boxStyle}
-        data-derived={spring(
-          createDerivedSpring(evalSpring => evalSpring(offsetX) * 10),
-        )}
-        style={templateSpring`transform: translate(${offsetX}px, ${offsetY}px) rotate(${heavySpring(
+        style={templateSpring`transform: translate(${offsetX}px, ${offsetY}px) rotate(${spring(
           angle,
         )}rad)`}
       />
+      {/* <Animated.div
+        class={boxStyle}
+        data-asdf={JSON.stringify(angle)}
+        style={templateSpring`transform: translate(${angle}px, ${0}px) rotate(${0}rad)`}
+      /> */}
       <Animated.div
         class={boxStyle}
-        style={templateSpring`transform: translate(${offsetX2}px, ${offsetY2}px) rotate(${heavySpring(
+        style={templateSpring`transform: translate(${offsetX2}px, ${offsetY2}px) rotate(${spring(
           angle2,
         )}rad)`}
       />
       <Animated.div
         class={boxStyle}
-        style={templateSpring`transform: translate(${offsetX3}px, ${offsetY3}px) rotate(${heavySpring(
+        style={templateSpring`transform: translate(${offsetX3}px, ${offsetY3}px) rotate(${spring(
           angle3,
         )}rad)`}
       />

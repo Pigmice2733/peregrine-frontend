@@ -23,6 +23,9 @@ import {
   Springed,
   tweenColor,
   tweenLength,
+  springedObject,
+  templateSpring,
+  measure,
 } from '@/spring/use'
 import { useSchema } from '@/cache/schema/use'
 
@@ -147,14 +150,24 @@ const TestComponent = () => {
   const [toggle, setToggle] = useState(false)
   const spring = initSpring({ mass: 0.0007 })
 
-  const styles = spring({
+  const styles = springedObject({
     padding: '0.5rem',
     'border-radius': '0.2rem',
-    transform: spring`translateX(${toggle ? 200 : -200}px)`,
+    // transform: spring(templateSpring`translateX(${toggle ? 200 : -200}px)`),
     'font-family': '"Dank Mono", "Fira Code", "Source Code Pro"',
-    background: tweenColor(spring, toggle ? '#282828' : 'black'),
-    color: tweenColor(spring, toggle ? '#b16286' : '#994cc3'),
-    width: tweenLength(spring, toggle ? '20vw' : '100%', el => el.offsetWidth),
+    // left: spring(templateSpring`${spring(toggle ? 10 : 100)}px`),
+    left: toggle ? 0 : '',
+    right: toggle ? '' : 0,
+    position: 'absolute',
+    transform: spring(
+      templateSpring`translateX(${measure(elSnapshot => {
+        console.log('hi', elSnapshot.offsetLeft)
+        return -elSnapshot.offsetLeft
+      })}px)`,
+    ),
+    // background: tweenColor(spring, toggle ? '#282828' : 'black'),
+    // color: tweenColor(spring, toggle ? '#b16286' : '#994cc3'),
+    // width: tweenLength(spring, toggle ? '20vw' : '100%', el => el.offsetWidth),
     // ...(toggle
     //   ? {
     //       background: tweenColor(spring, '#282828'),

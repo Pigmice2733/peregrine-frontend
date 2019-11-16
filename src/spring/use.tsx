@@ -1,5 +1,5 @@
 import { JSX, FunctionComponent, h } from 'preact'
-import { useRef, useEffect } from 'preact/hooks'
+import { useRef, useLayoutEffect } from 'preact/hooks'
 
 const springed = Symbol('springed')
 
@@ -37,10 +37,13 @@ type UnSpringObject<T extends object> = T extends object
 
 interface Springed<T, S = any> {
   [springed]: true
-  computeValue(state: S, springCache: SpringCache): { state: S; value: T }
+  computeValue(
+    state: S | undefined,
+    springCache: SpringCache,
+  ): { state: S; value: T }
   compose(createSpring: CreateSpring): Springed<T>
-  getInitialState: (springCache: SpringCache) => S
   target?: any
+  measure: (element: HTMLElement, state: S | undefined) => S | undefined
   type: SpringType
 }
 
@@ -66,9 +69,14 @@ export const initSpring = ({
       const spring: Springed<number, SpringedNumberState> = {
         [springed]: true,
         computeValue: state => {
+          if (!state) console.log('no s', state)
           const v = getSpringFramePosition(
             target,
-            state,
+            state || {
+              position: target,
+              lastTime: Date.now(),
+              velocity: 0,
+            },
             springStrength,
             friction,
             mass,
@@ -77,12 +85,8 @@ export const initSpring = ({
         },
         compose: createSpring => createSpring(spring),
         type: SpringType.number,
+        measure: (_el, state) => state,
         target,
-        getInitialState: () => ({
-          position: target,
-          lastTime: Date.now(),
-          velocity: 0,
-        }),
       }
       return spring
     }
@@ -90,13 +94,14 @@ export const initSpring = ({
     if (isSpringedNumber(target)) {
       interface WrappedSpringState {
         subSpringState: unknown
-        state: SpringedNumberState
+        state: SpringedNumberState | undefined
       }
       const subSpring = target
 
       const spring: Springed<number, WrappedSpringState> = {
         [springed]: true,
-        computeValue({ subSpringState, state }, springCache) {
+        computeValue(s, springCache) {
+          const subSpringState = s?.subSpringState
           const subSpringResult = computeSpring(
             subSpring,
             subSpringState,
@@ -105,7 +110,12 @@ export const initSpring = ({
           const target = subSpringResult.value
           const springResult = getSpringFramePosition(
             target,
-            state,
+            s?.state || {
+              lastTime: Date.now(),
+              position: computeSpring(subSpring, subSpringState, springCache)
+                .value,
+              velocity: 0,
+            },
             springStrength,
             friction,
             mass,
@@ -120,22 +130,12 @@ export const initSpring = ({
             },
           }
         },
+        measure: (el, s) => ({
+          subSpringState: subSpring.measure(el, s?.subSpringState),
+          state: s?.state,
+        }),
         compose: createSpring => createSpring(spring),
         type: SpringType.number,
-        getInitialState(springCache) {
-          const subSpring = target
-          const subSpringState = target.getInitialState(springCache)
-          return {
-            state: {
-              lastTime: Date.now(),
-              position: computeSpring(subSpring, subSpringState, springCache)
-                .value,
-              velocity: 0,
-            },
-            subSpring,
-            subSpringState,
-          }
-        },
       }
       return spring
     }
@@ -156,9 +156,7 @@ type TemplateLiteralExpression = string | number | boolean
 
 export const templateSpring = (
   strings: TemplateStringsArray,
-  ...expressions: (
-    | TemplateLiteralExpression
-    | Springed<string | number, unknown>)[]
+  ...expressions: (TemplateLiteralExpression | Springed<string | number>)[]
 ): Springed<string, TemplateSpringState> => {
   return {
     compose: createSpring =>
@@ -171,15 +169,18 @@ export const templateSpring = (
         ),
       ),
     target: expressions,
+    measure: (el, state) =>
+      expressions.reduce((state, expr, i) => {
+        if (isSpringed(expr)) state[i] = expr.measure(el, state[i])
+        return state
+      }, state || {}),
     computeValue: (state, springCache) => {
+      // console.log(state && state[0])
       const newState: TemplateSpringState = {}
       const computedExpressions: TemplateLiteralExpression[] = expressions.map(
         (expr, i) => {
           if (!isSpringed(expr)) return expr
-          const matchingState =
-            state[i] === undefined
-              ? expr.getInitialState(springCache)
-              : state[i]
+          const matchingState = state?.[i]
           const springResult = computeSpring(expr, matchingState, springCache)
           newState[i] = springResult.state
           return springResult.value
@@ -193,43 +194,91 @@ export const templateSpring = (
     },
     type: SpringType.other,
     [springed]: true,
-    getInitialState: () => ({}),
   }
 }
 
 /** Array of the sub spring states */
 type DerivedSpringState = unknown[]
 
-export const createDerivedSpring = <T extends any>(
-  cb: (evalSpring: <U>(s: Springed<U>) => U) => T,
-) => {
-  const spring: Springed<T, DerivedSpringState> = {
+export const createDerivedSpring = <T extends Springed<any>[], O>(
+  subSprings: T,
+  cb: (computedValues: { [K in keyof T]: UnSpring<T[K]> }) => O,
+): Springed<O> => {
+  const spring: Springed<O, DerivedSpringState> = {
+    [springed]: true,
+    type: SpringType.other,
+    // Here composing the spring means re-springing all the input springs
+    compose: createSpring =>
+      createDerivedSpring(subSprings.map(createSpring), cb as any),
+    measure: (el, subSpringStates) => {
+      return subSprings.map((subSpring, i) =>
+        subSpring.measure(el, subSpringStates?.[i]),
+      )
+    },
+    computeValue: (subSpringStates, springCache) => {
+      const subSpringResults = subSprings.map((subSpring, i) => {
+        return subSpring.computeValue(subSpringStates?.[i], springCache)
+      })
+      // eslint-disable-next-line caleb/standard/no-callback-literal
+      const value = cb(subSpringResults.map(r => r.value) as any)
+      return { state: subSpringResults.map(r => r.state), value }
+    },
+  }
+  return spring
+}
+
+interface DerivedSpringedNumberState {
+  callbackResultState: unknown
+  subSpringStates: unknown[]
+}
+
+export const createDerivedNumberSpring = <T extends Springed<any>[]>(
+  subSprings: T,
+  cb: (
+    computedValues: { [K in keyof T]: UnSpring<T[K]> },
+  ) => number | Springed<number>,
+): Springed<number> => {
+  const spring: Springed<number, DerivedSpringedNumberState> = {
     [springed]: true,
     type: SpringType.other,
     compose: createSpring =>
-      createDerivedSpring(evalSpring => {
-        const value = evalSpring(spring)
-        if (typeof value !== 'number')
-          throw new TypeError('Cannot wrap a non-number from derived spring')
-        return evalSpring(createSpring(value))
+      createDerivedNumberSpring(subSprings, computedValues => {
+        const v = cb(computedValues)
+        return createSpring(v)
       }),
-    computeValue: (subSpringStates, springCache) => {
-      let i = 0
-      const newSubSpringStates: unknown[] = []
-      const evalSpring = <U extends any>(subSpring: Springed<U>) => {
-        const subSpringState =
-          subSpringStates[i] === undefined
-            ? subSpring.getInitialState(springCache)
-            : subSpringStates[i]
-        const result = computeSpring(subSpring, subSpringState, springCache)
-        newSubSpringStates[i] = result.state
-        i++
-        return result.value
+    measure: (el, s) => ({
+      subSpringStates: subSprings.map((subSpring, i) =>
+        subSpring.measure(el, s?.subSpringStates?.[i]),
+      ),
+      callbackResultState: s?.callbackResultState,
+    }),
+    computeValue: (s, springCache) => {
+      const subSpringResults = subSprings.map((subSpring, i) => {
+        return subSpring.computeValue(s?.subSpringStates?.[i], springCache)
+      })
+      // eslint-disable-next-line caleb/standard/no-callback-literal
+      const callbackResult = cb(subSpringResults.map(r => r.value) as any)
+      const callbackResultState = s?.callbackResultState
+      const newSubSpringStates = subSpringResults.map(r => r.state)
+      if (isSpringed(callbackResult)) {
+        const { state, value } = computeSpring(
+          callbackResult,
+          callbackResultState,
+          springCache,
+        )
+        return {
+          state: {
+            callbackResultState: state,
+            subSpringStates: newSubSpringStates,
+          },
+          value,
+        }
       }
-      const value = cb(evalSpring)
-      return { state: newSubSpringStates, value }
+      return {
+        state: { callbackResultState, subSpringStates: newSubSpringStates },
+        value: callbackResult,
+      }
     },
-    getInitialState: () => [],
   }
   return spring
 }
@@ -244,17 +293,24 @@ export const springedObject = <T extends object>(
 ): Springed<UnSpringObject<T>, SpringedObjectState> => {
   const spring: Springed<UnSpringObject<T>, SpringedObjectState> = {
     [springed]: true,
-    compose(createSpring) {
+    compose(wrapperSpring) {
       const modifiedObject = Object.fromEntries(
         Object.entries(input).map(([key, val]) => {
           if (isSpringed(val) || typeof val === 'number')
-            return [key, createSpring]
+            return [key, wrapperSpring]
           return [key, val]
         }),
       )
       return springedObject(modifiedObject) as Springed<UnSpringObject<T>>
     },
     target: input,
+    measure(el, state) {
+      const newState: SpringedObjectState = {}
+      Object.entries(input).forEach(([key, val]: [string, unknown]) => {
+        if (isSpringed(val)) newState[key] = val.measure(el, state?.[key])
+      })
+      return newState
+    },
     computeValue(state, springCache) {
       const newState: SpringedObjectState = {}
       const value = Object.fromEntries(
@@ -262,7 +318,7 @@ export const springedObject = <T extends object>(
           if (!isSpringed(val)) return [key, val]
           const result = computeSpring(
             val as Springed<unknown>,
-            state[key] || val.getInitialState(springCache),
+            state?.[key],
             springCache,
           )
           newState[key] = result.state
@@ -272,14 +328,13 @@ export const springedObject = <T extends object>(
       return { state: newState, value }
     },
     type: SpringType.other,
-    getInitialState: () => ({}),
   }
   return spring
 }
 
 const computeSpring = <T extends any = unknown, S = any>(
   spring: Springed<T, S>,
-  state: S,
+  state: S | undefined,
   springCache: SpringCache,
 ) => {
   const cachedMatch = springCache.get(spring)
@@ -320,6 +375,39 @@ const getSpringFramePosition = (
   return { state, value: state.position }
 }
 
+/** Offset value */
+type MeasuredSpringState = number
+
+export const measure = (
+  getOffset: (elSnapshot: HTMLElement) => number,
+): Springed<number, MeasuredSpringState> => {
+  const spring: Springed<number, MeasuredSpringState> = {
+    [springed]: true,
+    type: SpringType.other,
+    measure: (el, state) => {
+      return getOffset(el)
+    },
+    compose: wrapperSpring =>
+      createDerivedNumberSpring([spring], ([offset]) => {
+        // console.log(offset)
+        const wrappedSpring = wrapperSpring(offset)
+        // const originalCompute = wrappedSpring.computeValue
+        // wrappedSpring.computeValue = (state, springCache) => {
+
+        // }
+        return offset
+      }),
+    computeValue(offset) {
+      const value = offset || 0
+      return {
+        state: offset || 0,
+        value,
+      }
+    },
+  }
+  return spring
+}
+
 const isSpringed = (prop: any): prop is Springed<any> => prop[springed]
 
 type AnimatifyProps<Props> = {
@@ -351,15 +439,15 @@ export const Animated = new Proxy<AnimatedObject>({} as any, {
       const staticProps = Object.fromEntries(
         propsEntries.filter(([, val]) => !isSpringed(val)),
       )
-      const propsSpring = springedObject(Object.fromEntries(
-        propsEntries.filter(([, val]) => isSpringed(val)),
-      ) as typeof props)
-      const elementRef = useRef<Element | undefined>()
-      const propsStateRef = useRef<unknown>(
-        propsSpring.getInitialState(new Map()),
+      const propsSpring = springedObject(
+        Object.fromEntries(
+          propsEntries.filter(([, val]) => isSpringed(val)),
+        ) as typeof props,
       )
-      useEffect(() => {
-        const updateComponentSprings = () => {
+      const elementRef = useRef<Element | undefined>()
+      const propsStateRef = useRef<SpringedObjectState | undefined>(undefined)
+      useLayoutEffect(() => {
+        const updateComponentSprings = (propsChanged = false) => () => {
           const element = elementRef.current
           const tweenedPropsResult = computeSpring(
             propsSpring,
@@ -373,6 +461,7 @@ export const Animated = new Proxy<AnimatedObject>({} as any, {
               ;(element as HTMLElement).style.cssText = tweenedProps.style
             } else {
               for (const key in tweenedProps.style) {
+                // @ts-ignore
                 ;(element as HTMLElement).style[key] = tweenedProps.style[key]
               }
             }
@@ -384,13 +473,22 @@ export const Animated = new Proxy<AnimatedObject>({} as any, {
                 )
               }
             }
+
+            if (propsChanged) {
+              propsStateRef.current = propsSpring.measure(
+                element as HTMLElement,
+                propsStateRef.current,
+              )
+              updateComponentSprings(false)
+            }
           }
           timeoutId = setTimeout(
-            () => (rafId = requestAnimationFrame(updateComponentSprings)),
-            1,
+            () =>
+              (rafId = requestAnimationFrame(updateComponentSprings(false))),
+            10,
           ) as any
         }
-        let rafId = requestAnimationFrame(updateComponentSprings)
+        let rafId = requestAnimationFrame(updateComponentSprings(true))
         let timeoutId: number
         return () => {
           clearTimeout(timeoutId)
@@ -417,32 +515,13 @@ export const tweenColor = (
   // We have to check that the property still exists, otherwise the property has been rejected by the css parser
   const targetColor = colorEl.style.color && getComputedStyle(colorEl).color
   colorEl.style.color = ''
-  const [targetRed = 0, targetGreen = 0, targetBlue = 0, targetAlpha = 1] =
-    (targetColor && targetColor.match(colorRegex)) || []
-  const red = spring(Number(targetRed))
-  const green = spring(Number(targetGreen))
-  const blue = spring(Number(targetBlue))
-  const alpha = spring(Number(targetAlpha))
+  const [targetRed, targetGreen, targetBlue, targetAlpha] =
+    targetColor?.match(colorRegex) || []
 
-  return {
-    [springed]: true,
-    subSprings: { red, green, blue, alpha },
-    composeTweenedValues: ({ red, green, blue, alpha }) =>
-      `rgba(${red},${green},${blue},${alpha})`,
-  }
-}
-
-export const tweenLength = (
-  spring: CreateSpring,
-  targetVal: string,
-  measure: (el: HTMLElement) => number,
-): Springed<string> => {
-  let v: number
-  return {
-    [springed]: true,
-    targetVal,
-    measure: el => (v = measure(el)),
-    subSprings: { v: spring(v || 0) },
-    composeTweenedValues: ({ v }) => v,
-  }
+  return createDerivedSpring(
+    [targetRed, targetGreen, targetBlue, targetAlpha].map(v =>
+      spring(Number(v || 0)),
+    ),
+    ([red, green, blue, alpha]) => `rgba(${red},${green},${blue},${alpha})`,
+  )
 }

@@ -19,7 +19,7 @@ const asdf = spring(bar)
 
 // Springed<number> - The return value of createDerivedSpring got springed
 const foobar = spring(
-  createDerivedSpring([x], ([x]) => {
+  createDerivedNumberSpring([x], ([x]) => {
     return x > 10 ? 100 : 35
   }),
 )
