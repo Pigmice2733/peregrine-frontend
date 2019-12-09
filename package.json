@@ -27,7 +27,7 @@
     "ganalytics": "^3.1.2",
     "matchit": "1.0.8",
     "polished": "3.4.2",
-    "preact": "10.0.4",
+    "preact": "10.1.0",
     "qss": "^2.0.3",
     "systemjs": "3.1.6"
   },
