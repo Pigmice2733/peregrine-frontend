@@ -53,7 +53,7 @@
     "babel-loader": "8.0.6",
     "babel-plugin-const-enum": "0.0.5",
     "babel-plugin-minify-dead-code-elimination": "0.5.1",
-    "babel-plugin-module-resolver": "3.2.0",
+    "babel-plugin-module-resolver": "4.0.0",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "clsx": "1.0.4",
     "cpy": "8.0.0",
