@@ -5,7 +5,7 @@
   "automerge": true,
   "rangeStrategy": "pin",
   "engines": {
-    "rangeStrategy": "bump"
+    "rangeStrategy": "replace"
   },
   "major": {
     "automerge": false
