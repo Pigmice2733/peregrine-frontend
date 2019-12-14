@@ -4,6 +4,9 @@
   "reviewers": ["calebeby"],
   "automerge": true,
   "rangeStrategy": "pin",
+  "engines": {
+    "rangeStrategy": "bump"
+  },
   "major": {
     "automerge": false
   },
