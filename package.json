@@ -59,7 +59,7 @@
     "css-loader": "3.3.2",
     "dotenv": "8.0.0",
     "eslint": "6.7.2",
-    "eslint-formatter-pretty": "3.0.0",
+    "eslint-formatter-pretty": "3.0.1",
     "eslint-plugin-caleb": "7.1.1",
     "fake-indexeddb": "3.0.0",
     "friendly-errors-webpack-plugin": "1.7.0",
