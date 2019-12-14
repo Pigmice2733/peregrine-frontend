@@ -5,8 +5,7 @@
   "license": "MIT",
   "repository": "Pigmice2733/peregrine-frontend",
   "engines": {
-    "node": "12",
-    "npm": ">=6.5.0"
+    "node": "12"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js",
