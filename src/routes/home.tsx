@@ -42,9 +42,7 @@ const Home = () => {
           })
           .sort(compareEvents(now, location))
           .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
-          .map(e => (
-            <EventCard href={`/events/${e.key}`} key={e.key} event={e} />
-          ))
+          .map(e => <EventCard key={e.key} event={e} />)
       ) : (
         <Spinner />
       )}

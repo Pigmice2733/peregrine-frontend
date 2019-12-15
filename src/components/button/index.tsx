@@ -1,8 +1,9 @@
-import { h, JSX } from 'preact'
+import { h, VNode } from 'preact'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { tint } from 'polished'
 import { pigmicePurple } from '@/colors'
+import { PropsOf } from '@/type-utils'
 
 const buttonStyle = css`
   text-align: center;
@@ -53,15 +54,20 @@ const flatButtonStyle = css`
   }
 `
 
-interface Props extends JSX.HTMLAttributes {
+interface BaseProps {
   flat?: boolean
 }
 
-const Button = (props: Props) => {
+interface Button {
+  (props: BaseProps & PropsOf<'a'> & { href: string }): VNode
+  (props: BaseProps & PropsOf<'div'>): VNode
+}
+
+const Button: Button = (props: BaseProps & PropsOf<'a' | 'div'>) => {
   const El = props.href ? 'a' : 'button'
   return (
     <El
-      {...props}
+      {...(props as any)}
       class={clsx(buttonStyle, props.class, props.flat && flatButtonStyle)}
     />
   )

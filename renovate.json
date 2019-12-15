@@ -3,6 +3,7 @@
   "assignees": ["calebeby"],
   "reviewers": ["calebeby"],
   "automerge": true,
+  "rangeStrategy": "pin",
   "major": {
     "automerge": false
   },

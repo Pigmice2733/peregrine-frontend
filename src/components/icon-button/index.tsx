@@ -1,5 +1,5 @@
-import { h, JSX } from 'preact'
-import { Merge } from '@/type-utils'
+import { h, VNode } from 'preact'
+import { PropsOf } from '@/type-utils'
 import Icon from '@/components/icon'
 import { css } from 'linaria'
 import clsx from 'clsx'
@@ -28,12 +28,22 @@ const iconButtonStyle = css`
 
 export { iconButtonStyle as iconButtonClass }
 
-type Props = Merge<JSX.HTMLAttributes, { icon: string }>
+interface BaseProps {
+  icon: string
+}
 
-const IconButton = ({ icon, ...attrs }: Props) => {
+interface IconButton {
+  (props: BaseProps & PropsOf<'a'> & { href: string }): VNode
+  (props: BaseProps & PropsOf<'div'>): VNode
+}
+
+const IconButton: IconButton = ({
+  icon,
+  ...attrs
+}: PropsOf<'a' | 'div'> & BaseProps) => {
   const El = attrs.href ? 'a' : 'button'
   return (
-    <El {...attrs} class={clsx(iconButtonStyle, attrs.class)}>
+    <El {...(attrs as any)} class={clsx(iconButtonStyle, attrs.class)}>
       <Icon icon={icon} />
     </El>
   )

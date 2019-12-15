@@ -4,30 +4,6 @@ import '@testing-library/jest-dom/extend-expect'
 import 'fake-indexeddb/auto'
 import { removeAccessToken, removeRefreshToken } from '@/jwt'
 
-declare global {
-  // eslint-disable-next-line caleb/@typescript-eslint/no-namespace
-  namespace jest {
-    interface Matchers<R> {
-      toBeChecked(): R
-    }
-  }
-}
-
-expect.extend({
-  toBeChecked(received) {
-    if (received.checked)
-      return {
-        message: () => `expected ${received} to not be checked`,
-        pass: true,
-      }
-
-    return {
-      message: () => `expected ${received} to be checked`,
-      pass: false,
-    }
-  },
-})
-
 window.fetch = (fetch as unknown) as typeof window['fetch']
 ;(window as any).Response = Response
 ;(window as any).Headers = Headers
