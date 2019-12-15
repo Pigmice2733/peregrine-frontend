@@ -1,5 +1,5 @@
-import { h, JSX, FunctionComponent } from 'preact'
-import { Merge } from '@/type-utils'
+import { h, VNode } from 'preact'
+import { ComponentName, PropsOf, ElementName } from '@/type-utils'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
@@ -25,13 +25,24 @@ const cardStyle = css`
   }
 `
 
-interface Props extends JSX.HTMLAttributes {
-  as?: keyof JSX.IntrinsicElements
+interface Card {
+  // Specific common overloads so that event listener types can be inferred
+  (props: { as: 'div' } & PropsOf<'div'>): VNode
+  (props: { as: 'a' } & PropsOf<'a'>): VNode
+  // Generic overload for any "as" type, event listener types must manually be specified, but they will be checked
+  <T extends ElementName>(props: { as: T } & PropsOf<T>): VNode
+  // Overloads for when there is no `as` prop
+  (props: PropsOf<'a'> & { href: string }): VNode
+  (props: PropsOf<'div'>): VNode
+  <T extends (props: any, context?: any) => VNode>(
+    props: { as: T } & PropsOf<T>,
+  ): VNode
 }
 
-export type CardProps<T = {}> = Merge<Props, T>
-
-const Card: FunctionComponent<Props> = ({ as, ...props }) => {
+const Card: Card = ({
+  as,
+  ...props
+}: { as?: ComponentName; href?: string; class?: string } & unknown) => {
   const El = as || (props.href ? 'a' : 'div')
   return <El {...props} class={clsx(cardStyle, props.class)} />
 }

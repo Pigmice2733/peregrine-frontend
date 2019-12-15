@@ -1,7 +1,7 @@
 import { h, JSX } from 'preact'
 import Icon from '@/components/icon'
-import { Falsy, Merge } from '@/type-utils'
-import Card, { CardProps } from '@/components/card'
+import { Falsy, Merge, PropsOf } from '@/type-utils'
+import Card from '@/components/card'
 import { css } from 'linaria'
 import clsx from 'clsx'
 
@@ -56,26 +56,26 @@ const titleStyle = css`
 
 interface Props {
   info: (
-    | CardProps<{
-        icon: string
-        title: string | JSX.Element
-        action?: Falsy | JSX.Element | JSX.Element[] | string | number
-      }>
+    | Merge<
+        PropsOf<'a'>,
+        {
+          icon: string
+          title: string | JSX.Element
+          action?: Falsy | JSX.Element | JSX.Element[] | string | number
+        }
+      >
     | Falsy
   )[]
 }
 
 const isTruthy = <T extends object>(i: T | Falsy): i is T => Boolean(i)
 
-const InfoGroupCard = ({
-  info,
-  ...props
-}: Merge<Props, JSX.HTMLAttributes>) => (
+const InfoGroupCard = ({ info, ...props }: Merge<Props, PropsOf<'div'>>) => (
   <Card {...props} class={clsx(infoCardStyle, props.class)}>
     {info.filter(isTruthy).map(({ icon, action, title, ...i }) => {
       const El = i.href ? 'a' : 'div'
       return (
-        <El class={rowStyle} key={icon} {...i}>
+        <El class={rowStyle} key={icon} {...(i as any)}>
           <Icon icon={icon} />
           <div class={titleStyle}>{title}</div>
           {action && <div>{action}</div>}

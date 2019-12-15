@@ -5,7 +5,7 @@ import clsx from 'clsx'
 
 type level = 1 | 2 | 3 | 4 | 5 | 6
 
-interface Props extends JSX.HTMLAttributes {
+interface Props extends JSX.HTMLAttributes<HTMLHeadingElement> {
   level: level
 }
 

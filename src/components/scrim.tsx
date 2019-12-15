@@ -1,10 +1,11 @@
-import { h, JSX } from 'preact'
+import { h } from 'preact'
 import { css } from 'linaria'
 import { rgba } from 'polished'
 import clsx from 'clsx'
 import { useRef, useEffect } from 'preact/hooks'
 import { moveFocusInside } from '@/utils/move-focus-inside'
 import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
+import { PropsOf } from '@/type-utils'
 
 // Scrim is a partially transparent dark full-screen backdrop used to focus the
 // user's attention
@@ -41,7 +42,7 @@ export const scrimHiddenClass = css`
   }
 `
 
-interface Props extends JSX.HTMLAttributes {
+interface Props extends PropsOf<'div'> {
   onClickOutside?: () => void
   visible: boolean
 }
@@ -58,11 +59,6 @@ export const Scrim = ({
 }: Props) => {
   const scrimEl = useRef<HTMLDivElement | null>(null)
   const previouslyFocusedElement = useRef<HTMLElement | null>(null)
-  const handleClick = (e: MouseEvent) => {
-    if (props.onClick) props.onClick(e)
-    // make sure click is from _this_ element, not a descendant
-    if (e.target === scrimEl.current) onClickOutside()
-  }
 
   useEffect(() => {
     if (!visible) return
@@ -107,7 +103,11 @@ export const Scrim = ({
       {...props}
       role="none"
       class={clsx(props.class, scrimStyle, visible || scrimHiddenClass)}
-      onClick={handleClick}
+      onClick={e => {
+        if (props.onClick) props.onClick.call(e.currentTarget, e)
+        // make sure click is from _this_ element, not a descendant
+        if (e.target === scrimEl.current) onClickOutside()
+      }}
       ref={scrimEl}
     />
   )
