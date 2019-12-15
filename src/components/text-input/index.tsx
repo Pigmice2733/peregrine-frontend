@@ -1,5 +1,5 @@
 import { h, JSX } from 'preact'
-import { Merge } from '@/type-utils'
+import { Merge, PropsOf } from '@/type-utils'
 import { css } from 'linaria'
 import clsx from 'clsx'
 import { useState } from 'preact/hooks'
@@ -29,16 +29,15 @@ const innerClass = css`
   }
 `
 
-export const InnerTextInput = (props: JSX.HTMLAttributes) => {
+export const InnerTextInput = (props: PropsOf<'input'>) => {
   const [hasFocused, setHasFocused] = useState(false)
-  const updateHasFocused = (e: FocusEvent) => {
-    setHasFocused(true)
-    if (props.onBlur) props.onBlur(e)
-  }
   return (
     <input
       {...props}
-      onBlur={updateHasFocused}
+      onBlur={e => {
+        setHasFocused(true)
+        if (props.onBlur) props.onBlur.call(e.currentTarget, e)
+      }}
       class={clsx(props.class, hasFocused && hasFocusedClass, innerClass)}
     />
   )

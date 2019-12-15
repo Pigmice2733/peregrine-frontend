@@ -1,7 +1,7 @@
 import { h, JSX } from 'preact'
 import { css } from 'linaria'
 
-interface Props extends JSX.HTMLAttributes {
+interface Props extends JSX.HTMLAttributes<SVGSVGElement> {
   icon: string
 }
 
