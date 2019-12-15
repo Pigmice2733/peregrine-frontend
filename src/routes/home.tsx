@@ -52,7 +52,10 @@ const Home = () => {
               margin: 1rem auto;
             `}
           >
-            <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" />
+            <img
+              alt="Deploys by Netlify"
+              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+            />
           </a>
         </Fragment>
       ) : (
