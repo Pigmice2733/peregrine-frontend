@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
 import Spinner from '@/components/spinner'
@@ -29,20 +29,35 @@ const Home = () => {
       <TextInput onInput={setTerm} label="Search for Events" />
 
       {events ? (
-        events
-          .filter(event => {
-            if (!term) return true
-            return (
-              event.name.toLowerCase().includes(lowerCaseQuery) ||
-              event.key.toLowerCase().includes(lowerCaseQuery) ||
-              event.locationName.toLowerCase().includes(lowerCaseQuery) ||
-              event.district?.toLowerCase().includes(lowerCaseQuery) ||
-              event.fullDistrict?.toLowerCase().includes(lowerCaseQuery)
-            )
-          })
-          .sort(compareEvents(now, location))
-          .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
-          .map(e => <EventCard key={e.key} event={e} />)
+        <Fragment>
+          {events
+            .filter(event => {
+              if (!term) return true
+              return (
+                event.name.toLowerCase().includes(lowerCaseQuery) ||
+                event.key.toLowerCase().includes(lowerCaseQuery) ||
+                event.locationName.toLowerCase().includes(lowerCaseQuery) ||
+                event.district?.toLowerCase().includes(lowerCaseQuery) ||
+                event.fullDistrict?.toLowerCase().includes(lowerCaseQuery)
+              )
+            })
+            .sort(compareEvents(now, location))
+            .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
+            .map(e => (
+              <EventCard key={e.key} event={e} />
+            ))}
+          <a
+            href="https://www.netlify.com"
+            class={css`
+              margin: 1rem auto;
+            `}
+          >
+            <img
+              alt="Deploys by Netlify"
+              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+            />
+          </a>
+        </Fragment>
       ) : (
         <Spinner />
       )}
