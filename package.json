@@ -58,7 +58,7 @@
     "cpy": "8.0.0",
     "css-loader": "3.4.0",
     "dotenv": "8.2.0",
-    "eslint": "6.7.2",
+    "eslint": "6.8.0",
     "eslint-formatter-pretty": "3.0.1",
     "eslint-plugin-caleb": "7.1.1",
     "fake-indexeddb": "3.0.0",
