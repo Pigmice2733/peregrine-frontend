@@ -29,7 +29,6 @@ import Icon from '@/components/icon'
 import { alert } from '@/icons/alert'
 import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
-import { Merge } from '@/type-utils'
 
 const RoleInfo = ({
   save,
@@ -294,7 +293,7 @@ const profileCardStyle = css`
 const UserProfileCard = ({
   user,
   refetch,
-  editable,
+  editable = false,
   isCurrentUser,
   isSuperAdmin,
 }: UserProfileProps) => {
