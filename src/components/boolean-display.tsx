@@ -15,9 +15,10 @@ const falseStyle = css`
   background: ${redOnPurple};
 `
 
-export const BooleanDisplay: FunctionComponent<
-  Merge<JSX.HTMLAttributes, { value: boolean }>
-> = ({ value, ...props }) => {
+export const BooleanDisplay: FunctionComponent<Merge<
+  JSX.HTMLAttributes,
+  { value: boolean }
+>> = ({ value, ...props }) => {
   const El = props.onClick ? 'button' : 'div'
   return (
     <El
