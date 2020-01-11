@@ -7,6 +7,9 @@ import { PropsOf } from '@/type-utils'
 
 const buttonStyle = css`
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--pigmice-purple);
   border: none;
   padding: 0.6rem 0.7rem;

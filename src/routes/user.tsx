@@ -1,38 +1,385 @@
-import { h } from 'preact'
+import { h, JSX, Fragment } from 'preact'
 import Page from '@/components/page'
 import Spinner from '@/components/spinner'
-import { usePromise } from '@/utils/use-promise'
 import { getUser } from '@/api/user/get-user'
-import { UserInfo, EditableUser } from '@/api/user'
+import { UserInfo, Roles } from '@/api/user'
 import Card from '@/components/card'
 import { useJWT } from '@/jwt'
 import IconButton from '@/components/icon-button'
 import { edit } from '@/icons/edit'
 import { css } from 'linaria'
-import { Heading } from '@/components/heading'
+import TextInput, { TextInputProps } from '@/components/text-input'
+import { useState, useEffect, useCallback } from 'preact/hooks'
+import { grey, offBlack } from '@/colors'
+import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
+import { modifyUser } from '@/api/user/modify-user'
+import { close } from '@/icons/close'
+import { check } from '@/icons/check'
+import { sync } from '@/icons/sync'
+import { getRealm } from '@/api/realm/get-realm'
+import { usePromise } from '@/utils/use-promise'
+import Toggle from '@/components/toggle'
+import { deleteUser } from '@/api/user/delete-user'
+import { deleteIcon } from '@/icons/delete'
+import { route } from '@/router'
+import { createDialog } from '@/components/dialog'
+import Alert from '@/components/alert'
+import Button from '@/components/button'
+import Icon from '@/components/icon'
+import { alert } from '@/icons/alert'
+import Authenticated from '@/components/authenticated'
+import { minPasswordLength, maxPasswordLength } from '@/constants'
+import { Merge } from '@/type-utils'
+
+const RoleInfo = ({
+  save,
+  disabled,
+  user,
+  title,
+  roleName,
+}: {
+  user: UserInfo
+  title: string
+  roleName: keyof Roles
+  disabled: boolean
+  save: (updatedInfo: { roles: Roles }) => Promise<unknown>
+}) => {
+  const [isSaving, setIsSaving] = useState(false)
+  const emitError = useErrorEmitter()
+  return (
+    <Fragment>
+      <dt>{title}</dt>
+      <dd>
+        <Toggle
+          checked={user.roles[roleName]}
+          disabled={disabled || isSaving}
+          onChange={newValue => {
+            setIsSaving(true)
+            save({ roles: { ...user.roles, [roleName]: newValue } })
+              .catch(emitError)
+              .finally(() => setIsSaving(false))
+          }}
+        />
+      </dd>
+    </Fragment>
+  )
+}
+
+const VerifiedInfo = ({
+  user,
+  refetch,
+  editable,
+}: {
+  user: UserInfo
+  refetch: () => Promise<unknown>
+  editable: boolean
+}) => {
+  const [isSaving, setIsSaving] = useState(false)
+  const { isVerified } = user.roles
+  const emitError = useErrorEmitter()
+  return (
+    <Alert
+      warning={!isVerified}
+      success={isVerified}
+      class={css`
+        display: grid;
+        grid-auto-flow: column;
+        align-items: center;
+        grid-gap: 0.3rem;
+      `}
+    >
+      <Icon
+        icon={isVerified ? check : alert}
+        class={css`
+          width: 1.2rem;
+          height: 1.2rem;
+        `}
+      />
+      {isVerified ? 'Verified' : 'Unverified'}
+      {editable && (
+        <Button
+          onClick={() => {
+            if (isSaving) return
+            setIsSaving(true)
+            modifyUser(user.id, {
+              roles: { ...user.roles, isVerified: !isVerified },
+            })
+              .then(refetch)
+              .catch(emitError)
+              .finally(() => setIsSaving(false))
+          }}
+          flat
+          disabled={isSaving}
+          class={css`
+            color: ${offBlack};
+            font-size: 0.8rem;
+            padding: 0.4rem;
+            &:hover,
+            &:focus {
+              background: #2121212e;
+            }
+          `}
+        >
+          {isVerified ? 'Unverify' : 'Verify'}
+        </Button>
+      )}
+    </Alert>
+  )
+}
+
+const iconInButtonStyle = css`
+  width: 1rem;
+  margin-right: 0.2rem;
+  fill: currentColor;
+`
+
+const DeleteUserButton = ({ user }: { user: UserInfo }) => {
+  const emitError = useErrorEmitter()
+  return (
+    <Button
+      flat
+      onClick={() => {
+        createDialog({
+          confirm: 'Delete',
+          dismiss: 'Cancel',
+          description:
+            'Deleting this user is permanent, but their reports will be preserved.',
+          title: `Delete ${user.firstName} ${user.lastName}?`,
+        })
+          .then(shouldDelete => {
+            if (shouldDelete)
+              return deleteUser(user.id).then(() => route('/users'))
+          })
+          .catch(emitError)
+      }}
+    >
+      <Icon class={iconInButtonStyle} icon={deleteIcon} />
+      {`Delete ${user.firstName} ${user.lastName}`}
+    </Button>
+  )
+}
+
+const ChangePasswordButton = ({ user }: { user: UserInfo }) => {
+  const emitError = useErrorEmitter()
+  return (
+    <EditableText
+      name="password"
+      label="Password"
+      type="password"
+      required
+      minLength={minPasswordLength}
+      maxLength={maxPasswordLength}
+      value={''}
+      save={password => modifyUser(user.id, { password }).catch(emitError)}
+    >
+      {(_password, _icon, startEditing) => (
+        <Button flat onClick={startEditing}>
+          <Icon class={iconInButtonStyle} icon={edit} />
+          Change Password
+        </Button>
+      )}
+    </EditableText>
+  )
+}
+
+interface EditableTextProps {
+  children: (
+    value: string,
+    editIcon: JSX.Element | undefined,
+    openEditor: () => void,
+  ) => JSX.Element
+  save: (newText: string) => Promise<unknown>
+  editable?: boolean
+  label: string
+  value: string
+}
+
+const editableTextStyle = css`
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 0.2rem;
+  align-items: center;
+`
+
+const smallIconButtonStyle = css`
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0.35rem;
+  color: ${grey};
+  display: inline-flex;
+`
+
+const EditableText = ({
+  children,
+  save,
+  label,
+  editable,
+  value: originalValue,
+  ...rest
+}: EditableTextProps & TextInputProps) => {
+  const [isEditing, setIsEditing] = useState(false)
+  const [value, setValue] = useState(originalValue)
+  const isChanged = value !== originalValue
+  const [isSaving, setIsSaving] = useState(false)
+  const emitError = useErrorEmitter()
+  const closeEditor = () => {
+    setIsEditing(false)
+    setIsSaving(false)
+  }
+  const openEditor = () => {
+    setIsEditing(true)
+    setIsSaving(false)
+    setValue(originalValue)
+  }
+  const saveNewValue = (e: Event) => {
+    e.preventDefault()
+    if (!isChanged || isSaving) return
+    setIsSaving(true)
+    save(value)
+      .catch(emitError)
+      .finally(closeEditor)
+  }
+  return isEditing ? (
+    <form class={editableTextStyle} onSubmit={saveNewValue}>
+      <TextInput label={label} value={value} onInput={setValue} {...rest} />
+      <IconButton
+        icon={isSaving ? sync : check}
+        disabled={!isChanged || isSaving}
+        class={smallIconButtonStyle}
+      />
+      <IconButton
+        icon={close}
+        onClick={e => {
+          e.preventDefault()
+          closeEditor()
+        }}
+        class={smallIconButtonStyle}
+      />
+    </form>
+  ) : (
+    children(
+      originalValue,
+      editable ? (
+        <IconButton
+          icon={edit}
+          onClick={openEditor}
+          class={smallIconButtonStyle}
+        />
+      ) : (
+        undefined
+      ),
+      openEditor,
+    )
+  )
+}
 
 interface UserProfileProps {
   user: UserInfo
   editable?: boolean
+  refetch: () => Promise<unknown>
+  isCurrentUser: boolean
+  isSuperAdmin: boolean
 }
 
 const profileCardStyle = css`
   margin: 1.5rem;
   max-width: 30rem;
+  min-width: 20rem;
   padding: 1rem;
+  display: grid;
+  grid-gap: 1rem;
+  justify-items: center;
 `
 
-const UserProfile = ({ user }: UserProfileProps) => {
-  const updateUserField = (field: keyof EditableUser) => {
-
-  }
+const UserProfileCard = ({
+  user,
+  refetch,
+  editable,
+  isCurrentUser,
+  isSuperAdmin,
+}: UserProfileProps) => {
+  const realm = usePromise(() => getRealm(user.realmId), [user.realmId])
+  const canEditRoles = editable && !isCurrentUser
+  const updateUser = (...args: Parameters<typeof modifyUser>) =>
+    modifyUser(...args).then(refetch)
   return (
-    <Card class={profileCardStyle}>
-      <EditableText
-        save={(newText: string) => {}}
-      >
-      {`${user.firstName} ${user.lastName}`}
-      <IconButton icon={edit} /></EditableText>
+    <Card class={profileCardStyle} as="section">
+      <ErrorBoundary>
+        <EditableText
+          editable={editable}
+          label="Name"
+          save={newText => {
+            const [firstName, lastName] = newText.split(/\s+/)
+            return updateUser(user.id, { firstName, lastName })
+          }}
+          value={`${user.firstName} ${user.lastName}`}
+        >
+          {(value, editIcon) => (
+            <h1
+              class={css`
+                font-size: 1.5rem;
+                margin: 0;
+              `}
+            >
+              {value} {editIcon}
+            </h1>
+          )}
+        </EditableText>
+        <EditableText
+          editable={editable}
+          label="Username"
+          save={username => updateUser(user.id, { username })}
+          value={user.username}
+        >
+          {(value, editIcon) => (
+            <h2
+              class={css`
+                font-size: 1.2rem;
+                font-weight: 500;
+                margin: 0;
+              `}
+            >
+              {value} {editIcon}
+            </h2>
+          )}
+        </EditableText>
+        <VerifiedInfo user={user} refetch={refetch} editable={canEditRoles} />
+        <dl
+          class={css`
+            display: grid;
+            grid-template-columns: auto auto;
+            align-items: center;
+            gap: 0.5rem 1rem;
+
+            & dd {
+              margin: 0;
+            }
+
+            & dt {
+              font-weight: bold;
+            }
+          `}
+        >
+          <dt>Realm</dt>
+          <dd>{realm?.name}</dd>
+          <RoleInfo
+            disabled={!canEditRoles}
+            title="Admin"
+            roleName="isAdmin"
+            save={data => updateUser(user.id, data)}
+            user={user}
+          />
+          <RoleInfo
+            disabled={!canEditRoles || !isSuperAdmin}
+            title="Super Admin"
+            roleName="isSuperAdmin"
+            save={data => updateUser(user.id, data)}
+            user={user}
+          />
+        </dl>
+        {editable && !isCurrentUser && <DeleteUserButton user={user} />}
+        {editable && <ChangePasswordButton user={user} />}
+      </ErrorBoundary>
     </Card>
   )
 }
@@ -43,21 +390,40 @@ const userPageStyle = css`
   align-items: center;
 `
 
-const UserPage = ({ userId }: { userId: number }) => {
-  const user = usePromise(() => getUser(userId), [userId])
+const InnerUserPage = ({ userId }: { userId: string }) => {
+  const [user, setUser] = useState<UserInfo | null>(null)
+  const fetchUser = useCallback(() => getUser(userId).then(setUser), [userId])
+  const emitError = useErrorEmitter()
+  useEffect(() => {
+    fetchUser().catch(emitError)
+  }, [emitError, fetchUser])
   const { jwt } = useJWT()
   const realm = jwt?.peregrineRealm
   const roles = jwt?.peregrineRoles
-  const isCurrentUser = userId === user?.id
+  const isCurrentUser = jwt?.sub === userId
   const isSuperAdmin = roles?.isSuperAdmin
   const isAdminInSameRealm = roles?.isAdmin && realm === user?.realmId
   const canEditUser = isCurrentUser || isSuperAdmin || isAdminInSameRealm
 
   return (
     <Page name="User" back={() => window.history.back()} class={userPageStyle}>
-      {user ? <UserProfile user={user} editable={canEditUser} /> : <Spinner />}
+      {user ? (
+        <UserProfileCard
+          user={user}
+          editable={canEditUser}
+          refetch={fetchUser}
+          isCurrentUser={isCurrentUser}
+          isSuperAdmin={isSuperAdmin || false}
+        />
+      ) : (
+        <Spinner />
+      )}
     </Page>
   )
+}
+
+const UserPage = ({ userId }: { userId: string }) => {
+  return <Authenticated render={() => <InnerUserPage userId={userId} />} />
 }
 
 export default UserPage

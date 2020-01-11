@@ -4,7 +4,8 @@ import { css } from 'linaria'
 import { useContext } from 'preact/hooks'
 
 interface State {
-  error: Error | null
+  caughtError?: Error
+  caughtEmittedError?: Error
 }
 
 const alertStyle = css`
@@ -22,17 +23,23 @@ export const ErrorEmitter = createContext<(error: Error) => void>(error => {
 export const useErrorEmitter = () => useContext(ErrorEmitter)
 
 export class ErrorBoundary extends Component<RenderableProps<{}>, State> {
-  state = {
-    error: null,
-  }
-  componentDidCatch = (error: Error) => {
-    console.error(error)
-    this.setState({ error })
+  componentDidCatch = (caughtError: Error) => {
+    console.error(caughtError)
+    this.setState({ caughtError })
   }
 
-  render({ children }: RenderableProps<{}>, { error }: State) {
+  dynamicError = (caughtEmittedError: Error) => {
+    console.error(caughtEmittedError)
+    this.setState({ caughtEmittedError })
+  }
+
+  render(
+    { children }: RenderableProps<{}>,
+    { caughtEmittedError, caughtError }: State,
+  ) {
+    const error = caughtEmittedError || caughtError
     return (
-      <ErrorEmitter.Provider value={this.componentDidCatch}>
+      <ErrorEmitter.Provider value={this.dynamicError}>
         {error && (
           <Alert class={alertStyle}>
             <details>
@@ -41,7 +48,9 @@ export class ErrorBoundary extends Component<RenderableProps<{}>, State> {
             </details>
           </Alert>
         )}
-        {children}
+        {/* We should not rerender the children if there was a caught error from them */}
+        {/* If there was a caught emitted error then it is fine to rerender */}
+        {!caughtError && children}
       </ErrorEmitter.Provider>
     )
   }

@@ -24,6 +24,10 @@ const iconButtonStyle = css`
     background: color-mod(#aaa alpha(25%));
     outline: none;
   }
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
 `
 
 export { iconButtonStyle as iconButtonClass }

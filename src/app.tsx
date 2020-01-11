@@ -7,6 +7,7 @@ import routes from './routes'
 import GAnalytics from 'ganalytics'
 import { requestIdleCallback } from '@/utils/request-idle-callback'
 import { uploadSavedReports } from './api/report/submit-report'
+import { ErrorBoundary } from './components/error-boundary'
 
 const ga = GAnalytics('UA-144107080-1', {}, true)
 
@@ -28,7 +29,9 @@ setInterval(uploadSavedReports, 30_000)
 const App = () => (
   <Fragment>
     <div>
-      <Router routes={routes} onChange={sendGa} />
+      <ErrorBoundary>
+        <Router routes={routes} onChange={sendGa} />
+      </ErrorBoundary>
     </div>
     <DialogDisplayer />
   </Fragment>

@@ -58,6 +58,8 @@ type Props = Merge<
   { label: string; labelClass?: string; onInput?: (val: string) => void }
 >
 
+export { Props as TextInputProps }
+
 const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
   return (
     <label class={clsx(labeledInputClass, labelClass)} key="asdfasdf">
