@@ -19,7 +19,7 @@ const updateCachedEvents = (events: ProcessedEventInfo[]) =>
 // user is a super-admin, they will see all events, otherwise they will see all
 // TBA events and additionally all the custom events on their realm.
 export const getEvents = () =>
-  request<EventInfo[]>('GET', 'events')
+  request<EventInfo[]>('GET', 'events', {'tbaDeleted': 'true'})
     .then(events => events.map(processEvent))
     .then(events => {
       requestIdleCallback(() => updateCachedEvents(events))
