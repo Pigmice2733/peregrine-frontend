@@ -2,14 +2,7 @@ module.exports = {
   presets: [
     ['linaria-preact/babel', { evaluate: true }],
     ['@babel/preset-typescript', { jsxPragma: 'h' }],
-    [
-      '@babel/preset-env',
-      {
-        loose: true,
-        spec: false,
-        exclude: ['transform-regenerator'],
-      },
-    ],
+    ['@babel/preset-modules', { loose: true }],
   ],
   plugins: [
     ['const-enum', { transform: 'constObject' }], // for TS const enum which babel ts doesn't support natively. See https://github.com/babel/babel/issues/8741

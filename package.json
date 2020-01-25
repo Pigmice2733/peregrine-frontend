@@ -41,7 +41,7 @@
     "@babel/plugin-transform-modules-commonjs": "7.8.3",
     "@babel/plugin-transform-react-jsx": "7.8.3",
     "@babel/plugin-transform-template-literals": "7.8.3",
-    "@babel/preset-env": "7.8.3",
+    "@babel/preset-modules": "^0.1.2",
     "@babel/preset-typescript": "7.8.3",
     "@calebeby/preact-testing-library": "0.0.4",
     "@testing-library/jest-dom": "5.0.2",
@@ -102,7 +102,7 @@
     "webpackbar": "4.0.0"
   },
   "browserslist": [
-    ">1% in my stats"
+    ">1%"
   ],
   "eslintConfig": {
     "extends": [
