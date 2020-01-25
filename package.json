@@ -102,7 +102,7 @@
     "webpackbar": "4.0.0"
   },
   "browserslist": [
-    ">1%"
+    ">1% in my stats"
   ],
   "eslintConfig": {
     "extends": [
