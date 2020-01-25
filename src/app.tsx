@@ -1,7 +1,7 @@
+import 'preact/debug'
 import './style.css'
 import { Router } from './router'
 import { h, Fragment } from 'preact'
-import 'preact/debug'
 import { DialogDisplayer } from './components/dialog'
 import routes from './routes'
 import GAnalytics from 'ganalytics'
