@@ -5,6 +5,8 @@ module.exports = {
     ['@babel/preset-modules', { loose: true }],
   ],
   plugins: [
+    process.env.NODE_ENV === 'production' &&
+      './babel-plugin-remove-preact-debug',
     ['const-enum', { transform: 'constObject' }], // for TS const enum which babel ts doesn't support natively. See https://github.com/babel/babel/issues/8741
     ['@babel/plugin-proposal-class-properties', { loose: true }],
     ['@babel/plugin-proposal-nullish-coalescing-operator', { loose: true }],
@@ -33,5 +35,5 @@ module.exports = {
       },
     ],
     'babel-plugin-minify-dead-code-elimination',
-  ],
+  ].filter(Boolean),
 }
