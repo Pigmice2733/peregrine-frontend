@@ -49,6 +49,8 @@ const chunksFile = join(outDir, 'chunks.json')
 
 const babelOptions = { extensions, babelrc: false, ...babelConfig }
 
+mkdirplz(outDir)
+
 export default [
   {
     input: './src/index.tsx',
