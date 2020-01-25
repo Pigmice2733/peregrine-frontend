@@ -51,15 +51,10 @@ const babelOptions = { extensions, babelrc: false, ...babelConfig }
 
 export default [
   {
-    input: './src/systemjs-entry.js',
-    output: { file: join(outDir, 'systemjs-entry.js'), format: 'iife' },
-    plugins: [node(rollupNodeOptions), terser(terserOptions(true))],
-  },
-  {
     input: './src/index.tsx',
     output: {
       dir: 'dist',
-      format: 'system',
+      format: 'esm',
       preferConst: true,
       sourcemap: false,
       chunkFileNames: '[hash].js',
@@ -87,10 +82,7 @@ export default [
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
         resolveFrom: './src/routes.ts',
-        everyRouteHeaders: [
-          printPush({ path: '/style.css', as: 'style' }),
-          printPush({ path: '/systemjs-entry.js', as: 'script' }),
-        ],
+        everyRouteHeaders: [printPush({ path: '/style.css', as: 'style' })],
         everyRouteModules: ['./index.tsx'],
       }),
       {
@@ -107,7 +99,6 @@ export default [
           const chunksJSON = Object.values(bundle)
             .filter(chunk => !chunk.isAsset)
             .map(chunk => `/${chunk.fileName}`)
-            .concat(['/systemjs-entry.js'])
           await writeFileAsync(chunksFile, JSON.stringify(chunksJSON))
         },
       },
