@@ -62,7 +62,7 @@ export default [
       chunkFileNames: '[hash].js',
     },
     experimentalOptimizeChunks: true,
-    chunkGroupingSize: 75000,
+    chunkGroupingSize: 55000,
     plugins: [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
