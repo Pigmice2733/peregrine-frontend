@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'preact/hooks'
 import { useErrorEmitter } from '@/components/error-boundary'
+import { CancellablePromise } from '@/utils/cancellable-promise'
 
 export const usePromise = <T extends any>(
   promiseCreator: () => Promise<T> | undefined,
@@ -11,6 +12,7 @@ export const usePromise = <T extends any>(
     const promise = promiseCreator()
     if (!promise) return
     promise.then(v => setVal(v)).catch(emitError)
+    if (promise instanceof CancellablePromise) return () => promise.cancel()
   }, [emitError, ...dependencies]) // eslint-disable-line caleb/react-hooks/exhaustive-deps
   return val
 }
