@@ -1,7 +1,6 @@
 import { CancellablePromise } from '.'
 
-const nextTick = () => new Promise(r => setTimeout(r, 0))
-// const nextTick = () => Promise.resolve()
+const nextTick = () => Promise.resolve()
 
 describe('behaves like a normal promise', () => {
   it('only resolves once', async () => {

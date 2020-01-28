@@ -48,10 +48,10 @@ const Home = () => {
     usePromise(getYears) ||
     (cachedEventsFromAllYears
       ? [
-          ...cachedEventsFromAllYears.reduce(
-            (years, e) => (years.add(e.endDate.getFullYear()), years),
-            new Set<number>(),
-          ),
+          ...cachedEventsFromAllYears.reduce((years, e) => {
+            years.add(e.endDate.getFullYear())
+            return years
+          }, new Set<number>()),
         ].sort()
       : [currentYear])
 
