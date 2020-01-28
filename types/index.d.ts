@@ -59,7 +59,7 @@ declare module 'matchit' {
 }
 
 declare module 'qss' {
-  type RawVal = string | number | boolean
+  type RawVal = string | number | boolean | undefined
   type Val = RawVal | RawVal[]
   interface QueryObj {
     [key: string]: Val

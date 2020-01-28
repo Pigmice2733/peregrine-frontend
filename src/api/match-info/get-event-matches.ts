@@ -19,9 +19,10 @@ const updateCachedEventMatches = (
   )
 
 export const getEventMatches = (eventKey: string, team?: string) =>
-  request<MatchInfo[]>('GET', `events/${eventKey}/matches`, { team })
-    .then(matches => matches.map(processMatch))
-    .then(matches => {
-      requestIdleCallback(() => updateCachedEventMatches(eventKey, matches))
-      return matches
-    })
+  request<MatchInfo[]>('GET', `events/${eventKey}/matches`, { team }).then(
+    matches => {
+      const processed = matches.map(processMatch)
+      requestIdleCallback(() => updateCachedEventMatches(eventKey, processed))
+      return processed
+    },
+  )

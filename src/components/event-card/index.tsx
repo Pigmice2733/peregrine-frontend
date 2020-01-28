@@ -1,16 +1,17 @@
 import { h } from 'preact'
 import Chip, { DateChip } from '@/components/chip'
-import Card, { CardProps } from '@/components/card'
+import Card from '@/components/card'
 import { css } from 'linaria'
 
-type Props = CardProps<{
+type Props = {
   event: {
+    key: string
     name: string
     district?: string
     week?: number
     startDate: Date
   }
-}>
+}
 
 const eventCardStyle = css`
   display: flex;
@@ -24,8 +25,8 @@ const nameStyle = css`
   margin-right: auto;
 `
 
-const EventCard = ({ event, href }: Props) => (
-  <Card href={href} class={eventCardStyle}>
+const EventCard = ({ event }: Props) => (
+  <Card href={`/events/${event.key}`} class={eventCardStyle}>
     <span class={nameStyle}>{event.name}</span>
     {event.district !== undefined && <Chip>{event.district}</Chip>}
     {event.week === undefined ? (
