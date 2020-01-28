@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'preact/hooks'
+import { CancellablePromise } from './cancellable-promise'
 
 /**
  * Returns a hook that executes a network promise and a cache promise.
@@ -9,7 +10,7 @@ import { useState, useEffect } from 'preact/hooks'
  * @param cacheGetter Function that resolves to the cache data
  */
 export const useNetworkCache = <DataType, ArgsType extends any[]>(
-  networkGetter: (...args: ArgsType) => Promise<DataType>,
+  networkGetter: (...args: ArgsType) => CancellablePromise<DataType>,
   cacheGetter: (...args: ArgsType) => Promise<DataType>,
 ) => {
   interface ResultingFunction {
@@ -27,16 +28,21 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
     const [data, setData] = useState<DataType | undefined>(undefined)
 
     useEffect(() => {
-      // Allow us to pass a single parameter of undefined to skip getting the data, and reset state
-      if (args.length >= 1 && args[0] === undefined) return setData(undefined)
+      // When the args change, reset the data
+      setData(undefined)
+
+      // Allow us to pass a single parameter of undefined to skip getting the data
+      if (args.length >= 1 && args[0] === undefined) return
       cacheGetter(...(args as ArgsType)).then(cachedData =>
         // don't update state using the cached data if network has already returned
         setData(data => data || cachedData),
       )
 
-      networkGetter(...(args as ArgsType)).then(networkData => {
-        setData(networkData)
-      })
+      const p = networkGetter(...(args as ArgsType)).then(networkData =>
+        setData(networkData),
+      )
+
+      return () => p.cancel()
     }, args)
 
     return data

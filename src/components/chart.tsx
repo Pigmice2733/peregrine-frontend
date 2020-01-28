@@ -18,6 +18,7 @@ import { formatPercent } from '@/utils/format-percent'
 import clsx from 'clsx'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { BooleanDisplay } from './boolean-display'
+import { CancellablePromise } from '@/utils/cancellable-promise'
 
 interface ChartCardProps {
   team: string
@@ -56,7 +57,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
   const matchesStats =
     usePromise(
       () =>
-        Promise.all(
+        CancellablePromise.all(
           teamMatches.sort(compareMatches).map(async match => ({
             matchKey: match.key,
             stats: await getMatchTeamStats(eventKey, match.key, team)

@@ -30,9 +30,9 @@ type Props<T> = {
   onChange: (v: T) => void
   getKey?: (v: T) => string | number
   getText?: (v: T) => string
-} & (T extends string
-  ? {}
-  : { getKey: (v: T) => string | number; getText: (v: T) => string })
+} & (T extends object
+  ? { getKey: (v: T) => string | number; getText: (v: T) => string }
+  : {})
 
 export const Dropdown = <T extends any>({
   options,

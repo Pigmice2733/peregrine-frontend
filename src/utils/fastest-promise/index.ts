@@ -1,8 +1,13 @@
+import { CancellablePromise } from '@/utils/cancellable-promise'
+
 /**
  * Like Promise.race, but it only rejects if both promises reject
  */
-export const fastestPromise = <T>(a: Promise<T>, b: Promise<T>): Promise<T> =>
-  new Promise((resolve, reject) => {
+export const fastestPromise = <T>(
+  a: Promise<T>,
+  b: Promise<T>,
+): CancellablePromise<T> =>
+  new CancellablePromise((resolve, reject) => {
     let resolved: false | T = false
     let rejected = false
 
