@@ -8,6 +8,7 @@ module.exports = {
     process.env.NODE_ENV === 'production' &&
       './babel-plugin-remove-preact-debug',
     process.env.NODE_ENV !== 'production' &&
+      process.env.NODE_ENV !== 'test' &&
       '@babel/plugin-transform-react-jsx-source',
     ['const-enum', { transform: 'constObject' }], // for TS const enum which babel ts doesn't support natively. See https://github.com/babel/babel/issues/8741
     ['@babel/plugin-proposal-class-properties', { loose: true }],
