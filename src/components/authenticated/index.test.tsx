@@ -40,6 +40,7 @@ test('renders login form', async () => {
         body: '{"username":"user name","password":"pass word"}',
         headers: {},
         method: 'POST',
+        signal: expect.any(AbortSignal),
       },
     ),
   )

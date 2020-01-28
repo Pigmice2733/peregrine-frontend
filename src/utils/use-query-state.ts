@@ -1,34 +1,16 @@
-import { useEffect, useState } from 'preact/hooks'
-import { decode, encode } from 'qss'
+import { Val as URLVal } from 'qss'
+import { useQueryParam, updateQueryParam } from '@/url-manager'
 
-const getParams = () =>
-  decode(
-    location.search.slice(1), // removes the "?"
-  )
-const updateQueryParam = (newValue: any, name: string) => {
-  const params = getParams()
-  params[name] = newValue
-  history.replaceState(null, '', '?' + encode(params))
-}
-export const useQueryState = <T>(name: string, initialState?: T) => {
-  const [value, setStateValue] = useState(initialState)
-  useEffect(() => {
-    if (!(name in getParams()) && initialState !== undefined) {
-      updateQueryParam(initialState, name)
-    }
-    const handleUrlChange = () => {
-      const newValue: T = getParams()[name] || initialState
-      setStateValue(newValue)
-    }
-    handleUrlChange()
-    window.addEventListener('popstate', handleUrlChange)
-    return () => window.removeEventListener('popstate', handleUrlChange)
-  }, [initialState, name])
+export const useQueryState = <DefaultVal extends URLVal = undefined>(
+  name: string,
+  initialState?: DefaultVal,
+) => {
+  const val = useQueryParam(name)
+
   return [
-    value,
-    (newValue: T) => {
-      updateQueryParam(newValue, name)
-      setStateValue(newValue)
+    val ?? initialState,
+    (newValue: URLVal) => {
+      updateQueryParam(name, newValue)
     },
   ] as const
 }

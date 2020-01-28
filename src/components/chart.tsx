@@ -27,6 +27,7 @@ import Icon from './icon'
 import { checkBold } from '@/icons/check-bold'
 import { xBold } from '@/icons/x-bold'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
+import { CancellablePromise } from '@/utils/cancellable-promise'
 
 interface ChartCardProps {
   team: string
@@ -65,7 +66,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
   const matchesStats =
     usePromise(
       () =>
-        Promise.all(
+        CancellablePromise.all(
           teamMatches.sort(compareMatches).map(async match => ({
             matchKey: match.key,
             stats: await getMatchTeamStats(eventKey, match.key, team)

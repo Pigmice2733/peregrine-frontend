@@ -1,7 +1,8 @@
 import { ComponentType, VNode, h } from 'preact'
-import { useState, useEffect, useMemo } from 'preact/hooks'
+import { useState, useEffect, useMemo, useLayoutEffect } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
 import Spinner from './components/spinner'
+import { updateUrl, useUrl } from './url-manager'
 
 type AnyComponent = ComponentType<any> | ((props: any) => VNode<any> | null)
 
@@ -14,50 +15,16 @@ interface Route {
   component: () => Promise<ComponentModule>
 }
 
-const routers: ((url: string) => void)[] = []
-
 export const route = (url: string) => {
-  routers.forEach(router => router(url))
-  history.pushState(null, '', url)
+  updateUrl(url)
 }
 
-export const Router = ({
-  routes,
-  onChange,
-}: {
-  routes: Route[]
-  onChange: () => void
-}) => {
-  const [url, setUrl] = useState(window.location.pathname)
-  const updateUrl = (url: string) => {
-    setUrl(url)
-    setResolvedComponent(null)
-  }
+export const Router = ({ routes }: { routes: Route[] }) => {
+  const path = useUrl(loc => loc.pathname)
 
   const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [
     routes,
   ])
-
-  useEffect(() => {
-    routers.push(updateUrl)
-  }, [])
-
-  useEffect(() => {
-    // when the url changes via pushstate or via browser back/forwards
-    // update the url in state and rerender
-    const historyListener = (e: PopStateEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-      e.stopImmediatePropagation()
-      updateUrl(location.pathname)
-    }
-    window.addEventListener('popstate', historyListener)
-    return () => window.removeEventListener('popstate', historyListener)
-  }, [])
-
-  useEffect(() => {
-    onChange()
-  }, [url, onChange])
 
   useEffect(() => {
     // when a link is clicked, don't do a full reload, intercept and update state
@@ -83,33 +50,34 @@ export const Router = ({
       }
     }
 
-    window.addEventListener('click', clickListener)
-
-    return () => window.removeEventListener('click', clickListener)
+    addEventListener('click', clickListener)
+    return () => removeEventListener('click', clickListener)
   }, [parsedRoutes])
-
-  const matchingRoutes = match(url, parsedRoutes)
-  const matchingFullRoute =
-    matchingRoutes.length > 0 ? matchingRoutes[0].old : null
 
   const [
     ResolvedComponent,
     setResolvedComponent,
   ] = useState<AnyComponent | null>(null)
 
-  useEffect(() => {
-    const matchingRouteObj = routes.find(r => r.path === matchingFullRoute)
+  const [routeProps, setRouteProps] = useState<any>(null)
+
+  const matchingRoute = match(path, parsedRoutes)
+  const matchingFullRoute =
+    matchingRoute.length > 0 ? matchingRoute[0].old : null
+  const matchingRouteObj = routes.find(r => r.path === matchingFullRoute)
+
+  // This has to be a layout effect because it needs to run
+  // before other components that are url-dependent are rendered
+  useLayoutEffect(() => {
+    setResolvedComponent(null)
     if (matchingRouteObj)
       matchingRouteObj.component().then(comp => {
         setResolvedComponent(() => comp.default)
+        setRouteProps(exec(path, matchingRoute))
       })
-  }, [routes, matchingFullRoute])
+  }, [matchingRoute, matchingRouteObj, path])
 
-  if (matchingFullRoute === null) {
-    return <h1>404</h1>
-  }
-
-  const routeProps = exec(url, matchingRoutes)
+  if (matchingFullRoute === null) return <h1>404</h1>
 
   if (ResolvedComponent) return <ResolvedComponent {...routeProps} />
 
