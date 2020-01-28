@@ -5,11 +5,7 @@ import { sortAscending } from '@/icons/sort-ascending'
 import { history } from '@/icons/history'
 import { MatchCard } from '@/components/match-card'
 import { round } from '@/utils/round'
-import { formatMatchKey } from '@/utils/format-match-key'
 import { getEventTeamInfo } from '@/api/get-event-team-info'
-import { getMatchTeamComments } from '@/api/report/get-match-team-comments'
-import { compareMatches } from '@/utils/compare-matches'
-import Card from '@/components/card'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
@@ -22,20 +18,6 @@ const sectionStyle = css`
   font-weight: normal;
   text-align: center;
   font-size: 1.2rem;
-`
-
-const commentsStyle = css`
-  width: 23rem;
-  max-width: calc(100% - 2rem);
-  padding: 1.1rem 0.5rem;
-
-  & ul {
-    margin: 0;
-  }
-
-  & li {
-    padding: 0.3em 0.1em;
-  }
 `
 
 interface Props {
@@ -64,10 +46,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
   )
   const schema = useSchema(eventInfo?.schemaId)
   const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
-  const teamComments = usePromise(
-    () => getMatchTeamComments(eventKey, 'frc' + teamNum),
-    [eventKey, teamNum],
-  )
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
@@ -102,24 +80,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           },
         ]}
       />
-      {teamComments && teamComments.length > 0 && (
-        <Card class={commentsStyle}>
-          <ul>
-            {teamComments
-              .sort((a, b) =>
-                compareMatches({ key: a.matchKey }, { key: b.matchKey }),
-              )
-              .map(c => (
-                <li key={c.id}>
-                  <a href={`/events/${eventKey}/matches/${c.matchKey}`}>
-                    {formatMatchKey(c.matchKey).group}
-                  </a>
-                  : {c.comment}
-                </li>
-              ))}
-          </ul>
-        </Card>
-      )}
       {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}

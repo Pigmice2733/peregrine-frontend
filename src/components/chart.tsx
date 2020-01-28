@@ -28,6 +28,83 @@ import { checkBold } from '@/icons/check-bold'
 import { xBold } from '@/icons/x-bold'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { CancellablePromise } from '@/utils/cancellable-promise'
+import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
+import { GetReport } from '@/api/report'
+import { getUser } from '@/api/user/get-user'
+import { commentIcon } from '@/icons/comment'
+
+const nullPromise = CancellablePromise.resolve(null)
+
+const reportCardStyle = css`
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 0.4rem 0.6rem;
+  padding: 0.6rem;
+
+  & > :not(svg) {
+    grid-column: 2;
+    margin: 0;
+  }
+
+  & > svg {
+    grid-row: 1 / 3;
+    color: #7e7e7e;
+  }
+
+  & > span {
+    font-family: 'Roboto Condensed', 'Roboto', sans-serif;
+    font-weight: bold;
+  }
+`
+
+const CommentDisplay = ({ report }: { report: GetReport }) => {
+  const userId = report.reporterId
+  const reporter = usePromise(
+    () => (userId ? getUser(userId).catch(() => nullPromise) : nullPromise),
+    [userId],
+  )
+  // If it is still loading, don't render
+  if (reporter === undefined || !report.comment) return null
+  return (
+    <Card outlined as="section" class={reportCardStyle}>
+      <Icon icon={commentIcon} />
+      <span>
+        {reporter ? `${reporter.firstName} ${reporter.lastName}` : 'Anonymous'}
+      </span>
+      <p>{report.comment}</p>
+    </Card>
+  )
+}
+
+const commentsDisplayStyle = css`
+  grid-column: 1 / -1;
+  display: grid;
+  grid-gap: 1.2rem;
+`
+
+const CommentsDisplay = ({
+  team,
+  match,
+  event,
+}: {
+  team: string
+  match: string
+  event: string
+}) => {
+  const reports = usePromise(() => getMatchTeamReports(event, match, team), [
+    event,
+    match,
+    team,
+  ])
+  if (!reports) return null
+  return (
+    <div class={commentsDisplayStyle}>
+      {reports.map(r => (
+        <CommentDisplay key={JSON.stringify(r)} report={r} />
+      ))}
+    </div>
+  )
+}
 
 interface ChartCardProps {
   team: string
@@ -39,7 +116,10 @@ interface ChartCardProps {
 const average = (values: number[]) =>
   values.reduce((sum, val) => sum + val) / values.length
 
-const chartCardStyle = css``
+const chartCardStyle = css`
+  width: 24rem;
+  max-width: calc(100vw - 2rem);
+`
 
 const chartDescriptionStyle = css`
   display: grid;
@@ -55,12 +135,12 @@ const statPickerStyle = css`
   font-size: 1.1rem;
 `
 
-export const ChartCard: FunctionComponent<ChartCardProps> = ({
+export const ChartCard = ({
   team,
   eventKey,
   teamMatches,
   schema,
-}) => {
+}: ChartCardProps) => {
   const [fieldName, setFieldName] = useQueryState('stat', schema.schema[0].name)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
@@ -109,9 +189,11 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
   const isBooleanStat =
     matchingSchemaStat && matchingSchemaStat.type === 'boolean'
 
-  return dataPoints.length === 0 ? null : (
+  const noData = dataPoints.length === 0
+
+  return (
     <Card onClick={handleClick} class={chartCardStyle}>
-      {isBooleanStat ? (
+      {noData ? null : isBooleanStat ? (
         <BooleanChart points={dataPoints} onPointClick={setSelectedIndex} />
       ) : (
         <Chart points={dataPoints} onPointClick={setSelectedIndex} />
@@ -124,7 +206,9 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
           value={fieldName}
         />
         <div class={detailsStyle}>
-          {selectedIndex === null ? (
+          {noData ? (
+            <p>No Data</p>
+          ) : selectedIndex === null ? (
             isBooleanStat ? (
               <p>{formatPercent(average(dataPoints))}</p>
             ) : (
@@ -150,6 +234,13 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
             </p>
           )}
         </div>
+        {selectedIndex !== null && (
+          <CommentsDisplay
+            match={matchesWithSelectedStat[selectedIndex].matchKey}
+            event={eventKey}
+            team={team}
+          />
+        )}
       </div>
     </Card>
   )
@@ -158,8 +249,7 @@ export const ChartCard: FunctionComponent<ChartCardProps> = ({
 const baseColor = pigmicePurple
 
 const chartStyle = css`
-  width: 24rem;
-  max-width: 100%;
+  width: 100%;
   height: auto;
   background: ${baseColor};
   display: block;
@@ -205,8 +295,6 @@ const pointStyle = css`
   }
 `
 
-const polygonStyle = css``
-
 let ids = 0
 
 interface ChartProps {
@@ -247,9 +335,12 @@ const Chart: FunctionComponent<ChartProps> = memo(
       isConstant ? canvasHeight / 2 : canvasHeight - yLerper(point),
     )
 
-    const linePoints = lerpedPoints.map(
-      (y, x) => `${xLerper(x)},${y}`, // the x is the array index, they are sequential and evenly spaced
-    )
+    const linePoints =
+      lerpedPoints.length > 1
+        ? lerpedPoints.map(
+            (y, x) => `${xLerper(x)},${y}`, // the x is the array index, they are sequential and evenly spaced
+          )
+        : [`${0},${lerpedPoints[0]}`, `${canvasWidth},${lerpedPoints[0]}`]
 
     const averageYValue = canvasHeight - yLerper(average(points))
 
@@ -296,7 +387,6 @@ const Chart: FunctionComponent<ChartProps> = memo(
 
         <g clip-path={`url(#${outerClipId})`}>
           <polygon
-            class={polygonStyle}
             points={polygonPoints.join(' ')}
             fill={`url(#${gradientId})`}
             filter={`url(#${shadowId})`}
@@ -354,7 +444,10 @@ const Chart: FunctionComponent<ChartProps> = memo(
         {lerpedPoints.map((y, x) => (
           // eslint-disable-next-line caleb/react/jsx-key
           <circle
-            cx={xLerper(x)}
+            cx={
+              // If there is just one point, it should go in the middle
+              lerpedPoints.length === 1 ? canvasWidth / 2 : xLerper(x)
+            }
             cy={y}
             class={pointStyle}
             onClick={() => onPointClick(x)}
@@ -373,8 +466,6 @@ const booleanChartStyle = css`
   height: 5rem;
   border-top-left-radius: inherit;
   border-top-right-radius: inherit;
-  max-width: calc(100vw - 2rem);
-  width: 25rem;
   position: relative;
   display: flex;
 
@@ -533,7 +624,7 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
 }
 
 const detailsStyle = css`
-  height: 4rem;
+  height: 3.5rem;
   grid-column: 1;
   grid-row: 1;
   align-self: stretch;
@@ -570,7 +661,7 @@ const detailsStyle = css`
   dl {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 0.5rem;
+    column-gap: 0.5rem;
     height: 100%;
     align-content: space-between;
   }
