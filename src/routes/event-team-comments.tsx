@@ -1,3 +1,4 @@
+/* eslint-disable max-nested-callbacks */
 import { h } from 'preact'
 import Page from '@/components/page'
 import { useEventInfo } from '@/cache/event-info/use'
@@ -10,6 +11,8 @@ import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { CommentCard } from '@/components/comment-card'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { compareMatches } from '@/utils/compare-matches'
+import { getEventMatches } from '@/api/match-info/get-event-matches'
+import { GetReport } from '@/api/report'
 
 interface Props {
   eventKey: string
@@ -28,7 +31,25 @@ const matchListStyle = css`
 
 const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const eventInfo = useEventInfo(eventKey)
-  const matches = useEventMatches(eventKey, 'frc' + teamNum)
+  const team = 'frc' + teamNum
+  const matchesWithComments = usePromise(
+    () =>
+      getEventMatches(eventKey, team)
+        .then(allMatches =>
+          Promise.all(
+            allMatches.sort(compareMatches).map(m =>
+              getMatchTeamReports(eventKey, m.key, team).then(reports => ({
+                reports: reports.filter(r => r.comment),
+                matchKey: m.key,
+              })),
+            ),
+          ),
+        )
+        .then(matchesWithReports =>
+          matchesWithReports.filter(m => m.reports.length > 0),
+        ),
+    [eventKey, teamNum],
+  )
 
   return (
     <Page
@@ -37,17 +58,24 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
       class={commentsPageStyle}
     >
       <Card class={matchListStyle}>
-        {matches ? (
-          matches
-            .sort(compareMatches)
-            .map(m => (
+        {matchesWithComments ? (
+          matchesWithComments.length === 0 ? (
+            <span
+              class={css`
+                margin: 0 auto;
+              `}
+            >
+              No comments
+            </span>
+          ) : (
+            matchesWithComments.map(({ matchKey, reports }) => (
               <MatchComments
-                key={m.key}
-                match={m.key}
-                team={`frc${teamNum}`}
-                event={eventKey}
+                key={matchKey}
+                match={matchKey}
+                reports={reports}
               />
             ))
+          )
         ) : (
           <Spinner />
         )}
@@ -68,22 +96,11 @@ const matchCommentsStyle = css`
 
 const MatchComments = ({
   match,
-  team,
-  event,
+  reports,
 }: {
   match: string
-  team: string
-  event: string
+  reports: GetReport[]
 }) => {
-  const reports = usePromise(
-    () =>
-      getMatchTeamReports(event, match, team).then(reports =>
-        reports.filter(r => r.comment),
-      ),
-    [event, match, team],
-  )
-  if (!reports || reports.length === 0) return null
-
   return (
     <div class={matchCommentsStyle}>
       <span>{formatMatchKeyShort(match)}</span>
