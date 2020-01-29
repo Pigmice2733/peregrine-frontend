@@ -24,6 +24,10 @@ const routes = [
     component: () => import('./routes/event-team'),
   },
   {
+    path: '/events/:eventKey/teams/:teamNum/comments',
+    component: () => import('./routes/event-team-comments'),
+  },
+  {
     path: '/users',
     component: () => import('./routes/users'),
   },

@@ -10,16 +10,7 @@ type GraphableField = {
 
 export interface Report {
   data: Field[]
-}
-
-export interface PartialComment {
-  comment: string
-}
-
-export interface Comment extends PartialComment {
-  id: number
-  matchKey: string
-  reporterId?: string
+  comment?: string
 }
 
 export interface GetReport extends Report {
