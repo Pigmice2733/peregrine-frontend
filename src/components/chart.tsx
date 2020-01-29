@@ -281,7 +281,6 @@ const boundsTextStyle = css`
 `
 
 const pointStyle = css`
-  r: 2;
   -webkit-tap-highlight-color: transparent;
   fill: ${darken(0.05, baseColor)};
   opacity: 0;
@@ -449,6 +448,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
               lerpedPoints.length === 1 ? canvasWidth / 2 : xLerper(x)
             }
             cy={y}
+            r={2}
             class={pointStyle}
             onClick={() => onPointClick(x)}
           />
