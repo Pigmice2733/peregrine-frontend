@@ -449,7 +449,13 @@ const Chart: FunctionComponent<ChartProps> = memo(
             }
             cy={y}
             r={2}
-            class={pointStyle}
+            class={clsx(
+              pointStyle,
+              lerpedPoints.length === 1 &&
+                css`
+                  opacity: 1;
+                `,
+            )}
             onClick={() => onPointClick(x)}
           />
         ))}
