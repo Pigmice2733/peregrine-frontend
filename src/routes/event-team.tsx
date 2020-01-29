@@ -13,6 +13,7 @@ import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
+import Button from '@/components/button'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -80,6 +81,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           },
         ]}
       />
+      <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
+        View all comments
+      </Button>
       {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}
