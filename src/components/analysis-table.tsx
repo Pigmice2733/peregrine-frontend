@@ -30,11 +30,6 @@ interface Props {
 
 type AvgType = 'Avg' | 'Max'
 
-const tableStyle = css`
-  overflow: auto;
-  max-height: calc(100vh - 3.1rem);
-`
-
 const cellStyle = css`
   text-align: center;
 `
@@ -206,7 +201,7 @@ const AnalysisTable: FunctionComponent<Props> = ({
     })
   }
   return (
-    <Card class={clsx(className, tableStyle)}>
+    <Card class={className}>
       <Table
         columns={columns}
         rows={rows}

@@ -19,15 +19,11 @@ import { css } from 'linaria'
 import { getRealms } from '@/api/realm/get-realms'
 import { Realm } from '@/api/realm'
 import { usePromise } from '@/utils/use-promise'
-
-const usersTableStyle = css`
-  margin: 1rem auto;
-`
-
-const usersPageStyle = css`
-  display: flex;
-  justify-content: center;
-`
+import {
+  tablePageStyle,
+  tablePageWrapperStyle,
+  tablePageTableStyle,
+} from '@/utils/table-page-style'
 
 const userLinkStyle = css`
   display: block;
@@ -77,11 +73,9 @@ const UsersTable = ({
   ]
 
   return (
-    <div class={usersPageStyle}>
-      <Card class={usersTableStyle}>
-        <Table columns={columns} rows={rows} />
-      </Card>
-    </div>
+    <Card class={tablePageTableStyle}>
+      <Table columns={columns} rows={rows} />
+    </Card>
   )
 }
 
@@ -107,7 +101,12 @@ const UsersPage = () => {
   return (
     <Authenticated
       render={() => (
-        <Page name="Users" back="/">
+        <Page
+          name="Users"
+          back="/"
+          class={tablePageStyle}
+          wrapperClass={tablePageWrapperStyle}
+        >
           <InnerUsersPage />
         </Page>
       )}
