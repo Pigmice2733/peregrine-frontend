@@ -12,7 +12,10 @@ export const usePromise = <T extends any>(
     const promise = promiseCreator()
     if (!promise) return
     promise.then(v => setVal(v)).catch(emitError)
-    if (promise instanceof CancellablePromise) return () => promise.cancel()
+    return () => {
+      if (promise instanceof CancellablePromise) promise.cancel()
+      setVal(undefined)
+    }
   }, [emitError, ...dependencies]) // eslint-disable-line caleb/react-hooks/exhaustive-deps
   return val
 }

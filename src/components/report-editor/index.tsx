@@ -1,10 +1,9 @@
 import { css } from 'linaria'
 import { Schema, StatDescription, ReportStatDescription } from '@/api/schema'
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { FunctionComponent, h } from 'preact'
+import { h } from 'preact'
 import { useState, useEffect, useMemo } from 'preact/hooks'
 import { submitReport } from '@/api/report/submit-report'
-import { submitComment } from '@/api/report/submit-comment'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import TeamPicker from '../team-picker'
 import FieldCard from '../field-card'
@@ -41,6 +40,7 @@ interface Props {
 
 const emptyReport: Report = {
   data: [],
+  comment: '',
 }
 
 const isFieldReportable = (
@@ -52,17 +52,16 @@ const isTeleop = (field: ReportStatDescription) => field.period === 'teleop'
 // Number properties default to 0 and boolean properties default to 0 which represents false
 const defaultFieldValue = 0
 
-export const ReportEditor: FunctionComponent<Props> = ({
+export const ReportEditor = ({
   eventKey,
   matchKey,
   schema,
   match,
   onSaveSuccess = noop,
   initialReport = emptyReport,
-}) => {
+}: Props) => {
   const [team, setTeam] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const [comment, setComment] = useState<string | undefined>(undefined)
   const [report, setReport] = useState<Report>(initialReport)
   const emitError = useErrorEmitter()
 
@@ -92,6 +91,7 @@ export const ReportEditor: FunctionComponent<Props> = ({
 
   useEffect(() => {
     setReport(report => ({
+      ...report,
       data: visibleFields.map(
         statDescription =>
           report.data.find(f => f.name === statDescription.reportReference) || {
@@ -108,7 +108,6 @@ export const ReportEditor: FunctionComponent<Props> = ({
     setIsSaving(true)
     try {
       const reportPromise = submitReport(eventKey, matchKey, team, report)
-      if (comment) await submitComment(eventKey, matchKey, team, { comment })
       await reportPromise
     } catch (error) {
       emitError(error)
@@ -145,7 +144,11 @@ export const ReportEditor: FunctionComponent<Props> = ({
           onChange={updateReportField(stat.reportReference)}
         />
       ))}
-      <TextInput class={commentStyles} label="Comments" onInput={setComment} />
+      <TextInput
+        class={commentStyles}
+        label="Comments"
+        onInput={comment => setReport(r => ({ ...r, comment }))}
+      />
       <Button disabled={isSaving || !isReady} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>
