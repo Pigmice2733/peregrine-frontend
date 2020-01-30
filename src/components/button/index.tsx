@@ -5,8 +5,14 @@ import { tint } from 'polished'
 import { pigmicePurple } from '@/colors'
 import { PropsOf } from '@/type-utils'
 
-const buttonStyle = css`
+export const buttonFontStyle = css`
+  text-transform: uppercase;
+  font-weight: bold;
   text-align: center;
+  text-decoration: none;
+`
+
+const buttonStyle = css`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,11 +23,8 @@ const buttonStyle = css`
   color: white;
   cursor: pointer;
   box-shadow: 0.1rem 0.1rem 0.6rem #00000059;
-  text-transform: uppercase;
-  font-weight: bold;
   font-size: 0.9rem;
   transition: all 0.2s ease;
-  text-decoration: none;
 
   &:hover,
   &:focus {
@@ -71,7 +74,12 @@ const Button: Button = (props: BaseProps & PropsOf<'a' | 'div'>) => {
   return (
     <El
       {...(props as any)}
-      class={clsx(buttonStyle, props.class, props.flat && flatButtonStyle)}
+      class={clsx(
+        buttonStyle,
+        props.class,
+        buttonFontStyle,
+        props.flat && flatButtonStyle,
+      )}
     />
   )
 }

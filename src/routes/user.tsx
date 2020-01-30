@@ -24,11 +24,12 @@ import { deleteIcon } from '@/icons/delete'
 import { route } from '@/router'
 import { createDialog } from '@/components/dialog'
 import Alert from '@/components/alert'
-import Button from '@/components/button'
+import Button, { buttonFontStyle } from '@/components/button'
 import Icon from '@/components/icon'
 import { alert } from '@/icons/alert'
 import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
+import clsx from 'clsx'
 
 const RoleInfo = ({
   save,
@@ -96,7 +97,7 @@ const VerifiedInfo = ({
       />
       {isVerified ? 'Verified' : 'Unverified'}
       {editable && (
-        <Button
+        <button
           onClick={() => {
             if (isSaving) return
             setIsSaving(true)
@@ -107,20 +108,27 @@ const VerifiedInfo = ({
               .catch(emitError)
               .finally(() => setIsSaving(false))
           }}
-          flat
           disabled={isSaving}
-          class={css`
-            color: ${offBlack};
-            font-size: 0.8rem;
-            padding: 0.4rem;
-            &:hover,
-            &:focus {
-              background: #2121212e;
-            }
-          `}
+          class={clsx(
+            buttonFontStyle,
+            css`
+              color: ${offBlack};
+              background: #00000015;
+              border: none;
+              border-radius: 0.3rem;
+              cursor: pointer;
+              outline: none;
+              font-size: 0.8rem;
+              padding: 0.4rem;
+              &:hover,
+              &:focus {
+                background: #2121212e;
+              }
+            `,
+          )}
         >
           {isVerified ? 'Unverify' : 'Verify'}
-        </Button>
+        </button>
       )}
     </Alert>
   )
