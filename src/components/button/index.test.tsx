@@ -11,7 +11,7 @@ test('button', () => {
   expect(clickHandler).toHaveBeenCalledTimes(1)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <button
-      class="buttonStyle_b1uioams"
+      class="buttonStyle_br386bu buttonFontStyle_b1uioams"
     >
       Hello
     </button>
@@ -26,7 +26,7 @@ test('renders an `a` element for `href`', () => {
   )
   expect(container.firstChild).toMatchInlineSnapshot(`
     <a
-      class="buttonStyle_b1uioams caleb"
+      class="buttonStyle_br386bu caleb buttonFontStyle_b1uioams"
       href="google.com"
     >
       Googlez
