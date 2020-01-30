@@ -5,12 +5,12 @@ import { getUser } from '@/api/user/get-user'
 import { UserInfo, Roles } from '@/api/user'
 import Card from '@/components/card'
 import { useJWT } from '@/jwt'
-import IconButton from '@/components/icon-button'
+import { InlineIconButton } from '@/components/icon-button'
 import { edit } from '@/icons/edit'
 import { css } from 'linaria'
 import TextInput, { TextInputProps } from '@/components/text-input'
 import { useState, useEffect, useCallback } from 'preact/hooks'
-import { grey, offBlack } from '@/colors'
+import { offBlack } from '@/colors'
 import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
 import { modifyUser } from '@/api/user/modify-user'
 import { close } from '@/icons/close'
@@ -120,6 +120,7 @@ const VerifiedInfo = ({
               outline: none;
               font-size: 0.8rem;
               padding: 0.4rem;
+              transition: all 0.3s ease;
               &:hover,
               &:focus {
                 background: #2121212e;
@@ -166,7 +167,7 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
   )
 }
 
-const ChangePasswordButton = ({ user }: { user: UserInfo }) => {
+const SetPasswordButton = ({ user }: { user: UserInfo }) => {
   const emitError = useErrorEmitter()
   return (
     <EditableText
@@ -182,7 +183,7 @@ const ChangePasswordButton = ({ user }: { user: UserInfo }) => {
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
           <Icon class={iconInButtonStyle} icon={edit} />
-          Change Password
+          Set Password
         </Button>
       )}
     </EditableText>
@@ -206,14 +207,6 @@ const editableTextStyle = css`
   grid-auto-flow: column;
   grid-gap: 0.2rem;
   align-items: center;
-`
-
-const smallIconButtonStyle = css`
-  width: 1.7rem;
-  height: 1.7rem;
-  padding: 0.35rem;
-  color: ${grey};
-  display: inline-flex;
 `
 
 const EditableText = ({
@@ -249,29 +242,23 @@ const EditableText = ({
   return isEditing ? (
     <form class={editableTextStyle} onSubmit={saveNewValue}>
       <TextInput label={label} value={value} onInput={setValue} {...rest} />
-      <IconButton
+      <InlineIconButton
         icon={isSaving ? sync : check}
         disabled={!isChanged || isSaving}
-        class={smallIconButtonStyle}
       />
-      <IconButton
+      <InlineIconButton
         icon={close}
         onClick={e => {
           e.preventDefault()
           closeEditor()
         }}
-        class={smallIconButtonStyle}
       />
     </form>
   ) : (
     children(
       originalValue,
       editable ? (
-        <IconButton
-          icon={edit}
-          onClick={openEditor}
-          class={smallIconButtonStyle}
-        />
+        <InlineIconButton icon={edit} onClick={openEditor} />
       ) : (
         undefined
       ),
@@ -385,7 +372,7 @@ const UserProfileCard = ({
           />
         </dl>
         {editable && !isCurrentUser && <DeleteUserButton user={user} />}
-        {editable && <ChangePasswordButton user={user} />}
+        {editable && <SetPasswordButton user={user} />}
       </ErrorBoundary>
     </Card>
   )
