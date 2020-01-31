@@ -74,17 +74,27 @@ const toggleStyle = css`
     border-radius: 50%;
     transition: inherit;
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &::before {
+      opacity: 0;
+    }
+  }
 `
 
 interface Props {
   onChange: (newValue: boolean) => void
   checked?: boolean
-  key?: string | number
+  disabled?: boolean
 }
 
-const Toggle = ({ onChange, checked }: Props) => (
+const Toggle = ({ onChange, checked, disabled }: Props) => (
   <input
     type="checkbox"
+    disabled={disabled}
     class={toggleStyle}
     checked={checked}
     onChange={e => onChange((e.target as HTMLInputElement).checked)}

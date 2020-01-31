@@ -3,6 +3,7 @@ import { PropsOf } from '@/type-utils'
 import Icon from '@/components/icon'
 import { css } from 'linaria'
 import clsx from 'clsx'
+import { grey } from '@/colors'
 
 const iconButtonStyle = css`
   cursor: pointer;
@@ -23,6 +24,10 @@ const iconButtonStyle = css`
   &:focus {
     background: color-mod(#aaa alpha(25%));
     outline: none;
+  }
+
+  &[disabled] {
+    cursor: not-allowed;
   }
 `
 
@@ -50,3 +55,26 @@ const IconButton: IconButton = ({
 }
 
 export default IconButton
+
+const inlineIconButtonStyle = css`
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0.35rem;
+  color: ${grey};
+  display: inline-flex;
+`
+
+export const InlineIconButton: IconButton = ({
+  icon,
+  ...attrs
+}: PropsOf<'a' | 'div'> & BaseProps) => {
+  const El = attrs.href ? 'a' : 'button'
+  return (
+    <El
+      {...(attrs as any)}
+      class={clsx(inlineIconButtonStyle, iconButtonStyle, attrs.class)}
+    >
+      <Icon icon={icon} />
+    </El>
+  )
+}

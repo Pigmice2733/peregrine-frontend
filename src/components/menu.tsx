@@ -151,6 +151,11 @@ export const Menu = ({ onHide, visible }: Props) => {
               Users
             </MenuItem>
           )}
+          {jwt && (
+            <MenuItem icon={accountCircle} href={`/users/${jwt.sub}`}>
+              Profile
+            </MenuItem>
+          )}
           {isLoggedIn ? (
             <MenuItem icon={logoutIcon} onClick={logoutHandler}>
               Log out

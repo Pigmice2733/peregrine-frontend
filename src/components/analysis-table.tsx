@@ -30,11 +30,6 @@ interface Props {
 
 type AvgType = 'Avg' | 'Max'
 
-const tableStyle = css`
-  overflow: auto;
-  max-height: calc(100vh - 3.1rem);
-`
-
 const cellStyle = css`
   text-align: center;
 `
@@ -65,6 +60,7 @@ const createStatCell = (avgType: AvgType) => (
         : '?'
       return <td class={cellStyle}>{text}</td>
     },
+    sortOrder: SortOrder.DESC,
     getCellValue: cell => (cell ? cell[avgTypeStr] : -1),
   }
 }
@@ -169,7 +165,7 @@ const AnalysisTable: FunctionComponent<Props> = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: (team, rowIndex) => (
+    renderCell: (team, _row, rowIndex) => (
       <th scope="row" class={teamNumCellStyle}>
         <div className={teamRankStyle}>{rowIndex + 1}</div>
         {renderTeam(team)}
@@ -205,7 +201,7 @@ const AnalysisTable: FunctionComponent<Props> = ({
     })
   }
   return (
-    <Card class={clsx(className, tableStyle)}>
+    <Card class={className}>
       <Table
         columns={columns}
         rows={rows}

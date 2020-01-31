@@ -7,6 +7,7 @@ import routes from './routes'
 import GAnalytics from 'ganalytics'
 import { requestIdleCallback } from '@/utils/request-idle-callback'
 import { uploadSavedReports } from './api/report/submit-report'
+import { ErrorBoundary } from './components/error-boundary'
 import { addUrlListener } from './url-manager'
 
 if (process.env.NODE_ENV === 'production') {
@@ -28,7 +29,9 @@ setInterval(uploadSavedReports, 30_000)
 const App = () => (
   <Fragment>
     <div>
-      <Router routes={routes} />
+      <ErrorBoundary>
+        <Router routes={routes} />
+      </ErrorBoundary>
     </div>
     <DialogDisplayer />
   </Fragment>

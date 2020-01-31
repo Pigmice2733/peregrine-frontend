@@ -7,31 +7,15 @@ import AnalysisTable from '@/components/analysis-table'
 import Spinner from '@/components/spinner'
 import { css } from 'linaria'
 import { useSchema } from '@/cache/schema/use'
+import {
+  tablePageStyle,
+  tablePageWrapperStyle,
+  tablePageTableStyle,
+} from '@/utils/table-page-style'
 
 interface Props {
   eventKey: string
 }
-
-const analysisPageStyle = css`
-  padding: 1rem;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  @media (max-width: 600px) {
-    padding: 0;
-  }
-`
-
-const analysisTableStyle = css`
-  height: 100%;
-`
-
-const wrapperStyle = css`
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-`
 
 const teamStyle = css`
   color: inherit;
@@ -47,12 +31,12 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
     <Page
       name={`Analysis - ${eventInfo ? eventInfo.name : eventKey}`}
       back={`/events/${eventKey}`}
-      class={analysisPageStyle}
-      wrapperClass={wrapperStyle}
+      class={tablePageStyle}
+      wrapperClass={tablePageWrapperStyle}
     >
       {eventStats && schema ? (
         <AnalysisTable
-          class={analysisTableStyle}
+          class={tablePageTableStyle}
           teams={eventStats}
           schema={schema}
           renderTeam={team => (
