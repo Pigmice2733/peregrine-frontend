@@ -1,12 +1,12 @@
 import { request } from '../base'
-import { Stat } from '.'
+import { TeamStats } from '.'
 
 export const getMatchTeamStats = (
   eventKey: string,
   matchKey: string,
   team: string,
 ) =>
-  request<{ team: string; summary: Stat[] | null }>(
+  request<TeamStats>(
     'GET',
     `events/${eventKey}/matches/${matchKey}/teams/${team}/stats`,
   )

@@ -1,4 +1,4 @@
-import { h, JSX, FunctionComponent, Fragment } from 'preact'
+import { h, JSX, Fragment } from 'preact'
 import { Schema, StatDescription, StatType } from '@/api/schema'
 import { Stat, ProcessedTeamStats } from '@/api/stats'
 import Card from '@/components/card'
@@ -25,7 +25,9 @@ interface Props {
   teams: ProcessedTeamStats[]
   schema: Schema
   renderTeam: (team: string) => JSX.Element
+  renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
   class?: string
+  enableSettings?: boolean
 }
 
 type AvgType = 'Avg' | 'Max'
@@ -38,7 +40,13 @@ type RowType = ProcessedTeamStats
 
 type StatWithType = Stat & { type: StatType }
 
-const createStatCell = (avgType: AvgType) => (
+const createStatCell = (
+  avgType: AvgType,
+  renderBoolean?: (
+    cell: StatWithType,
+    avgTypeStr: 'avg' | 'max',
+  ) => JSX.Element,
+) => (
   statDescription: StatDescription,
 ): Column<StatWithType | undefined, RowType> => {
   const avgTypeStr = avgType === 'Avg' ? 'avg' : 'max'
@@ -55,7 +63,7 @@ const createStatCell = (avgType: AvgType) => (
     renderCell: cell => {
       const text = cell
         ? cell.type === 'boolean'
-          ? formatPercent(cell[avgTypeStr])
+          ? renderBoolean?.(cell, avgTypeStr) || formatPercent(cell[avgTypeStr])
           : round(cell[avgTypeStr])
         : '?'
       return <td class={cellStyle}>{text}</td>
@@ -154,12 +162,14 @@ const teamRankStyle = css`
   color: ${grey};
 `
 
-const AnalysisTable: FunctionComponent<Props> = ({
+const AnalysisTable = ({
   teams,
   schema,
   renderTeam,
   class: className,
-}) => {
+  renderBoolean,
+  enableSettings = true,
+}: Props) => {
   const [avgType, setAvgType] = useState<AvgType>('Avg')
   const teamColumn: Column<string, RowType> = {
     title: 'Team',
@@ -178,8 +188,8 @@ const AnalysisTable: FunctionComponent<Props> = ({
   const teleopFields = allDisplayableFields.filter(f => f.period === 'teleop')
   const columns = [
     teamColumn,
-    ...autoFields.map(createStatCell(avgType)),
-    ...teleopFields.map(createStatCell(avgType)),
+    ...autoFields.map(createStatCell(avgType, renderBoolean)),
+    ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
@@ -208,9 +218,11 @@ const AnalysisTable: FunctionComponent<Props> = ({
         contextRow={
           <Fragment>
             <th class={topLeftCellStyle}>
-              <button class={iconButtonStyle} onClick={showSettings}>
-                <Icon icon={settingsIcon} class={iconStyle} />
-              </button>
+              {enableSettings && (
+                <button class={iconButtonStyle} onClick={showSettings}>
+                  <Icon icon={settingsIcon} class={iconStyle} />
+                </button>
+              )}
             </th>
             <th
               class={clsx(contextSectionStyle, autoStyle)}
