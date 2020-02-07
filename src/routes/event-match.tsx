@@ -134,7 +134,6 @@ const matchScoreStyle = css`
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-width: 11rem;
-  color: white;
   font-weight: bold;
   justify-content: center;
   text-align: center;
@@ -142,6 +141,7 @@ const matchScoreStyle = css`
 
   & > * {
     padding: 1.5rem 0;
+    color: white;
   }
 `
 
