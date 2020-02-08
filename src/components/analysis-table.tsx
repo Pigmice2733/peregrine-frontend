@@ -20,9 +20,10 @@ import { blue, red, grey, lightGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
+import Spinner from './spinner'
 
 interface Props {
-  teams: ProcessedTeamStats[]
+  teams: ProcessedTeamStats[] | undefined
   schema: Schema
   renderTeam: (team: string) => JSX.Element
   renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
@@ -191,6 +192,7 @@ const AnalysisTable = ({
     ...autoFields.map(createStatCell(avgType, renderBoolean)),
     ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
+  if (!teams) return <Spinner />
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
   )
