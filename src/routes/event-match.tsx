@@ -110,24 +110,24 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       )}
       {match && schema && (
         <Card>
-          <button
-            class={clsx(
-              displayModeStyle,
-              selectedDisplay === showMatchResults && activeDisplayModeStyle,
-            )}
-            onClick={() => setSelectedDisplay(showMatchResults)}
-          >
-            {showMatchResults}
-          </button>
-          <button
-            class={clsx(
-              displayModeStyle,
-              selectedDisplay === showEventResults && activeDisplayModeStyle,
-            )}
-            onClick={() => setSelectedDisplay(showEventResults)}
-          >
-            {showEventResults}
-          </button>
+          <div class={displayModeSelectorStyle}>
+            <button
+              class={clsx(
+                selectedDisplay === showMatchResults && activeDisplayModeStyle,
+              )}
+              onClick={() => setSelectedDisplay(showMatchResults)}
+            >
+              {showMatchResults}
+            </button>
+            <button
+              class={clsx(
+                selectedDisplay === showEventResults && activeDisplayModeStyle,
+              )}
+              onClick={() => setSelectedDisplay(showEventResults)}
+            >
+              {showEventResults}
+            </button>
+          </div>
           <AnalysisTable
             teams={
               selectedDisplay === showEventResults
@@ -183,22 +183,28 @@ const blueScoreStyle = css`
   background: ${blue};
 `
 
-const displayModeStyle = css`
-  background: transparent;
-  padding: 1rem;
-  border: none;
-  border-bottom: 0.2rem solid transparent;
-  font-weight: bold;
-  outline: none;
+const activeDisplayModeStyle = css``
 
-  &:hover,
-  &:focus {
-    background: ${faintGrey};
+const displayModeSelectorStyle = css`
+  position: sticky;
+  left: 0;
+  & > button {
+    background: transparent;
+    padding: 1rem;
+    border: none;
+    border-bottom: 0.2rem solid transparent;
+    font-weight: bold;
+    outline: none;
+
+    &:hover,
+    &:focus {
+      background: ${faintGrey};
+    }
+
+    &.${activeDisplayModeStyle} {
+      border-bottom-color: ${pigmicePurple};
+    }
   }
-`
-
-const activeDisplayModeStyle = css`
-  border-bottom-color: ${pigmicePurple};
 `
 
 export default EventMatch
