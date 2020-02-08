@@ -79,7 +79,6 @@ const topLeftCellStyle = css`
   z-index: 1;
   ${borderRightOnly};
   background: white;
-  font-size: 15px;
   min-width: ${firstColumnWidth};
   padding: 0;
   height: ${contextRowHeight};
@@ -124,12 +123,12 @@ const contextSectionStyle = css`
 `
 
 const autoStyle = css`
-  box-shadow: inset 0 -3px ${blue};
+  box-shadow: inset 0 -0.15rem ${blue};
   color: ${blue};
 `
 
 const teleopStyle = css`
-  box-shadow: inset 0 -3px ${red};
+  box-shadow: inset 0 -0.15rem ${red};
   color: ${red};
 `
 

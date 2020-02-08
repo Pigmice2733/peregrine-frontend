@@ -196,9 +196,9 @@ const displayModeSelectorStyle = css`
     background: transparent;
     padding: 1rem;
     border: none;
-    border-bottom: 0.2rem solid transparent;
     font-weight: bold;
     outline: none;
+    cursor: pointer;
 
     &:hover,
     &:focus {
@@ -206,7 +206,7 @@ const displayModeSelectorStyle = css`
     }
 
     &.${activeDisplayModeStyle} {
-      border-bottom-color: ${pigmicePurple};
+      box-shadow: inset 0 -0.15rem ${pigmicePurple};
     }
   }
 `
