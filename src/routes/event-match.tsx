@@ -152,7 +152,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 {team}
               </a>
             )}
-            renderBoolean={cell => <BooleanDisplay value={cell.avg === 1} />}
+            renderBoolean={
+              selectedDisplay === showMatchResults
+                ? cell => <BooleanDisplay value={cell.avg === 1} />
+                : undefined
+            }
             enableSettings={selectedDisplay !== showMatchResults}
           />
         </Card>
