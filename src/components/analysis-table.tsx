@@ -1,7 +1,6 @@
 import { h, JSX, Fragment } from 'preact'
 import { Schema, StatDescription, StatType } from '@/api/schema'
 import { Stat, ProcessedTeamStats } from '@/api/stats'
-import Card from '@/components/card'
 import clsx from 'clsx'
 import {
   Table,
