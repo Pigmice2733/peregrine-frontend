@@ -27,7 +27,6 @@ interface Props {
   schema: Schema
   renderTeam: (team: string) => JSX.Element
   renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
-  class?: string
   enableSettings?: boolean
 }
 
@@ -167,7 +166,6 @@ const AnalysisTable = ({
   teams,
   schema,
   renderTeam,
-  class: className,
   renderBoolean,
   enableSettings = true,
 }: Props) => {
@@ -213,35 +211,33 @@ const AnalysisTable = ({
     })
   }
   return (
-    <Card class={className}>
-      <Table
-        columns={columns}
-        rows={rows}
-        contextRow={
-          <Fragment>
-            <th class={topLeftCellStyle}>
-              {enableSettings && (
-                <button class={iconButtonStyle} onClick={showSettings}>
-                  <Icon icon={settingsIcon} class={iconStyle} />
-                </button>
-              )}
-            </th>
-            <th
-              class={clsx(contextSectionStyle, autoStyle)}
-              colSpan={autoFields.length}
-            >
-              <span>Auto</span>
-            </th>
-            <th
-              class={clsx(contextSectionStyle, teleopStyle)}
-              colSpan={teleopFields.length}
-            >
-              <span>Teleop</span>
-            </th>
-          </Fragment>
-        }
-      />
-    </Card>
+    <Table
+      columns={columns}
+      rows={rows}
+      contextRow={
+        <Fragment>
+          <th class={topLeftCellStyle}>
+            {enableSettings && (
+              <button class={iconButtonStyle} onClick={showSettings}>
+                <Icon icon={settingsIcon} class={iconStyle} />
+              </button>
+            )}
+          </th>
+          <th
+            class={clsx(contextSectionStyle, autoStyle)}
+            colSpan={autoFields.length}
+          >
+            <span>Auto</span>
+          </th>
+          <th
+            class={clsx(contextSectionStyle, teleopStyle)}
+            colSpan={teleopFields.length}
+          >
+            <span>Teleop</span>
+          </th>
+        </Fragment>
+      }
+    />
   )
 }
 
