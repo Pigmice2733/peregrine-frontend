@@ -53,9 +53,11 @@ self.addEventListener('fetch', function(event) {
   if (/fonts\.gstatic/.exec(url)) {
     return event.respondWith(handleFontsRequest(request))
   }
+  const parsedUrl = new URL(request.url)
   if (
     request.method === 'GET' &&
-    new URL(request.url).origin === location.origin
+    parsedUrl.origin === location.origin &&
+    !parsedUrl.pathname.startsWith('/api')
   ) {
     // only handles requests from this domain
     return event.respondWith(handleGETRequest(request))
