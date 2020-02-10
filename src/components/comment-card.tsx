@@ -6,9 +6,6 @@ import { getUser } from '@/api/user/get-user'
 import Card from './card'
 import Icon from './icon'
 import { commentIcon } from '@/icons/comment'
-import { CancellablePromise } from '@/utils/cancellable-promise'
-
-const nullPromise = CancellablePromise.resolve(null)
 
 const commentCardStyle = css`
   display: grid;
@@ -35,11 +32,9 @@ const commentCardStyle = css`
 export const CommentCard = ({ report }: { report: GetReport }) => {
   const userId = report.reporterId
   const reporter = usePromise(
-    () => (userId ? getUser(userId).catch(() => nullPromise) : nullPromise),
+    () => (userId ? getUser(userId).catch(() => null) : null),
     [userId],
   )
-  // If it is still loading, don't render
-  if (reporter === undefined || !report.comment) return null
   return (
     <Card outlined as="section" class={commentCardStyle}>
       <Icon icon={commentIcon} />
