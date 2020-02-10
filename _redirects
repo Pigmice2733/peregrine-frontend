@@ -1,2 +1,3 @@
+/api/*  https://api.peregrine.ga/:splat 200!
 https://pgrn.ga/* https://peregrine.ga/:splat
 /* /index.html 200
