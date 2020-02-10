@@ -50,8 +50,6 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
     [eventKey, teamNum],
   )
 
-  console.log(matchesWithComments)
-
   return (
     <Page
       name={`Comments: ${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
