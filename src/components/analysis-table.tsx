@@ -1,7 +1,6 @@
-import { h, JSX, FunctionComponent, Fragment } from 'preact'
+import { h, JSX, Fragment } from 'preact'
 import { Schema, StatDescription, StatType } from '@/api/schema'
 import { Stat, ProcessedTeamStats } from '@/api/stats'
-import Card from '@/components/card'
 import clsx from 'clsx'
 import {
   Table,
@@ -20,12 +19,14 @@ import { blue, red, grey, lightGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
+import Spinner from './spinner'
 
 interface Props {
-  teams: ProcessedTeamStats[]
+  teams: ProcessedTeamStats[] | undefined
   schema: Schema
   renderTeam: (team: string) => JSX.Element
-  class?: string
+  renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
+  enableSettings?: boolean
 }
 
 type AvgType = 'Avg' | 'Max'
@@ -38,7 +39,13 @@ type RowType = ProcessedTeamStats
 
 type StatWithType = Stat & { type: StatType }
 
-const createStatCell = (avgType: AvgType) => (
+const createStatCell = (
+  avgType: AvgType,
+  renderBoolean?: (
+    cell: StatWithType,
+    avgTypeStr: 'avg' | 'max',
+  ) => JSX.Element,
+) => (
   statDescription: StatDescription,
 ): Column<StatWithType | undefined, RowType> => {
   const avgTypeStr = avgType === 'Avg' ? 'avg' : 'max'
@@ -55,7 +62,7 @@ const createStatCell = (avgType: AvgType) => (
     renderCell: cell => {
       const text = cell
         ? cell.type === 'boolean'
-          ? formatPercent(cell[avgTypeStr])
+          ? renderBoolean?.(cell, avgTypeStr) || formatPercent(cell[avgTypeStr])
           : round(cell[avgTypeStr])
         : '?'
       return <td class={cellStyle}>{text}</td>
@@ -72,7 +79,6 @@ const topLeftCellStyle = css`
   z-index: 1;
   ${borderRightOnly};
   background: white;
-  font-size: 15px;
   min-width: ${firstColumnWidth};
   padding: 0;
   height: ${contextRowHeight};
@@ -117,12 +123,12 @@ const contextSectionStyle = css`
 `
 
 const autoStyle = css`
-  box-shadow: inset 0 -3px ${blue};
+  box-shadow: inset 0 -0.15rem ${blue};
   color: ${blue};
 `
 
 const teleopStyle = css`
-  box-shadow: inset 0 -3px ${red};
+  box-shadow: inset 0 -0.15rem ${red};
   color: ${red};
 `
 
@@ -154,12 +160,13 @@ const teamRankStyle = css`
   color: ${grey};
 `
 
-const AnalysisTable: FunctionComponent<Props> = ({
+const AnalysisTable = ({
   teams,
   schema,
   renderTeam,
-  class: className,
-}) => {
+  renderBoolean,
+  enableSettings = true,
+}: Props) => {
   const [avgType, setAvgType] = useState<AvgType>('Avg')
   const teamColumn: Column<string, RowType> = {
     title: 'Team',
@@ -178,9 +185,10 @@ const AnalysisTable: FunctionComponent<Props> = ({
   const teleopFields = allDisplayableFields.filter(f => f.period === 'teleop')
   const columns = [
     teamColumn,
-    ...autoFields.map(createStatCell(avgType)),
-    ...teleopFields.map(createStatCell(avgType)),
+    ...autoFields.map(createStatCell(avgType, renderBoolean)),
+    ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
+  if (!teams) return <Spinner />
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
   )
@@ -201,33 +209,33 @@ const AnalysisTable: FunctionComponent<Props> = ({
     })
   }
   return (
-    <Card class={className}>
-      <Table
-        columns={columns}
-        rows={rows}
-        contextRow={
-          <Fragment>
-            <th class={topLeftCellStyle}>
+    <Table
+      columns={columns}
+      rows={rows}
+      contextRow={
+        <Fragment>
+          <th class={topLeftCellStyle}>
+            {enableSettings && (
               <button class={iconButtonStyle} onClick={showSettings}>
                 <Icon icon={settingsIcon} class={iconStyle} />
               </button>
-            </th>
-            <th
-              class={clsx(contextSectionStyle, autoStyle)}
-              colSpan={autoFields.length}
-            >
-              <span>Auto</span>
-            </th>
-            <th
-              class={clsx(contextSectionStyle, teleopStyle)}
-              colSpan={teleopFields.length}
-            >
-              <span>Teleop</span>
-            </th>
-          </Fragment>
-        }
-      />
-    </Card>
+            )}
+          </th>
+          <th
+            class={clsx(contextSectionStyle, autoStyle)}
+            colSpan={autoFields.length}
+          >
+            <span>Auto</span>
+          </th>
+          <th
+            class={clsx(contextSectionStyle, teleopStyle)}
+            colSpan={teleopFields.length}
+          >
+            <span>Teleop</span>
+          </th>
+        </Fragment>
+      }
+    />
   )
 }
 

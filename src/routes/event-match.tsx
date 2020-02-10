@@ -12,6 +12,12 @@ import { css } from 'linaria'
 import { usePromise } from '@/utils/use-promise'
 import { useMatchInfo } from '@/cache/match-info/use'
 import { useSchema } from '@/cache/schema/use'
+import { useState, useEffect } from 'preact/hooks'
+import Card from '@/components/card'
+import { red, blue, faintGrey, pigmicePurple } from '@/colors'
+import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
+import { processTeamStats } from '@/api/stats'
+import { BooleanDisplay } from '@/components/boolean-display'
 
 interface Props {
   eventKey: string
@@ -33,24 +39,53 @@ const matchStyle = css`
   & > * {
     margin: 1.5rem 0 0 0;
     max-width: 100%;
+    overflow-x: auto;
   }
 
   /* extra selectors for specificity */
   a.${tableTeamStyle}.${redStyle} {
-    color: var(--alliance-red);
+    color: ${red};
   }
 
   a.${tableTeamStyle}.${blueStyle} {
-    color: var(--alliance-blue);
+    color: ${blue};
   }
 `
 
+const showMatchResults = 'Match Results'
+const showEventResults = 'Event Results'
+
+type SelectedDisplay = typeof showMatchResults | typeof showEventResults
+
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
-  const eventInfo = useEventInfo(eventKey)
-  const matchInfo = useMatchInfo(eventKey, matchKey)
-  const schema = useSchema(eventInfo?.schemaId)
+  const event = useEventInfo(eventKey)
+  const match = useMatchInfo(eventKey, matchKey)
+  const schema = useSchema(event?.schemaId)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
+
+  const [selectedDisplay, setSelectedDisplay] = useState<SelectedDisplay>(
+    showEventResults,
+  )
+
+  const matchHasBeenPlayed =
+    match && match.blueScore !== undefined && match.redScore !== undefined
+
+  // When the match loads (or changes),
+  useEffect(() => {
+    if (matchHasBeenPlayed) setSelectedDisplay(showMatchResults)
+  }, [matchHasBeenPlayed])
+
+  const teamsStats = usePromise(
+    () =>
+      match &&
+      Promise.all(
+        [...match.redAlliance, ...match.blueAlliance].map(t =>
+          getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
+        ),
+      ),
+    [match],
+  )
 
   return (
     <Page
@@ -59,27 +94,56 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         m.group +
         (m.num ? ' Match ' + m.num : '') +
         ' - ' +
-        (eventInfo ? eventInfo.name : eventKey)
+        (event ? event.name : eventKey)
       }
+      class={matchStyle}
     >
-      <div class={matchStyle}>
-        <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
-          Scout Match
-        </Button>
-        {matchInfo ? <MatchCard match={matchInfo} /> : <Spinner />}
-        {matchInfo && schema && teams && (
+      <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+        Scout Match
+      </Button>
+      {match ? <MatchCard match={match} /> : <Spinner />}
+      {match && (
+        <Card class={matchScoreStyle}>
+          <div class={redScoreStyle}>{match.redScore}</div>
+          <div class={blueScoreStyle}>{match.blueScore}</div>
+        </Card>
+      )}
+      {match && schema && (
+        <Card>
+          <div class={displayModeSelectorStyle}>
+            <button
+              class={clsx(
+                selectedDisplay === showMatchResults && activeDisplayModeStyle,
+              )}
+              onClick={() => setSelectedDisplay(showMatchResults)}
+            >
+              {showMatchResults}
+            </button>
+            <button
+              class={clsx(
+                selectedDisplay === showEventResults && activeDisplayModeStyle,
+              )}
+              onClick={() => setSelectedDisplay(showEventResults)}
+            >
+              {showEventResults}
+            </button>
+          </div>
           <AnalysisTable
-            teams={teams.filter(
-              t =>
-                matchInfo.redAlliance.includes('frc' + t.team) ||
-                matchInfo.blueAlliance.includes('frc' + t.team),
-            )}
+            teams={
+              selectedDisplay === showEventResults
+                ? teams?.filter(
+                    t =>
+                      match.redAlliance.includes('frc' + t.team) ||
+                      match.blueAlliance.includes('frc' + t.team),
+                  )
+                : teamsStats
+            }
             schema={schema}
-            renderTeam={team => (
+            renderTeam={(team: string) => (
               <a
                 class={clsx(
                   tableTeamStyle,
-                  matchInfo.redAlliance.includes('frc' + team)
+                  match.redAlliance.includes('frc' + team)
                     ? redStyle
                     : blueStyle,
                 )}
@@ -88,11 +152,63 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 {team}
               </a>
             )}
+            renderBoolean={
+              selectedDisplay === showMatchResults
+                ? cell => <BooleanDisplay value={cell.avg === 1} />
+                : undefined
+            }
+            enableSettings={selectedDisplay !== showMatchResults}
           />
-        )}
-      </div>
+        </Card>
+      )}
     </Page>
   )
 }
+
+const matchScoreStyle = css`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-width: 11rem;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.5rem;
+
+  & > * {
+    padding: 1.5rem 0;
+    color: white;
+  }
+`
+
+const redScoreStyle = css`
+  background: ${red};
+`
+const blueScoreStyle = css`
+  background: ${blue};
+`
+
+const activeDisplayModeStyle = css``
+
+const displayModeSelectorStyle = css`
+  position: sticky;
+  left: 0;
+  & > button {
+    background: transparent;
+    padding: 1rem;
+    border: none;
+    font-weight: bold;
+    outline: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      background: ${faintGrey};
+    }
+
+    &.${activeDisplayModeStyle} {
+      box-shadow: inset 0 -0.15rem ${pigmicePurple};
+    }
+  }
+`
 
 export default EventMatch

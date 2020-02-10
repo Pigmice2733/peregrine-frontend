@@ -24,7 +24,6 @@ const matchCardStyle = css`
   grid-template-columns: 1fr 1fr minmax(auto, 10rem);
   overflow: hidden;
   text-decoration: none;
-  color: inherit;
 
   & > time {
     grid-row: span 2;

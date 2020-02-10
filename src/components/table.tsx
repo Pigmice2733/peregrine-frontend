@@ -9,7 +9,7 @@ const borderBottomAndRight = `box-shadow: inset -1px -1px ${lightGrey}`
 // the 2nd shadow covers a tiny gap between the cells I couldn't otherwise remove
 export const borderRightOnly = `box-shadow: inset -1px 0 ${lightGrey}, 0 1px 0 white`
 const borderBottomOnly = `box-shadow: inset 0 -1px ${lightGrey}`
-const activeBorderBottomOnly = `box-shadow: inset 0 -2px ${pigmicePurple}`
+const activeBorderBottomOnly = `box-shadow: inset 0 -0.15rem ${pigmicePurple}`
 
 const tableStyle = css`
   border-collapse: collapse;

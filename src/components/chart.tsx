@@ -45,9 +45,9 @@ const CommentsDisplay = ({
   if (!reports) return null
   return (
     <div class={commentsDisplayStyle}>
-      {reports.map(r => (
-        <CommentCard key={JSON.stringify(r)} report={r} />
-      ))}
+      {reports.map(
+        r => r.comment && <CommentCard key={JSON.stringify(r)} report={r} />,
+      )}
     </div>
   )
 }

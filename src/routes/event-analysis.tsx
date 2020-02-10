@@ -12,6 +12,7 @@ import {
   tablePageWrapperStyle,
   tablePageTableStyle,
 } from '@/utils/table-page-style'
+import Card from '@/components/card'
 
 interface Props {
   eventKey: string
@@ -35,16 +36,17 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       wrapperClass={tablePageWrapperStyle}
     >
       {eventStats && schema ? (
-        <AnalysisTable
-          class={tablePageTableStyle}
-          teams={eventStats}
-          schema={schema}
-          renderTeam={team => (
-            <a class={teamStyle} href={`/events/${eventKey}/teams/${team}`}>
-              {team}
-            </a>
-          )}
-        />
+        <Card class={tablePageTableStyle}>
+          <AnalysisTable
+            teams={eventStats}
+            schema={schema}
+            renderTeam={team => (
+              <a class={teamStyle} href={`/events/${eventKey}/teams/${team}`}>
+                {team}
+              </a>
+            )}
+          />
+        </Card>
       ) : (
         <Spinner />
       )}
