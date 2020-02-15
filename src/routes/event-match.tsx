@@ -102,7 +102,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         Scout Match
       </Button>
       {match ? <MatchCard match={match} /> : <Spinner />}
-      {match && (
+      {match && matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
           <div class={blueScoreStyle}>{match.blueScore}</div>
