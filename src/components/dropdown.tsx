@@ -56,9 +56,6 @@ export const Dropdown = <T extends any>({
     )
     return acc
   }, {} as { [key: string]: JSX.Element[] })
-  console.log(optionsByGroup)
-  const groups = new Set(options.map(o => getGroup(o)).filter(g => g !== null))
-  console.log(groups)
   return (
     // eslint-disable-next-line caleb/jsx-a11y/no-onchange
     <select
