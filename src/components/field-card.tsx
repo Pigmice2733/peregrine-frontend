@@ -4,6 +4,7 @@ import NumberInput from './number-input'
 import { css } from 'linaria'
 import Toggle from './toggle'
 import { ReportStatDescription, NumberStatDescription } from '@/api/schema'
+import { cleanFieldName } from '@/utils/clean-field-name'
 
 const fieldCardStyle = css`
   display: grid;
@@ -34,7 +35,7 @@ const FieldCard = <FieldType extends ReportStatDescription>({
   value,
 }: RenderableProps<Props<FieldType>>) => (
   <Card as="label" class={fieldCardStyle}>
-    <div class={nameStyle}>{statDescription.name}</div>
+    <div class={nameStyle}>{cleanFieldName(statDescription.name)}</div>
     {isNumberField(statDescription) ? (
       <NumberInput value={value} min={0} onChange={onChange} />
     ) : (
