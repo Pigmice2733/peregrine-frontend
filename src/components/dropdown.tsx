@@ -1,7 +1,8 @@
 import { css } from 'linaria'
-import { h } from 'preact'
+import { h, JSX, Fragment } from 'preact'
 import clsx from 'clsx'
 import { createShadow } from '@/utils/create-shadow'
+import { SetRequired } from 'type-fest'
 
 const dropdownStyle = css`
   background: transparent;
@@ -22,27 +23,42 @@ const buttonStyles = css`
   box-shadow: ${createShadow(2)};
 `
 
-type Props<T> = {
+interface BaseProps<T> {
   class?: string
   button?: true
   options: readonly T[]
   value?: T
   onChange: (v: T) => void
+  getGroup?: (v: T) => string | null
   getKey?: (v: T) => string | number
-  getText?: (v: T) => string
-} & (T extends object
-  ? { getKey: (v: T) => string | number; getText: (v: T) => string }
-  : {})
+  getText?: (v: T) => string | number
+}
+
+type Props<T> = BaseProps<T> &
+  (T extends object ? SetRequired<BaseProps<T>, 'getKey' | 'getText'> : {})
 
 export const Dropdown = <T extends any>({
   options,
   button,
   onChange,
   value,
-  getKey = (v: T) => (v as unknown) as string,
-  getText = (v: T) => (v as unknown) as string,
+  getKey = (v: T) => v,
+  getText = (v: T) => v,
+  getGroup = () => null,
   ...props
 }: Props<T>) => {
+  const optionsByGroup = options.reduce((acc, opt) => {
+    const group = getGroup(opt) || ''
+    acc[group] = (acc[group] || []).concat(
+      <option value={getKey(opt)} key={getKey(opt)}>
+        {getText(opt)}
+      </option>,
+    )
+    return acc
+  }, {} as { [key: string]: JSX.Element[] })
+  console.log(optionsByGroup)
+  const groups = new Set(options.map(o => getGroup(o)).filter(g => g !== null))
+  console.log(groups)
   return (
     // eslint-disable-next-line caleb/jsx-a11y/no-onchange
     <select
@@ -56,11 +72,13 @@ export const Dropdown = <T extends any>({
       }
       class={clsx(button && buttonStyles, props.class, dropdownStyle)}
     >
-      {options.map(o => (
-        <option value={getKey(o)} key={getKey(o)}>
-          {getText(o)}
-        </option>
-      ))}
+      {Object.entries(optionsByGroup).map(([groupName, children]) =>
+        groupName ? (
+          <optgroup label={groupName}>{children}</optgroup>
+        ) : (
+          children
+        ),
+      )}
     </select>
   )
 }

@@ -11,7 +11,7 @@ import { lerp } from '@/utils/lerp'
 import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
 import { round } from '@/utils/round'
 import { Dropdown } from './dropdown'
-import { Schema } from '@/api/schema'
+import { Schema, StatDescription } from '@/api/schema'
 import { memo } from '@/utils/memo'
 import { useQueryState } from '@/utils/use-query-state'
 import { formatPercent } from '@/utils/format-percent'
@@ -21,6 +21,7 @@ import { BooleanDisplay } from './boolean-display'
 import { CancellablePromise } from '@/utils/cancellable-promise'
 import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { CommentCard } from './comment-card'
+import { cleanFieldName } from '@/utils/clean-field-name'
 
 const commentsDisplayStyle = css`
   grid-column: 1 / -1;
@@ -125,10 +126,6 @@ export const ChartCard = ({
     if (!(event.target as Element).closest(`.${point}`)) setSelectedIndex(null)
   }
 
-  const statOptions = schema.schema
-    .filter(stat => !stat.hide)
-    .map(stat => stat.name)
-
   const matchingSchemaStat = schema.schema.find(s => s.name === fieldName)
   const isBooleanStat =
     matchingSchemaStat && matchingSchemaStat.type === 'boolean'
@@ -143,11 +140,14 @@ export const ChartCard = ({
         <Chart points={dataPoints} onPointClick={setSelectedIndex} />
       )}
       <div class={chartDescriptionStyle}>
-        <Dropdown
+        <Dropdown<StatDescription>
           class={statPickerStyle}
-          options={statOptions}
-          onChange={setFieldName}
-          value={fieldName}
+          options={schema.schema.filter(s => !s.hide)}
+          getKey={s => s.name}
+          getText={s => cleanFieldName(s.name)}
+          getGroup={s => (s.period === 'auto' ? 'Auto' : 'Teleop')}
+          onChange={s => setFieldName(s.name)}
+          value={matchingSchemaStat}
         />
         <div class={detailsStyle}>
           {noData ? (

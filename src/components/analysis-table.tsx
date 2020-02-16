@@ -20,6 +20,7 @@ import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
 import Spinner from './spinner'
+import { cleanFieldName } from '@/utils/clean-field-name'
 
 interface Props {
   teams: ProcessedTeamStats[] | undefined
@@ -50,7 +51,7 @@ const createStatCell = (
 ): Column<StatWithType | undefined, RowType> => {
   const avgTypeStr = avgType === 'Avg' ? 'avg' : 'max'
   return {
-    title: statDescription.name,
+    title: cleanFieldName(statDescription.name),
     getCell: row => {
       const matchingCell = row.summary[statDescription.name]
       if (matchingCell)
