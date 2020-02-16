@@ -87,7 +87,10 @@ export const ChartCard = ({
   teamMatches,
   schema,
 }: ChartCardProps) => {
-  const [fieldName, setFieldName] = useQueryState('stat', schema.schema[0].name)
+  const [fieldName, setFieldName] = useQueryState(
+    'stat',
+    schema.schema.find(f => !f.hide)?.name,
+  )
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
     usePromise(
