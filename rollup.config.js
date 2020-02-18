@@ -153,7 +153,7 @@ export default [
           await mkdirplz(iconDir)
           const background = 'transparent'
           await Promise.all(
-            [512, 192].map(async width =>
+            [512, 192, 180, 32, 16].map(async width =>
               writeFileAsync(
                 join(iconDir, `${width}.png`),
                 await sharp(iconSrc)
