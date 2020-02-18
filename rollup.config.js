@@ -152,17 +152,39 @@ export default [
           const iconDir = join(outDir, 'icons')
           await mkdirplz(iconDir)
           const background = 'transparent'
-          await Promise.all(
-            [512, 192].map(async width =>
+          const appleBg = '#800080'
+          const appleWidth = 180
+          const applePad = Math.round(0.07 * appleWidth)
+          await Promise.all([
+            ...[512, 192, 180, 32, 16].map(
+              async width =>
+                writeFileAsync(
+                  join(iconDir, `${width}.png`),
+                  await sharp(iconSrc)
+                    .resize(width, width, { fit: 'contain', background })
+                    .png()
+                    .toBuffer(),
+                ),
               writeFileAsync(
-                join(iconDir, `${width}.png`),
+                join(iconDir, 'apple.png'),
                 await sharp(iconSrc)
-                  .resize(width, width, { fit: 'contain', background })
+                  .resize(appleWidth - applePad * 2, 180 - applePad * 2, {
+                    fit: 'contain',
+                    background: appleBg,
+                  })
+                  .extend({
+                    top: applePad,
+                    bottom: applePad,
+                    right: applePad,
+                    left: applePad,
+                    background: appleBg,
+                  })
+                  .flatten({ background: appleBg })
                   .png()
                   .toBuffer(),
               ),
             ),
-          )
+          ])
         },
       },
     ],
