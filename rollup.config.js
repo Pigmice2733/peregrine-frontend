@@ -166,7 +166,7 @@ export default [
                     .toBuffer(),
                 ),
               writeFileAsync(
-                join(iconDir, `apple.png`),
+                join(iconDir, 'apple.png'),
                 await sharp(iconSrc)
                   .resize(appleWidth - applePad * 2, 180 - applePad * 2, {
                     fit: 'contain',
