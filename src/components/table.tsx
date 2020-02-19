@@ -71,6 +71,7 @@ const sortButtonStyle = css`
 export interface Column<CellType, RowType> {
   /** Column name, used in title row */
   title: string
+  key: string
   renderCell: (
     cellValue: CellType,
     row: RowType,
@@ -102,6 +103,7 @@ export const createTextColumn = <RowType extends any = never>(
     </td>
   ),
   title,
+  key: title,
   getCellValue: value => value.toLowerCase(),
   sortOrder: SortOrder.ASC,
   getCell: getValue,
@@ -115,6 +117,7 @@ export const createNumberColumn = <RowType extends any = never>(
 ): Column<number, RowType> => ({
   renderCell: value => <td class={cellStyle}>{value}</td>,
   title,
+  key: title,
   getCellValue: value => value,
   sortOrder: SortOrder.DESC,
   getCell: getValue,
@@ -132,6 +135,7 @@ export const createBooleanColumn = <RowType extends any = never>(
     </td>
   ),
   title,
+  key: title,
   getCellValue: value => value,
   sortOrder: SortOrder.DESC,
   getCell: getValue,
@@ -168,16 +172,15 @@ export const Table = <RowType extends any>({
   defaultSortColumn: defaultSortCol = columns[0],
   contextRow,
 }: RenderableProps<Props<RowType>>) => {
-  const [sortColTitle, setSortColTitle] = useState<string>(defaultSortCol.title)
-  const sortCol =
-    columns.find(col => col.title === sortColTitle) || defaultSortCol
+  const [sortColKey, setSortColKey] = useState<string>(defaultSortCol.key)
+  const sortCol = columns.find(col => col.key === sortColKey) || defaultSortCol
   const [sortOrder, setSortOrder] = useState<SortOrderState>(
     SortOrderState.DEFAULT,
   )
 
   const updateSortCol = (col: Column<any, RowType>) => {
     setSortOrder(
-      col.title === sortColTitle
+      col.title === sortColKey
         ? // if the column is already selected, reverse the order
           sortOrder === SortOrderState.DEFAULT
           ? SortOrderState.REVERSED
@@ -185,7 +188,7 @@ export const Table = <RowType extends any>({
         : // otherwise use the default order
           SortOrderState.DEFAULT,
     )
-    setSortColTitle(col.title)
+    setSortColKey(col.key)
   }
 
   const compareRows = (
@@ -215,7 +218,7 @@ export const Table = <RowType extends any>({
         <tr class={tableHeaderRowStyle}>
           {columns.map(col => (
             <th
-              key={col.title}
+              key={col.key}
               class={clsx(
                 tableHeaderCellStyle,
                 col === sortCol && activeStyle,

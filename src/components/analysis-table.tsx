@@ -60,6 +60,7 @@ const createStatCell = (
           type: statDescription.type,
         }
     },
+    key: statDescription.period + '::' + statDescription.name,
     renderCell: cell => {
       const text = cell
         ? cell.type === 'boolean'
@@ -173,6 +174,7 @@ const AnalysisTable = ({
     title: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
+    key: 'team',
     renderCell: (team, _row, rowIndex) => (
       <th scope="row" class={teamNumCellStyle}>
         <div className={teamRankStyle}>{rowIndex + 1}</div>
