@@ -23,7 +23,6 @@ import { formatTimeWithoutDate } from '@/utils/format-time'
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
-import { grey } from '@/colors'
 
 const sectionStyle = css`
   font-weight: normal;
