@@ -23,6 +23,7 @@ import { formatTimeWithoutDate } from '@/utils/format-time'
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
+import { grey } from '@/colors'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -199,9 +200,16 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           teamLocation && {
             title: formatTeamLocation(teamLocation, eventKey),
             icon: mapMarker,
-            action:
-              teamLocation.match.time &&
-              `(${formatTimeWithoutDate(teamLocation.match.time)})`,
+            action: teamLocation.match.time && (
+              <span
+                class={css`
+                  color: #757575;
+                  font-size: 0.75rem;
+                `}
+              >
+                {formatTimeWithoutDate(teamLocation.match.time)}
+              </span>
+            ),
           },
         ]}
       />
