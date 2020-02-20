@@ -15,13 +15,11 @@ import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
 import Button from '@/components/button'
 import { matchHasTeam } from '@/utils/match-has-team'
-import { useCurrentTime } from '@/utils/use-current-time'
 import { compareMatches } from '@/utils/compare-matches'
 import { lerp } from '@/utils/lerp'
 import { useState } from 'preact/hooks'
-import { formatMatchKey } from '@/utils/format-match-key'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
-import { formatTime, formatTimeWithoutDate } from '@/utils/format-time'
+import { formatTimeWithoutDate } from '@/utils/format-time'
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
@@ -154,8 +152,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
   const now = new Date(
     lerp(0, 1, eventStartTime.getTime(), eventEndTime.getTime())(timePercent),
   )
-
-  const currentMatch = eventMatches?.find(isCurrent(now))
 
   const teamLocation =
     eventMatches && guessTeamLocation(eventMatches, teamNum, now)
