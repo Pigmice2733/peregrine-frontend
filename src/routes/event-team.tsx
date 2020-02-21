@@ -16,13 +16,12 @@ import { useSchema } from '@/cache/schema/use'
 import Button from '@/components/button'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { compareMatches } from '@/utils/compare-matches'
-import { lerp } from '@/utils/lerp'
-import { useState } from 'preact/hooks'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { formatTimeWithoutDate } from '@/utils/format-time'
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
+import { useCurrentTime } from '@/utils/use-current-time'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -48,9 +47,6 @@ const eventTeamStyle = css`
   }
 `
 
-const eventStartTime = new Date('Sat Feb 15 2020 08:00 EST')
-const eventEndTime = new Date('Sat Feb 15 2020 16:00 EST')
-
 const minute = 1000 * 60
 const matchCycleDuration = 7 * minute
 const afterMatchDuration = 10 * minute
@@ -60,7 +56,7 @@ const isCurrent = (now: Date) => (match: ProcessedMatchInfo): boolean => {
   const matchStartTime = match.time
   if (!matchStartTime) return false
   // match starts at 3:04
-  // match is current till 3:14 (+10m)
+  // match is current till 3:11 (+7m)
   const matchEndTime = new Date(matchStartTime.getTime() + matchCycleDuration)
   return matchStartTime < now && now < matchEndTime
 }
@@ -109,8 +105,8 @@ const guessTeamLocation = (
 
     const matchStartTime = m.time.getTime()
     // match starts at 3:04
-    // match queueing starts at 2:34
-    // verify that 2:34 < now < 3:04
+    // match queueing starts at 2:39
+    // verify that 2:39 < now < 3:04
     const matchQueueStartTime = matchStartTime - queueDuration
     return matchQueueStartTime < currentTime && currentTime < matchStartTime
   })
@@ -122,8 +118,8 @@ const guessTeamLocation = (
     const matchStartTime = m.time.getTime()
     const matchEndTime = matchStartTime + matchCycleDuration
     // match started at 3:04
-    // match ended at 3:14 (+10m)
-    // verify that match results posted and 3:14 < now < 3:24 (+10m)
+    // match ended at 3:11 (+7m)
+    // verify that 3:11 < now < 3:21 (+10m)
     return (
       matchEndTime < currentTime &&
       currentTime < matchEndTime + afterMatchDuration
@@ -157,11 +153,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
   const schema = useSchema(eventInfo?.schemaId)
   const eventMatches = useEventMatches(eventKey)?.sort(compareMatches)
   const teamMatches = eventMatches?.filter(matchHasTeam('frc' + teamNum))
-  const [timePercent, setTimePercent] = useState(0)
-  // const now = useCurrentTime()
-  const now = new Date(
-    lerp(0, 1, eventStartTime.getTime(), eventEndTime.getTime())(timePercent),
-  )
+  const now = useCurrentTime()
 
   const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
 
@@ -173,15 +165,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
-      <input
-        type="range"
-        min="0"
-        step="0.0001"
-        max="1"
-        style={{ width: '80vw' }}
-        onInput={e => setTimePercent(e.currentTarget.valueAsNumber)}
-      />
-      <p>{now.toLocaleTimeString()}</p>
       {nextMatch && (
         <Fragment>
           <h2 class={sectionStyle}>Next Match</h2>
