@@ -163,7 +163,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     lerp(0, 1, eventStartTime.getTime(), eventEndTime.getTime())(timePercent),
   )
 
-  const teamLocation = eventMatches && guessTeamLocation(teamMatches, now)
+  const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
