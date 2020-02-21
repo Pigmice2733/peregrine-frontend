@@ -18,6 +18,7 @@ import { red, blue, faintGrey, pigmicePurple } from '@/colors'
 import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
 import { processTeamStats } from '@/api/stats'
 import { BooleanDisplay } from '@/components/boolean-display'
+import { matchHasTeam } from '@/utils/match-has-team'
 
 interface Props {
   eventKey: string
@@ -131,11 +132,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           <AnalysisTable
             teams={
               selectedDisplay === showEventResults
-                ? teams?.filter(
-                    t =>
-                      match.redAlliance.includes('frc' + t.team) ||
-                      match.blueAlliance.includes('frc' + t.team),
-                  )
+                ? teams?.filter(t => matchHasTeam('frc' + t.team)(match))
                 : teamsStats
             }
             schema={schema}
