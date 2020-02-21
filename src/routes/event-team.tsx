@@ -89,12 +89,10 @@ const formatTeamLocation = (
 }
 
 const guessTeamLocation = (
-  eventMatches: ProcessedMatchInfo[],
-  teamNum: string,
+  teamMatches: ProcessedMatchInfo[],
   now: Date,
 ): TeamLocation => {
   const currentTime = now.getTime()
-  const teamMatches = eventMatches.filter(matchHasTeam('frc' + teamNum))
   const currentMatch = teamMatches.find(isCurrent(now))
   if (currentMatch)
     return {
@@ -165,8 +163,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     lerp(0, 1, eventStartTime.getTime(), eventEndTime.getTime())(timePercent),
   )
 
-  const teamLocation =
-    eventMatches && guessTeamLocation(eventMatches, teamNum, now)
+  const teamLocation = eventMatches && guessTeamLocation(teamMatches, now)
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
