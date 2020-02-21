@@ -52,9 +52,9 @@ const eventStartTime = new Date('Sat Feb 15 2020 08:00 EST')
 const eventEndTime = new Date('Sat Feb 15 2020 16:00 EST')
 
 const minute = 1000 * 60
-const matchCycleDuration = 10 * minute
+const matchCycleDuration = 7 * minute
 const afterMatchDuration = 10 * minute
-const queueDuration = 25 * minute
+const queueDuration = 20 * minute
 
 const isCurrent = (now: Date) => (match: ProcessedMatchInfo): boolean => {
   const matchStartTime = match.time
@@ -113,21 +113,25 @@ const guessTeamLocation = (
 
   const matchThatJustFinished = teamMatches.find(m => {
     if (!m.time) return false
-    const hasFinished =
-      m && m.blueScore !== undefined && m.redScore !== undefined
     const matchStartTime = m.time.getTime()
     const matchEndTime = matchStartTime + matchCycleDuration
     // match started at 3:04
     // match ended at 3:14 (+10m)
     // verify that match results posted and 3:14 < now < 3:24 (+10m)
     return (
-      hasFinished &&
       matchEndTime < currentTime &&
       currentTime < matchEndTime + afterMatchDuration
     )
   })
   if (matchThatJustFinished)
-    return { match: matchThatJustFinished, state: TeamState.AfterMatch }
+    return {
+      match: matchThatJustFinished,
+      state:
+        // If the match is "past" its end time, but scores haven't been posted yet, it should display "in match"
+        matchThatJustFinished.blueScore === undefined
+          ? TeamState.InMatch
+          : TeamState.AfterMatch,
+    }
 }
 
 type TeamLocation =
