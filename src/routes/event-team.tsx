@@ -96,7 +96,15 @@ const guessTeamLocation = (
   const currentTime = now.getTime()
   const teamMatches = eventMatches.filter(matchHasTeam('frc' + teamNum))
   const currentMatch = teamMatches.find(isCurrent(now))
-  if (currentMatch) return { match: currentMatch, state: TeamState.InMatch }
+  if (currentMatch)
+    return {
+      match: currentMatch,
+      state:
+        // If the match results are posted before the match is predicted to be finished, it should show as "after match"
+        currentMatch.blueScore === undefined
+          ? TeamState.InMatch
+          : TeamState.AfterMatch,
+    }
 
   const queueMatch = teamMatches.find(m => {
     if (!m.time) return false
