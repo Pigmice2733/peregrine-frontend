@@ -72,6 +72,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
                 key={matchKey}
                 match={matchKey}
                 reports={reports}
+                eventKey={eventKey}
               />
             ))
           )
@@ -88,21 +89,29 @@ const matchCommentsStyle = css`
   grid-template-columns: 4rem 1fr;
   grid-gap: 1.2rem;
 
-  & > span {
+  & > :first-child {
     font-weight: bold;
+  }
+
+  & > :not(:first-child) {
+    grid-column: 2;
   }
 `
 
 const MatchComments = ({
   match,
   reports,
+  eventKey,
 }: {
   match: string
   reports: GetReport[]
+  eventKey: string
 }) => {
   return (
     <div class={matchCommentsStyle}>
-      <span>{formatMatchKeyShort(match)}</span>
+      <a href={`/events/${eventKey}/matches/${match}`}>
+        {formatMatchKeyShort(match)}
+      </a>
       {reports.map(r => (
         <CommentCard key={JSON.stringify(r)} report={r} />
       ))}
