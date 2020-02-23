@@ -12,10 +12,12 @@ import { mdiPlay } from '@mdi/js'
 
 const videoCardStyle = css`
   width: 40rem;
-  background: black;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 100%;
+  div& {
+    background: black;
+  }
   &:before {
     display: block;
     content: '';
