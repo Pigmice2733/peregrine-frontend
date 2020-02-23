@@ -19,6 +19,8 @@ import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
 import { processTeamStats } from '@/api/stats'
 import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
+import { VideoCard } from '@/components/video-card'
+import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 
 interface Props {
   eventKey: string
@@ -31,14 +33,14 @@ const redStyle = css``
 const blueStyle = css``
 
 const matchStyle = css`
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: 100%;
+  padding: 1.5rem;
+  grid-gap: 1.5rem;
+  justify-items: center;
 
-  & > div, /* increase specificity */
   & > * {
-    margin: 1.5rem 0 0 0;
     max-width: 100%;
     overflow-x: auto;
   }
@@ -110,7 +112,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         </Card>
       )}
       {match && schema && (
-        <Card>
+        <Card
+          class={css`
+            overflow-y: hidden;
+          `}
+        >
           <div class={displayModeSelectorStyle}>
             <button
               class={clsx(
@@ -158,6 +164,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           />
         </Card>
       )}
+      {match?.videos?.map(v => (
+        <VideoCard url={cleanYoutubeUrl(v)} />
+      ))}
     </Page>
   )
 }

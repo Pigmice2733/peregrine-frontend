@@ -1,5 +1,5 @@
 import { h, VNode } from 'preact'
-import { ComponentName, PropsOf, ElementName } from '@/type-utils'
+import { PropsOf, ElementName } from '@/type-utils'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
@@ -33,33 +33,26 @@ interface BaseCardProps {
   outlined?: boolean
 }
 
+export type CardProps<Elements extends ElementName = ElementName> = {
+  [El in Elements]: El extends 'div'
+    ? { as?: 'div' } & PropsOf<'div'>
+    : El extends 'a'
+    ? ({ as: 'a' } | { as?: 'a'; href: string }) & PropsOf<'a'>
+    : { as: El } & PropsOf<El>
+}[Elements] &
+  BaseCardProps
+
 interface Card {
-  // Specific common overloads so that event listener types can be inferred
-  (props: { as: 'div' } & PropsOf<'div'> & BaseCardProps): VNode
-  (props: { as: 'a' } & PropsOf<'a'> & BaseCardProps): VNode
-  // Generic overload for any "as" type, event listener types must manually be specified, but they will be checked
-  <T extends ElementName>(props: { as: T } & PropsOf<T> & BaseCardProps): VNode
-  // Overloads for when there is no `as` prop
-  (props: PropsOf<'a'> & { href: string } & BaseCardProps): VNode
-  (props: PropsOf<'div'> & BaseCardProps): VNode
-  <T extends (props: any, context?: any) => VNode>(
-    props: { as: T } & PropsOf<T> & BaseCardProps,
-  ): VNode
+  (props: { href: string } & CardProps<'a'>): VNode
+  (props: CardProps<'div'>): VNode
+  (props: CardProps): VNode
 }
 
-const Card: Card = ({
-  as,
-  outlined,
-  ...props
-}: {
-  as?: ComponentName
-  href?: string
-  class?: string
-} & BaseCardProps) => {
+const Card: Card = ({ as, outlined, ...props }: CardProps) => {
   const El = as || (props.href ? 'a' : 'div')
   return (
     <El
-      {...props}
+      {...(props as any)}
       class={clsx(cardStyle, outlined && outlinedCardStyle, props.class)}
     />
   )
