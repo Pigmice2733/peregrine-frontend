@@ -7,6 +7,7 @@ export interface MatchInfo {
   time?: string
   // example: qm3
   key: string
+  videos?: string[] | null
   redScore?: number
   blueScore?: number
   // UTC date - scheduled match time
