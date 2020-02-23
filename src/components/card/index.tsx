@@ -46,7 +46,6 @@ interface Card {
   (props: { href: string } & CardProps<'a'>): VNode
   (props: CardProps<'div'>): VNode
   (props: CardProps): VNode
-  (props: BaseCardProps & PropsOf<ElementName> & { as: ElementName }): VNode
 }
 
 const Card: Card = ({ as, outlined, ...props }: CardProps) => {
