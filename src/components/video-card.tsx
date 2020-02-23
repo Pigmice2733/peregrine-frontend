@@ -45,6 +45,7 @@ export const VideoCard = ({
   const [loadVideo, setLoadVideo] = useState(false)
   useEffect(() => {
     if (connection === ConnectionType.Default) setLoadVideo(true)
+    else if (connection === ConnectionType.Offline) setLoadVideo(false)
   }, [connection])
   if (connection === ConnectionType.Offline) return null
   return (
