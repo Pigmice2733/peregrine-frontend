@@ -25,6 +25,7 @@ const buttonStyles = css`
 
 interface BaseProps<T> {
   class?: string
+  required?: boolean
   button?: true
   options: readonly T[]
   value?: T
@@ -32,6 +33,7 @@ interface BaseProps<T> {
   getGroup?: (v: T) => string | null
   getKey?: (v: T) => string | number
   getText?: (v: T) => string | number
+  emptyLabel?: string
 }
 
 type Props<T> = BaseProps<T> &
@@ -45,6 +47,7 @@ export const Dropdown = <T extends any>({
   getKey = (v: T) => v,
   getText = (v: T) => v,
   getGroup = () => null,
+  emptyLabel = 'Select an option',
   ...props
 }: Props<T>) => {
   const optionsByGroup = options.reduce((acc, opt) => {
@@ -67,8 +70,14 @@ export const Dropdown = <T extends any>({
           ) as T,
         )
       }
+      {...props}
       class={clsx(button && buttonStyles, props.class, dropdownStyle)}
     >
+      {value === undefined && (
+        <option disabled selected>
+          {emptyLabel}
+        </option>
+      )}
       {Object.entries(optionsByGroup).map(([groupName, children]) =>
         groupName ? (
           <optgroup label={groupName}>{children}</optgroup>
