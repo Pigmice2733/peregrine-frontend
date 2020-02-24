@@ -19,6 +19,7 @@ import { usePromise } from '@/utils/use-promise'
 import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
 import { authenticate } from '@/api/authenticate'
 import { route } from '@/router'
+import { Realm } from '@/api/realm'
 
 const signUpStyle = css`
   padding: 1.5rem;
@@ -45,12 +46,13 @@ const SignUpForm = () => {
   const [lastName, setLastName] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [realmId, setRealmId] = useState(1)
+  const [realmId, setRealmId] = useState<number | undefined>(undefined)
   const realms = usePromise(getRealms) || []
   const emitError = useErrorEmitter()
 
   const onSubmit = (e: Event) => {
     e.preventDefault()
+    if (realmId === undefined) return
     setIsLoading(true)
     createUser({
       username,
@@ -89,9 +91,12 @@ const SignUpForm = () => {
             minLength={minPasswordLength}
             maxLength={maxPasswordLength}
           />
-          <Dropdown
+          <Dropdown<Realm>
+            value={realmId === undefined ? undefined : realms[realmId]}
+            emptyLabel="Select a realm"
             class={dropdownClass}
             options={realms}
+            required
             onChange={v => {
               setRealmId(v.id)
             }}
