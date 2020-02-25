@@ -25,8 +25,8 @@ const matchListStyle = css`
 const enum QueryRank {
   NoMatch,
   TeamLoose,
-  TeamExact,
   MatchLoose,
+  TeamExact,
   MatchExact,
 }
 
