@@ -10,6 +10,8 @@ import { uploadSavedReports } from './api/report/submit-report'
 import { ErrorBoundary } from './components/error-boundary'
 import { addUrlListener } from './url-manager'
 
+console.log('app v4')
+
 if (process.env.NODE_ENV === 'production') {
   const ga = GAnalytics('UA-144107080-1', {}, true)
   addUrlListener(() =>

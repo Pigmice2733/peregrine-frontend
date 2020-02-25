@@ -71,7 +71,11 @@ interface Props {
 const isTruthy = <T extends object>(i: T | Falsy): i is T => Boolean(i)
 
 const InfoGroupCard = ({ info, ...props }: Merge<Props, PropsOf<'div'>>) => (
-  <Card {...props} class={clsx(infoCardStyle, props.class)}>
+  <Card
+    {...props}
+    class={clsx(infoCardStyle, props.class)}
+    style={{ background: 'red' }}
+  >
     {info.filter(isTruthy).map(({ icon, action, title, ...i }) => {
       const El = i.href ? 'a' : 'div'
       return (

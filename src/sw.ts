@@ -13,20 +13,24 @@ const urlInWhitelist = (whitelist: string[], url: string) =>
   whitelist.some(cachePath => new URL(cachePath, location.href).href === url)
 
 const setupCache = async () => {
+  console.log('setting up new cache')
   const cache = await cachePromise
   const cacheItems: string[] = [...chunks, root, '/style.css']
   await cache.addAll(cacheItems)
   ;(await cache.keys()).forEach(req => {
     if (!urlInWhitelist(cacheItems, req.url)) cache.delete(req)
   })
+  console.log('done setting up cache')
 }
 
 self.addEventListener('install', function(event) {
+  console.log('new sw install has triggered')
   self.skipWaiting()
   event.waitUntil(setupCache())
 })
 
 const handleGETRequest = async (request: Request): Promise<Response> => {
+  console.log('handling', request.url)
   const cache = await cachePromise
   return (await cache.match(request)) || fetch(request, { mode: 'same-origin' })
 }
@@ -46,6 +50,7 @@ self.addEventListener('fetch', function(event) {
   const { request } = event
   const { url } = request
   if (request.mode === 'navigate') {
+    console.log('its a navigate request v2')
     return navigator.onLine
       ? null // Fall back to network
       : event.respondWith(caches.match(root) as Promise<Response>)
