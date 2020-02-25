@@ -1,31 +1,17 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { Fragment, h } from 'preact'
-import { Dropdown } from './dropdown'
-import {
-  matchNames,
-  matchTypes,
-  getMatchType,
-  MatchType,
-} from '@/utils/match-type'
 import TextInput from './text-input'
-import { compareMatches } from '@/utils/compare-matches'
+import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
 import { MatchCard } from './match-card'
 import Spinner from './spinner'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
+import { formatMatchKey } from '@/utils/format-match-key'
 
 interface Props {
   matches: ProcessedMatchInfo[]
   eventKey: string
 }
-
-type FilterType = MatchType | 'Team'
-
-const searchStyles = css`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-gap: 0.7rem;
-`
 
 const searchTextStyles = css`
   margin: 0;
@@ -36,56 +22,78 @@ const matchListStyle = css`
   grid-gap: 1.1rem;
 `
 
+const enum QueryRank {
+  NoMatch,
+  TeamLoose,
+  TeamExact,
+  MatchLoose,
+  MatchExact,
+}
+
 export const EventMatches = ({ matches, eventKey }: Props) => {
-  const [filterType, setFilterType] = useState<FilterType>('Team')
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const teamQuery = 'frc' + searchQuery
-  const matchGroups =
-    matches &&
-    [
-      ...matches.reduce((groups, match) => {
-        const matchType = getMatchType(match.key)
-        groups.add(matchType)
-        return groups
-      }, new Set<MatchType>()),
-    ].sort((a, b) => matchTypes[a] - matchTypes[b])
+  const s = searchQuery.trim().toLowerCase()
+
+  const getQueryRank = (m: ProcessedMatchInfo) => {
+    if (
+      s === m.key ||
+      'qm' + s === m.key ||
+      s === formatMatchKey(m.key).group.toLowerCase()
+    )
+      return QueryRank.MatchExact
+    if (
+      m.key.includes(s) ||
+      formatMatchKey(m.key)
+        .group.toLowerCase()
+        .includes(s)
+    )
+      return QueryRank.MatchLoose
+    // If all of the query is digits
+    if (Number(s).toString() === s) {
+      const teams = [...m.redAlliance, ...m.blueAlliance].map(t =>
+        t.replace(/frc/, ''),
+      )
+      if (teams.includes(s)) return QueryRank.TeamExact
+      if (teams.some(t => t.includes(s))) return QueryRank.TeamLoose
+    }
+    return QueryRank.NoMatch
+  }
+
+  const sortedMatches = matches
+    .map(match => ({
+      match,
+      queryRank: getQueryRank(match),
+    }))
+    .filter(m => m.queryRank !== QueryRank.NoMatch)
+    .sort((a, b) => {
+      return (
+        b.queryRank - a.queryRank ||
+        compareMatchesChronologically(a.match, b.match)
+      )
+    })
+
+  console.log(sortedMatches)
+
+  const filteredMatches = s
+    ? sortedMatches.map(m => m.match)
+    : matches.sort(compareMatchesChronologically)
 
   return (
     <Fragment>
-      <div class={searchStyles}>
-        {matchGroups && (
-          <Dropdown<FilterType>
-            button
-            options={['Team', ...matchGroups]}
-            getText={g => matchNames[g as MatchType] || g}
-            onChange={setFilterType}
-          />
-        )}
-        <TextInput
-          labelClass={searchTextStyles}
-          label="Search"
-          onInput={setSearchQuery}
-        />
-      </div>
+      <TextInput
+        labelClass={searchTextStyles}
+        label="Search"
+        onInput={setSearchQuery}
+      />
       {matches ? (
         <div class={matchListStyle}>
-          {matches
-            .filter(m =>
-              filterType === 'Team'
-                ? searchQuery === '' ||
-                  m.redAlliance.some(t => t === teamQuery) ||
-                  m.blueAlliance.some(t => t === teamQuery)
-                : filterType === getMatchType(m.key) &&
-                  m.key.includes(searchQuery),
-            )
-            .sort(compareMatches)
-            .map(m => (
-              <MatchCard
-                href={`/events/${eventKey}/matches/${m.key}`}
-                match={m}
-                key={m.key}
-              />
-            ))}
+          {filteredMatches.map(m => (
+            <MatchCard
+              href={`/events/${eventKey}/matches/${m.key}`}
+              match={m}
+              key={m.key}
+            />
+          ))}
         </div>
       ) : (
         <Spinner />
