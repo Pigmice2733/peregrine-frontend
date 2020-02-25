@@ -25,7 +25,6 @@ const setupCache = async () => {
 
 self.addEventListener('install', function(event) {
   console.log('new sw install has triggered')
-  self.skipWaiting()
   event.waitUntil(setupCache())
 })
 
