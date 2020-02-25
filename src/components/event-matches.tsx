@@ -59,23 +59,20 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
     return QueryRank.NoMatch
   }
 
-  const sortedMatches = matches
-    .map(match => ({
-      match,
-      queryRank: getQueryRank(match),
-    }))
-    .filter(m => m.queryRank !== QueryRank.NoMatch)
-    .sort((a, b) => {
-      return (
-        b.queryRank - a.queryRank ||
-        compareMatchesChronologically(a.match, b.match)
-      )
-    })
-
-  console.log(sortedMatches)
-
   const filteredMatches = s
-    ? sortedMatches.map(m => m.match)
+    ? matches
+        .map(match => ({
+          match,
+          queryRank: getQueryRank(match),
+        }))
+        .filter(m => m.queryRank !== QueryRank.NoMatch)
+        .sort((a, b) => {
+          return (
+            b.queryRank - a.queryRank ||
+            compareMatchesChronologically(a.match, b.match)
+          )
+        })
+        .map(m => m.match)
     : matches.sort(compareMatchesChronologically)
 
   return (
