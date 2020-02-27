@@ -76,6 +76,7 @@ export interface Column<CellType, RowType> {
     cellValue: CellType,
     row: RowType,
     rowIndex: number,
+    sortColKey: string,
   ) => JSX.Element
   /** Function to retrieve the cell value, used for sorting */
   getCellValue: (cellValue: CellType) => number | string | boolean
@@ -210,7 +211,6 @@ export const Table = <RowType extends any>({
     }
     return result
   }
-
   return (
     <table class={tableStyle}>
       <thead>
@@ -238,7 +238,13 @@ export const Table = <RowType extends any>({
       </thead>
       <tbody>
         {rows.sort(compareRows).map((row, index) => (
-          <TableRow key={row.key} row={row} columns={columns} index={index} />
+          <TableRow
+            key={row.key}
+            row={row}
+            columns={columns}
+            index={index}
+            sortColKey={sortColKey}
+          />
         ))}
       </tbody>
     </table>
@@ -276,15 +282,17 @@ const TableRow = <RowType extends any>({
   row,
   columns,
   index,
+  sortColKey,
 }: RenderableProps<{
   row: Row<RowType>
   columns: Column<any, RowType>[]
   index: number
+  sortColKey: string
 }>) => (
   <tr class={tableRowStyle}>
     {columns.map(col => {
       const cell = col.getCell(row.value)
-      return col.renderCell(cell, row.value, index)
+      return col.renderCell(cell, row.value, index, sortColKey)
     })}
   </tr>
 )
