@@ -92,14 +92,12 @@ const SignUpForm = () => {
             maxLength={maxPasswordLength}
           />
           <Dropdown<Realm>
-            value={realmId === undefined ? undefined : realms[realmId]}
+            value={realms.find(r => r.id === realmId)}
             emptyLabel="Select a realm"
             class={dropdownClass}
             options={realms}
             required
-            onChange={v => {
-              setRealmId(v.id)
-            }}
+            onChange={v => setRealmId(v.id)}
             getKey={v => v.id}
             getText={v => v.name}
           />
