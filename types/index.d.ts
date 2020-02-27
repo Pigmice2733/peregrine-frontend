@@ -71,4 +71,5 @@ declare module 'qss' {
 declare module 'chunks' {
   const chunks: string[]
   export default chunks
+  export const chunksHash: string
 }
