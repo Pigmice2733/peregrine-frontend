@@ -50,7 +50,7 @@ interface Props {
 export const EventInfoCard = ({ event }: Props) =>
   event ? (
     <InfoGroupCard
-      style={{ background: 'red' }}
+      style={{ background: 'purple' }}
       info={[
         event.locationName &&
           event.gmapsUrl && {
