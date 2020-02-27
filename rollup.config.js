@@ -131,7 +131,7 @@ export default [
           if (source !== chunksFile) return null
           const chunks = await readFileAsync(chunksFile, 'utf8')
           const chunksHash = crypto
-            .createHash('md5')
+            .createHash('sha256')
             .update(chunks)
             .digest('hex')
             .slice(0, 10)

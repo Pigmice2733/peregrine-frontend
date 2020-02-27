@@ -28,7 +28,7 @@ module.exports = {
         ) {
           return local
         }
-        const h = createHash('md5')
+        const h = createHash('sha256')
           .update(prod ? local + path : path)
           .digest('hex')
           .slice(0, 4)
