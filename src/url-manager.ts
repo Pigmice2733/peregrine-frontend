@@ -39,5 +39,7 @@ export const useQueryParam = (name: string) =>
   useUrl(() => getQueryParams()[name])
 
 export const updateQueryParam = (name: string, value: URLVal) => {
-  updateUrl(encode({ ...getQueryParams(), [name]: value }, '?'))
+  updateUrl(
+    encode({ ...getQueryParams(), [name]: value }, '?').replace(/%3A/g, ':'),
+  )
 }

@@ -40,8 +40,11 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
           <AnalysisTable
             teams={eventStats}
             schema={schema}
-            renderTeam={team => (
-              <a class={teamStyle} href={`/events/${eventKey}/teams/${team}`}>
+            renderTeam={(team, sortColKey) => (
+              <a
+                class={teamStyle}
+                href={`/events/${eventKey}/teams/${team}?stat=${sortColKey}`}
+              >
                 {team}
               </a>
             )}

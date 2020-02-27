@@ -22,6 +22,7 @@ import { CancellablePromise } from '@/utils/cancellable-promise'
 import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { CommentCard } from './comment-card'
 import { cleanFieldName } from '@/utils/clean-field-name'
+import { getFieldKey } from '@/utils/get-field-key'
 
 const commentsDisplayStyle = css`
   grid-column: 1 / -1;
@@ -88,9 +89,10 @@ export const ChartCard = ({
   teamMatches,
   schema,
 }: ChartCardProps) => {
-  const [fieldName, setFieldName] = useQueryState(
+  const firstField = schema.schema.find(f => !f.hide) as StatDescription
+  const [fieldKey, setFieldName] = useQueryState(
     'stat',
-    schema.schema.find(f => !f.hide)?.name,
+    getFieldKey(firstField),
   )
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats =
@@ -107,11 +109,16 @@ export const ChartCard = ({
       [team, teamMatches, eventKey],
     ) || []
 
-  useEffect(() => setSelectedIndex(null), [fieldName])
+  useEffect(() => setSelectedIndex(null), [fieldKey])
 
   const matchesWithSelectedStat = matchesStats
     .map(({ matchKey, stats }) => {
-      const matchingStat = stats.find(f => f.name === fieldName)
+      const matchingStat = stats.find(
+        f =>
+          // TODO: This assumes that a field only appears in auto or teleop, not both
+          getFieldKey({ name: f.name, period: 'teleop' }) === fieldKey ||
+          getFieldKey({ name: f.name, period: 'auto' }) === fieldKey,
+      )
       if (matchingStat) return { matchKey, matchingStat }
       return null
     })
@@ -126,7 +133,9 @@ export const ChartCard = ({
     if (!(event.target as Element).closest(`.${point}`)) setSelectedIndex(null)
   }
 
-  const matchingSchemaStat = schema.schema.find(s => s.name === fieldName)
+  const matchingSchemaStat = schema.schema.find(
+    s => getFieldKey(s) === fieldKey,
+  )
   const isBooleanStat =
     matchingSchemaStat && matchingSchemaStat.type === 'boolean'
 
@@ -143,10 +152,10 @@ export const ChartCard = ({
         <Dropdown<StatDescription>
           class={statPickerStyle}
           options={schema.schema.filter(s => !s.hide)}
-          getKey={s => s.name}
+          getKey={getFieldKey}
           getText={s => cleanFieldName(s.name)}
           getGroup={s => (s.period === 'auto' ? 'Auto' : 'Teleop')}
-          onChange={s => setFieldName(s.name)}
+          onChange={s => setFieldName(getFieldKey(s))}
           value={matchingSchemaStat}
         />
         <div class={detailsStyle}>

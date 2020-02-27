@@ -21,11 +21,12 @@ import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
 import Spinner from './spinner'
 import { cleanFieldName } from '@/utils/clean-field-name'
+import { getFieldKey } from '@/utils/get-field-key'
 
 interface Props {
   teams: ProcessedTeamStats[] | undefined
   schema: Schema
-  renderTeam: (team: string) => JSX.Element
+  renderTeam: (team: string, sortColKey: string) => JSX.Element
   renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
   enableSettings?: boolean
 }
@@ -60,7 +61,7 @@ const createStatCell = (
           type: statDescription.type,
         }
     },
-    key: statDescription.period + '::' + statDescription.name,
+    key: getFieldKey(statDescription),
     renderCell: cell => {
       const text = cell
         ? cell.type === 'boolean'
@@ -175,10 +176,10 @@ const AnalysisTable = ({
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
     key: 'team',
-    renderCell: (team, _row, rowIndex) => (
+    renderCell: (team, _row, rowIndex, sortColKey) => (
       <th scope="row" class={teamNumCellStyle}>
         <div className={teamRankStyle}>{rowIndex + 1}</div>
-        {renderTeam(team)}
+        {renderTeam(team, sortColKey)}
       </th>
     ),
     sortOrder: SortOrder.ASC,
