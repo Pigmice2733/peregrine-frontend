@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
@@ -14,7 +14,8 @@ interface MatchCardProps {
     time?: Date
   }
   key?: string | number
-  href?: string
+  eventKey: string
+  link?: boolean
 }
 
 const matchCardStyle = css`
@@ -56,13 +57,19 @@ const matchNumStyle = css`
 
 const allianceStyle = css`
   grid-column: 3;
-  color: white;
-  font-weight: bold;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
   text-align: center;
   text-align-last: justify;
+  color: white;
+  font-weight: bold;
+
+  & > * {
+    color: white;
+    text-decoration: none;
+    padding: 0.2rem;
+  }
 `
 
 const redStyle = css`
@@ -73,10 +80,25 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
-export const MatchCard = memo(({ match, href }: MatchCardProps) => {
+export const MatchCard = memo(({ match, eventKey, link }: MatchCardProps) => {
   const matchName = formatMatchKey(match.key)
+
+  const createTeamLinks = (teams: string[]) =>
+    teams.flatMap((t: string, i) => {
+      const num = formatTeamNumber(t)
+      const El = link ? Fragment : 'a'
+      return [
+        i ? ' ' : null,
+        <El key={num} href={`/events/${eventKey}/teams/${num}`}>
+          {num}
+        </El>,
+      ]
+    })
   return (
-    <Card class={matchCardStyle} href={href}>
+    <Card
+      class={matchCardStyle}
+      href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
+    >
       <div class={matchTitleStyle}>
         {matchName.num ? <div>{matchName.group}</div> : matchName.group}
         {matchName.num && (
@@ -89,10 +111,10 @@ export const MatchCard = memo(({ match, href }: MatchCardProps) => {
         </time>
       )}
       <div class={`${redStyle} ${allianceStyle}`}>
-        {match.redAlliance.map(t => formatTeamNumber(t)).join(' ')}
+        {createTeamLinks(match.redAlliance)}
       </div>
       <div class={`${blueStyle} ${allianceStyle}`}>
-        {match.blueAlliance.map(t => formatTeamNumber(t)).join(' ')}
+        {createTeamLinks(match.blueAlliance)}
       </div>
     </Card>
   )

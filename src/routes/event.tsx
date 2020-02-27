@@ -76,7 +76,8 @@ const Event = ({ eventKey }: Props) => {
           <MatchCard
             key={newestIncompleteMatch.key}
             match={newestIncompleteMatch}
-            href={`/events/${eventKey}/matches/${newestIncompleteMatch.key}`}
+            eventKey={eventKey}
+            link
           />
         )}
         {matches ? (
