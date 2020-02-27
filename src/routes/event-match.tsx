@@ -104,7 +104,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
         Scout Match
       </Button>
-      {match ? <MatchCard match={match} /> : <Spinner />}
+      {match ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
       {match && matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
