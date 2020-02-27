@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'preact/hooks'
-import { decode, encode, Val as URLVal, QueryObj } from 'qss'
+import { decode, Val as URLVal, QueryObj } from 'qss'
+import { encodeQs } from './utils/encode-qs'
 
 const urlListeners = new Set<() => void>()
 
@@ -39,7 +40,5 @@ export const useQueryParam = (name: string) =>
   useUrl(() => getQueryParams()[name])
 
 export const updateQueryParam = (name: string, value: URLVal) => {
-  updateUrl(
-    encode({ ...getQueryParams(), [name]: value }, '?').replace(/%3A/g, ':'),
-  )
+  updateUrl(encodeQs({ ...getQueryParams(), [name]: value }))
 }
