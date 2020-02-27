@@ -1,10 +1,13 @@
-import chunks from 'chunks'
+import chunks, { chunksHash } from 'chunks'
 
 declare let self: ServiceWorkerGlobalScope
 export {}
 
-const cachePromise = caches.open('v1')
-const fontsCachePromise = caches.open('fonts')
+const chunksCacheKey = chunksHash
+const fontsCacheKey = 'fonts'
+
+const cachePromise = caches.open(chunksCacheKey)
+const fontsCachePromise = caches.open(fontsCacheKey)
 
 // we are using /index.html instead of / so that it doesn't include h2 pushes because those depend on the route
 const root = '/index.html'
@@ -23,6 +26,17 @@ const setupCache = async () => {
 
 self.addEventListener('install', function(event) {
   event.waitUntil(setupCache())
+})
+
+// When the new SW activates, delete any old caches
+self.addEventListener('activate', () => {
+  caches.keys().then(cacheKeys =>
+    cacheKeys.forEach(cacheKey => {
+      if (cacheKey !== chunksCacheKey && cacheKey !== fontsCacheKey) {
+        caches.delete(cacheKey)
+      }
+    }),
+  )
 })
 
 const handleGETRequest = async (request: Request): Promise<Response> => {

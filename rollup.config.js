@@ -6,6 +6,7 @@ import postcss from 'rollup-plugin-postcss'
 import netlifyPush, { printPush } from 'rollup-plugin-netlify-push'
 import parseRoutes from 'rollup-plugin-netlify-push/parse-routes'
 import { apiUrl } from './src/api/api-url.ts'
+import crypto from 'crypto'
 import { promisify } from 'util'
 import { writeFile, readFile } from 'fs'
 import { join } from 'path'
@@ -129,7 +130,17 @@ export default [
         async load(source) {
           if (source !== chunksFile) return null
           const chunks = await readFileAsync(chunksFile, 'utf8')
-          return `const chunks = ${chunks}; export default chunks`
+          const chunksHash = crypto
+            .createHash('md5')
+            .update(chunks)
+            .digest('hex')
+            .slice(0, 10)
+
+          return `
+            const chunks = ${chunks}
+            export default chunks
+            export const chunksHash = ${JSON.stringify(chunksHash)}
+          `
         },
       },
       node(rollupNodeOptions),
