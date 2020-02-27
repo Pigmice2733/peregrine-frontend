@@ -85,11 +85,7 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       {matches ? (
         <div class={matchListStyle}>
           {filteredMatches.map(m => (
-            <MatchCard
-              href={`/events/${eventKey}/matches/${m.key}`}
-              match={m}
-              key={m.key}
-            />
+            <MatchCard eventKey={eventKey} match={m} key={m.key} link />
           ))}
         </div>
       ) : (

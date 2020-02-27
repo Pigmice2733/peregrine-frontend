@@ -168,10 +168,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       {nextMatch && (
         <Fragment>
           <h2 class={sectionStyle}>Next Match</h2>
-          <MatchCard
-            match={nextMatch}
-            href={`/events/${eventKey}/matches/${nextMatch.key}`}
-          />
+          <MatchCard match={nextMatch} eventKey={eventKey} link />
         </Fragment>
       )}
       <InfoGroupCard
