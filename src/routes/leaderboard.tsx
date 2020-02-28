@@ -48,14 +48,12 @@ const LeaderboardList = () => {
   const years = useYears()
   const leaderboard = usePromise(() => getLeaderboard(year), [year])
 
-  if (!leaderboard) return <Spinner />
-
   return (
     <div class={leaderboardListStyle}>
       <Dropdown options={years} onChange={setYear} value={year} />
-      {leaderboard.map(i => (
+      {leaderboard?.map(i => (
         <LeaderboardCard key={i.reporterId} item={i} />
-      ))}
+      )) || <Spinner />}
     </div>
   )
 }
