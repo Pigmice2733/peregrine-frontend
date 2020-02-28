@@ -10,10 +10,8 @@ import TextInput from '@/components/text-input'
 import { css } from 'linaria'
 import { Dropdown } from '@/components/dropdown'
 import { useQueryState } from '@/utils/use-query-state'
-import { getYears } from '@/api/get-years'
-import { usePromise } from '@/utils/use-promise'
-import { getCachedEvents } from '@/cache/events/get-cached'
 import { UnstyledList } from '@/components/unstyled-list'
+import { useYears } from '@/utils/use-years'
 
 const homeStyle = css`
   display: grid;
@@ -42,18 +40,8 @@ const Home = () => {
   const lowerCaseQuery = query.toLowerCase()
   const [yearVal, setYear] = useQueryState('year', currentYear)
   const year = Number(yearVal)
+  const years = useYears()
   const events = useEvents(year)
-  const cachedEventsFromAllYears = usePromise(getCachedEvents)
-  const years =
-    usePromise(getYears) ||
-    (cachedEventsFromAllYears
-      ? [
-          ...cachedEventsFromAllYears.reduce((years, e) => {
-            years.add(e.endDate.getFullYear())
-            return years
-          }, new Set<number>()),
-        ].sort()
-      : [currentYear])
 
   return (
     <Page name="Home" back={false} class={homeStyle}>
