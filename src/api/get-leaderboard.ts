@@ -5,5 +5,5 @@ export interface LeaderboardItem {
   reports: number
 }
 
-export const getLeaderboard = () =>
-  request<LeaderboardItem[]>('GET', 'leaderboard')
+export const getLeaderboard = (year?: number | string) =>
+  request<LeaderboardItem[]>('GET', 'leaderboard', { year })
