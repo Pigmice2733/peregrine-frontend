@@ -119,8 +119,6 @@ export const ChartCard = ({
     return matchesAutoFieldName || matchesTeleopFieldName
   })?.name
 
-  console.log(fullFieldName)
-
   const matchesWithSelectedStat = (matchesStats || [])
     .map(({ matchKey, stats }) => {
       const matchingStat = stats.find(f => f.name === fullFieldName)
