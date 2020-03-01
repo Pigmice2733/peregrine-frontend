@@ -188,21 +188,25 @@ const AnalysisTable = ({
     key: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    renderCell: (team, _row, rowIndex, sortColKey) => (
-      <th scope="row" class={teamNumCellStyle}>
-        <div className={teamRankStyle}>{rowIndex + 1}</div>
-        {renderTeam(
-          team,
-          eventTeamUrl(
-            eventKey,
+    renderCell: (team, _row, rowIndex, sortColKey) => {
+      const isSortingByStat =
+        sortColKey.startsWith('auto') || sortColKey.startsWith('teleop')
+      return (
+        <th scope="row" class={teamNumCellStyle}>
+          {isSortingByStat && (
+            <div className={teamRankStyle}>{rowIndex + 1}</div>
+          )}
+          {renderTeam(
             team,
-            sortColKey.startsWith('auto') || sortColKey.startsWith('teleop')
-              ? sortColKey
-              : undefined,
-          ),
-        )}
-      </th>
-    ),
+            eventTeamUrl(
+              eventKey,
+              team,
+              isSortingByStat ? sortColKey : undefined,
+            ),
+          )}
+        </th>
+      )
+    },
     sortOrder: SortOrder.ASC,
   }
 
