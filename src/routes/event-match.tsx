@@ -21,7 +21,6 @@ import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
-import { eventTeamUrl } from '@/utils/urls/event-team'
 
 interface Props {
   eventKey: string
@@ -137,13 +136,14 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             </button>
           </div>
           <AnalysisTable
+            eventKey={eventKey}
             teams={
               selectedDisplay === showEventResults
                 ? teams?.filter(t => matchHasTeam('frc' + t.team)(match))
                 : teamsStats
             }
             schema={schema}
-            renderTeam={(team, sortColKey) => (
+            renderTeam={(team, link) => (
               <a
                 class={clsx(
                   tableTeamStyle,
@@ -151,11 +151,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                     ? redStyle
                     : blueStyle,
                 )}
-                href={eventTeamUrl(
-                  eventKey,
-                  team,
-                  sortColKey === 'team' ? undefined : sortColKey,
-                )}
+                href={link}
               >
                 {team}
               </a>
