@@ -23,7 +23,6 @@ import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { CommentCard } from './comment-card'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
-import Spinner from './spinner'
 
 const commentsDisplayStyle = css`
   grid-column: 1 / -1;
@@ -130,8 +129,6 @@ export const ChartCard = ({
     })
     .filter((f): f is Exclude<typeof f, null> => f !== null)
 
-  if (matchesWithSelectedStat.length)
-    console.log(fieldKey, matchesWithSelectedStat[0].matchingStat)
   const dataPoints = matchesWithSelectedStat.map(s => s.matchingStat.avg)
 
   const hoveredMatchKey =
