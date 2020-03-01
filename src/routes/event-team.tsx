@@ -5,7 +5,7 @@ import { sortAscending } from '@/icons/sort-ascending'
 import { history } from '@/icons/history'
 import { MatchCard } from '@/components/match-card'
 import { round } from '@/utils/round'
-import { getEventTeamInfo } from '@/api/get-event-team-info'
+import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
@@ -22,6 +22,7 @@ import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
 import { useCurrentTime } from '@/utils/use-current-time'
+import { useMemo } from 'preact/hooks'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -152,7 +153,11 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
   )
   const schema = useSchema(eventInfo?.schemaId)
   const eventMatches = useEventMatches(eventKey)?.sort(compareMatches)
-  const teamMatches = eventMatches?.filter(matchHasTeam('frc' + teamNum))
+  // This has useMemo so that it does not change when it is passed to ChartCard
+  const teamMatches = useMemo(
+    () => eventMatches?.filter(matchHasTeam('frc' + teamNum)),
+    [eventMatches, teamNum],
+  )
   const now = useCurrentTime()
 
   const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
@@ -204,12 +209,12 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
       </Button>
-      {eventMatches && schema && (
+      {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}
           eventKey={eventKey}
           schema={schema}
-          teamMatches={eventMatches}
+          teamMatches={teamMatches}
         />
       )}
     </Page>
