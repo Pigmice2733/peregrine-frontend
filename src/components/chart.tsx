@@ -90,35 +90,38 @@ export const ChartCard = ({
   schema,
 }: ChartCardProps) => {
   const firstField = schema.schema.find(f => !f.hide) as StatDescription
-  const [fieldKey, setFieldName] = useQueryState(
-    'stat',
-    getFieldKey(firstField),
-  )
+  const [fieldKey, setFieldKey] = useQueryState('stat', getFieldKey(firstField))
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
-  const matchesStats =
-    usePromise(
-      () =>
-        CancellablePromise.all(
-          teamMatches.sort(compareMatches).map(async match => ({
-            matchKey: match.key,
-            stats: await getMatchTeamStats(eventKey, match.key, team)
-              .then(s => s.summary || [])
-              .catch(() => []),
-          })),
-        ),
-      [team, teamMatches, eventKey],
-    ) || []
+  const matchesStats = usePromise(
+    () =>
+      CancellablePromise.all(
+        teamMatches.sort(compareMatches).map(async match => ({
+          matchKey: match.key,
+          stats: await getMatchTeamStats(eventKey, match.key, team)
+            .then(s => s.summary || [])
+            .catch(() => []),
+        })),
+      ),
+    [team, teamMatches, eventKey],
+  )
 
   useEffect(() => setSelectedIndex(null), [fieldKey])
 
-  const matchesWithSelectedStat = matchesStats
+  const fullFieldName = schema.schema.find(field => {
+    if (field.hide) return false
+    const matchesAutoFieldName =
+      getFieldKey({ name: field.name, period: 'auto' }) === fieldKey
+    const matchesTeleopFieldName =
+      getFieldKey({ name: field.name, period: 'teleop' }) === fieldKey
+    if (field.name.includes('auto')) return matchesAutoFieldName
+    if (field.name.includes('teleop')) return matchesTeleopFieldName
+
+    return matchesAutoFieldName || matchesTeleopFieldName
+  })?.name
+
+  const matchesWithSelectedStat = (matchesStats || [])
     .map(({ matchKey, stats }) => {
-      const matchingStat = stats.find(
-        f =>
-          // TODO: This assumes that a field only appears in auto or teleop, not both
-          getFieldKey({ name: f.name, period: 'teleop' }) === fieldKey ||
-          getFieldKey({ name: f.name, period: 'auto' }) === fieldKey,
-      )
+      const matchingStat = stats.find(f => f.name === fullFieldName)
       if (matchingStat) return { matchKey, matchingStat }
       return null
     })
@@ -155,12 +158,14 @@ export const ChartCard = ({
           getKey={getFieldKey}
           getText={s => cleanFieldName(s.name)}
           getGroup={s => (s.period === 'auto' ? 'Auto' : 'Teleop')}
-          onChange={s => setFieldName(getFieldKey(s))}
+          onChange={s => setFieldKey(getFieldKey(s))}
           value={matchingSchemaStat}
         />
         <div class={detailsStyle}>
           {noData ? (
-            <p>No Data</p>
+            matchesStats ? (
+              <p>No Data</p>
+            ) : null
           ) : selectedIndex === null ? (
             isBooleanStat ? (
               <p>{formatPercent(average(dataPoints))}</p>
