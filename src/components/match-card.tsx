@@ -56,6 +56,7 @@ const matchNumStyle = css`
 `
 
 const allianceStyle = css`
+  white-space: nowrap;
   grid-column: 3;
   align-self: stretch;
   margin-left: 0.3rem;

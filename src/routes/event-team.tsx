@@ -14,7 +14,6 @@ import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
 import Button from '@/components/button'
-import { matchHasTeam } from '@/utils/match-has-team'
 import { compareMatches } from '@/utils/compare-matches'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { formatTimeWithoutDate } from '@/utils/format-time'
@@ -152,11 +151,8 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     [eventKey, teamNum],
   )
   const schema = useSchema(eventInfo?.schemaId)
-  const eventMatches = useEventMatches(eventKey)?.sort(compareMatches)
-  // This has useMemo so that it does not change when it is passed to ChartCard
-  const teamMatches = useMemo(
-    () => eventMatches?.filter(matchHasTeam('frc' + teamNum)),
-    [eventMatches, teamNum],
+  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
+    compareMatches,
   )
   const now = useCurrentTime()
 
