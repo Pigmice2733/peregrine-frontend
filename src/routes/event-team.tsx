@@ -151,8 +151,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     [eventKey, teamNum],
   )
   const schema = useSchema(eventInfo?.schemaId)
-  const eventMatches = useEventMatches(eventKey)?.sort(compareMatches)
-  const teamMatches = eventMatches?.filter(matchHasTeam('frc' + teamNum))
+  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
+    compareMatches,
+  )
   const now = useCurrentTime()
 
   const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
@@ -204,12 +205,12 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
       </Button>
-      {eventMatches && schema && (
+      {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}
           eventKey={eventKey}
           schema={schema}
-          teamMatches={eventMatches}
+          teamMatches={teamMatches}
         />
       )}
     </Page>
