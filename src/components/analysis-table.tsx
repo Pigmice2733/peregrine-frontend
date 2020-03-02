@@ -211,15 +211,12 @@ const AnalysisTable = ({
   }
 
   const rankCellStyle = css`
-    display: grid;
     white-space: nowrap;
-    justify-content: center;
-    align-items: center;
-    grid-gap: 0.25rem;
+    text-align: center;
     min-width: 5.5rem;
 
     & :not(:first-child) {
-      grid-column: 2;
+      padding-left: 0.25rem;
       font-size: 0.7rem;
       color: ${textGrey};
     }
