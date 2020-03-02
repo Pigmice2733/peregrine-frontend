@@ -267,7 +267,6 @@ const tableRowStyle = css`
 
   & td {
     padding: 0.8rem 0.6rem;
-    ${borderBottomOnly};
   }
 
   & th:last-of-type {
