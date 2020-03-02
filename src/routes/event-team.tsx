@@ -21,7 +21,6 @@ import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
 import { useCurrentTime } from '@/utils/use-current-time'
-import { useMemo } from 'preact/hooks'
 
 const sectionStyle = css`
   font-weight: normal;
