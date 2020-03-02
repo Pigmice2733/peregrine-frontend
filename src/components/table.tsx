@@ -181,7 +181,7 @@ export const Table = <RowType extends any>({
 
   const updateSortCol = (col: Column<any, RowType>) => {
     setSortOrder(
-      col.title === sortColKey
+      col.key === sortColKey
         ? // if the column is already selected, reverse the order
           sortOrder === SortOrderState.DEFAULT
           ? SortOrderState.REVERSED
