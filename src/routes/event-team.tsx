@@ -14,7 +14,6 @@ import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
 import Button from '@/components/button'
-import { matchHasTeam } from '@/utils/match-has-team'
 import { compareMatches } from '@/utils/compare-matches'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { formatTimeWithoutDate } from '@/utils/format-time'
@@ -151,8 +150,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     [eventKey, teamNum],
   )
   const schema = useSchema(eventInfo?.schemaId)
-  const eventMatches = useEventMatches(eventKey)?.sort(compareMatches)
-  const teamMatches = eventMatches?.filter(matchHasTeam('frc' + teamNum))
+  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
+    compareMatches,
+  )
   const now = useCurrentTime()
 
   const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
@@ -204,12 +204,12 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
       </Button>
-      {eventMatches && schema && (
+      {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}
           eventKey={eventKey}
           schema={schema}
-          teamMatches={eventMatches}
+          teamMatches={teamMatches}
         />
       )}
     </Page>
