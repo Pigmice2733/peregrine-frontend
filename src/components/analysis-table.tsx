@@ -15,18 +15,23 @@ import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
 import { css } from 'linaria'
 import { createDialog } from './dialog'
-import { blue, red, grey, lightGrey } from '@/colors'
+import { blue, red, grey, lightGrey, textGrey } from '@/colors'
 import Icon from './icon'
 import { settings as settingsIcon } from '@/icons/settings'
 import { round } from '@/utils/round'
 import Spinner from './spinner'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
+import { usePromise } from '@/utils/use-promise'
+import { getEventTeams } from '@/api/event-team-info/get-event-teams'
+import { eventTeamUrl } from '@/utils/urls/event-team'
+import { EventTeamInfo } from '@/api/event-team-info'
 
 interface Props {
+  eventKey: string
   teams: ProcessedTeamStats[] | undefined
   schema: Schema
-  renderTeam: (team: string, sortColKey: string) => JSX.Element
+  renderTeam: (team: string, link: string) => JSX.Element
   renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
   enableSettings?: boolean
 }
@@ -125,6 +130,11 @@ const contextSectionStyle = css`
   }
 `
 
+const rankStyle = css`
+  box-shadow: inset 0 -0.15rem #398013;
+  color: #398013;
+`
+
 const autoStyle = css`
   box-shadow: inset 0 -0.15rem ${blue};
   color: ${blue};
@@ -164,23 +174,69 @@ const teamRankStyle = css`
 `
 
 const AnalysisTable = ({
+  eventKey,
   teams,
   schema,
   renderTeam,
   renderBoolean,
   enableSettings = true,
 }: Props) => {
+  const rankingInfo = usePromise(() => getEventTeams(eventKey), [eventKey])
   const [avgType, setAvgType] = useState<AvgType>('Avg')
   const teamColumn: Column<string, RowType> = {
     title: 'Team',
+    key: 'Team',
     getCell: row => row.team,
     getCellValue: team => parseInt(team),
-    key: 'team',
-    renderCell: (team, _row, rowIndex, sortColKey) => (
-      <th scope="row" class={teamNumCellStyle}>
-        <div className={teamRankStyle}>{rowIndex + 1}</div>
-        {renderTeam(team, sortColKey)}
-      </th>
+    renderCell: (team, _row, rowIndex, sortColKey) => {
+      const isSortingByStat =
+        sortColKey.startsWith('auto') || sortColKey.startsWith('teleop')
+      return (
+        <th scope="row" class={teamNumCellStyle}>
+          {isSortingByStat && (
+            <div className={teamRankStyle}>{rowIndex + 1}</div>
+          )}
+          {renderTeam(
+            team,
+            eventTeamUrl(
+              eventKey,
+              team,
+              isSortingByStat ? sortColKey : undefined,
+            ),
+          )}
+        </th>
+      )
+    },
+    sortOrder: SortOrder.ASC,
+  }
+
+  const rankCellStyle = css`
+    display: grid;
+    white-space: nowrap;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 0.25rem;
+    min-width: 5.5rem;
+
+    & :not(:first-child) {
+      grid-column: 2;
+      font-size: 0.7rem;
+      color: ${textGrey};
+    }
+  `
+
+  const rankColumn: Column<EventTeamInfo | undefined, RowType> = {
+    title: 'Rank',
+    key: 'Rank',
+    getCell: row => rankingInfo?.find(r => r.team === 'frc' + row.team),
+    getCellValue: cell => cell?.rank ?? Infinity,
+    renderCell: cell => (
+      <td class={rankCellStyle}>
+        <span>{cell?.rank === undefined ? '?' : cell.rank}</span>
+        {cell?.rankingScore !== undefined && (
+          <span>{`(${round(cell.rankingScore)} RP)`}</span>
+        )}
+      </td>
     ),
     sortOrder: SortOrder.ASC,
   }
@@ -189,6 +245,7 @@ const AnalysisTable = ({
   const teleopFields = allDisplayableFields.filter(f => f.period === 'teleop')
   const columns = [
     teamColumn,
+    rankColumn,
     ...autoFields.map(createStatCell(avgType, renderBoolean)),
     ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
@@ -224,6 +281,9 @@ const AnalysisTable = ({
                 <Icon icon={settingsIcon} class={iconStyle} />
               </button>
             )}
+          </th>
+          <th class={clsx(contextSectionStyle, rankStyle)} colSpan={1}>
+            <span>Rank</span>
           </th>
           <th
             class={clsx(contextSectionStyle, autoStyle)}

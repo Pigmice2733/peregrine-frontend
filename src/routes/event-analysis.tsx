@@ -13,7 +13,6 @@ import {
   tablePageTableStyle,
 } from '@/utils/table-page-style'
 import Card from '@/components/card'
-import { eventTeamUrl } from '@/utils/urls/event-team'
 
 interface Props {
   eventKey: string
@@ -39,17 +38,11 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       {eventStats && schema ? (
         <Card class={tablePageTableStyle}>
           <AnalysisTable
+            eventKey={eventKey}
             teams={eventStats}
             schema={schema}
-            renderTeam={(team, sortColKey) => (
-              <a
-                class={teamStyle}
-                href={eventTeamUrl(
-                  eventKey,
-                  team,
-                  sortColKey === 'team' ? undefined : sortColKey,
-                )}
-              >
+            renderTeam={(team, link) => (
+              <a class={teamStyle} href={link}>
                 {team}
               </a>
             )}
