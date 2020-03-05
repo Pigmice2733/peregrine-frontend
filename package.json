@@ -30,7 +30,7 @@
     "qss": "2.0.3"
   },
   "devDependencies": {
-    "@babel/core": "7.8.6",
+    "@babel/core": "7.8.7",
     "@babel/plugin-proposal-class-properties": "7.8.3",
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.8.3",
     "@babel/plugin-proposal-numeric-separator": "7.8.3",
@@ -90,7 +90,7 @@
     "rollup-plugin-babel": "4.3.3",
     "rollup-plugin-netlify-push": "0.2.0",
     "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-postcss": "2.1.1",
+    "rollup-plugin-postcss": "2.2.0",
     "rollup-plugin-terser": "5.2.0",
     "sharp": "0.24.1",
     "templite": "1.1.0",
