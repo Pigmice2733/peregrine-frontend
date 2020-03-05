@@ -146,7 +146,7 @@ type TeamLocation =
 const EventTeam = ({ eventKey, teamNum }: Props) => {
   const eventInfo = useEventInfo(eventKey)
   const eventTeamInfo = usePromise(
-    () => getEventTeamInfo(eventKey, 'frc' + teamNum),
+    () => getEventTeamInfo(eventKey, 'frc' + teamNum).catch(() => undefined),
     [eventKey, teamNum],
   )
   const schema = useSchema(eventInfo?.schemaId)
@@ -176,14 +176,14 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           {
             title: 'Rank',
             icon: sortAscending,
-            action: eventTeamInfo ? eventTeamInfo.rank : '',
+            action: eventTeamInfo ? eventTeamInfo.rank : '?',
           },
           {
             title: 'Ranking Score',
             icon: history,
             action: eventTeamInfo?.rankingScore
               ? round(eventTeamInfo.rankingScore)
-              : '',
+              : '?',
           },
           teamLocation && {
             title: formatTeamLocation(teamLocation, eventKey),
