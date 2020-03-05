@@ -204,6 +204,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
       </Button>
+      <Button href={`/events/${eventKey}/teams/${teamNum}/matches`}>
+        View Matches
+      </Button>
       {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}
