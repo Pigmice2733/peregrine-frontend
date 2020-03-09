@@ -94,7 +94,7 @@
     "rollup-plugin-terser": "5.2.0",
     "sharp": "0.25.1",
     "templite": "1.1.0",
-    "type-fest": "0.11.0",
+    "type-fest": "0.12.0",
     "typescript": "3.8.3",
     "webpack": "4.42.0",
     "webpack-bundle-analyzer": "3.6.0",
