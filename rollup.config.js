@@ -1,5 +1,5 @@
 import linaria from 'linaria-preact/rollup'
-import node from 'rollup-plugin-node-resolve'
+import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import babel from 'rollup-plugin-babel'
 import postcss from 'rollup-plugin-postcss'
