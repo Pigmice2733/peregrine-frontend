@@ -235,9 +235,7 @@ const EditableText = ({
     e.preventDefault()
     if (!isChanged || isSaving) return
     setIsSaving(true)
-    save(value)
-      .catch(emitError)
-      .finally(closeEditor)
+    save(value).catch(emitError).finally(closeEditor)
   }
   return isEditing ? (
     <form class={editableTextStyle} onSubmit={saveNewValue}>
@@ -259,9 +257,7 @@ const EditableText = ({
       originalValue,
       editable ? (
         <InlineIconButton icon={edit} onClick={openEditor} />
-      ) : (
-        undefined
-      ),
+      ) : undefined,
       openEditor,
     )
   )

@@ -43,9 +43,7 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       return QueryRank.MatchExact
     if (
       m.key.includes(s) ||
-      formatMatchKey(m.key)
-        .group.toLowerCase()
-        .includes(s)
+      formatMatchKey(m.key).group.toLowerCase().includes(s)
     )
       return QueryRank.MatchLoose
     // If all of the query is digits

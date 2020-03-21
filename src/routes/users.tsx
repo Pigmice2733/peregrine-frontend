@@ -83,9 +83,7 @@ const InnerUsersPage = () => {
   const [users, setUsers] = useState<UserInfo[] | undefined>(undefined)
   const emitError = useErrorEmitter()
   const updateUsers = () => {
-    getUsers()
-      .then(setUsers)
-      .catch(emitError)
+    getUsers().then(setUsers).catch(emitError)
   }
   const realms = usePromise(() => getRealms(), [])
   useEffect(updateUsers, [])

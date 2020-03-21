@@ -24,7 +24,7 @@ const setupCache = async () => {
   })
 }
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(setupCache())
 })
 
@@ -55,7 +55,7 @@ const handleFontsRequest = async (request: Request) => {
   })
 }
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
   const { request } = event
   const { url } = request
   if (request.mode === 'navigate') {
