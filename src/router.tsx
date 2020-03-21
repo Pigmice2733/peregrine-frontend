@@ -20,9 +20,9 @@ export const route = (url: string) => {
 }
 
 export const Router = ({ routes }: { routes: Route[] }) => {
-  const path = useUrl(loc => loc.pathname)
+  const path = useUrl((loc) => loc.pathname)
 
-  const parsedRoutes = useMemo(() => routes.map(route => parse(route.path)), [
+  const parsedRoutes = useMemo(() => routes.map((route) => parse(route.path)), [
     routes,
   ])
 
@@ -64,14 +64,14 @@ export const Router = ({ routes }: { routes: Route[] }) => {
   const matchingRoute = match(path, parsedRoutes)
   const matchingFullRoute =
     matchingRoute.length > 0 ? matchingRoute[0].old : null
-  const matchingRouteObj = routes.find(r => r.path === matchingFullRoute)
+  const matchingRouteObj = routes.find((r) => r.path === matchingFullRoute)
 
   // This has to be a layout effect because it needs to run
   // before other components that are url-dependent are rendered
   useLayoutEffect(() => {
     setResolvedComponent(null)
     if (matchingRouteObj)
-      matchingRouteObj.component().then(comp => {
+      matchingRouteObj.component().then((comp) => {
         setResolvedComponent(() => comp.default)
         setRouteProps(exec(path, matchingRoute))
       })

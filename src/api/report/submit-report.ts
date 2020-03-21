@@ -61,7 +61,7 @@ export const submitReport = (
   team: string,
   report: Report,
 ) =>
-  new Promise<null>(resolve => {
+  new Promise<null>((resolve) => {
     let succeeded = false
     const reportData: SavedReport = { eventKey, matchKey, team, report }
     const fallback = () => {

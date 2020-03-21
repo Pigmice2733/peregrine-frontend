@@ -73,7 +73,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
 
   return (
     <Form onSubmit={onSubmit} ref={formRef}>
-      {isValid => (
+      {(isValid) => (
         <Fragment>
           <TextInput
             required

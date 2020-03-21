@@ -51,7 +51,7 @@ export const UserRow = ({ user, refresh = () => {} }: Props) => {
       title: `Delete ${user.username}?`,
       description: `This will remove ${user.firstName} ${user.lastName}`,
     })
-      .then(confirmed => {
+      .then((confirmed) => {
         if (confirmed) return deleteUser(user.id).then(refresh)
       })
       .catch(emitError)
@@ -62,21 +62,21 @@ export const UserRow = ({ user, refresh = () => {} }: Props) => {
       <td>
         <InnerTextInput
           value={modifiedUser.username}
-          onInput={e => {
+          onInput={(e) => {
             const username = (e.target as HTMLInputElement).value
-            return setUserState(u => ({ ...u, username }))
+            return setUserState((u) => ({ ...u, username }))
           }}
         />
       </td>
       <td>
         <InnerTextInput
           value={`${modifiedUser.firstName} ${modifiedUser.lastName}`}
-          onInput={e => {
+          onInput={(e) => {
             const [
               firstName,
               lastName,
             ] = (e.target as HTMLInputElement).value.split(' ')
-            return setUserState(u => ({ ...u, firstName, lastName }))
+            return setUserState((u) => ({ ...u, firstName, lastName }))
           }}
         />
       </td>
@@ -84,33 +84,36 @@ export const UserRow = ({ user, refresh = () => {} }: Props) => {
         <InnerTextInput
           value={modifiedUser.password || ''}
           type="password"
-          onInput={e => {
+          onInput={(e) => {
             const password = (e.target as HTMLInputElement).value
-            return setUserState(u => ({ ...u, password }))
+            return setUserState((u) => ({ ...u, password }))
           }}
         />
       </td>
       <td>
         <Toggle
           checked={modifiedUser.roles.isVerified}
-          onChange={v => {
-            setUserState(u => ({ ...u, roles: { ...u.roles, isVerified: v } }))
+          onChange={(v) => {
+            setUserState((u) => ({
+              ...u,
+              roles: { ...u.roles, isVerified: v },
+            }))
           }}
         />
       </td>
       <td>
         <Toggle
           checked={modifiedUser.roles.isAdmin}
-          onChange={v => {
-            setUserState(u => ({ ...u, roles: { ...u.roles, isAdmin: v } }))
+          onChange={(v) => {
+            setUserState((u) => ({ ...u, roles: { ...u.roles, isAdmin: v } }))
           }}
         />
       </td>
       <td>
         <Toggle
           checked={modifiedUser.roles.isSuperAdmin}
-          onChange={v => {
-            setUserState(u => ({
+          onChange={(v) => {
+            setUserState((u) => ({
               ...u,
               roles: { ...u.roles, isSuperAdmin: v },
             }))

@@ -77,11 +77,11 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
         {...rest}
         value={value}
         type="number"
-        onChange={e => onChange((e.target as HTMLInputElement).valueAsNumber)}
+        onChange={(e) => onChange((e.target as HTMLInputElement).valueAsNumber)}
       />
       <button
         tabIndex={-1}
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault()
           onChange(value - 1)
         }}
@@ -90,7 +90,7 @@ const NumberInput = ({ onChange, value, ...rest }: Props) => {
       </button>
       <button
         tabIndex={-1}
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault()
           onChange(value + 1)
         }}

@@ -30,7 +30,7 @@ const prod = process.env.NODE_ENV === 'production'
 const rollupNodeOptions = { extensions }
 
 /** @param {boolean} prod */
-const terserOptions = prod => ({
+const terserOptions = (prod) => ({
   ecma: /** @type {8} */ (8),
   module: true,
   compress: {
@@ -100,8 +100,8 @@ export default [
         name: 'rollup-plugin-chunks-json',
         async writeBundle(bundle) {
           const chunksJSON = Object.values(bundle)
-            .filter(chunk => !chunk.isAsset)
-            .map(chunk => `/${chunk.fileName}`)
+            .filter((chunk) => !chunk.isAsset)
+            .map((chunk) => `/${chunk.fileName}`)
           await writeFileAsync(chunksFile, JSON.stringify(chunksJSON))
         },
       },
@@ -168,7 +168,7 @@ export default [
           const applePad = Math.round(0.07 * appleWidth)
           await Promise.all([
             ...[512, 192, 180, 32, 16].map(
-              async width =>
+              async (width) =>
                 writeFileAsync(
                   join(iconDir, `${width}.png`),
                   await sharp(iconSrc)

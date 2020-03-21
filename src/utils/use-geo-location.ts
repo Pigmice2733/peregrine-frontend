@@ -13,7 +13,7 @@ export interface LatLong {
 const getIpLocation = () =>
   apiUrl
     ? fetch(apiUrl)
-        .then(result => result.json())
+        .then((result) => result.json())
         .then(
           (data): Promise<LatLong> =>
             data.latitude && data.longitude ? data : EMPTY_PROMISE,
@@ -21,9 +21,9 @@ const getIpLocation = () =>
     : EMPTY_PROMISE
 
 const getGeoLocation = () =>
-  new Promise<LatLong>(resolve =>
+  new Promise<LatLong>((resolve) =>
     navigator.geolocation.getCurrentPosition(
-      result =>
+      (result) =>
         resolve({
           latitude: result.coords.latitude,
           longitude: result.coords.longitude,
@@ -58,7 +58,7 @@ export const useGeoLocation = () => {
   )
   useEffect(() => {
     const locationPromise = getLocation()
-    locationPromise.then(loc =>
+    locationPromise.then((loc) =>
       localStorage.setItem(locationKey, JSON.stringify(loc)),
     )
     locationPromise.then(setLocation)

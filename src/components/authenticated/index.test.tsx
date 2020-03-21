@@ -14,7 +14,7 @@ test('renders login form', async () => {
   })
   const container = render(
     <Authenticated
-      render={roles => (
+      render={(roles) => (
         <h1>{`logged in with roles: ${JSON.stringify(roles)}`}</h1>
       )}
     />,

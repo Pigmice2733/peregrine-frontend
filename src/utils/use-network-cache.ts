@@ -33,12 +33,12 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
 
       // Allow us to pass a single parameter of undefined to skip getting the data
       if (args.length >= 1 && args[0] === undefined) return
-      cacheGetter(...(args as ArgsType)).then(cachedData =>
+      cacheGetter(...(args as ArgsType)).then((cachedData) =>
         // don't update state using the cached data if network has already returned
-        setData(data => data || cachedData),
+        setData((data) => data || cachedData),
       )
 
-      const p = networkGetter(...(args as ArgsType)).then(networkData =>
+      const p = networkGetter(...(args as ArgsType)).then((networkData) =>
         setData(networkData),
       )
 

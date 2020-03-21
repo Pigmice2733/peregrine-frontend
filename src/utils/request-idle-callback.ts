@@ -22,7 +22,9 @@ const BUSY_THRESHHOLD = 3
  * Inspired by https://github.com/GoogleChromeLabs/quicklink/blob/master/src/request-idle-callback.mjs
  * and https://github.com/aFarkas/requestIdleCallback
  */
-const requestIdleCallbackPolyfill: typeof window.requestIdleCallback = callback => {
+const requestIdleCallbackPolyfill: typeof window.requestIdleCallback = (
+  callback,
+) => {
   let lastCalled = Date.now()
   const intervalId = setInterval(() => {
     const timeDiff = -lastCalled + (lastCalled = Date.now())

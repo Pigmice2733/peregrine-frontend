@@ -15,11 +15,13 @@ const updateCachedEventMatches = (
 ) =>
   transaction(
     'matches',
-    matchStore => {
+    (matchStore) => {
       idbPromise(getAllCachedEventMatches(matchStore, eventKey)).then(
-        cachedMatches => {
-          cachedMatches.forEach(match => {
-            const missingFromResponse = !matches.some(m => m.key === match.key)
+        (cachedMatches) => {
+          cachedMatches.forEach((match) => {
+            const missingFromResponse = !matches.some(
+              (m) => m.key === match.key,
+            )
             const teamWasInMatch = team ? matchHasTeam(team)(match) : true
             if (missingFromResponse && teamWasInMatch) {
               matchStore.delete(createMatchDbKey(eventKey, match.key))
@@ -27,7 +29,7 @@ const updateCachedEventMatches = (
           })
         },
       )
-      matches.forEach(match =>
+      matches.forEach((match) =>
         matchStore.put(match, createMatchDbKey(eventKey, match.key)),
       )
     },
@@ -36,7 +38,7 @@ const updateCachedEventMatches = (
 
 export const getEventMatches = (eventKey: string, team?: string) =>
   request<MatchInfo[]>('GET', `events/${eventKey}/matches`, { team }).then(
-    matches => {
+    (matches) => {
       const processed = matches.map(processMatch).sort(compareMatches)
       requestIdleCallback(() =>
         updateCachedEventMatches(eventKey, processed, team),

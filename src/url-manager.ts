@@ -6,7 +6,7 @@ const urlListeners = new Set<() => void>()
 
 export const addUrlListener = (cb: () => void) => urlListeners.add(cb)
 
-const handleUrlChange = () => urlListeners.forEach(l => l())
+const handleUrlChange = () => urlListeners.forEach((l) => l())
 
 window.addEventListener('popstate', handleUrlChange)
 

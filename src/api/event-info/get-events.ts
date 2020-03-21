@@ -7,15 +7,15 @@ import { idbPromise } from '@/utils/idb-promise'
 const updateCachedEvents = (events: ProcessedEventInfo[], year?: number) =>
   transaction(
     'events',
-    eventStore => {
+    (eventStore) => {
       // Remove events that are in cache but no longer exist on the server
       idbPromise(eventStore.getAll()).then(
         (allEvents: ProcessedEventInfo[]) => {
-          allEvents.forEach(event => {
+          allEvents.forEach((event) => {
             // If the event is from the year that we requested, but did not come back in the response
             if (
               event.endDate.getFullYear() === year &&
-              !events.some(e => e.key === event.key)
+              !events.some((e) => e.key === event.key)
             ) {
               // Remove it
               eventStore.delete(event.key)
@@ -23,7 +23,7 @@ const updateCachedEvents = (events: ProcessedEventInfo[], year?: number) =>
           })
         },
       )
-      events.forEach(event => eventStore.put(event, event.key))
+      events.forEach((event) => eventStore.put(event, event.key))
     },
     'readwrite',
   )
@@ -33,8 +33,8 @@ const updateCachedEvents = (events: ProcessedEventInfo[], year?: number) =>
 // TBA events and additionally all the custom events on their realm.
 export const getEvents = (year?: number) =>
   request<EventInfo[]>('GET', 'events', { year })
-    .then(events => events.map(processEvent))
-    .then(events => {
+    .then((events) => events.map(processEvent))
+    .then((events) => {
       requestIdleCallback(() => updateCachedEvents(events, year))
       return events
     })

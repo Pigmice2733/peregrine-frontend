@@ -97,7 +97,7 @@ const Toggle = ({ onChange, checked, disabled }: Props) => (
     disabled={disabled}
     class={toggleStyle}
     checked={checked}
-    onChange={e => onChange((e.target as HTMLInputElement).checked)}
+    onChange={(e) => onChange((e.target as HTMLInputElement).checked)}
   />
 )
 

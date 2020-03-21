@@ -21,7 +21,7 @@ const getDB = (dbName: string) => {
   request.onupgradeneeded = () => initDB(request.result)
   const requestPromise = idbPromise(request)
   requestPromise.then(() => {
-    request.result.addEventListener('error', errorEvent => {
+    request.result.addEventListener('error', (errorEvent) => {
       throw new Error(
         ((errorEvent.target as unknown) as { error: string }).error,
       )
@@ -49,6 +49,6 @@ export const transaction = async <ResolvedResult = void>(
       ? idbPromise(handlerResult)
       : handlerResult
   // wait for transaction to finish
-  await new Promise(resolve => (tx.oncomplete = resolve as () => {}))
+  await new Promise((resolve) => (tx.oncomplete = resolve as () => {}))
   return data
 }

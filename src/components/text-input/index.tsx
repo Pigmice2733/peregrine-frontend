@@ -34,7 +34,7 @@ export const InnerTextInput = (props: PropsOf<'input'>) => {
   return (
     <input
       {...props}
-      onBlur={e => {
+      onBlur={(e) => {
         setHasFocused(true)
         if (props.onBlur) props.onBlur.call(e.currentTarget, e)
       }}
@@ -66,7 +66,9 @@ const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
       {label}
       <InnerTextInput
         {...rest}
-        onInput={e => onInput && onInput((e.target as HTMLInputElement).value)}
+        onInput={(e) =>
+          onInput && onInput((e.target as HTMLInputElement).value)
+        }
       />
     </label>
   )

@@ -43,36 +43,34 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       return QueryRank.MatchExact
     if (
       m.key.includes(s) ||
-      formatMatchKey(m.key)
-        .group.toLowerCase()
-        .includes(s)
+      formatMatchKey(m.key).group.toLowerCase().includes(s)
     )
       return QueryRank.MatchLoose
     // If all of the query is digits
     if (Number(s).toString() === s) {
-      const teams = [...m.redAlliance, ...m.blueAlliance].map(t =>
+      const teams = [...m.redAlliance, ...m.blueAlliance].map((t) =>
         t.replace(/frc/, ''),
       )
       if (teams.includes(s)) return QueryRank.TeamExact
-      if (teams.some(t => t.includes(s))) return QueryRank.TeamLoose
+      if (teams.some((t) => t.includes(s))) return QueryRank.TeamLoose
     }
     return QueryRank.NoMatch
   }
 
   const filteredMatches = s
     ? matches
-        .map(match => ({
+        .map((match) => ({
           match,
           queryRank: getQueryRank(match),
         }))
-        .filter(m => m.queryRank !== QueryRank.NoMatch)
+        .filter((m) => m.queryRank !== QueryRank.NoMatch)
         .sort((a, b) => {
           return (
             b.queryRank - a.queryRank ||
             compareMatchesChronologically(a.match, b.match)
           )
         })
-        .map(m => m.match)
+        .map((m) => m.match)
     : matches.sort(compareMatchesChronologically)
 
   return (
@@ -84,7 +82,7 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       />
       {matches ? (
         <div class={matchListStyle}>
-          {filteredMatches.map(m => (
+          {filteredMatches.map((m) => (
             <MatchCard eventKey={eventKey} match={m} key={m.key} link />
           ))}
         </div>

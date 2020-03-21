@@ -69,12 +69,12 @@ const actionsStyle = css`
 export const DialogDisplayer = () => {
   const [dialogs, setDialogs] = useState<Dialog[]>([])
   const [wasVisibleLastFrame, setWasVisibleLastFrame] = useState(false)
-  createDialog = opts => {
+  createDialog = (opts) => {
     let resolvePromise: (value: boolean) => void
-    const promise = new Promise<boolean>(resolve => {
+    const promise = new Promise<boolean>((resolve) => {
       resolvePromise = resolve
     })
-    setDialogs(dialogs => [...dialogs, { ...opts, resolvePromise }])
+    setDialogs((dialogs) => [...dialogs, { ...opts, resolvePromise }])
     return promise
   }
 
@@ -87,7 +87,7 @@ export const DialogDisplayer = () => {
 
   const handleClick = (value: boolean) => () => {
     dialog.resolvePromise(value)
-    setDialogs(dialogs => dialogs.slice(1))
+    setDialogs((dialogs) => dialogs.slice(1))
   }
 
   const dismiss = handleClick(false)

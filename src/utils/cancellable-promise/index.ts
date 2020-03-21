@@ -43,7 +43,7 @@ class CancellablePromise<T> extends Promise<T> {
   cancel() {
     if (this.isCanceled) return
     this.isCanceled = true
-    this.cancelListeners.forEach(cb => cb())
+    this.cancelListeners.forEach((cb) => cb())
   }
 
   then<TResult1 = T, TResult2 = never>(
@@ -53,13 +53,13 @@ class CancellablePromise<T> extends Promise<T> {
     const p = new CancellablePromise<TResult1 | TResult2>(
       (resolve, reject, onCancel) => {
         super.then(
-          val => {
+          (val) => {
             if (!this.isCanceled)
               resolve(
                 onfulfilled ? onfulfilled(val) : ((val as any) as TResult1),
               )
           },
-          val => {
+          (val) => {
             if (this.isCanceled) return
             if (onrejected) resolve(onrejected(val))
             // If there is no catcher, the sub-promise should reject

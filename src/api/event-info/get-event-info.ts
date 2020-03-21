@@ -9,7 +9,7 @@ const updateCachedEventInfo = (
 ) =>
   transaction(
     'events',
-    eventStore => {
+    (eventStore) => {
       eventStore.put(eventInfo, eventKey)
     },
     'readwrite',
@@ -20,7 +20,7 @@ const updateCachedEventInfo = (
 export const getEventInfo = (eventKey: string) =>
   request<EventInfo>('GET', `events/${eventKey}`)
     .then(processEvent)
-    .then(eventInfo => {
+    .then((eventInfo) => {
       requestIdleCallback(() => updateCachedEventInfo(eventKey, eventInfo))
       return eventInfo
     })

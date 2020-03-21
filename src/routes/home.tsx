@@ -54,7 +54,7 @@ const Home = () => {
         <Fragment>
           <UnstyledList class={matchListStyle}>
             {events
-              .filter(event => {
+              .filter((event) => {
                 if (!query) return true
                 return (
                   event.name.toLowerCase().includes(lowerCaseQuery) ||
@@ -66,7 +66,7 @@ const Home = () => {
               })
               .sort(compareEvents(now, location))
               .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
-              .map(e => (
+              .map((e) => (
                 <li key={e.key}>
                   <EventCard event={e} />
                 </li>

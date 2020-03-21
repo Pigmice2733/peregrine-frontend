@@ -53,7 +53,7 @@ const RoleInfo = ({
         <Toggle
           checked={user.roles[roleName]}
           disabled={disabled || isSaving}
-          onChange={newValue => {
+          onChange={(newValue) => {
             setIsSaving(true)
             save({ roles: { ...user.roles, [roleName]: newValue } })
               .catch(emitError)
@@ -154,7 +154,7 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
             'Deleting this user is permanent, but their reports will be preserved.',
           title: `Delete ${user.firstName} ${user.lastName}?`,
         })
-          .then(shouldDelete => {
+          .then((shouldDelete) => {
             if (shouldDelete)
               return deleteUser(user.id).then(() => route('/users'))
           })
@@ -178,7 +178,7 @@ const SetPasswordButton = ({ user }: { user: UserInfo }) => {
       minLength={minPasswordLength}
       maxLength={maxPasswordLength}
       value={''}
-      save={password => modifyUser(user.id, { password }).catch(emitError)}
+      save={(password) => modifyUser(user.id, { password }).catch(emitError)}
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
@@ -235,9 +235,7 @@ const EditableText = ({
     e.preventDefault()
     if (!isChanged || isSaving) return
     setIsSaving(true)
-    save(value)
-      .catch(emitError)
-      .finally(closeEditor)
+    save(value).catch(emitError).finally(closeEditor)
   }
   return isEditing ? (
     <form class={editableTextStyle} onSubmit={saveNewValue}>
@@ -248,7 +246,7 @@ const EditableText = ({
       />
       <InlineIconButton
         icon={close}
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault()
           closeEditor()
         }}
@@ -259,9 +257,7 @@ const EditableText = ({
       originalValue,
       editable ? (
         <InlineIconButton icon={edit} onClick={openEditor} />
-      ) : (
-        undefined
-      ),
+      ) : undefined,
       openEditor,
     )
   )
@@ -302,7 +298,7 @@ const UserProfileCard = ({
         <EditableText
           editable={editable}
           label="Name"
-          save={newText => {
+          save={(newText) => {
             const [firstName, lastName] = newText.split(/\s+/)
             return updateUser(user.id, { firstName, lastName })
           }}
@@ -322,7 +318,7 @@ const UserProfileCard = ({
         <EditableText
           editable={editable}
           label="Username"
-          save={username => updateUser(user.id, { username })}
+          save={(username) => updateUser(user.id, { username })}
           value={user.username}
         >
           {(value, editIcon) => (
@@ -360,14 +356,14 @@ const UserProfileCard = ({
             disabled={!canEditRoles}
             title="Admin"
             roleName="isAdmin"
-            save={data => updateUser(user.id, data)}
+            save={(data) => updateUser(user.id, data)}
             user={user}
           />
           <RoleInfo
             disabled={!canEditRoles || !isSuperAdmin}
             title="Super Admin"
             roleName="isSuperAdmin"
-            save={data => updateUser(user.id, data)}
+            save={(data) => updateUser(user.id, data)}
             user={user}
           />
         </dl>

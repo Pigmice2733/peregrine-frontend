@@ -13,25 +13,25 @@ const fontsCachePromise = caches.open(fontsCacheKey)
 const root = '/index.html'
 
 const urlInWhitelist = (whitelist: string[], url: string) =>
-  whitelist.some(cachePath => new URL(cachePath, location.href).href === url)
+  whitelist.some((cachePath) => new URL(cachePath, location.href).href === url)
 
 const setupCache = async () => {
   const cache = await cachePromise
   const cacheItems: string[] = [...chunks, root, '/style.css']
   await cache.addAll(cacheItems)
-  ;(await cache.keys()).forEach(req => {
+  ;(await cache.keys()).forEach((req) => {
     if (!urlInWhitelist(cacheItems, req.url)) cache.delete(req)
   })
 }
 
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
   event.waitUntil(setupCache())
 })
 
 // When the new SW activates, delete any old caches
 self.addEventListener('activate', () => {
-  caches.keys().then(cacheKeys =>
-    cacheKeys.forEach(cacheKey => {
+  caches.keys().then((cacheKeys) =>
+    cacheKeys.forEach((cacheKey) => {
       if (cacheKey !== chunksCacheKey && cacheKey !== fontsCacheKey) {
         caches.delete(cacheKey)
       }
@@ -48,14 +48,14 @@ const handleFontsRequest = async (request: Request) => {
   const fontsCache = await fontsCachePromise
   const cacheMatch = await fontsCache.match(request)
   if (cacheMatch) return cacheMatch
-  return fetch(request).then(res => {
+  return fetch(request).then((res) => {
     const cacheRes = res.clone()
     fontsCache.put(request, cacheRes)
     return res
   })
 }
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
   const { request } = event
   const { url } = request
   if (request.mode === 'navigate') {

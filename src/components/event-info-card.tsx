@@ -98,7 +98,7 @@ export const EventInfoCard = ({ event }: Props) =>
             event.webcasts.length === 1 ? (
               <Icon icon={webcastIcon(event.webcasts[0])} />
             ) : (
-              event.webcasts.map(w => (
+              event.webcasts.map((w) => (
                 <IconButton
                   key={w}
                   icon={webcastIcon(w)}

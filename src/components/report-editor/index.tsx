@@ -68,7 +68,7 @@ export const ReportEditor = ({
   const isReady = team !== null
 
   const updateReportField = (fieldName: string) => (value: number) =>
-    setReport(report => ({
+    setReport((report) => ({
       data: report.data.map(
         (f): Field => (f.name === fieldName ? { name: fieldName, value } : f),
       ),
@@ -76,7 +76,7 @@ export const ReportEditor = ({
 
   const getReportFieldValue = (statDescription: ReportStatDescription) => {
     const matchingField = report.data.find(
-      f => f.name === statDescription.reportReference,
+      (f) => f.name === statDescription.reportReference,
     )
     if (matchingField) return matchingField.value
     return defaultFieldValue
@@ -90,11 +90,13 @@ export const ReportEditor = ({
   const teleopFields = visibleFields.filter(isTeleop)
 
   useEffect(() => {
-    setReport(report => ({
+    setReport((report) => ({
       ...report,
       data: visibleFields.map(
-        statDescription =>
-          report.data.find(f => f.name === statDescription.reportReference) || {
+        (statDescription) =>
+          report.data.find(
+            (f) => f.name === statDescription.reportReference,
+          ) || {
             name: statDescription.reportReference,
             value: defaultFieldValue,
           },
@@ -127,7 +129,7 @@ export const ReportEditor = ({
         redAlliance={match.redAlliance}
       />
       <h2>Auto</h2>
-      {autoFields.map(stat => (
+      {autoFields.map((stat) => (
         <FieldCard
           key={'auto' + stat.reportReference}
           statDescription={stat}
@@ -136,7 +138,7 @@ export const ReportEditor = ({
         />
       ))}
       <h2>Teleop</h2>
-      {teleopFields.map(stat => (
+      {teleopFields.map((stat) => (
         <FieldCard
           key={'teleop' + stat.reportReference}
           statDescription={stat}
@@ -147,7 +149,7 @@ export const ReportEditor = ({
       <TextInput
         class={commentStyles}
         label="Comments"
-        onInput={comment => setReport(r => ({ ...r, comment }))}
+        onInput={(comment) => setReport((r) => ({ ...r, comment }))}
       />
       <Button disabled={isSaving || !isReady} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}

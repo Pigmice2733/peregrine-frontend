@@ -16,7 +16,7 @@ const codeStyle = css`
   overflow-x: auto;
 `
 
-export const ErrorEmitter = createContext<(error: Error) => void>(error => {
+export const ErrorEmitter = createContext<(error: Error) => void>((error) => {
   throw error
 })
 

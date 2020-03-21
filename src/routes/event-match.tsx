@@ -83,7 +83,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     () =>
       match &&
       Promise.all(
-        [...match.redAlliance, ...match.blueAlliance].map(t =>
+        [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
         ),
       ),
@@ -139,7 +139,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             eventKey={eventKey}
             teams={
               selectedDisplay === showEventResults
-                ? teams?.filter(t => matchHasTeam('frc' + t.team)(match))
+                ? teams?.filter((t) => matchHasTeam('frc' + t.team)(match))
                 : teamsStats
             }
             schema={schema}
@@ -158,14 +158,14 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             )}
             renderBoolean={
               selectedDisplay === showMatchResults
-                ? cell => <BooleanDisplay value={cell.avg === 1} />
+                ? (cell) => <BooleanDisplay value={cell.avg === 1} />
                 : undefined
             }
             enableSettings={selectedDisplay !== showMatchResults}
           />
         </Card>
       )}
-      {match?.videos?.map(v => (
+      {match?.videos?.map((v) => (
         <VideoCard url={cleanYoutubeUrl(v)} />
       ))}
     </Page>

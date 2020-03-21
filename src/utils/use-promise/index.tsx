@@ -11,7 +11,7 @@ export const usePromise = <T extends any>(
   useEffect(() => {
     const cbResult = promiseCreator()
     if (!(cbResult instanceof Promise)) return setVal(cbResult)
-    cbResult.then(v => setVal(v)).catch(emitError)
+    cbResult.then((v) => setVal(v)).catch(emitError)
     return () => {
       if (cbResult instanceof CancellablePromise) cbResult.cancel()
       setVal(undefined)

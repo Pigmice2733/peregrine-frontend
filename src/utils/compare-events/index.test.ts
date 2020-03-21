@@ -70,7 +70,7 @@ const expectOrder = (
     expect((items = [b, a]).sort(comparer)).toEqual([a, b])
   } catch (error) {
     throw new Error(
-      `${items.map(i => i.name).join(', ')}
+      `${items.map((i) => i.name).join(', ')}
 
 Should have been sorted in this order:
 

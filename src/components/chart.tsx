@@ -48,7 +48,7 @@ const CommentsDisplay = ({
   return (
     <div class={commentsDisplayStyle}>
       {reports.map(
-        r => r.comment && <CommentCard key={JSON.stringify(r)} report={r} />,
+        (r) => r.comment && <CommentCard key={JSON.stringify(r)} report={r} />,
       )}
     </div>
   )
@@ -89,16 +89,16 @@ export const ChartCard = ({
   teamMatches,
   schema,
 }: ChartCardProps) => {
-  const firstField = schema.schema.find(f => !f.hide) as StatDescription
+  const firstField = schema.schema.find((f) => !f.hide) as StatDescription
   const [fieldKey, setFieldKey] = useQueryState('stat', getFieldKey(firstField))
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const matchesStats = usePromise(
     () =>
       CancellablePromise.all(
-        teamMatches.sort(compareMatches).map(async match => ({
+        teamMatches.sort(compareMatches).map(async (match) => ({
           matchKey: match.key,
           stats: await getMatchTeamStats(eventKey, match.key, team)
-            .then(s => s.summary || [])
+            .then((s) => s.summary || [])
             .catch(() => []),
         })),
       ),
@@ -107,7 +107,7 @@ export const ChartCard = ({
 
   useEffect(() => setSelectedIndex(null), [fieldKey])
 
-  const fullFieldName = schema.schema.find(field => {
+  const fullFieldName = schema.schema.find((field) => {
     if (field.hide) return false
     const matchesAutoFieldName =
       getFieldKey({ name: field.name, period: 'auto' }) === fieldKey
@@ -121,13 +121,13 @@ export const ChartCard = ({
 
   const matchesWithSelectedStat = (matchesStats || [])
     .map(({ matchKey, stats }) => {
-      const matchingStat = stats.find(f => f.name === fullFieldName)
+      const matchingStat = stats.find((f) => f.name === fullFieldName)
       if (matchingStat) return { matchKey, matchingStat }
       return null
     })
     .filter((f): f is Exclude<typeof f, null> => f !== null)
 
-  const dataPoints = matchesWithSelectedStat.map(s => s.matchingStat.avg)
+  const dataPoints = matchesWithSelectedStat.map((s) => s.matchingStat.avg)
 
   const hoveredMatchKey =
     selectedIndex !== null && matchesWithSelectedStat[selectedIndex].matchKey
@@ -137,7 +137,7 @@ export const ChartCard = ({
   }
 
   const matchingSchemaStat = schema.schema.find(
-    s => getFieldKey(s) === fieldKey,
+    (s) => getFieldKey(s) === fieldKey,
   )
   const isBooleanStat =
     matchingSchemaStat && matchingSchemaStat.type === 'boolean'
@@ -154,11 +154,11 @@ export const ChartCard = ({
       <div class={chartDescriptionStyle}>
         <Dropdown<StatDescription>
           class={statPickerStyle}
-          options={schema.schema.filter(s => !s.hide)}
+          options={schema.schema.filter((s) => !s.hide)}
           getKey={getFieldKey}
-          getText={s => cleanFieldName(s.name)}
-          getGroup={s => (s.period === 'auto' ? 'Auto' : 'Teleop')}
-          onChange={s => setFieldKey(getFieldKey(s))}
+          getText={(s) => cleanFieldName(s.name)}
+          getGroup={(s) => (s.period === 'auto' ? 'Auto' : 'Teleop')}
+          onChange={(s) => setFieldKey(getFieldKey(s))}
           value={matchingSchemaStat}
         />
         <div class={detailsStyle}>
@@ -294,7 +294,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
     /** Whether the value for the field never changes */
     const isConstant = highest === lowest
 
-    const lerpedPoints = points.map(point =>
+    const lerpedPoints = points.map((point) =>
       isConstant ? canvasHeight / 2 : canvasHeight - yLerper(point),
     )
 
