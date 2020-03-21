@@ -11,10 +11,10 @@ export const getAllCachedEventMatches = (
   matchStore.getAll(IDBKeyRange.bound(`${eventKey}-`, `${eventKey}-z`))
 
 export const getCachedEventMatches = (eventKey: string, team?: string) =>
-  transaction('matches', matchStore =>
+  transaction('matches', (matchStore) =>
     getAllCachedEventMatches(matchStore, eventKey),
   )
-    .then(results =>
+    .then((results) =>
       (team ? results.filter(matchHasTeam(team)) : results).sort(
         compareMatches,
       ),

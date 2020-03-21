@@ -34,18 +34,18 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const matchesWithComments = usePromise(
     () =>
       getEventMatches(eventKey, team)
-        .then(allMatches =>
+        .then((allMatches) =>
           Promise.all(
-            allMatches.sort(compareMatches).map(m =>
-              getMatchTeamReports(eventKey, m.key, team).then(reports => ({
-                reports: reports.filter(r => r.comment),
+            allMatches.sort(compareMatches).map((m) =>
+              getMatchTeamReports(eventKey, m.key, team).then((reports) => ({
+                reports: reports.filter((r) => r.comment),
                 matchKey: m.key,
               })),
             ),
           ),
         )
-        .then(matchesWithReports =>
-          matchesWithReports.filter(m => m.reports.length > 0),
+        .then((matchesWithReports) =>
+          matchesWithReports.filter((m) => m.reports.length > 0),
         ),
     [eventKey, teamNum],
   )
@@ -112,7 +112,7 @@ const MatchComments = ({
       <a href={`/events/${eventKey}/matches/${match}`}>
         {formatMatchKeyShort(match)}
       </a>
-      {reports.map(r => (
+      {reports.map((r) => (
         <CommentCard key={JSON.stringify(r)} report={r} />
       ))}
     </div>

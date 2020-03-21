@@ -58,7 +58,7 @@ const createStatCell = (
   const avgTypeStr = avgType === 'Avg' ? 'avg' : 'max'
   return {
     title: cleanFieldName(statDescription.name),
-    getCell: row => {
+    getCell: (row) => {
       const matchingCell = row.summary[statDescription.name]
       if (matchingCell)
         return {
@@ -67,7 +67,7 @@ const createStatCell = (
         }
     },
     key: getFieldKey(statDescription),
-    renderCell: cell => {
+    renderCell: (cell) => {
       const text = cell
         ? cell.type === 'boolean'
           ? renderBoolean?.(cell, avgTypeStr) || formatPercent(cell[avgTypeStr])
@@ -76,7 +76,7 @@ const createStatCell = (
       return <td class={cellStyle}>{text}</td>
     },
     sortOrder: SortOrder.DESC,
-    getCellValue: cell => (cell ? cell[avgTypeStr] : -1),
+    getCellValue: (cell) => (cell ? cell[avgTypeStr] : -1),
   }
 }
 
@@ -186,8 +186,8 @@ const AnalysisTable = ({
   const teamColumn: Column<string, RowType> = {
     title: 'Team',
     key: 'Team',
-    getCell: row => row.team,
-    getCellValue: team => parseInt(team),
+    getCell: (row) => row.team,
+    getCellValue: (team) => parseInt(team),
     renderCell: (team, _row, rowIndex, sortColKey) => {
       const isSortingByStat =
         sortColKey.startsWith('auto') || sortColKey.startsWith('teleop')
@@ -225,9 +225,9 @@ const AnalysisTable = ({
   const rankColumn: Column<EventTeamInfo | undefined, RowType> = {
     title: 'Rank',
     key: 'Rank',
-    getCell: row => rankingInfo?.find(r => r.team === 'frc' + row.team),
-    getCellValue: cell => cell?.rank ?? Infinity,
-    renderCell: cell => (
+    getCell: (row) => rankingInfo?.find((r) => r.team === 'frc' + row.team),
+    getCellValue: (cell) => cell?.rank ?? Infinity,
+    renderCell: (cell) => (
       <td class={rankCellStyle}>
         <span>{cell?.rank === undefined ? '?' : cell.rank}</span>
         {cell?.rankingScore !== undefined && (
@@ -237,9 +237,9 @@ const AnalysisTable = ({
     ),
     sortOrder: SortOrder.ASC,
   }
-  const allDisplayableFields = schema.schema.filter(f => !f.hide)
-  const autoFields = allDisplayableFields.filter(f => f.period === 'auto')
-  const teleopFields = allDisplayableFields.filter(f => f.period === 'teleop')
+  const allDisplayableFields = schema.schema.filter((f) => !f.hide)
+  const autoFields = allDisplayableFields.filter((f) => f.period === 'auto')
+  const teleopFields = allDisplayableFields.filter((f) => f.period === 'teleop')
   const columns = [
     teamColumn,
     rankColumn,
@@ -258,7 +258,7 @@ const AnalysisTable = ({
           <Dropdown
             class={dropdownStyle}
             options={['Avg', 'Max'] as const}
-            onChange={v => setAvgType(v)}
+            onChange={(v) => setAvgType(v)}
             value={avgType}
           />
         </div>

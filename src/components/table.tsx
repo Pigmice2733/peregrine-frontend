@@ -98,14 +98,14 @@ export const createTextColumn = <RowType extends any = never>(
   getValue: (row: RowType) => string,
   additionalOpts: Partial<Column<string, RowType>> = {},
 ): Column<string, RowType> => ({
-  renderCell: value => (
+  renderCell: (value) => (
     <td class={cellStyle} title={value}>
       {value}
     </td>
   ),
   title,
   key: title,
-  getCellValue: value => value.toLowerCase(),
+  getCellValue: (value) => value.toLowerCase(),
   sortOrder: SortOrder.ASC,
   getCell: getValue,
   ...additionalOpts,
@@ -116,10 +116,10 @@ export const createNumberColumn = <RowType extends any = never>(
   getValue: (row: RowType) => number,
   additionalOpts: Partial<Column<number, RowType>> = {},
 ): Column<number, RowType> => ({
-  renderCell: value => <td class={cellStyle}>{value}</td>,
+  renderCell: (value) => <td class={cellStyle}>{value}</td>,
   title,
   key: title,
-  getCellValue: value => value,
+  getCellValue: (value) => value,
   sortOrder: SortOrder.DESC,
   getCell: getValue,
   ...additionalOpts,
@@ -130,14 +130,14 @@ export const createBooleanColumn = <RowType extends any = never>(
   getValue: (row: RowType) => boolean,
   additionalOpts: Partial<Column<boolean, RowType>> = {},
 ): Column<boolean, RowType> => ({
-  renderCell: value => (
+  renderCell: (value) => (
     <td class={cellStyle}>
       <BooleanDisplay value={value} />
     </td>
   ),
   title,
   key: title,
-  getCellValue: value => value,
+  getCellValue: (value) => value,
   sortOrder: SortOrder.DESC,
   getCell: getValue,
   ...additionalOpts,
@@ -174,7 +174,8 @@ export const Table = <RowType extends any>({
   contextRow,
 }: RenderableProps<Props<RowType>>) => {
   const [sortColKey, setSortColKey] = useState<string>(defaultSortCol.key)
-  const sortCol = columns.find(col => col.key === sortColKey) || defaultSortCol
+  const sortCol =
+    columns.find((col) => col.key === sortColKey) || defaultSortCol
   const [sortOrder, setSortOrder] = useState<SortOrderState>(
     SortOrderState.DEFAULT,
   )
@@ -216,7 +217,7 @@ export const Table = <RowType extends any>({
       <thead>
         {contextRow && <tr class={contextRowStyle}>{contextRow}</tr>}
         <tr class={tableHeaderRowStyle}>
-          {columns.map(col => (
+          {columns.map((col) => (
             <th
               key={col.key}
               class={clsx(
@@ -290,7 +291,7 @@ const TableRow = <RowType extends any>({
   sortColKey: string
 }>) => (
   <tr class={tableRowStyle}>
-    {columns.map(col => {
+    {columns.map((col) => {
       const cell = col.getCell(row.value)
       return col.renderCell(cell, row.value, index, sortColKey)
     })}

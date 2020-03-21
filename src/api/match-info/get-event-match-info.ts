@@ -10,7 +10,7 @@ const updateCachedEventMatchInfo = (
 ) =>
   transaction(
     'matches',
-    matchStore => {
+    (matchStore) => {
       matchStore.put(match, createMatchDbKey(eventKey, match.key))
     },
     'readwrite',
@@ -19,7 +19,7 @@ const updateCachedEventMatchInfo = (
 export const getEventMatchInfo = (eventKey: string, matchKey: string) =>
   request<MatchInfo>('GET', `events/${eventKey}/matches/${matchKey}`)
     .then(processMatch)
-    .then(match => {
+    .then((match) => {
       requestIdleCallback(() => updateCachedEventMatchInfo(eventKey, match))
       return match
     })

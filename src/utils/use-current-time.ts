@@ -3,7 +3,7 @@ import { useEffect, useState } from 'preact/hooks'
 const timeListeners = new Set<(d: Date) => void>()
 
 setInterval(() => {
-  timeListeners.forEach(l => l(new Date()))
+  timeListeners.forEach((l) => l(new Date()))
 }, 1000)
 
 export const useCurrentTime = () => {

@@ -41,7 +41,7 @@ const FieldCard = <FieldType extends ReportStatDescription>({
     ) : (
       <Toggle
         checked={Boolean(value)}
-        onChange={value => onChange(Number(value))}
+        onChange={(value) => onChange(Number(value))}
       />
     )}
   </Card>

@@ -63,10 +63,11 @@ export const Dropdown = <T extends any>({
     // eslint-disable-next-line caleb/jsx-a11y/no-onchange
     <select
       value={value === undefined ? undefined : getKey(value)}
-      onChange={e =>
+      onChange={(e) =>
         onChange(
           options.find(
-            o => getKey(o).toString() === (e.target as HTMLSelectElement).value,
+            (o) =>
+              getKey(o).toString() === (e.target as HTMLSelectElement).value,
           ) as T,
         )
       }

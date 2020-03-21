@@ -62,7 +62,7 @@ type Props = Merge<
 const Header = ({ back, name }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const toggleMenu = () => setIsMenuOpen(isOpen => !isOpen)
+  const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen)
   const hideMenu = () => setIsMenuOpen(false)
 
   return (

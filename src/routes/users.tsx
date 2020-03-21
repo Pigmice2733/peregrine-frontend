@@ -39,13 +39,13 @@ const UsersTable = ({
   users: UserInfo[]
   realms: Realm[]
 }) => {
-  const rows: Row<UserInfo>[] = users.map(user => ({
+  const rows: Row<UserInfo>[] = users.map((user) => ({
     key: user.id,
     value: user,
   }))
 
   const columns = [
-    createTextColumn<UserInfo>('Username', user => user.username, {
+    createTextColumn<UserInfo>('Username', (user) => user.username, {
       renderCell: (username, { id }) => (
         <th scope="row">
           <a class={userLinkStyle} href={`/users/${id}`}>
@@ -54,21 +54,21 @@ const UsersTable = ({
         </th>
       ),
     }),
-    createTextColumn<UserInfo>('First Name', user => user.firstName),
-    createTextColumn<UserInfo>('Last Name', user => user.lastName),
-    createNumberColumn<UserInfo>('ID', user => user.id, {
+    createTextColumn<UserInfo>('First Name', (user) => user.firstName),
+    createTextColumn<UserInfo>('Last Name', (user) => user.lastName),
+    createNumberColumn<UserInfo>('ID', (user) => user.id, {
       sortOrder: SortOrder.ASC,
     }),
-    createBooleanColumn<UserInfo>('Verified', user => user.roles.isVerified),
-    createBooleanColumn<UserInfo>('Admin', user => user.roles.isAdmin),
+    createBooleanColumn<UserInfo>('Verified', (user) => user.roles.isVerified),
+    createBooleanColumn<UserInfo>('Admin', (user) => user.roles.isAdmin),
     createBooleanColumn<UserInfo>(
       'Super Admin',
-      user => user.roles.isSuperAdmin,
+      (user) => user.roles.isSuperAdmin,
     ),
     createTextColumn<UserInfo>(
       'Realm',
-      user =>
-        realms.find(r => r.id === user.realmId)?.name || String(user.realmId),
+      (user) =>
+        realms.find((r) => r.id === user.realmId)?.name || String(user.realmId),
     ),
   ]
 

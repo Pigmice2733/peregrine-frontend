@@ -23,7 +23,7 @@ export const request = <T extends any>(
   params?: QueryParams,
   body?: any,
 ) =>
-  CancellablePromise.wrapAsync(async onCancel => {
+  CancellablePromise.wrapAsync(async (onCancel) => {
     const controller = new AbortController()
     const signal = controller.signal
 

@@ -71,7 +71,7 @@ const SignUpForm = () => {
 
   return (
     <Form onSubmit={onSubmit}>
-      {isValid => (
+      {(isValid) => (
         <Fragment>
           <TextInput label="First Name" onInput={setFirstName} required />
           <TextInput label="Last Name" onInput={setLastName} required />
@@ -92,14 +92,14 @@ const SignUpForm = () => {
             maxLength={maxPasswordLength}
           />
           <Dropdown<Realm>
-            value={realms.find(r => r.id === realmId)}
+            value={realms.find((r) => r.id === realmId)}
             emptyLabel="Select a realm"
             class={dropdownClass}
             options={realms}
             required
-            onChange={v => setRealmId(v.id)}
-            getKey={v => v.id}
-            getText={v => v.name}
+            onChange={(v) => setRealmId(v.id)}
+            getKey={(v) => v.id}
+            getText={(v) => v.name}
           />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}

@@ -50,7 +50,7 @@ const EnumSelector = <T extends string>({
   selected,
 }: Props<T>) => (
   <div class={outer}>
-    {items.map(i => (
+    {items.map((i) => (
       <label class={label} key={i}>
         <input
           class={input}

@@ -80,12 +80,12 @@ const blueStyle = css`
 const TeamPicker = ({ redAlliance, blueAlliance, onChange }: Props) => (
   <div class={teamPickerStyle}>
     <div class={allianceStyle + ' ' + redStyle}>
-      {redAlliance.map(t => (
+      {redAlliance.map((t) => (
         <Item key={t} team={t} onChange={onChange} />
       ))}
     </div>
     <div class={allianceStyle + ' ' + blueStyle}>
-      {blueAlliance.map(t => (
+      {blueAlliance.map((t) => (
         <Item key={t} team={t} onChange={onChange} />
       ))}
     </div>

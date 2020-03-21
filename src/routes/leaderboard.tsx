@@ -51,7 +51,7 @@ const LeaderboardList = () => {
   return (
     <div class={leaderboardListStyle}>
       <Dropdown options={years} onChange={setYear} value={year} />
-      {leaderboard?.map(i => (
+      {leaderboard?.map((i) => (
         <LeaderboardCard key={i.reporterId} item={i} />
       )) || <Spinner />}
     </div>

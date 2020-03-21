@@ -48,7 +48,7 @@ const SavedReportsPage: FunctionComponent = () => {
     <Page name="Saved Reports" back="/" class={savedReportsPageStyle}>
       {savedReports.length > 0 ? (
         <Fragment>
-          {savedReports.map(report => (
+          {savedReports.map((report) => (
             <SavedReportCard
               report={report}
               key={report.eventKey + report.matchKey + report.team}

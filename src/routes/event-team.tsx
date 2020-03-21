@@ -99,7 +99,7 @@ const guessTeamLocation = (
           : TeamState.AfterMatch,
     }
 
-  const queueMatch = teamMatches.find(m => {
+  const queueMatch = teamMatches.find((m) => {
     if (!m.time) return false
 
     const matchStartTime = m.time.getTime()
@@ -112,7 +112,7 @@ const guessTeamLocation = (
 
   if (queueMatch) return { match: queueMatch, state: TeamState.Queueing }
 
-  const matchThatJustFinished = teamMatches.find(m => {
+  const matchThatJustFinished = teamMatches.find((m) => {
     if (!m.time) return false
     const matchStartTime = m.time.getTime()
     const matchEndTime = matchStartTime + matchCycleDuration
