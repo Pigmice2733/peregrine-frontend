@@ -1,8 +1,12 @@
+import { useSavedReports } from '@/api/report/submit-report'
+import { useSavedTeams } from '@/api/save-teams'
 import { pigmicePurple } from '@/colors'
 import Icon from '@/components/icon'
 import { Scrim, scrimHiddenClass } from '@/components/scrim'
 import { accountCircle } from '@/icons/account-circle'
+import { accountPlus } from '@/icons/account-plus'
 import { close as closeIcon } from '@/icons/close'
+import { cloudSync } from '@/icons/cloud-sync'
 import { crown } from '@/icons/crown'
 import { home } from '@/icons/home'
 import { login } from '@/icons/login'
@@ -14,11 +18,8 @@ import { resolveUrl } from '@/utils/resolve-url'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { darken, lighten, rgba } from 'polished'
-import { ComponentChildren, h, Fragment } from 'preact'
+import { ComponentChildren, Fragment, h } from 'preact'
 import IconButton from './icon-button'
-import { useSavedReports } from '@/api/report/submit-report'
-import { cloudSync } from '@/icons/cloud-sync'
-import { accountPlus } from '@/icons/account-plus'
 
 const spacing = '0.3rem'
 
@@ -128,7 +129,7 @@ export const Menu = ({ onHide, visible }: Props) => {
   const isAdmin = jwt?.peregrineRoles.isAdmin
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
-
+  const savedTeams = useSavedTeams()
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
       <aside class={menuStyle}>
@@ -156,6 +157,14 @@ export const Menu = ({ onHide, visible }: Props) => {
               Profile
             </MenuItem>
           )}
+          {savedTeams.map(({ teamNum, eventKey }) => (
+            <MenuItem
+              icon={logoutIcon}
+              href={`/events/${eventKey}/teams/${teamNum}`}
+            >
+              {teamNum}
+            </MenuItem>
+          ))}
           {isLoggedIn ? (
             <MenuItem icon={logoutIcon} onClick={logoutHandler}>
               Log out

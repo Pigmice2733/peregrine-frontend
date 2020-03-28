@@ -1,26 +1,27 @@
-import { h, Fragment } from 'preact'
-import Page from '@/components/page'
-import InfoGroupCard from '@/components/info-group-card'
-import { sortAscending } from '@/icons/sort-ascending'
-import { history } from '@/icons/history'
-import { MatchCard } from '@/components/match-card'
-import { round } from '@/utils/round'
 import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
-import { css } from 'linaria'
+import { ProcessedMatchInfo } from '@/api/match-info'
+import { saveTeam } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
-import { usePromise } from '@/utils/use-promise'
-import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
-import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
 import Button from '@/components/button'
+import { ChartCard } from '@/components/chart'
+import InfoGroupCard from '@/components/info-group-card'
+import { MatchCard } from '@/components/match-card'
+import Page from '@/components/page'
+import { history } from '@/icons/history'
+import { mapMarker } from '@/icons/map-marker'
+import { sortAscending } from '@/icons/sort-ascending'
+import { Falsy } from '@/type-utils'
 import { compareMatches } from '@/utils/compare-matches'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { formatTimeWithoutDate } from '@/utils/format-time'
-import { ProcessedMatchInfo } from '@/api/match-info'
-import { mapMarker } from '@/icons/map-marker'
-import { Falsy } from '@/type-utils'
+import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { round } from '@/utils/round'
 import { useCurrentTime } from '@/utils/use-current-time'
+import { usePromise } from '@/utils/use-promise'
+import { css } from 'linaria'
+import { Fragment, h } from 'preact'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -207,6 +208,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/matches`}>
         View Matches
       </Button>
+      <Button onClick={() => saveTeam(teamNum, eventKey)}>Save Team</Button>
       {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}
