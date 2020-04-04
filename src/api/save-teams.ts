@@ -46,8 +46,9 @@ export const useSavedTeams = () => {
 
 // TODO:
 // - Add event name to menu
-// - Replace menu icon with different icon
-// - Replace the button with a star or something
+// - Replace Save Teams button with a star or something
+// - Fix menu close button placement
 
 // DONE:
 // - Make sure you can't save a team @ event multiple times / "Save team" should say something else if it is already saved
+// - Replace menu icon with different icon
