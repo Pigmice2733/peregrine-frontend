@@ -1,6 +1,6 @@
 import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { saveTeam } from '@/api/save-teams'
+import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
@@ -160,6 +160,11 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
+  const savedTeams = useSavedTeams()
+  const isTeamSaved = savedTeams.some(
+    (team) => team.teamNum === teamNum && team.eventKey === eventKey,
+  )
+
   return (
     <Page
       name={`${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
@@ -208,7 +213,15 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/matches`}>
         View Matches
       </Button>
-      <Button onClick={() => saveTeam(teamNum, eventKey)}>Save Team</Button>
+      <Button
+        onClick={() =>
+          isTeamSaved
+            ? removeTeam(teamNum, eventKey)
+            : saveTeam(teamNum, eventKey)
+        }
+      >
+        {isTeamSaved ? 'Remove Team' : 'Save Team'}
+      </Button>
       {teamMatches && schema && (
         <ChartCard
           team={'frc' + teamNum}

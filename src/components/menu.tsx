@@ -6,6 +6,7 @@ import { Scrim, scrimHiddenClass } from '@/components/scrim'
 import { accountCircle } from '@/icons/account-circle'
 import { accountPlus } from '@/icons/account-plus'
 import { close as closeIcon } from '@/icons/close'
+import { mdiStarCircle } from '@mdi/js'
 import { cloudSync } from '@/icons/cloud-sync'
 import { crown } from '@/icons/crown'
 import { home } from '@/icons/home'
@@ -92,10 +93,11 @@ const menuStyle = css`
   z-index: 16;
   transition: inherit;
   transition-timing-function: cubic-bezier(1, 0, 0.71, 0.88);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
   padding: ${spacing};
   will-change: transform;
+  overflow: hidden;
 
   & ul {
     list-style-type: none;
@@ -124,6 +126,20 @@ const logoutHandler = () => {
   window.location.reload()
 }
 
+const navStyle = css`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  overflow: hidden;
+`
+const savedTeamsStyle = css`
+  overflow: auto;
+`
+const savedTeamsLabelStyle = css`
+  font-weight: bold;
+  padding: 0.1em 0.9em;
+`
+
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt?.peregrineRoles.isAdmin
@@ -140,52 +156,67 @@ export const Menu = ({ onHide, visible }: Props) => {
           class={closeButtonStyle}
           style={{ marginRight: getScrollbarWidth() }}
         />
-        <ul>
-          <MenuItem icon={home} href="/">
-            Home
-          </MenuItem>
-          <MenuItem icon={crown} href="/leaderboard">
-            Leaderboard
-          </MenuItem>
-          {isAdmin && (
-            <MenuItem icon={accountCircle} href="/users">
-              Users
+        <nav class={navStyle}>
+          <ul>
+            <MenuItem icon={home} href="/">
+              Home
             </MenuItem>
-          )}
-          {jwt && (
-            <MenuItem icon={accountCircle} href={`/users/${jwt.sub}`}>
-              Profile
+            <MenuItem icon={crown} href="/leaderboard">
+              Leaderboard
             </MenuItem>
-          )}
-          {savedTeams.map(({ teamNum, eventKey }) => (
-            <MenuItem
-              icon={logoutIcon}
-              href={`/events/${eventKey}/teams/${teamNum}`}
-            >
-              {teamNum}
-            </MenuItem>
-          ))}
-          {isLoggedIn ? (
-            <MenuItem icon={logoutIcon} onClick={logoutHandler}>
-              Log out
-            </MenuItem>
-          ) : (
-            <Fragment>
-              <MenuItem icon={login} href="/login">
-                Log in
+            {isAdmin && (
+              <MenuItem icon={accountCircle} href="/users">
+                Users
               </MenuItem>
-              <MenuItem icon={accountPlus} href="/signup">
-                Sign Up
+            )}
+            {jwt && (
+              <MenuItem icon={accountCircle} href={`/users/${jwt.sub}`}>
+                Profile
               </MenuItem>
-            </Fragment>
-          )}
-          {savedReports.length > 0 && (
-            <MenuItem icon={cloudSync} href="/saved-reports">
-              Offline Saved Reports
-            </MenuItem>
-          )}
-        </ul>
+            )}
+            {savedReports.length > 0 && (
+              <MenuItem icon={cloudSync} href="/saved-reports">
+                Offline Saved Reports
+              </MenuItem>
+            )}
+          </ul>
+          <div class={savedTeamsLabelStyle}>Saved Teams</div>
+          <ul class={savedTeamsStyle}>
+            {savedTeams.map(({ teamNum, eventKey }) => (
+              <MenuItem
+                icon={mdiStarCircle}
+                href={`/events/${eventKey}/teams/${teamNum}`}
+              >
+                {teamNum}
+              </MenuItem>
+              // http://grid.malven.co/
+            ))}
+          </ul>
+          <ul>
+            {jwt && (
+              <MenuItem icon={accountCircle} href={`/users/${jwt.sub}`}>
+                Profile
+              </MenuItem>
+            )}
+            {isLoggedIn ? (
+              <MenuItem icon={logoutIcon} onClick={logoutHandler}>
+                Log out
+              </MenuItem>
+            ) : (
+              <Fragment>
+                <MenuItem icon={login} href="/login">
+                  Log in
+                </MenuItem>
+                <MenuItem icon={accountPlus} href="/signup">
+                  Sign Up
+                </MenuItem>
+              </Fragment>
+            )}
+          </ul>
+        </nav>
       </aside>
     </Scrim>
   )
 }
+
+// https://materialdesignicons.com/
