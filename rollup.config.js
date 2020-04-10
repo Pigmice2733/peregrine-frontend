@@ -91,8 +91,6 @@ export default [
       sourcemap: false,
       chunkFileNames: '[hash].js',
     },
-    experimentalOptimizeChunks: true,
-    chunkGroupingSize: 50000,
     plugins: [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
@@ -128,9 +126,11 @@ export default [
       },
       {
         name: 'rollup-plugin-chunks-json',
-        async writeBundle(bundle) {
+        async writeBundle(_, bundle) {
           const chunksJSON = Object.values(bundle)
-            .filter((chunk) => !chunk.isAsset)
+            .filter((chunk) => {
+              return chunk.type === 'chunk'
+            })
             .map((chunk) => `/${chunk.fileName}`)
           await writeFileAsync(chunksFile, JSON.stringify(chunksJSON))
         },
