@@ -32,15 +32,18 @@ const rollupNodeOptions = { extensions }
 
 /** @param {boolean} prod */
 const terserOptions = (prod) => ({
+  // have to override these because the terser plugin sets them
+  module: false,
+  toplevel: false,
   ecma: /** @type {8} */ (8),
-  module: true,
   compress: {
     passes: 4,
     unsafe: true,
     pure_getters: true,
     join_vars: prod,
+    toplevel: true,
   },
-  mangle: prod,
+  mangle: prod && { toplevel: false },
 })
 
 const outDir = 'dist'
