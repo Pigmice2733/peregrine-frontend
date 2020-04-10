@@ -2,11 +2,8 @@ module.exports = {
   presets: [
     ['linaria-preact/babel', { evaluate: true }],
     ['@babel/preset-typescript', { jsxPragma: 'h' }],
-    ['@babel/preset-modules', { loose: true }],
   ],
   plugins: [
-    process.env.NODE_ENV === 'production' &&
-      './babel-plugin-remove-preact-debug',
     process.env.NODE_ENV !== 'production' &&
       process.env.NODE_ENV !== 'test' &&
       '@babel/plugin-transform-react-jsx-source',

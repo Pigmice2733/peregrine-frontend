@@ -1,7 +1,7 @@
 import linaria from 'linaria-preact/rollup'
 import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
-import babel from 'rollup-plugin-babel'
+import babel from '@babel/core'
 import postcss from 'rollup-plugin-postcss'
 import netlifyPush, { printPush } from 'rollup-plugin-netlify-push'
 import parseRoutes from 'rollup-plugin-netlify-push/parse-routes'
@@ -9,7 +9,7 @@ import { apiUrl } from './src/api/api-url.ts'
 import crypto from 'crypto'
 import { promisify } from 'util'
 import { writeFile, readFile } from 'fs'
-import { join } from 'path'
+import { join, sep as pathSep } from 'path'
 import cpy from 'cpy'
 import templite from 'templite'
 import sharp from 'sharp'
@@ -17,6 +17,7 @@ import mkdirplz from 'mkdirplz'
 const postcssPlugins = require('./postcss.config').plugins
 require('dotenv').config()
 const babelConfig = require('./.babelrc')
+const babelConfigProd = require('./.babelrc.prod')
 
 const writeFileAsync = promisify(writeFile)
 const readFileAsync = promisify(readFile)
@@ -40,15 +41,43 @@ const terserOptions = (prod) => ({
     join_vars: prod,
   },
   mangle: prod,
-  output: {
-    beautify: !prod,
-  },
 })
 
 const outDir = 'dist'
 const chunksFile = join(outDir, 'chunks.json')
 
-const babelOptions = { extensions, babelrc: false, ...babelConfig }
+/**
+ * Runs babel on the input code
+ * @returns {import('rollup').Plugin}
+ */
+const babelInput = () => ({
+  name: 'rollup-plugin-babel-input',
+  async transform(code, id) {
+    if (id.split(pathSep).includes('node_modules')) return null
+    if (!(id.endsWith('.ts') || id.endsWith('.js') || id.endsWith('.tsx')))
+      return null
+    const { code: outputCode, map } = await babel.transformAsync(code, {
+      ...babelConfig,
+      filename: id,
+    })
+    return { code: outputCode, map }
+  },
+})
+
+/**
+ * Runs babel on the output code
+ * @returns {import('rollup').Plugin}
+ */
+const babelOutput = () => ({
+  name: 'rollup-plugin-babel-output',
+  async renderChunk(code) {
+    const { code: outputCode, map } = await babel.transformAsync(
+      code,
+      babelConfigProd,
+    )
+    return { code: outputCode, map }
+  },
+})
 
 mkdirplz(outDir)
 
@@ -80,7 +109,8 @@ export default [
         config: false,
         minimize: { zindex: false },
       }),
-      babel(babelOptions),
+      babelInput(),
+      babelOutput(),
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
@@ -144,7 +174,8 @@ export default [
         },
       },
       node(rollupNodeOptions),
-      babel(babelOptions),
+      babelInput(),
+      babelOutput(),
       terser(terserOptions(prod)),
       {
         name: 'write-manifest',
