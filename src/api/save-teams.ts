@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'preact/hooks'
 
-let savedTeams = []
-const savedTeamsListeners = []
+interface SavedTeam {
+  teamNum: string
+  eventKey: string
+}
+
+let savedTeams: SavedTeam[] = []
+const savedTeamsListeners: ((savedTeams: SavedTeam[]) => void)[] = []
 
 const loadFromLocalStorage = () => {
   savedTeams = JSON.parse(localStorage.getItem('savedTeams') || '[]')
@@ -40,15 +45,3 @@ export const useSavedTeams = () => {
   }, [])
   return _savedTeams
 }
-
-// http://localhost:2733/events/2020waspo/teams/2147
-// https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-
-// TODO:
-// - Replace Save Teams button with a star or something
-
-// DONE:
-// - Add event name to menu
-// - Make sure you can't save a team @ event multiple times / "Save team" should say something else if it is already saved
-// - Replace menu icon with different icon
-// - Fix menu close button placement

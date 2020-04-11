@@ -204,8 +204,11 @@ export const Menu = ({ onHide, visible }: Props) => {
           <h2 class={savedTeamsLabelStyle}>Saved Teams</h2>
           <ul class={savedTeamsStyle}>
             {savedTeams.map(({ teamNum, eventKey }) => (
-              <SavedTeamMenuItem teamNum={teamNum} eventKey={eventKey} />
-              // http://grid.malven.co/
+              <SavedTeamMenuItem
+                key={`${teamNum}:${eventKey}`}
+                teamNum={teamNum}
+                eventKey={eventKey}
+              />
             ))}
           </ul>
           <ul>
