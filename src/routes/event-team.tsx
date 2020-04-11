@@ -22,6 +22,8 @@ import { useCurrentTime } from '@/utils/use-current-time'
 import { usePromise } from '@/utils/use-promise'
 import { css } from 'linaria'
 import { Fragment, h } from 'preact'
+import IconButton from '@/components/icon-button'
+import { mdiStarOutline, mdiStar } from '@mdi/js'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -144,6 +146,14 @@ type TeamLocation =
   | null
   | undefined
 
+const pageHeadingStyle = css`
+  display: flex;
+  align-items: center;
+`
+const teamHeadingSpanStyle = css`
+  margin-right: 0.3rem;
+`
+
 const EventTeam = ({ eventKey, teamNum }: Props) => {
   const eventInfo = useEventInfo(eventKey)
   const eventTeamInfo = usePromise(
@@ -167,7 +177,22 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
 
   return (
     <Page
-      name={`${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
+      name={
+        <span class={pageHeadingStyle}>
+          <span class={teamHeadingSpanStyle}>{`${teamNum} @ ${
+            eventInfo ? eventInfo.name : eventKey
+          }`}</span>
+          <IconButton
+            icon={isTeamSaved ? mdiStar : mdiStarOutline}
+            onClick={() =>
+              isTeamSaved
+                ? removeTeam(teamNum, eventKey)
+                : saveTeam(teamNum, eventKey)
+            }
+            title={isTeamSaved ? 'Remove Team' : 'Save Team'}
+          />
+        </span>
+      }
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
@@ -212,15 +237,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       </Button>
       <Button href={`/events/${eventKey}/teams/${teamNum}/matches`}>
         View Matches
-      </Button>
-      <Button
-        onClick={() =>
-          isTeamSaved
-            ? removeTeam(teamNum, eventKey)
-            : saveTeam(teamNum, eventKey)
-        }
-      >
-        {isTeamSaved ? 'Remove Team' : 'Save Team'}
       </Button>
       {teamMatches && schema && (
         <ChartCard

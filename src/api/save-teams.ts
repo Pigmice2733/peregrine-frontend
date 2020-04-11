@@ -45,10 +45,10 @@ export const useSavedTeams = () => {
 // https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
 
 // TODO:
-// - Add event name to menu
 // - Replace Save Teams button with a star or something
-// - Fix menu close button placement
 
 // DONE:
+// - Add event name to menu
 // - Make sure you can't save a team @ event multiple times / "Save team" should say something else if it is already saved
 // - Replace menu icon with different icon
+// - Fix menu close button placement

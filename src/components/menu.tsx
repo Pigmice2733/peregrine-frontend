@@ -21,6 +21,7 @@ import { css } from 'linaria'
 import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren, Fragment, h } from 'preact'
 import IconButton from './icon-button'
+import { useEventInfo } from '@/cache/event-info/use'
 
 const spacing = '0.3rem'
 
@@ -112,7 +113,7 @@ const menuStyle = css`
 `
 
 const closeButtonStyle = css`
-  align-self: flex-end;
+  justify-self: end;
   margin: 0;
 `
 
@@ -128,7 +129,7 @@ const logoutHandler = () => {
 
 const navStyle = css`
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto 1fr auto;
   height: 100%;
   overflow: hidden;
 `
@@ -137,8 +138,28 @@ const savedTeamsStyle = css`
 `
 const savedTeamsLabelStyle = css`
   font-weight: bold;
-  padding: 0.1em 0.9em;
+  padding: 0.1rem 0.9rem;
+  margin: 0;
+  font-size: 1.1rem;
 `
+// http://grid.malven.co/
+const SavedTeamMenuItem = ({
+  eventKey,
+  teamNum,
+}: {
+  eventKey: string
+  teamNum: string
+}) => {
+  const eventInfo = useEventInfo(eventKey)
+  return (
+    <MenuItem
+      icon={mdiStarCircle}
+      href={`/events/${eventKey}/teams/${teamNum}`}
+    >
+      {teamNum} - {eventInfo ? eventInfo.name : eventKey}
+    </MenuItem>
+  )
+}
 
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
@@ -180,15 +201,10 @@ export const Menu = ({ onHide, visible }: Props) => {
               </MenuItem>
             )}
           </ul>
-          <div class={savedTeamsLabelStyle}>Saved Teams</div>
+          <h2 class={savedTeamsLabelStyle}>Saved Teams</h2>
           <ul class={savedTeamsStyle}>
             {savedTeams.map(({ teamNum, eventKey }) => (
-              <MenuItem
-                icon={mdiStarCircle}
-                href={`/events/${eventKey}/teams/${teamNum}`}
-              >
-                {teamNum}
-              </MenuItem>
+              <SavedTeamMenuItem teamNum={teamNum} eventKey={eventKey} />
               // http://grid.malven.co/
             ))}
           </ul>
