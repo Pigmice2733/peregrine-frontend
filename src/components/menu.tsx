@@ -142,7 +142,7 @@ const savedTeamsLabelStyle = css`
   margin: 0;
   font-size: 1.1rem;
 `
-// http://grid.malven.co/
+
 const SavedTeamMenuItem = ({
   eventKey,
   teamNum,
@@ -237,5 +237,3 @@ export const Menu = ({ onHide, visible }: Props) => {
     </Scrim>
   )
 }
-
-// https://materialdesignicons.com/
