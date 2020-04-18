@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { EMPTY_PROMISE, noop } from './empty-promise'
+import { EMPTY_PROMISE } from './empty-promise'
 
 const apiKey = process.env.IPDATA_API_KEY
 const apiUrl =
