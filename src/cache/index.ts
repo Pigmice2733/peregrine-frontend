@@ -16,8 +16,11 @@ const initDB = (db: IDBDatabase) => {
     db.createObjectStore(SCHEMA_STORE)
 }
 
-const getDB = (dbName: string) => {
-  const request = indexedDB.open(dbName, DB_VERSION)
+let db: IDBDatabase | undefined
+
+const getDB = () => {
+  if (db) return Promise.resolve(db)
+  const request = indexedDB.open(DB_NAME, DB_VERSION)
   request.onupgradeneeded = () => initDB(request.result)
   const requestPromise = idbPromise(request)
   requestPromise.then(() => {
@@ -26,11 +29,10 @@ const getDB = (dbName: string) => {
         ((errorEvent.target as unknown) as { error: string }).error,
       )
     })
+    db = request.result
   })
   return requestPromise
 }
-
-const db = getDB(DB_NAME)
 
 export const transaction = async <ResolvedResult = void>(
   storeName: string,
@@ -41,7 +43,7 @@ export const transaction = async <ResolvedResult = void>(
     | (ResolvedResult | IDBRequest<ResolvedResult>),
   transactionType: IDBTransactionMode = 'readonly',
 ) => {
-  const tx = (await db).transaction(storeName, transactionType)
+  const tx = (await getDB()).transaction(storeName, transactionType)
   const store = tx.objectStore(storeName)
   const handlerResult = await handler(store)
   const data =
