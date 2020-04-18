@@ -58,7 +58,13 @@ const Home = () => {
       <div class={filterStyle}>
         <Dropdown options={years} onChange={setYear} value={year} />
         <TextInput onInput={setQuery} label="Search for Events" />
-        {prompt && <IconButton icon={mdiCrosshairsGps} onClick={prompt} />}
+        {prompt && (
+          <IconButton
+            icon={mdiCrosshairsGps}
+            onClick={prompt}
+            title="Use geolocation for sorting"
+          />
+        )}
       </div>
 
       {events ? (
