@@ -39,10 +39,6 @@ const getLocation = async (): Promise<LatLong> => {
       name: 'geolocation',
     })
     if (geoPermission.state === 'granted') return getGeoLocation()
-  } else {
-    // In browsers that don't support navigator.permissions (safari)
-    // ask for location right away
-    return getGeoLocation()
   }
   return getIpLocation()
 }
@@ -54,6 +50,11 @@ const getLocationFromLocalStorage = () => {
   if (result) return JSON.parse(result) as LatLong
 }
 
+const saveLocationToLocalStorage = (loc: LatLong) => {
+  localStorage.setItem(locationKey, JSON.stringify(loc))
+  return loc
+}
+
 export const useGeoLocation = () => {
   const [location, setLocation] = useState<LatLong | undefined>(
     getLocationFromLocalStorage(),
@@ -62,11 +63,7 @@ export const useGeoLocation = () => {
     navigator.permissions === undefined,
   )
   useEffect(() => {
-    const locationPromise = getLocation()
-    locationPromise.then((loc) =>
-      localStorage.setItem(locationKey, JSON.stringify(loc)),
-    )
-    locationPromise.then(setLocation)
+    getLocation().then(saveLocationToLocalStorage).then(setLocation)
   }, [])
 
   useEffect(() => {
@@ -93,9 +90,7 @@ export const useGeoLocation = () => {
   const prompt =
     canPrompt &&
     (() => {
-      navigator.geolocation.getCurrentPosition(() => {
-        getGeoLocation().then(setLocation)
-      })
+      getGeoLocation().then(saveLocationToLocalStorage).then(setLocation)
     })
 
   return [location, prompt] as const
