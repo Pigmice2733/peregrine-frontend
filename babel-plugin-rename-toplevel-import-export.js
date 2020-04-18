@@ -1,4 +1,11 @@
 /**
+ * This babel plugin replaces terser's top-level name minification
+ * Terser's top-level name minification doesn't try to make the single-letter variable names match the imported/exported names
+ * This plugin makes them match, so that instead of `export {Z as A}` it renames the Z variable to A and writes `export {A}`
+ * Terser must have mangling set to topLevel: false otherwise terser will re-rename all the variables, defeating the purpose
+ */
+
+/**
  * @returns {import('@babel/core').PluginObj}
  */
 module.exports = () => {
