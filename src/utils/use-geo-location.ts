@@ -33,16 +33,6 @@ const getGeoLocation = () =>
     ),
   )
 
-const getLocation = async (): Promise<LatLong> => {
-  if (navigator.permissions) {
-    const geoPermission = await navigator.permissions.query({
-      name: 'geolocation',
-    })
-    if (geoPermission.state === 'granted') return getGeoLocation()
-  }
-  return getIpLocation()
-}
-
 const locationKey = 'geolocation'
 
 const getLocationFromLocalStorage = () => {
@@ -54,9 +44,11 @@ export const useGeoLocation = () => {
   const [location, setLocation] = useState<LatLong | undefined>(
     getLocationFromLocalStorage(),
   )
-  const [canPrompt, setCanPrompt] = useState<boolean>(false)
+  const [canPrompt, setCanPrompt] = useState<boolean>(
+    navigator.permissions === undefined,
+  )
   useEffect(() => {
-    const locationPromise = getLocation()
+    const locationPromise = getGeoLocation()
     locationPromise.then((loc) =>
       localStorage.setItem(locationKey, JSON.stringify(loc)),
     )
@@ -68,11 +60,15 @@ export const useGeoLocation = () => {
     const onPositionChange = () => {
       if (geoPermission) setCanPrompt(geoPermission.state === 'prompt')
     }
-    navigator.permissions.query({ name: 'geolocation' }).then((permission) => {
-      geoPermission = permission
-      geoPermission.addEventListener('change', onPositionChange)
-      onPositionChange()
-    })
+    if (navigator.permissions) {
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then((permission) => {
+          geoPermission = permission
+          geoPermission.addEventListener('change', onPositionChange)
+          onPositionChange()
+        })
+    }
 
     return () => {
       if (geoPermission)
