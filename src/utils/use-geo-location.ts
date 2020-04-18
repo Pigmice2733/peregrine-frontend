@@ -39,8 +39,6 @@ const getLocation = async (): Promise<LatLong> => {
       name: 'geolocation',
     })
     if (geoPermission.state === 'granted') return getGeoLocation()
-    // user has not granted location, so we will prompt for location after a certain amount of time
-    setTimeout(() => navigator.geolocation.getCurrentPosition(noop), 3 * 1000)
   }
   return getIpLocation()
 }
@@ -56,6 +54,7 @@ export const useGeoLocation = () => {
   const [location, setLocation] = useState<LatLong | undefined>(
     getLocationFromLocalStorage(),
   )
+  const [canPrompt, setCanPrompt] = useState<boolean>(false)
   useEffect(() => {
     const locationPromise = getLocation()
     locationPromise.then((loc) =>
@@ -63,5 +62,31 @@ export const useGeoLocation = () => {
     )
     locationPromise.then(setLocation)
   }, [])
-  return location
+
+  useEffect(() => {
+    let geoPermission: PermissionStatus | undefined
+    const onPositionChange = () => {
+      if (geoPermission) setCanPrompt(geoPermission.state === 'prompt')
+    }
+    navigator.permissions.query({ name: 'geolocation' }).then((permission) => {
+      geoPermission = permission
+      geoPermission.addEventListener('change', onPositionChange)
+      onPositionChange()
+    })
+
+    return () => {
+      if (geoPermission)
+        geoPermission.removeEventListener('change', onPositionChange)
+    }
+  }, [])
+
+  const prompt =
+    canPrompt &&
+    (() => {
+      navigator.geolocation.getCurrentPosition(() => {
+        getGeoLocation().then(setLocation)
+      })
+    })
+
+  return [location, prompt] as const
 }
