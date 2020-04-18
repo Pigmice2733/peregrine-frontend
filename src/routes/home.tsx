@@ -12,6 +12,8 @@ import { Dropdown } from '@/components/dropdown'
 import { useQueryState } from '@/utils/use-query-state'
 import { UnstyledList } from '@/components/unstyled-list'
 import { useYears } from '@/utils/use-years'
+import IconButton from '@/components/icon-button'
+import { mdiCrosshairsGps } from '@mdi/js'
 
 const homeStyle = css`
   display: grid;
@@ -27,15 +29,23 @@ const matchListStyle = css`
 `
 
 const filterStyle = css`
-  display: grid;
-  grid-template-columns: min-content 1fr;
-  grid-gap: 1rem;
+  display: flex;
+  align-items: center;
+  margin: -0.5rem;
+
+  & > * {
+    margin: 0.5rem;
+  }
+
+  & > :nth-child(2) {
+    flex-grow: 1;
+  }
 `
 
 const now = new Date()
 const currentYear = now.getFullYear()
 const Home = () => {
-  const location = useGeoLocation()
+  const [location, prompt] = useGeoLocation()
   const [query, setQuery] = useState('')
   const lowerCaseQuery = query.toLowerCase()
   const [yearVal, setYear] = useQueryState('year', currentYear)
@@ -48,6 +58,13 @@ const Home = () => {
       <div class={filterStyle}>
         <Dropdown options={years} onChange={setYear} value={year} />
         <TextInput onInput={setQuery} label="Search for Events" />
+        {prompt && (
+          <IconButton
+            icon={mdiCrosshairsGps}
+            onClick={prompt}
+            title="Use geolocation for sorting"
+          />
+        )}
       </div>
 
       {events ? (
