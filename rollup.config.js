@@ -68,7 +68,7 @@ export default [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
       postcss({
-        extract: 'dist/style.css',
+        extract: './dist/style.css',
         modules: cssModulesConfig,
         plugins: Object.entries(postcssPlugins).reduce(
           (plugins, [key, value]) =>
