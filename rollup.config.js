@@ -9,7 +9,7 @@ import { apiUrl } from './src/api/api-url.ts'
 import crypto from 'crypto'
 import { promisify } from 'util'
 import { writeFile, readFile } from 'fs'
-import { join } from 'path'
+import { join, resolve as pathResolve } from 'path'
 import cpy from 'cpy'
 import templite from 'templite'
 import sharp from 'sharp'
@@ -68,7 +68,7 @@ export default [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
       postcss({
-        extract: 'dist/style.css',
+        extract: pathResolve('./dist/style.css'),
         modules: cssModulesConfig,
         plugins: Object.entries(postcssPlugins).reduce(
           (plugins, [key, value]) =>
