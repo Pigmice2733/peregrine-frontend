@@ -85,8 +85,7 @@ export default [
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
         resolveFrom: './src/routes.ts',
-        everyRouteHeaders: [printPush({ path: '/style.
-                                       ', as: 'style' })],
+        everyRouteHeaders: [printPush({ path: '/style.css', as: 'style' })],
         everyRouteModules: ['./index.tsx'],
       }),
       {
