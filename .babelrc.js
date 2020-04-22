@@ -21,6 +21,9 @@ module.exports = {
     ],
     '@babel/plugin-proposal-numeric-separator',
     'macros',
+    // Removes the import of 'preact/debug'
+    process.env.NODE_ENV === 'production' &&
+      './babel-plugin-remove-preact-debug',
     'babel-plugin-transform-inline-environment-variables',
     // This is included in preset-env but we want to manually enable it even in
     // environments that natively support template literals because "" + "" is

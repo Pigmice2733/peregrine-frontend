@@ -17,7 +17,7 @@ import mkdirplz from 'mkdirplz'
 const postcssPlugins = require('./postcss.config').plugins
 require('dotenv').config()
 const babelConfig = require('./.babelrc')
-const babelConfigProd = require('./.babelrc.prod')
+const babelConfigProd = require('./.babelrc.output')
 
 const writeFileAsync = promisify(writeFile)
 const readFileAsync = promisify(readFile)
