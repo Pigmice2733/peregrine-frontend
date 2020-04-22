@@ -21,6 +21,9 @@ import { ProcessedMatchInfo } from '@/api/match-info'
 import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
 import { useCurrentTime } from '@/utils/use-current-time'
+import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
+import IconButton from '@/components/icon-button'
+import { mdiStarOutline, mdiStar } from '@mdi/js'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -143,6 +146,14 @@ type TeamLocation =
   | null
   | undefined
 
+const pageHeadingStyle = css`
+  display: flex;
+  align-items: center;
+`
+const teamHeadingSpanStyle = css`
+  margin-right: 0.3rem;
+`
+
 const EventTeam = ({ eventKey, teamNum }: Props) => {
   const eventInfo = useEventInfo(eventKey)
   const eventTeamInfo = usePromise(
@@ -159,9 +170,29 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
+  const savedTeams = useSavedTeams()
+  const isTeamSaved = savedTeams.some(
+    (team) => team.teamNum === teamNum && team.eventKey === eventKey,
+  )
+
   return (
     <Page
-      name={`${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
+      name={
+        <span class={pageHeadingStyle}>
+          <span class={teamHeadingSpanStyle}>{`${teamNum} @ ${
+            eventInfo ? eventInfo.name : eventKey
+          }`}</span>
+          <IconButton
+            icon={isTeamSaved ? mdiStar : mdiStarOutline}
+            onClick={() =>
+              isTeamSaved
+                ? removeTeam(teamNum, eventKey)
+                : saveTeam(teamNum, eventKey)
+            }
+            title={isTeamSaved ? 'Remove Team' : 'Save Team'}
+          />
+        </span>
+      }
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >

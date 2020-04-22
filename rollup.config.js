@@ -9,7 +9,7 @@ import { apiUrl } from './src/api/api-url.ts'
 import crypto from 'crypto'
 import { promisify } from 'util'
 import { writeFile, readFile } from 'fs'
-import { join, sep as pathSep } from 'path'
+import * as path from 'path'
 import cpy from 'cpy'
 import templite from 'templite'
 import sharp from 'sharp'
@@ -47,7 +47,7 @@ const terserOptions = (prod) => ({
 })
 
 const outDir = 'dist'
-const chunksFile = join(outDir, 'chunks.json')
+const chunksFile = path.join(outDir, 'chunks.json')
 
 /**
  * Runs babel on the input code
@@ -56,7 +56,7 @@ const chunksFile = join(outDir, 'chunks.json')
 const babelInput = () => ({
   name: 'rollup-plugin-babel-input',
   async transform(code, id) {
-    if (id.split(pathSep).includes('node_modules')) return null
+    if (id.split(path.sep).includes('node_modules')) return null
     if (!(id.endsWith('.ts') || id.endsWith('.js') || id.endsWith('.tsx')))
       return null
     const { code: outputCode, map } = await babel.transformAsync(code, {
@@ -98,7 +98,7 @@ export default [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
       postcss({
-        extract: 'dist/style.css',
+        extract: path.resolve('./dist/style.css'),
         modules: cssModulesConfig,
         plugins: Object.entries(postcssPlugins).reduce(
           (plugins, [key, value]) =>
@@ -124,7 +124,7 @@ export default [
         async writeBundle() {
           const htmlSrc = await readFileAsync('rollup-index.html', 'utf8')
           const htmlOut = templite(htmlSrc, { apiUrl })
-          writeFileAsync(join(outDir, 'index.html'), htmlOut)
+          writeFileAsync(path.join(outDir, 'index.html'), htmlOut)
         },
       },
       {
@@ -185,7 +185,7 @@ export default [
         async writeBundle() {
           const manifestSrc = await readFileAsync('./src/manifest.json', 'utf8')
           await writeFileAsync(
-            join(outDir, 'manifest.json'),
+            path.join(outDir, 'manifest.json'),
             JSON.stringify(JSON.parse(manifestSrc)),
           )
         },
@@ -194,7 +194,7 @@ export default [
         name: 'write-icons',
         async writeBundle() {
           const iconSrc = await readFileAsync('./src/logo.png')
-          const iconDir = join(outDir, 'icons')
+          const iconDir = path.join(outDir, 'icons')
           await mkdirplz(iconDir)
           const background = 'transparent'
           const appleBg = '#800080'
@@ -204,14 +204,14 @@ export default [
             ...[512, 192, 180, 32, 16].map(
               async (width) =>
                 writeFileAsync(
-                  join(iconDir, `${width}.png`),
+                  path.join(iconDir, `${width}.png`),
                   await sharp(iconSrc)
                     .resize(width, width, { fit: 'contain', background })
                     .png()
                     .toBuffer(),
                 ),
               writeFileAsync(
-                join(iconDir, 'apple.png'),
+                path.join(iconDir, 'apple.png'),
                 await sharp(iconSrc)
                   .resize(appleWidth - applePad * 2, 180 - applePad * 2, {
                     fit: 'contain',

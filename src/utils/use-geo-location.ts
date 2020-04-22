@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import { EMPTY_PROMISE, noop } from './empty-promise'
+import { EMPTY_PROMISE } from './empty-promise'
 
 const apiKey = process.env.IPDATA_API_KEY
 const apiUrl =
@@ -39,8 +39,6 @@ const getLocation = async (): Promise<LatLong> => {
       name: 'geolocation',
     })
     if (geoPermission.state === 'granted') return getGeoLocation()
-    // user has not granted location, so we will prompt for location after a certain amount of time
-    setTimeout(() => navigator.geolocation.getCurrentPosition(noop), 3 * 1000)
   }
   return getIpLocation()
 }
@@ -52,16 +50,48 @@ const getLocationFromLocalStorage = () => {
   if (result) return JSON.parse(result) as LatLong
 }
 
+const saveLocationToLocalStorage = (loc: LatLong) => {
+  localStorage.setItem(locationKey, JSON.stringify(loc))
+  return loc
+}
+
 export const useGeoLocation = () => {
   const [location, setLocation] = useState<LatLong | undefined>(
     getLocationFromLocalStorage(),
   )
+  const [canPrompt, setCanPrompt] = useState<boolean>(
+    navigator.permissions === undefined,
+  )
   useEffect(() => {
-    const locationPromise = getLocation()
-    locationPromise.then((loc) =>
-      localStorage.setItem(locationKey, JSON.stringify(loc)),
-    )
-    locationPromise.then(setLocation)
+    getLocation().then(saveLocationToLocalStorage).then(setLocation)
   }, [])
-  return location
+
+  useEffect(() => {
+    let geoPermission: PermissionStatus | undefined
+    const onPositionChange = () => {
+      if (geoPermission) setCanPrompt(geoPermission.state === 'prompt')
+    }
+    if (navigator.permissions) {
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then((permission) => {
+          geoPermission = permission
+          geoPermission.addEventListener('change', onPositionChange)
+          onPositionChange()
+        })
+    }
+
+    return () => {
+      if (geoPermission)
+        geoPermission.removeEventListener('change', onPositionChange)
+    }
+  }, [])
+
+  const prompt =
+    canPrompt &&
+    (() => {
+      getGeoLocation().then(saveLocationToLocalStorage).then(setLocation)
+    })
+
+  return [location, prompt] as const
 }
