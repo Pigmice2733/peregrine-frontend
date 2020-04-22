@@ -20,6 +20,7 @@ module.exports = {
       },
     ],
     '@babel/plugin-proposal-numeric-separator',
+    'macros',
     'babel-plugin-transform-inline-environment-variables',
     // This is included in preset-env but we want to manually enable it even in
     // environments that natively support template literals because "" + "" is

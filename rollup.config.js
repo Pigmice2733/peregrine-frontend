@@ -74,10 +74,14 @@ const babelInput = () => ({
 const babelOutput = () => ({
   name: 'rollup-plugin-babel-output',
   async renderChunk(code) {
-    const { code: outputCode, map } = await babel.transformAsync(
-      code,
-      babelConfigProd,
-    )
+    const { code: outputCode, map } = await babel.transformAsync(code, {
+      ...babelConfigProd,
+      caller: {
+        name: 'rollup-plugin-babel-output',
+        supportsDynamicImport: true,
+        supportsStaticESM: true,
+      },
+    })
     return { code: outputCode, map }
   },
 })
@@ -94,6 +98,7 @@ export default [
       sourcemap: false,
       chunkFileNames: '[hash].js',
     },
+    preserveEntrySignatures: false,
     plugins: [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
