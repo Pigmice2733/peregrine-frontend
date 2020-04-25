@@ -1,16 +1,13 @@
 import { FunctionComponent, h, Fragment } from 'preact'
 import Page from '@/components/page'
-import {
-  SavedReport,
-  useSavedReports,
-  uploadSavedReports,
-} from '@/api/report/submit-report'
+import { useSavedReports, uploadSavedReports } from '@/api/report/submit-report'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Button from '@/components/button'
+import { Report } from '@/api/report'
 
 const savedReportCardStyle = css`
   padding: 1rem;
@@ -18,20 +15,18 @@ const savedReportCardStyle = css`
   margin: 1rem;
 `
 
-const SavedReportCard: FunctionComponent<{ report: SavedReport }> = ({
-  report,
-}) => {
+const SavedReportCard: FunctionComponent<{ report: Report }> = ({ report }) => {
   const eventInfo = useEventInfo(report.eventKey)
   const matchKey = formatMatchKey(report.matchKey)
   const formattedMatchKey = matchKey.num
     ? `${matchKey.group} Match ${matchKey.num}`
     : matchKey.group
+  const eventName = eventInfo ? eventInfo.name : report.eventKey
+  const teamName = formatTeamNumber(report.teamKey)
   return (
-    <Card class={savedReportCardStyle}>{`${formatTeamNumber(
-      report.team,
-    )} in ${formattedMatchKey} @ ${
-      eventInfo ? eventInfo.name : report.eventKey
-    }`}</Card>
+    <Card class={savedReportCardStyle}>
+      {`${teamName} in ${formattedMatchKey} @ ${eventName}`}
+    </Card>
   )
 }
 
@@ -51,7 +46,7 @@ const SavedReportsPage: FunctionComponent = () => {
           {savedReports.map((report) => (
             <SavedReportCard
               report={report}
-              key={report.eventKey + report.matchKey + report.team}
+              key={report.eventKey + report.matchKey + report.teamKey}
             />
           ))}
           <Button onClick={uploadSavedReports}>Sync now</Button>
