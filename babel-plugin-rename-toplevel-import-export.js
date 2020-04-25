@@ -86,7 +86,7 @@ module.exports = () => {
     })
   }
   return {
-    name: 'custom-plugin',
+    name: 'rename-toplevel-import-export',
     visitor: {
       Program: {
         exit(path) {
