@@ -1,17 +1,18 @@
 import { css } from 'linaria'
-import { Schema, StatDescription, ReportStatDescription } from '@/api/schema'
-import { ProcessedMatchInfo } from '@/api/match-info'
+import { StatDescription, ReportStatDescription } from '@/api/schema'
 import { h } from 'preact'
-import { useState, useEffect, useMemo } from 'preact/hooks'
-import { submitReport } from '@/api/report/submit-report'
+import { useState, useMemo, useEffect } from 'preact/hooks'
+import { uploadReport, saveReportLocally } from '@/api/report/submit-report'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import TeamPicker from '../team-picker'
 import FieldCard from '../field-card'
 import TextInput from '../text-input'
 import Button from '../button'
-import { noop } from '@/utils/empty-promise'
-import { useErrorEmitter } from '../error-boundary'
 import { Report, Field } from '@/api/report'
+import { useSchema } from '@/cache/schema/use'
+import { SetRequired } from 'type-fest'
+import { useEventInfo } from '@/cache/event-info/use'
+import { useMatchInfo } from '@/cache/match-info/use'
 
 const scoutStyles = css`
   display: flex;
@@ -29,18 +30,9 @@ const buttonStyles = css`
 `
 
 interface Props {
-  eventKey: string
-  matchKey: string
-  schema: Schema
-  match: ProcessedMatchInfo
-  /** Callback to be called whenever the report is saved */
-  onSaveSuccess?: () => void
-  initialReport?: Report
-}
-
-const emptyReport: Report = {
-  data: [],
-  comment: '',
+  initialReport: SetRequired<Partial<Report>, 'eventKey'>
+  onSaveSuccess: (report: Report) => void
+  onSaveLocally: (report: Report) => void
 }
 
 const isFieldReportable = (
@@ -53,83 +45,101 @@ const isTeleop = (field: ReportStatDescription) => field.period === 'teleop'
 const defaultFieldValue = 0
 
 export const ReportEditor = ({
-  eventKey,
-  matchKey,
-  schema,
-  match,
-  onSaveSuccess = noop,
-  initialReport = emptyReport,
+  initialReport,
+  onSaveLocally,
+  onSaveSuccess,
 }: Props) => {
+  const eventKey = initialReport.eventKey
   const [team, setTeam] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
-  const [report, setReport] = useState<Report>(initialReport)
-  const emitError = useErrorEmitter()
+  const [matchKey] = useState<string | undefined>(initialReport.matchKey)
+  const [comment, setComment] = useState('')
+  const schemaId = useEventInfo(eventKey)?.schemaId
+  const schema = useSchema(schemaId)?.schema
+  const match = useMatchInfo(eventKey, matchKey)
 
-  const isReady = team !== null
-
+  const [reportData, setReportData] = useState<Report['data']>(
+    initialReport.data || [],
+  )
   const updateReportField = (fieldName: string) => (value: number) =>
-    setReport((report) => ({
-      data: report.data.map(
+    setReportData((reportData) =>
+      reportData.map(
         (f): Field => (f.name === fieldName ? { name: fieldName, value } : f),
       ),
-    }))
+    )
 
   const getReportFieldValue = (statDescription: ReportStatDescription) => {
-    const matchingField = report.data.find(
+    const matchingField = reportData.find(
       (f) => f.name === statDescription.reportReference,
     )
     if (matchingField) return matchingField.value
     return defaultFieldValue
   }
 
-  const visibleFields = useMemo(() => schema.schema.filter(isFieldReportable), [
+  const visibleFields = useMemo(() => schema?.filter(isFieldReportable), [
     schema,
   ])
 
-  const autoFields = visibleFields.filter(isAuto)
-  const teleopFields = visibleFields.filter(isTeleop)
+  const blueAlliance = match?.blueAlliance
+  const redAlliance = match?.redAlliance
 
   useEffect(() => {
-    setReport((report) => ({
-      ...report,
-      data: visibleFields.map(
+    if (!visibleFields) return
+    setReportData((reportData) =>
+      visibleFields.map(
         (statDescription) =>
-          report.data.find(
+          reportData.find(
             (f) => f.name === statDescription.reportReference,
           ) || {
             name: statDescription.reportReference,
             value: defaultFieldValue,
           },
       ),
-    }))
+    )
   }, [visibleFields])
 
-  const onSubmit = async (e: Event) => {
-    e.preventDefault()
-    if (!team) return
-    setIsSaving(true)
-    try {
-      const reportPromise = submitReport(eventKey, matchKey, team, report)
-      await reportPromise
-    } catch (error) {
-      emitError(error)
-    } finally {
-      setIsSaving(false)
+  /** Returns the Report if all the required fields are filled in, false otherwise */
+  const getReportIfValid = (): Report | false => {
+    if (!matchKey || !team) return false
+    return {
+      eventKey,
+      matchKey,
+      comment,
+      data: reportData,
+      teamKey: team,
     }
-    onSaveSuccess()
+  }
+  const report = getReportIfValid()
+
+  const submit = (e: Event) => {
+    e.preventDefault()
+    if (!report) return
+    setIsSaving(true)
+    uploadReport(report)
+      .then(() => {
+        onSaveSuccess(report)
+      })
+      .catch(() => {
+        saveReportLocally(report)
+        onSaveLocally(report)
+      })
+      .finally(() => {
+        setIsSaving(false)
+      })
   }
 
   return (
-    <form class={scoutStyles} onSubmit={onSubmit}>
+    <form class={scoutStyles} onSubmit={submit}>
       <h1>Scout {team && formatTeamNumber(team)}</h1>
-
-      <TeamPicker
-        onChange={setTeam}
-        blueAlliance={match.blueAlliance}
-        redAlliance={match.redAlliance}
-      />
+      {blueAlliance && redAlliance && (
+        <TeamPicker
+          onChange={setTeam}
+          blueAlliance={blueAlliance}
+          redAlliance={redAlliance}
+        />
+      )}
       <h2>Auto</h2>
-      {autoFields.map((stat) => (
+      {visibleFields?.filter(isAuto).map((stat) => (
         <FieldCard
           key={'auto' + stat.reportReference}
           statDescription={stat}
@@ -138,7 +148,7 @@ export const ReportEditor = ({
         />
       ))}
       <h2>Teleop</h2>
-      {teleopFields.map((stat) => (
+      {visibleFields?.filter(isTeleop).map((stat) => (
         <FieldCard
           key={'teleop' + stat.reportReference}
           statDescription={stat}
@@ -146,12 +156,8 @@ export const ReportEditor = ({
           onChange={updateReportField(stat.reportReference)}
         />
       ))}
-      <TextInput
-        class={commentStyles}
-        label="Comments"
-        onInput={(comment) => setReport((r) => ({ ...r, comment }))}
-      />
-      <Button disabled={isSaving || !isReady} class={buttonStyles}>
+      <TextInput class={commentStyles} label="Comments" onInput={setComment} />
+      <Button disabled={isSaving || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>
     </form>

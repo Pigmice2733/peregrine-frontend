@@ -19,10 +19,11 @@ import clsx from 'clsx'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { BooleanDisplay } from './boolean-display'
 import { CancellablePromise } from '@/utils/cancellable-promise'
-import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { CommentCard } from './comment-card'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
+import { getReports } from '@/api/report/get-reports'
+import { GetReport } from '@/api/report'
 
 const commentsDisplayStyle = css`
   grid-column: 1 / -1;
@@ -30,21 +31,7 @@ const commentsDisplayStyle = css`
   grid-gap: 1.2rem;
 `
 
-const CommentsDisplay = ({
-  team,
-  match,
-  event,
-}: {
-  team: string
-  match: string
-  event: string
-}) => {
-  const reports = usePromise(() => getMatchTeamReports(event, match, team), [
-    event,
-    match,
-    team,
-  ])
-  if (!reports) return null
+const CommentsDisplay = ({ reports }: { reports: GetReport[] }) => {
   return (
     <div class={commentsDisplayStyle}>
       {reports.map(
@@ -129,7 +116,7 @@ export const ChartCard = ({
 
   const dataPoints = matchesWithSelectedStat.map((s) => s.matchingStat.avg)
 
-  const hoveredMatchKey =
+  const selectedMatchKey =
     selectedIndex !== null && matchesWithSelectedStat[selectedIndex].matchKey
 
   const handleClick = (event: MouseEvent) => {
@@ -143,6 +130,10 @@ export const ChartCard = ({
     matchingSchemaStat && matchingSchemaStat.type === 'boolean'
 
   const noData = dataPoints.length === 0
+  const allReports = usePromise(() => getReports({ event: eventKey, team }), [
+    eventKey,
+    team,
+  ]) || []
 
   return (
     <Card onClick={handleClick} class={chartCardStyle}>
@@ -193,16 +184,14 @@ export const ChartCard = ({
               <a
                 href={`/events/${eventKey}/matches/${matchesWithSelectedStat[selectedIndex].matchKey}`}
               >
-                {formatMatchKeyShort(hoveredMatchKey as string)}
+                {formatMatchKeyShort(selectedMatchKey as string)}
               </a>
             </p>
           )}
         </div>
-        {selectedIndex !== null && (
+        {selectedMatchKey && (
           <CommentsDisplay
-            match={matchesWithSelectedStat[selectedIndex].matchKey}
-            event={eventKey}
-            team={team}
+            reports={allReports.filter((r) => r.matchKey === selectedMatchKey)}
           />
         )}
       </div>

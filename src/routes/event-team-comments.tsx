@@ -6,12 +6,11 @@ import { css } from 'linaria'
 import Card from '@/components/card'
 import Spinner from '@/components/spinner'
 import { usePromise } from '@/utils/use-promise'
-import { getMatchTeamReports } from '@/api/report/get-match-team-reports'
 import { CommentCard } from '@/components/comment-card'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
-import { compareMatches } from '@/utils/compare-matches'
-import { getEventMatches } from '@/api/match-info/get-event-matches'
+import { compareMatchKeys } from '@/utils/compare-matches'
 import { GetReport } from '@/api/report'
+import { getReports } from '@/api/report/get-reports'
 
 interface Props {
   eventKey: string
@@ -31,23 +30,18 @@ const matchListStyle = css`
 const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const eventInfo = useEventInfo(eventKey)
   const team = 'frc' + teamNum
-  const matchesWithComments = usePromise(
-    () =>
-      getEventMatches(eventKey, team)
-        .then((allMatches) =>
-          Promise.all(
-            allMatches.sort(compareMatches).map((m) =>
-              getMatchTeamReports(eventKey, m.key, team).then((reports) => ({
-                reports: reports.filter((r) => r.comment),
-                matchKey: m.key,
-              })),
-            ),
-          ),
-        )
-        .then((matchesWithReports) =>
-          matchesWithReports.filter((m) => m.reports.length > 0),
-        ),
-    [eventKey, teamNum],
+  const reports = usePromise(() => getReports({ team, event: eventKey }), [
+    team,
+    eventKey,
+  ])
+  const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
+    (acc, report) => {
+      if (report.comment) {
+        ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
+      }
+      return acc
+    },
+    {},
   )
 
   return (
@@ -57,8 +51,8 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
       class={commentsPageStyle}
     >
       <Card class={matchListStyle}>
-        {matchesWithComments ? (
-          matchesWithComments.length === 0 ? (
+        {commentsByMatch ? (
+          Object.keys(commentsByMatch).length === 0 ? (
             <span
               class={css`
                 margin: 0 auto;
@@ -67,14 +61,16 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
               No comments
             </span>
           ) : (
-            matchesWithComments.map(({ matchKey, reports }) => (
-              <MatchComments
-                key={matchKey}
-                match={matchKey}
-                reports={reports}
-                eventKey={eventKey}
-              />
-            ))
+            Object.entries(commentsByMatch)
+              .sort(([a], [b]) => compareMatchKeys(a, b))
+              .map(([matchKey, reports]) => (
+                <MatchComments
+                  key={matchKey}
+                  match={matchKey}
+                  reports={reports}
+                  eventKey={eventKey}
+                />
+              ))
           )
         ) : (
           <Spinner />
@@ -113,7 +109,7 @@ const MatchComments = ({
         {formatMatchKeyShort(match)}
       </a>
       {reports.map((r) => (
-        <CommentCard key={JSON.stringify(r)} report={r} />
+        <CommentCard key={r.id} report={r} />
       ))}
     </div>
   )
