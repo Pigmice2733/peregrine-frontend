@@ -20,7 +20,6 @@ module.exports = {
       },
     ],
     '@babel/plugin-proposal-numeric-separator',
-    'macros',
     // Removes the import of 'preact/debug'
     process.env.NODE_ENV === 'production' &&
       './babel-plugin-remove-preact-debug',
