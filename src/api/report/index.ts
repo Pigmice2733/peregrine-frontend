@@ -1,3 +1,5 @@
+import { SetRequired } from '@/type-utils'
+
 export interface Field {
   name: string
   value: number
@@ -9,14 +11,22 @@ type GraphableField = {
 } & Field
 
 export interface Report {
+  id?: number
+  eventKey: string
+  matchKey: string
+  teamKey: string
+  realmId?: number
+  /**
+   * Doesn't exist if the reporter account has been deleted.
+   * Admins can set this to a different userid than themself
+   */
+  reporterId?: number
   data: Field[]
-  comment?: string
+  comment: string
 }
 
-export interface GetReport extends Report {
-  // Not sent if the reporter account has been deleted.
-  reporterId?: string
-}
+/** Getting reports from the server results in this interface */
+export type GetReport = SetRequired<Report, 'data' | 'comment' | 'id'>
 
 interface EventKey {
   // 2018orwil
