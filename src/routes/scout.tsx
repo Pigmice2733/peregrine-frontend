@@ -10,6 +10,7 @@ interface Props {
 }
 
 const ScoutPage = ({ eventKey, matchKey }: Props) => {
+  const goToMatchPage = () => route(`/events/${eventKey}/matches/${matchKey}`)
   return (
     <Authenticated
       label="Log In to Scout"
@@ -17,9 +18,8 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
         <Page name="Scout" back={`/events/${eventKey}/matches/${matchKey}`}>
           <ReportEditor
             initialReport={{ eventKey, matchKey }}
-            onSaveSuccess={() =>
-              route(`/events/${eventKey}/matches/${matchKey}`)
-            }
+            onSaveSuccess={goToMatchPage}
+            onSaveLocally={goToMatchPage}
           />
         </Page>
       )}
