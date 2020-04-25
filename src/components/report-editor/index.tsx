@@ -32,7 +32,7 @@ const buttonStyles = css`
 interface Props {
   initialReport: SetRequired<Partial<Report>, 'eventKey'>
   onSaveSuccess: (report: Report) => void
-  onSaveLocally: (report: Report) => void
+  onSaveLocally?: (report: Report) => void
 }
 
 const isFieldReportable = (
@@ -121,7 +121,7 @@ export const ReportEditor = ({
       })
       .catch(() => {
         saveReportLocally(report)
-        onSaveLocally(report)
+        if (onSaveLocally) onSaveLocally(report)
       })
       .finally(() => {
         setIsSaving(false)

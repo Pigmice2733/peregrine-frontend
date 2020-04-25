@@ -20,9 +20,6 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
             onSaveSuccess={() =>
               route(`/events/${eventKey}/matches/${matchKey}`)
             }
-            onSaveLocally={() => {
-              console.log('saved locally')
-            }}
           />
         </Page>
       )}
