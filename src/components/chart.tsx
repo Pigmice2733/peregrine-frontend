@@ -130,10 +130,9 @@ export const ChartCard = ({
     matchingSchemaStat && matchingSchemaStat.type === 'boolean'
 
   const noData = dataPoints.length === 0
-  const allReports = usePromise(() => getReports({ event: eventKey, team }), [
-    eventKey,
-    team,
-  ]) || []
+  const allReports =
+    usePromise(() => getReports({ event: eventKey, team }), [eventKey, team]) ||
+    []
 
   return (
     <Card onClick={handleClick} class={chartCardStyle}>
