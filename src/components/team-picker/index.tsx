@@ -6,6 +6,7 @@ interface Props {
   redAlliance: string[]
   blueAlliance: string[]
   onChange: (newTeam: string) => void
+  value?: string
 }
 
 const teamStyle = css`
@@ -32,10 +33,11 @@ const inputStyle = css`
 const Item = ({
   team,
   onChange,
+  checked,
 }: {
   team: string
-  key?: string
   onChange: (team: string) => void
+  checked: boolean
 }) => (
   <label class={labelStyle}>
     <input
@@ -43,6 +45,7 @@ const Item = ({
       type="radio"
       name="teamNum"
       onChange={() => onChange(team)}
+      checked={checked}
     />
     <div class={teamStyle}>{formatTeamNumber(team)}</div>
   </label>
@@ -77,16 +80,16 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
-const TeamPicker = ({ redAlliance, blueAlliance, onChange }: Props) => (
+const TeamPicker = ({ redAlliance, blueAlliance, onChange, value }: Props) => (
   <div class={teamPickerStyle}>
     <div class={allianceStyle + ' ' + redStyle}>
       {redAlliance.map((t) => (
-        <Item key={t} team={t} onChange={onChange} />
+        <Item key={t} team={t} onChange={onChange} checked={t === value} />
       ))}
     </div>
     <div class={allianceStyle + ' ' + blueStyle}>
       {blueAlliance.map((t) => (
-        <Item key={t} team={t} onChange={onChange} />
+        <Item key={t} team={t} onChange={onChange} checked={t === value} />
       ))}
     </div>
   </div>

@@ -6,6 +6,7 @@ import { getUser } from '@/api/user/get-user'
 import Card from './card'
 import Icon from './icon'
 import { commentIcon } from '@/icons/comment'
+import { formatUserName } from '@/utils/format-user-name'
 
 const commentCardStyle = css`
   display: grid;
@@ -38,9 +39,7 @@ export const CommentCard = ({ report }: { report: GetReport }) => {
   return (
     <Card outlined as="section" class={commentCardStyle}>
       <Icon icon={commentIcon} />
-      <span>
-        {reporter ? `${reporter.firstName} ${reporter.lastName}` : 'Anonymous'}
-      </span>
+      <span>{formatUserName(reporter)}</span>
       <p>{report.comment}</p>
     </Card>
   )

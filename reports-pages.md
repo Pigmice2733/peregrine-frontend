@@ -1,0 +1,6 @@
+- Add a view/edit report page
+- Link comments to report page
+- User reports list on profile page
+- Telling the user whether or not match was scouted
+- Edit offline reports
+- Delete offline reports

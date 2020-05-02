@@ -50,10 +50,10 @@ export const ReportEditor = ({
   onSaveSuccess,
 }: Props) => {
   const eventKey = initialReport.eventKey
-  const [team, setTeam] = useState<string | null>(null)
+  const [team, setTeam] = useState<string | null>(initialReport.teamKey || null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [matchKey] = useState<string | undefined>(initialReport.matchKey)
-  const [comment, setComment] = useState('')
+  const [comment, setComment] = useState(initialReport.comment || '')
   const schemaId = useEventInfo(eventKey)?.schemaId
   const schema = useSchema(schemaId)?.schema
   const match = useMatchInfo(eventKey, matchKey)
@@ -136,6 +136,7 @@ export const ReportEditor = ({
           onChange={setTeam}
           blueAlliance={blueAlliance}
           redAlliance={redAlliance}
+          value={team}
         />
       )}
       <h2>Auto</h2>
@@ -156,7 +157,12 @@ export const ReportEditor = ({
           onChange={updateReportField(stat.reportReference)}
         />
       ))}
-      <TextInput class={commentStyles} label="Comments" onInput={setComment} />
+      <TextInput
+        class={commentStyles}
+        label="Comments"
+        onInput={setComment}
+        value={comment}
+      />
       <Button disabled={isSaving || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>

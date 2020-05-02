@@ -55,6 +55,10 @@ const routes = [
     path: '/users/:userId',
     component: () => import('./routes/user'),
   },
+  {
+    path: '/reports/:reportId',
+    component: () => import('./routes/report'),
+  },
 ]
 
 export default routes
