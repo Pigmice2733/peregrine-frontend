@@ -1,4 +1,4 @@
-/* eslint-disable caleb/shopify/prefer-class-properties */
+/* eslint-disable caleb/@shopify/prefer-class-properties */
 
 type OnCanceled = (cb: () => void) => void
 type Executor<T> = (
