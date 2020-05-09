@@ -187,7 +187,7 @@ const AnalysisTable = ({
     title: 'Team',
     key: 'Team',
     getCell: (row) => row.team,
-    getCellValue: (team) => parseInt(team),
+    getCellValue: (team) => Number.parseInt(team),
     renderCell: (team, _row, rowIndex, sortColKey) => {
       const isSortingByStat =
         sortColKey.startsWith('auto') || sortColKey.startsWith('teleop')
