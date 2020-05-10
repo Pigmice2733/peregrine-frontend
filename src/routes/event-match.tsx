@@ -72,7 +72,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 
   const matchHasBeenPlayed =
-    match && match.blueScore !== undefined && match.redScore !== undefined
+    match?.blueScore !== undefined && match.redScore !== undefined
 
   // When the match loads (or changes),
   useEffect(() => {
