@@ -6,15 +6,28 @@ import { mdiAccountCircle } from '@mdi/js'
 import { getUser } from '@/api/user/get-user'
 import { usePromise } from '@/utils/use-promise'
 import { formatUserName } from '@/utils/format-user-name'
+import Button from './button'
 
 interface Props {
   report: GetReport
+  onEditClick?: () => void
 }
+// What we want to display
+// -Reporter name
+// -Reporter realm
+// -Team num
+// --Auto
+// --Teleop
+// -Event
+// -Match
+// -Opponents/Alliance members
+// -Comment
+// -Edit button (if they can edit)
 
-export const ReportViewer = ({ report }: Props) => {
+export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const reporter = usePromise(() => {
-    if (reporterId !== undefined) {
+    if (reporterId !== undefined && reporterId !== null) {
       return getUser(reporterId)
     }
   }, [reporterId])
@@ -25,6 +38,7 @@ export const ReportViewer = ({ report }: Props) => {
         <Icon icon={mdiAccountCircle} />
         {formatUserName(reporter)}
       </div>
+      {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </Fragment>
   )
 }

@@ -20,7 +20,7 @@ export interface Report {
    * Doesn't exist if the reporter account has been deleted.
    * Admins can set this to a different userid than themself
    */
-  reporterId?: number
+  reporterId?: number | null
   data: Field[]
   comment: string
 }

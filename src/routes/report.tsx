@@ -5,67 +5,50 @@ import { ReportEditor } from '@/components/report-editor'
 import { ReportViewer } from '@/components/report-viewer'
 import Card from '@/components/card'
 import { css } from 'linaria'
-
-const fakeReport: GetReport = {
-  id: 1000,
-  eventKey: '2020waspo',
-  matchKey: 'qm1',
-  teamKey: 'frc2147',
-  realmId: 4,
-  reporterId: 64,
-  comment: 'blah',
-  data: [
-    {
-      name: 'Balls Scored High (auto)',
-      value: 2,
-    },
-    {
-      name: 'Balls Scored Low (auto)',
-      value: 0,
-    },
-    {
-      name: 'Balls Scored High (teleop)',
-      value: 7,
-    },
-    {
-      name: 'Balls Scored Low (teleop)',
-      value: 0,
-    },
-    {
-      name: 'Rotation Control',
-      value: 0,
-    },
-    {
-      name: 'Position Control',
-      value: 0,
-    },
-    {
-      name: 'Runs Through Trench',
-      value: 3,
-    },
-    {
-      name: 'Runs Through Rendezvous',
-      value: 1,
-    },
-  ],
-}
+import { getReport } from '@/api/report/get-report'
+import { usePromise } from '@/utils/use-promise'
+import Spinner from '@/components/spinner'
+import { useState } from 'preact/hooks'
+import { useJWT } from '@/jwt'
 
 const reportPageStyle = css`
   display: flex;
   padding: 2rem;
 `
 
-const Report = () => {
+const Report = ({ reportId }: { reportId: number }) => {
+  const report = usePromise(() => getReport(reportId), [reportId])
+  const [isEditing, setIsEditing] = useState(false)
+  const { jwt } = useJWT()
+  const canEdit =
+    jwt &&
+    report &&
+    (report.reporterId === Number.parseInt(jwt.sub) ||
+      (jwt.peregrineRoles.isAdmin && report.realmId === jwt.peregrineRealm) ||
+      jwt.peregrineRoles.isSuperAdmin)
   return (
     <Page
       name="Report"
       back={() => window.history.back()}
       class={reportPageStyle}
     >
-      <Card>
-        {/* <ReportEditor initialReport={fakeReport} onSaveSuccess={() => {}} /> */}
-        <ReportViewer report={fakeReport} />
-      </Card>
+      {report ? (
+        <Card>
+          {isEditing ? (
+            <ReportEditor
+              initialReport={report}
+              onSaveSuccess={() => setIsEditing(false)}
+            />
+          ) : (
+            <ReportViewer
+              report={report}
+              onEditClick={canEdit ? () => setIsEditing(true) : undefined}
+            />
+          )}
+        </Card>
+      ) : (
+        <Spinner />
+      )}
     </Page>
   )
 }
