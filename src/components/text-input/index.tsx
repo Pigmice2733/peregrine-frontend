@@ -66,9 +66,7 @@ const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
       {label}
       <InnerTextInput
         {...rest}
-        onInput={(e) =>
-          onInput && onInput((e.target as HTMLInputElement).value)
-        }
+        onInput={(e) => onInput?.((e.target as HTMLInputElement).value)}
       />
     </label>
   )

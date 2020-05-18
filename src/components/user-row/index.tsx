@@ -44,7 +44,7 @@ export const UserRow = ({ user, refresh = () => {} }: Props) => {
       })
   }
 
-  const confirmDelete = async () => {
+  const confirmDelete = () => {
     createDialog({
       confirm: 'Delete',
       dismiss: 'Cancel',
