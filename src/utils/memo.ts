@@ -25,7 +25,9 @@ export function memo<Props>(
     const updateRef = ref == nextProps.ref
     if (!updateRef) {
       // @ts-ignore
-      ref.call ? ref(null) : (ref.current = null)
+      if (ref.call) ref(null)
+      // @ts-ignore
+      else ref.current = null
     }
     return (
       (areValuesEqual
