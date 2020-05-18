@@ -86,7 +86,7 @@ const InnerUsersPage = () => {
     getUsers().then(setUsers).catch(emitError)
   }
   const realms = usePromise(() => getRealms(), [])
-  useEffect(updateUsers, [])
+  useEffect(updateUsers, [emitError])
 
   return users && realms ? (
     <UsersTable users={users} realms={realms} />
