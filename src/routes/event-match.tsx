@@ -166,7 +166,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         </Card>
       )}
       {match?.videos?.map((v) => (
-        <VideoCard url={cleanYoutubeUrl(v)} />
+        <VideoCard key={v} url={cleanYoutubeUrl(v)} />
       ))}
     </Page>
   )
