@@ -68,7 +68,7 @@ const expectOrder = (
   try {
     expect((items = [a, b]).sort(comparer)).toEqual([a, b])
     expect((items = [b, a]).sort(comparer)).toEqual([a, b])
-  } catch (error) {
+  } catch {
     throw new Error(
       `${items.map((i) => i.name).join(', ')}
 

@@ -190,11 +190,6 @@ export const Menu = ({ onHide, visible }: Props) => {
                 Users
               </MenuItem>
             )}
-            {jwt && (
-              <MenuItem icon={accountCircle} href={`/users/${jwt.sub}`}>
-                Profile
-              </MenuItem>
-            )}
             {savedReports.length > 0 && (
               <MenuItem icon={cloudSync} href="/saved-reports">
                 Offline Saved Reports

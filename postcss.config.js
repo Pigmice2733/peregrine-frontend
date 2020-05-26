@@ -23,7 +23,7 @@ module.exports = {
       generateScopedName: (local, path) => {
         // ignore linaria classes
         if (
-          /\.[tj]sx?_[a-z0-9]*\.css/.test(path) ||
+          /\.[jt]sx?_[\da-z]*\.css/.test(path) ||
           /\.linaria\.css$/.test(path)
         ) {
           return local
