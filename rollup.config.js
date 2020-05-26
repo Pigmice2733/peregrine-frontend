@@ -74,8 +74,13 @@ export default [
         config: false,
         minimize: { zindex: false },
       }),
-      getBabelInputPlugin({ extensions, babelrc: false, ...babelConfig }),
-      getBabelOutputPlugin({ extensions, babelrc: false, ...babelConfigProd }),
+      getBabelInputPlugin({
+        extensions,
+        babelHelpers: 'bundled',
+        babelrc: false,
+        ...babelConfig,
+      }),
+      getBabelOutputPlugin({ babelrc: false, ...babelConfigProd }),
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
@@ -139,8 +144,13 @@ export default [
         },
       },
       node(rollupNodeOptions),
-      getBabelInputPlugin({ extensions, babelrc: false, ...babelConfig }),
-      getBabelOutputPlugin({ extensions, babelrc: false, ...babelConfigProd }),
+      getBabelInputPlugin({
+        extensions,
+        babelHelpers: 'bundled',
+        babelrc: false,
+        ...babelConfig,
+      }),
+      getBabelOutputPlugin({ babelrc: false, ...babelConfigProd }),
       terser(terserOptions(prod)),
       {
         name: 'write-manifest',

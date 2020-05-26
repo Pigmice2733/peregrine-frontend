@@ -1,14 +1,6 @@
 module.exports = {
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        loose: true,
-        bugfixes: true,
-        debug: true,
-        modules: false,
-      },
-    ],
+    ['@babel/preset-env', { loose: true, bugfixes: true, modules: false }],
   ],
   plugins: [
     // Buggy right now so not being used
