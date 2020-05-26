@@ -5,7 +5,7 @@
  * Terser must have mangling set to topLevel: false otherwise terser will re-rename all the variables, defeating the purpose
  */
 
- // THIS IS BUGGY RIGHT NOW SO IT IS NOT BEING USED
+// THIS IS BUGGY RIGHT NOW SO IT IS NOT BEING USED
 
 /**
  * @returns {import('@babel/core').PluginObj}
