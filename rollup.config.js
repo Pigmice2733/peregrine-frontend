@@ -43,7 +43,6 @@ const terserOptions = (prod) => ({
     join_vars: prod,
     toplevel: true,
   },
-  mangle: prod && { toplevel: false },
 })
 
 const outDir = 'dist'
