@@ -1,10 +1,18 @@
 module.exports = {
   presets: [
-    ['@babel/preset-env', { loose: true, bugfixes: true, debug: true }],
+    [
+      '@babel/preset-env',
+      {
+        loose: true,
+        bugfixes: true,
+        debug: true,
+        modules: false,
+      },
+    ],
   ],
   plugins: [
     // Buggy right now so not being used
-  //   process.env.NODE_ENV === 'production' &&
-  //     './babel-plugin-rename-toplevel-import-export',
+    //   process.env.NODE_ENV === 'production' &&
+    //     './babel-plugin-rename-toplevel-import-export',
   ].filter(Boolean),
 }

@@ -1,7 +1,7 @@
 import linaria from 'linaria-preact/rollup'
 import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
-import babel from '@babel/core'
+import { getBabelInputPlugin, getBabelOutputPlugin } from '@rollup/plugin-babel'
 import postcss from 'rollup-plugin-postcss'
 import netlifyPush, { printPush } from 'rollup-plugin-netlify-push'
 import parseRoutes from 'rollup-plugin-netlify-push/parse-routes'
@@ -32,58 +32,18 @@ const rollupNodeOptions = { extensions }
 
 /** @param {boolean} prod */
 const terserOptions = (prod) => ({
-  // have to override these because the terser plugin sets them
-  module: false,
-  toplevel: false,
   ecma: /** @type {8} */ (8),
+  module: true,
   compress: {
     passes: 4,
     unsafe: true,
     pure_getters: true,
     join_vars: prod,
-    toplevel: true,
   },
 })
 
 const outDir = 'dist'
 const chunksFile = path.join(outDir, 'chunks.json')
-
-/**
- * Runs babel on the input code
- * @returns {import('rollup').Plugin}
- */
-const babelInput = () => ({
-  name: 'rollup-plugin-babel-input',
-  async transform(code, id) {
-    if (id.split(path.sep).includes('node_modules')) return null
-    if (!(id.endsWith('.ts') || id.endsWith('.js') || id.endsWith('.tsx')))
-      return null
-    const { code: outputCode, map } = await babel.transformAsync(code, {
-      ...babelConfig,
-      filename: id,
-    })
-    return { code: outputCode, map }
-  },
-})
-
-/**
- * Runs babel on the output code
- * @returns {import('rollup').Plugin}
- */
-const babelOutput = () => ({
-  name: 'rollup-plugin-babel-output',
-  async renderChunk(code) {
-    const { code: outputCode, map } = await babel.transformAsync(code, {
-      ...babelConfigProd,
-      caller: {
-        name: 'rollup-plugin-babel-output',
-        supportsDynamicImport: true,
-        supportsStaticESM: true,
-      },
-    })
-    return { code: outputCode, map }
-  },
-})
 
 mkdirplz(outDir)
 
@@ -114,8 +74,8 @@ export default [
         config: false,
         minimize: { zindex: false },
       }),
-      babelInput(),
-      babelOutput(),
+      getBabelInputPlugin({ extensions, babelrc: false, ...babelConfig }),
+      getBabelOutputPlugin({ extensions, babelrc: false, ...babelConfigProd }),
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
@@ -135,9 +95,7 @@ export default [
         name: 'rollup-plugin-chunks-json',
         async writeBundle(_, bundle) {
           const chunksJSON = Object.values(bundle)
-            .filter((chunk) => {
-              return chunk.type === 'chunk'
-            })
+            .filter((chunk) => chunk.type === 'chunk')
             .map((chunk) => `/${chunk.fileName}`)
           await writeFileAsync(chunksFile, JSON.stringify(chunksJSON))
         },
@@ -181,8 +139,8 @@ export default [
         },
       },
       node(rollupNodeOptions),
-      babelInput(),
-      babelOutput(),
+      getBabelInputPlugin({ extensions, babelrc: false, ...babelConfig }),
+      getBabelOutputPlugin({ extensions, babelrc: false, ...babelConfigProd }),
       terser(terserOptions(prod)),
       {
         name: 'write-manifest',
