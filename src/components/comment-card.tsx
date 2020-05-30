@@ -20,7 +20,7 @@ const commentCardStyle = css`
   }
 
   & > svg {
-    grid-row: 1 / 3;
+    grid-row: 1 / 2;
     color: #7e7e7e;
   }
 
@@ -30,7 +30,12 @@ const commentCardStyle = css`
   }
 `
 
-export const CommentCard = ({ report }: { report: GetReport }) => {
+interface Props {
+  report: GetReport
+  showReporter?: boolean
+}
+
+export const CommentCard = ({ report, showReporter = true }: Props) => {
   const userId = report.reporterId
   const reporter = usePromise(
     () => (userId ? getUser(userId).catch(() => null) : null),
@@ -39,7 +44,9 @@ export const CommentCard = ({ report }: { report: GetReport }) => {
   return (
     <Card outlined as="section" class={commentCardStyle}>
       <Icon icon={commentIcon} />
-      <span>{formatUserName(reporter)}</span>
+      {showReporter && (
+        <span>{showReporter ? formatUserName(reporter) : undefined}</span>
+      )}
       <p>{report.comment}</p>
     </Card>
   )

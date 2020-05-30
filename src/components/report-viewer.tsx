@@ -12,6 +12,11 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { StatDescription } from '@/api/schema'
 import { BooleanDisplay } from './boolean-display'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
+import TeamPicker from './team-picker'
+import { useMatchInfo } from '@/cache/match-info/use'
+import { CommentCard } from './comment-card'
+import { css } from 'linaria'
+import { cleanFieldName } from '@/utils/clean-field-name'
 
 interface Props {
   report: GetReport
@@ -29,6 +34,11 @@ interface Props {
 // xComment
 // xEdit button (if they can edit)
 
+const nameTypeSeparatorStyle = css`
+  display: flex;
+  justify-content: space-between;
+`
+
 const ReportFieldViewer = ({
   field,
   report,
@@ -40,17 +50,35 @@ const ReportFieldViewer = ({
     report.data.find((data) => data.name === field.reportReference)?.value ??
     '?'
   return (
-    <div>
-      {`${field.name}: `}
+    <div class={nameTypeSeparatorStyle}>
+      <div
+        class={css`
+          margin-right: 1rem;
+        `}
+      >{`${cleanFieldName(field.name)}: `}</div>
       {field.type === 'boolean' ? (
         <BooleanDisplay value={Boolean(value)} />
       ) : (
-        value
+        <span>{value}</span>
       )}
     </div>
   )
 }
 // http://localhost:2733/reports/4086
+
+const reporterStyle = css`
+  display: flex;
+  align-items: center;
+`
+const fieldValuesStyle = css`
+  display: grid;
+  grid-gap: 1rem;
+
+  & > h3 {
+    justify-self: center;
+    margin: 0;
+  }
+`
 
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
@@ -60,7 +88,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
     }
   }, [reporterId])
   const eventInfo = useEventInfo(report.eventKey)
-
+  const matchInfo = useMatchInfo(report.eventKey, report.matchKey)
   const schema = useSchema(eventInfo?.schemaId)
   const displayableFields = schema?.schema.filter(
     (field) => field.reportReference !== undefined,
@@ -78,32 +106,43 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
           href={`/events/${report.eventKey}/teams/${formatTeamNumber(
             report.teamKey,
           )}`}
-        >{`team: ${formatTeamNumber(report.teamKey)}`}</a>
-      </div>
-      <div>
-        <a href={`/events/${report.eventKey}`}>{`event: ${
+        >{`${formatTeamNumber(report.teamKey)}`}</a>
+        {' in '}
+        <a
+          href={`/events/${report.eventKey}/matches/${report.matchKey}`}
+        >{`${formatMatchKeyShort(report.matchKey)}`}</a>
+        {' at '}
+        <a href={`/events/${report.eventKey}`}>{`${
           eventInfo?.name ?? report.eventKey
         }`}</a>
       </div>
-      <div>
-        <a
-          href={`/events/${report.eventKey}/matches/${report.matchKey}`}
-        >{`match: ${formatMatchKeyShort(report.matchKey)}`}</a>
+      {matchInfo && (
+        <TeamPicker
+          redAlliance={matchInfo.redAlliance}
+          blueAlliance={matchInfo.blueAlliance}
+          value={report.teamKey}
+          editable={false}
+        />
+      )}
+
+      <div class={fieldValuesStyle}>
+        <h3>Auto</h3>
+        {autoFields?.map((field) => (
+          <ReportFieldViewer field={field} report={report} key={field.name} />
+        ))}
+        <h3>Teleop</h3>
+        {teleopFields?.map((field) => (
+          <ReportFieldViewer field={field} report={report} key={field.name} />
+        ))}
       </div>
-      <div>{report.comment}</div>
       <div>
+        <CommentCard report={report} showReporter={false} />
+      </div>
+      <div class={reporterStyle}>
         <Icon icon={mdiAccountCircle} />
         {formatUserName(reporter)}
       </div>
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
-      <h3>Auto</h3>
-      {autoFields?.map((field) => (
-        <ReportFieldViewer field={field} report={report} key={field.name} />
-      ))}
-      <h3>Teleop</h3>
-      {teleopFields?.map((field) => (
-        <ReportFieldViewer field={field} report={report} key={field.name} />
-      ))}
     </Fragment>
   )
 }

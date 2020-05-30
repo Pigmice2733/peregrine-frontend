@@ -14,7 +14,17 @@ import { useJWT } from '@/jwt'
 const reportPageStyle = css`
   display: flex;
   padding: 2rem;
+  justify-content: center;
 `
+const reportCardBlock = css`
+  width: 30rem;
+  padding: 2rem;
+  display: grid;
+  justify-items: center;
+  grid-gap: 1rem;
+`
+
+// http://grid.malven.co/
 
 const Report = ({ reportId }: { reportId: number }) => {
   const report = usePromise(() => getReport(reportId), [reportId])
@@ -33,7 +43,7 @@ const Report = ({ reportId }: { reportId: number }) => {
       class={reportPageStyle}
     >
       {report ? (
-        <Card>
+        <Card class={reportCardBlock}>
           {isEditing ? (
             <ReportEditor
               initialReport={report}

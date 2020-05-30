@@ -1,24 +1,33 @@
 import { h } from 'preact'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import { css } from 'linaria'
+import clsx from 'clsx'
 
 interface Props {
   redAlliance: string[]
   blueAlliance: string[]
-  onChange: (newTeam: string) => void
+  onChange?: (newTeam: string) => void
   value?: string
+  editable?: boolean
 }
 
 const teamStyle = css`
   padding: 0.5rem;
-  cursor: pointer;
   text-align: center;
+`
+
+const editableTeamStyle = css`
+  cursor: pointer;
 `
 
 const labelStyle = css`
   color: white;
   font-weight: bold;
   flex-grow: 1;
+`
+
+const checkedTeamStyle = css`
+  background: #ffffff38;
 `
 
 const inputStyle = css`
@@ -34,20 +43,32 @@ const Item = ({
   team,
   onChange,
   checked,
+  editable,
 }: {
   team: string
-  onChange: (team: string) => void
+  onChange?: (team: string) => void
   checked: boolean
+  editable: boolean
 }) => (
   <label class={labelStyle}>
-    <input
-      class={inputStyle}
-      type="radio"
-      name="teamNum"
-      onChange={() => onChange(team)}
-      checked={checked}
-    />
-    <div class={teamStyle}>{formatTeamNumber(team)}</div>
+    {editable && (
+      <input
+        class={inputStyle}
+        type="radio"
+        name="teamNum"
+        onChange={() => onChange?.(team)}
+        checked={checked}
+      />
+    )}
+    <div
+      class={clsx(
+        teamStyle,
+        checked && checkedTeamStyle,
+        editable && editableTeamStyle,
+      )}
+    >
+      {formatTeamNumber(team)}
+    </div>
   </label>
 )
 
@@ -60,7 +81,9 @@ const teamPickerStyle = css`
   border-radius: 0.3rem;
   overflow: hidden;
   box-shadow: var(--card-shadow);
+`
 
+const editableTeamPickerStyle = css`
   &:focus-within,
   &:active {
     box-shadow: 0 0 0px 4px var(--focus-ring);
@@ -80,16 +103,34 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
-const TeamPicker = ({ redAlliance, blueAlliance, onChange, value }: Props) => (
-  <div class={teamPickerStyle}>
+const TeamPicker = ({
+  redAlliance,
+  blueAlliance,
+  onChange,
+  value,
+  editable = true,
+}: Props) => (
+  <div class={clsx(teamPickerStyle, editable && editableTeamPickerStyle)}>
     <div class={allianceStyle + ' ' + redStyle}>
       {redAlliance.map((t) => (
-        <Item key={t} team={t} onChange={onChange} checked={t === value} />
+        <Item
+          key={t}
+          team={t}
+          onChange={onChange}
+          checked={t === value}
+          editable={editable}
+        />
       ))}
     </div>
     <div class={allianceStyle + ' ' + blueStyle}>
       {blueAlliance.map((t) => (
-        <Item key={t} team={t} onChange={onChange} checked={t === value} />
+        <Item
+          key={t}
+          team={t}
+          onChange={onChange}
+          checked={t === value}
+          editable={editable}
+        />
       ))}
     </div>
   </div>
