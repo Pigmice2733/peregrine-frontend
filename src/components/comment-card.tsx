@@ -33,16 +33,26 @@ const commentCardStyle = css`
 interface Props {
   report: GetReport
   showReporter?: boolean
+  linkToReport?: boolean
 }
 
-export const CommentCard = ({ report, showReporter = true }: Props) => {
+export const CommentCard = ({
+  report,
+  showReporter = true,
+  linkToReport = true,
+}: Props) => {
   const userId = report.reporterId
   const reporter = usePromise(
     () => (userId ? getUser(userId).catch(() => null) : null),
     [userId],
   )
   return (
-    <Card outlined as="section" class={commentCardStyle}>
+    <Card
+      outlined
+      as={linkToReport ? 'a' : 'div'}
+      href={linkToReport ? `/reports/${report.id}` : undefined}
+      class={commentCardStyle}
+    >
       <Icon icon={commentIcon} />
       {showReporter && (
         <span>{showReporter ? formatUserName(reporter) : undefined}</span>
@@ -51,3 +61,5 @@ export const CommentCard = ({ report, showReporter = true }: Props) => {
     </Card>
   )
 }
+
+// http://localhost:2733/events/2020orore/teams/2471?stat=teleop::Balls%20Scored%20High

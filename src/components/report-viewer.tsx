@@ -136,7 +136,11 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         ))}
       </div>
       <div>
-        <CommentCard report={report} showReporter={false} />
+        <CommentCard
+          report={report}
+          showReporter={false}
+          linkToReport={false}
+        />
       </div>
       <div class={reporterStyle}>
         <Icon icon={mdiAccountCircle} />

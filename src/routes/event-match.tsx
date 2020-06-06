@@ -21,6 +21,8 @@ import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
+import { MatchReports } from '@/components/match-reports'
+import { getReports } from '@/api/report/get-reports'
 
 interface Props {
   eventKey: string
@@ -64,6 +66,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
+  const reports = usePromise(
+    () => getReports({ event: eventKey, match: matchKey }),
+    [eventKey, matchKey],
+  )
   const schema = useSchema(event?.schemaId)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
 
@@ -111,6 +117,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           <div class={blueScoreStyle}>{match.blueScore}</div>
         </Card>
       )}
+      {match && reports && <MatchReports match={match} reports={reports} />}
       {match && schema && (
         <Card
           class={css`
