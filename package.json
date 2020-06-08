@@ -90,7 +90,7 @@
     "prompts": "1.2.1",
     "rollup": "2.14.0",
     "rollup-plugin-netlify-push": "1.0.0",
-    "rollup-plugin-postcss": "2.9.0",
+    "rollup-plugin-postcss": "3.1.2",
     "rollup-plugin-terser": "5.3.0",
     "sharp": "0.25.3",
     "templite": "1.1.0",
