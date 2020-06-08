@@ -17,7 +17,7 @@ const qs = (q: QueryParams) => {
   return v ? `?${v}` : ''
 }
 
-export const request = <T extends any>(
+export const request = <Expected>(
   method: HTTPMethod,
   endpoint: string,
   params?: QueryParams,
@@ -40,13 +40,13 @@ export const request = <T extends any>(
 
     const parsed =
       resp.headers.get('Content-Type') === 'application/json' && text !== ''
-        ? (JSON.parse(text) as T)
-        : ((text as unknown) as T)
+        ? (JSON.parse(text) as Expected)
+        : ((text as unknown) as Expected)
 
     if (resp.ok) {
       return parsed
     }
     if (resp.status === 401) removeAccessToken()
 
-    throw new Error(typeof parsed === 'string' ? parsed : parsed.error)
+    throw new Error('error' in parsed ? (parsed as any).error : parsed)
   })
