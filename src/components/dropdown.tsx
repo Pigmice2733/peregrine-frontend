@@ -44,8 +44,14 @@ export const Dropdown = <T extends any>({
   button,
   onChange,
   value,
-  getKey = (v: T) => v,
-  getText = (v: T) => v,
+  getKey = (
+    // this is fine. The Props type above makes sure these exist when they need to
+    v: any,
+  ) => v,
+  getText = (
+    // this is fine. The Props type above makes sure these exist when they need to
+    v: any,
+  ) => v,
   getGroup = () => null,
   emptyLabel = 'Select an option',
   ...props
