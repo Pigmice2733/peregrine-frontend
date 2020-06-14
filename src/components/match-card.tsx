@@ -5,6 +5,7 @@ import { formatTeamNumber } from '@/utils/format-team-number'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
+import clsx from 'clsx'
 
 interface MatchCardProps {
   match: {
@@ -16,6 +17,7 @@ interface MatchCardProps {
   key?: string | number
   eventKey: string
   link?: boolean
+  class?: string
 }
 
 const matchCardStyle = css`
@@ -81,42 +83,44 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
-export const MatchCard = memo(({ match, eventKey, link }: MatchCardProps) => {
-  const matchName = formatMatchKey(match.key)
+export const MatchCard = memo(
+  ({ match, eventKey, link, class: className }: MatchCardProps) => {
+    const matchName = formatMatchKey(match.key)
 
-  const createTeamLinks = (teams: string[]) =>
-    teams.flatMap((t: string, i) => {
-      const num = formatTeamNumber(t)
-      const El = link ? Fragment : 'a'
-      return [
-        i ? ' ' : null,
-        <El key={num} href={`/events/${eventKey}/teams/${num}`}>
-          {num}
-        </El>,
-      ]
-    })
-  return (
-    <Card
-      class={matchCardStyle}
-      href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
-    >
-      <div class={matchTitleStyle}>
-        {matchName.num ? <div>{matchName.group}</div> : matchName.group}
-        {matchName.num && (
-          <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+    const createTeamLinks = (teams: string[]) =>
+      teams.flatMap((t: string, i) => {
+        const num = formatTeamNumber(t)
+        const El = link ? Fragment : 'a'
+        return [
+          i ? ' ' : null,
+          <El key={num} href={`/events/${eventKey}/teams/${num}`}>
+            {num}
+          </El>,
+        ]
+      })
+    return (
+      <Card
+        class={clsx(matchCardStyle, className)}
+        href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
+      >
+        <div class={matchTitleStyle}>
+          {matchName.num ? <div>{matchName.group}</div> : matchName.group}
+          {matchName.num && (
+            <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+          )}
+        </div>
+        {match.time && (
+          <time dateTime={match.time.toISOString()}>
+            {formatTime(match.time)}
+          </time>
         )}
-      </div>
-      {match.time && (
-        <time dateTime={match.time.toISOString()}>
-          {formatTime(match.time)}
-        </time>
-      )}
-      <div class={`${redStyle} ${allianceStyle}`}>
-        {createTeamLinks(match.redAlliance)}
-      </div>
-      <div class={`${blueStyle} ${allianceStyle}`}>
-        {createTeamLinks(match.blueAlliance)}
-      </div>
-    </Card>
-  )
-})
+        <div class={`${redStyle} ${allianceStyle}`}>
+          {createTeamLinks(match.redAlliance)}
+        </div>
+        <div class={`${blueStyle} ${allianceStyle}`}>
+          {createTeamLinks(match.blueAlliance)}
+        </div>
+      </Card>
+    )
+  },
+)

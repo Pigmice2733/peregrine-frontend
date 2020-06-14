@@ -30,6 +30,8 @@ import { alert } from '@/icons/alert'
 import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
 import clsx from 'clsx'
+import { getReports } from '@/api/report/get-reports'
+import { mdiClipboardTextMultipleOutline } from '@mdi/js'
 
 const RoleInfo = ({
   save,
@@ -292,6 +294,7 @@ const UserProfileCard = ({
   const canEditRoles = editable && !isCurrentUser
   const updateUser = (...args: Parameters<typeof modifyUser>) =>
     modifyUser(...args).then(refetch)
+  const reports = usePromise(() => getReports({ reporter: user.id }), [user.id])
   return (
     <Card class={profileCardStyle} as="section">
       <ErrorBoundary>
@@ -333,6 +336,17 @@ const UserProfileCard = ({
             </h2>
           )}
         </EditableText>
+        {/* https://materialdesignicons.com/ */}
+        {reports && (
+          <Button flat>
+            <Icon
+              class={iconInButtonStyle}
+              icon={mdiClipboardTextMultipleOutline}
+            />
+
+            {`${reports.length} reports`}
+          </Button>
+        )}
         <VerifiedInfo user={user} refetch={refetch} editable={canEditRoles} />
         <dl
           class={css`

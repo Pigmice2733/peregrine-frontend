@@ -37,12 +37,17 @@ const blueStyle = css``
 const matchStyle = css`
   display: grid;
   max-width: 100%;
-  grid-template-columns: 100%;
+  grid-template-columns: 1fr;
   padding: 1.5rem;
   grid-gap: 1.5rem;
   justify-items: center;
-
+  @media (min-width: 750px) {
+    grid-template-columns: 1fr 1fr;
+  }
   & > * {
+    @media (min-width: 750px) {
+      grid-column: 1 / 3;
+    }
     max-width: 100%;
     overflow-x: auto;
   }
@@ -54,6 +59,20 @@ const matchStyle = css`
 
   a.${tableTeamStyle}.${blueStyle} {
     color: ${blue};
+  }
+`
+
+const leftColumnStyle = css`
+  @media (min-width: 750px) {
+    grid-column: 1 / 2;
+  }
+`
+
+const matchReportsStyle = css`
+  @media (min-width: 750px) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 4;
+    align-self: start;
   }
 `
 
@@ -107,17 +126,30 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
       class={matchStyle}
     >
-      <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+      <Button
+        href={`/events/${eventKey}/matches/${matchKey}/scout`}
+        class={leftColumnStyle}
+      >
         Scout Match
       </Button>
-      {match ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
+      {match ? (
+        <MatchCard match={match} eventKey={eventKey} class={leftColumnStyle} />
+      ) : (
+        <Spinner />
+      )}
       {match && matchHasBeenPlayed && (
-        <Card class={matchScoreStyle}>
+        <Card class={clsx(matchScoreStyle, leftColumnStyle)}>
           <div class={redScoreStyle}>{match.redScore}</div>
           <div class={blueScoreStyle}>{match.blueScore}</div>
         </Card>
       )}
-      {match && reports && <MatchReports match={match} reports={reports} />}
+      {match && reports && (
+        <MatchReports
+          match={match}
+          reports={reports}
+          class={matchReportsStyle}
+        />
+      )}
       {match && schema && (
         <Card
           class={css`
