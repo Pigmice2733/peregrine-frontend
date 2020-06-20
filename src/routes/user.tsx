@@ -32,6 +32,7 @@ import { minPasswordLength, maxPasswordLength } from '@/constants'
 import clsx from 'clsx'
 import { getReports } from '@/api/report/get-reports'
 import { mdiClipboardTextMultipleOutline } from '@mdi/js'
+import { noop } from '@/utils/empty-promise'
 
 const RoleInfo = ({
   save,
@@ -336,9 +337,8 @@ const UserProfileCard = ({
             </h2>
           )}
         </EditableText>
-        {/* https://materialdesignicons.com/ */}
         {reports && (
-          <Button flat>
+          <Button flat href={`/users/${user.id}/reports`}>
             <Icon
               class={iconInButtonStyle}
               icon={mdiClipboardTextMultipleOutline}
@@ -388,6 +388,26 @@ const UserProfileCard = ({
   )
 }
 
+const AnonymousProfileCard = ({ userId }: { userId: number }) => {
+  const reports = usePromise(() => getReports({ reporter: userId }), [userId])
+
+  return (
+    <Card class={profileCardStyle} as="section">
+      <h1>Anonymous</h1>
+      {reports && (
+        <Button flat href={`/users/${userId}/reports`}>
+          <Icon
+            class={iconInButtonStyle}
+            icon={mdiClipboardTextMultipleOutline}
+          />
+
+          {`${reports.length} reports`}
+        </Button>
+      )}
+    </Card>
+  )
+}
+
 const userPageStyle = css`
   display: flex;
   flex-direction: column;
@@ -396,10 +416,13 @@ const userPageStyle = css`
 
 const InnerUserPage = ({ userId }: { userId: string }) => {
   const [user, setUser] = useState<UserInfo | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const fetchUser = useCallback(() => getUser(userId).then(setUser), [userId])
   const emitError = useErrorEmitter()
   useEffect(() => {
-    fetchUser().catch(emitError)
+    fetchUser()
+      .catch(noop)
+      .finally(() => setIsLoading(false))
   }, [emitError, fetchUser])
   const { jwt } = useJWT()
   const realm = jwt?.peregrineRealm
@@ -411,7 +434,9 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
 
   return (
     <Page name="User" back={() => window.history.back()} class={userPageStyle}>
-      {user ? (
+      {isLoading ? (
+        <Spinner />
+      ) : user ? (
         <UserProfileCard
           user={user}
           editable={canEditUser}
@@ -420,7 +445,7 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
           isSuperAdmin={isSuperAdmin || false}
         />
       ) : (
-        <Spinner />
+        <AnonymousProfileCard userId={userId} />
       )}
     </Page>
   )

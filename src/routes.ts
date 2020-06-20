@@ -56,6 +56,10 @@ const routes = [
     component: () => import('./routes/user'),
   },
   {
+    path: '/users/:userId/reports',
+    component: () => import('./routes/user-reports'),
+  },
+  {
     path: '/reports/:reportId',
     component: () => import('./routes/report'),
   },
