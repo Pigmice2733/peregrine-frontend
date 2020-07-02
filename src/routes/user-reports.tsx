@@ -11,14 +11,9 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import { getUser } from '@/api/user/get-user'
 
-// http://localhost:2733/users/64/reports
-// http://localhost:2733/users/64
-
 interface Props {
   userId: number
 }
-
-// http://grid.malven.co/
 
 const userReportsStyle = css`
   display: grid;
@@ -34,10 +29,12 @@ const reportCardStyle = css`
 
 const UserReports = ({ userId }: Props) => {
   const reports = usePromise(() => getReports({ reporter: userId }), [userId])
-  const user = usePromise(() => getUser(userId), [userId])
+  const user = usePromise(() => getUser(userId).catch(() => {}), [userId])
   return (
     <Page
-      name={`${user ? `${user.firstName} ${user.lastName}` : userId}: Reports`}
+      name={`${
+        user ? `${user.firstName} ${user.lastName}` : `User ${userId}`
+      }: Reports`}
       back={`/users/${userId}`}
       class={userReportsStyle}
     >

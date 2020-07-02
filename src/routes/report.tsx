@@ -1,6 +1,5 @@
 import { h } from 'preact'
 import Page from '@/components/page'
-import { GetReport } from '@/api/report'
 import { ReportEditor } from '@/components/report-editor'
 import { ReportViewer } from '@/components/report-viewer'
 import Card from '@/components/card'
@@ -10,6 +9,7 @@ import { usePromise } from '@/utils/use-promise'
 import Spinner from '@/components/spinner'
 import { useState } from 'preact/hooks'
 import { useJWT } from '@/jwt'
+import { route } from '@/router'
 
 const reportPageStyle = css`
   display: flex;
@@ -23,8 +23,6 @@ const reportCardBlock = css`
   justify-items: center;
   grid-gap: 1rem;
 `
-
-// http://grid.malven.co/
 
 const Report = ({ reportId }: { reportId: number }) => {
   const report = usePromise(() => getReport(reportId), [reportId])
@@ -48,6 +46,9 @@ const Report = ({ reportId }: { reportId: number }) => {
             <ReportEditor
               initialReport={report}
               onSaveSuccess={() => setIsEditing(false)}
+              onDelete={() =>
+                route(`/events/${report.eventKey}/matches/${report.matchKey}`)
+              }
             />
           ) : (
             <ReportViewer

@@ -20,6 +20,7 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
             initialReport={{ eventKey, matchKey }}
             onSaveSuccess={goToMatchPage}
             onSaveLocally={goToMatchPage}
+            onDelete={goToMatchPage}
           />
         </Page>
       )}

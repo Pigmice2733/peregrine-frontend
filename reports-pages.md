@@ -2,7 +2,12 @@
 - [done] Link comments to report page
 - [done] Telling the user whether or not match was scouted
 - [done] User reports list on profile page
+- [done] Delete reports from report page
+- Don't show comment in report viewer if it is empty
+- Link from report viewer to user profile
+- Add user dropdown for admins in report editor
+- Allow switching match/event that report belongs to
+- Link from report editor to report viewer
 - Edit offline reports
 - Delete offline reports
-
-TODO next time: finish fixing user profile page for users of a different realm
+- Notifications

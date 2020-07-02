@@ -13,6 +13,7 @@ import { useSchema } from '@/cache/schema/use'
 import { SetRequired } from 'type-fest'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useMatchInfo } from '@/cache/match-info/use'
+import { deleteReport } from '@/api/report/delete-report'
 
 // http://localhost:2733/reports/2911
 
@@ -36,6 +37,7 @@ interface Props {
   initialReport: SetRequired<Partial<Report>, 'eventKey'>
   onSaveSuccess: (report: Report) => void
   onSaveLocally?: (report: Report) => void
+  onDelete: () => void
 }
 
 const isFieldReportable = (
@@ -51,10 +53,12 @@ export const ReportEditor = ({
   initialReport,
   onSaveLocally,
   onSaveSuccess,
+  onDelete,
 }: Props) => {
   const eventKey = initialReport.eventKey
   const [team, setTeam] = useState<string | null>(initialReport.teamKey || null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [matchKey] = useState<string | undefined>(initialReport.matchKey)
   const [comment, setComment] = useState(initialReport.comment || '')
   const schemaId = useEventInfo(eventKey)?.schemaId
@@ -105,6 +109,7 @@ export const ReportEditor = ({
   const getReportIfValid = (): Report | false => {
     if (!matchKey || !team) return false
     return {
+      id: initialReport.id,
       eventKey,
       matchKey,
       comment,
@@ -129,6 +134,16 @@ export const ReportEditor = ({
       .finally(() => {
         setIsSaving(false)
       })
+  }
+  const handleDelete = async (e: Event) => {
+    e.preventDefault()
+    const reportId = initialReport.id
+    if (reportId !== undefined) {
+      setIsDeleting(true)
+      await deleteReport(reportId)
+      setIsDeleting(false)
+    }
+    onDelete()
   }
 
   return (
@@ -166,9 +181,18 @@ export const ReportEditor = ({
         onInput={setComment}
         value={comment}
       />
-      <Button disabled={isSaving || !report} class={buttonStyles}>
+      <Button disabled={isSaving || isDeleting || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
+      </Button>
+      <Button
+        disabled={isSaving || isDeleting || !report}
+        class={buttonStyles}
+        onClick={handleDelete}
+      >
+        {isDeleting ? 'Deleting Report' : 'Delete Report'}
       </Button>
     </form>
   )
 }
+
+// http://localhost:2733/reports/5279

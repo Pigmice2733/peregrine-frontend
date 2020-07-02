@@ -283,6 +283,10 @@ const profileCardStyle = css`
   grid-gap: 1rem;
   justify-items: center;
 `
+const userNameStyle = css`
+  font-size: 1.5rem;
+  margin: 0;
+`
 
 const UserProfileCard = ({
   user,
@@ -309,12 +313,7 @@ const UserProfileCard = ({
           value={`${user.firstName} ${user.lastName}`}
         >
           {(value, editIcon) => (
-            <h1
-              class={css`
-                font-size: 1.5rem;
-                margin: 0;
-              `}
-            >
+            <h1 class={userNameStyle}>
               {value} {editIcon}
             </h1>
           )}
@@ -393,7 +392,8 @@ const AnonymousProfileCard = ({ userId }: { userId: number }) => {
 
   return (
     <Card class={profileCardStyle} as="section">
-      <h1>Anonymous</h1>
+      <h1 class={userNameStyle}>Anonymous</h1>
+      <Alert warning>{"You do not have access to this user's profile."}</Alert>
       {reports && (
         <Button flat href={`/users/${userId}/reports`}>
           <Icon
