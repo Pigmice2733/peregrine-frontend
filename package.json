@@ -106,7 +106,8 @@
     ">.5% in us",
     "not ie 11",
     "not ios_saf <11.1",
-    "not edge <79"
+    "not edge <79",
+    "not android <81"
   ],
   "eslintConfig": {
     "extends": [
