@@ -64,7 +64,7 @@
     "eslint": "7.3.1",
     "eslint-formatter-pretty": "4.0.0",
     "eslint-plugin-caleb": "9.0.0",
-    "fake-indexeddb": "3.0.2",
+    "fake-indexeddb": "3.1.0",
     "friendly-errors-webpack-plugin": "1.7.0",
     "html-webpack-plugin": "4.3.0",
     "hygen": "1.6.2",
