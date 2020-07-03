@@ -44,7 +44,6 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
         .then((networkData) => setNetworkData(networkData))
         .catch((error) => {
           if (error instanceof Error) {
-            console.log('got an error', error)
             setNetworkData(error)
           }
         })
