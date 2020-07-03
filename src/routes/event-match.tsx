@@ -21,6 +21,7 @@ import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
