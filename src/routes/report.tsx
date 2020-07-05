@@ -5,11 +5,11 @@ import { ReportViewer } from '@/components/report-viewer'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { getReport } from '@/api/report/get-report'
-import { usePromise } from '@/utils/use-promise'
 import Spinner from '@/components/spinner'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
 import { route } from '@/router'
+import { GetReport } from '@/api/report'
 
 const reportPageStyle = css`
   display: flex;
@@ -25,7 +25,13 @@ const reportCardBlock = css`
 `
 
 const Report = ({ reportId }: { reportId: number }) => {
-  const report = usePromise(() => getReport(reportId), [reportId])
+  const [report, setReport] = useState<GetReport | undefined>(undefined)
+  useEffect(() => {
+    setReport(undefined)
+    getReport(reportId).then((report) => {
+      setReport(report)
+    })
+  }, [reportId])
   const [isEditing, setIsEditing] = useState(false)
   const { jwt } = useJWT()
   const canEdit =
@@ -45,7 +51,10 @@ const Report = ({ reportId }: { reportId: number }) => {
           {isEditing ? (
             <ReportEditor
               initialReport={report}
-              onSaveSuccess={() => setIsEditing(false)}
+              onSaveSuccess={(report) => {
+                setReport(report)
+                setIsEditing(false)
+              }}
               onDelete={() =>
                 route(`/events/${report.eventKey}/matches/${report.matchKey}`)
               }

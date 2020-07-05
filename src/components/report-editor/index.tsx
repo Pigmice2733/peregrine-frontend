@@ -8,12 +8,13 @@ import TeamPicker from '../team-picker'
 import FieldCard from '../field-card'
 import TextInput from '../text-input'
 import Button from '../button'
-import { Report, Field } from '@/api/report'
+import { Report, Field, GetReport } from '@/api/report'
 import { useSchema } from '@/cache/schema/use'
 import { SetRequired } from 'type-fest'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useMatchInfo } from '@/cache/match-info/use'
 import { deleteReport } from '@/api/report/delete-report'
+import { useJWT } from '@/jwt'
 
 // http://localhost:2733/reports/2911
 
@@ -35,7 +36,7 @@ const buttonStyles = css`
 
 interface Props {
   initialReport: SetRequired<Partial<Report>, 'eventKey'>
-  onSaveSuccess: (report: Report) => void
+  onSaveSuccess: (report: GetReport) => void
   onSaveLocally?: (report: Report) => void
   onDelete: () => void
 }
@@ -64,6 +65,7 @@ export const ReportEditor = ({
   const schemaId = useEventInfo(eventKey)?.schemaId
   const schema = useSchema(schemaId)?.schema
   const match = useMatchInfo(eventKey, matchKey)
+  const { jwt } = useJWT()
 
   const [reportData, setReportData] = useState<Report['data']>(
     initialReport.data || [],
@@ -105,9 +107,13 @@ export const ReportEditor = ({
     )
   }, [visibleFields])
 
+  // https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Pigmice2733/peregrine-backend/develop/internal/server/openapi.yaml
+
   /** Returns the Report if all the required fields are filled in, false otherwise */
   const getReportIfValid = (): Report | false => {
-    if (!matchKey || !team) return false
+    if (!matchKey || !team || !jwt) return false
+    const reporterId = initialReport.reporterId ?? Number(jwt.sub)
+    const realmId = initialReport.realmId ?? jwt.peregrineRealm
     return {
       id: initialReport.id,
       eventKey,
@@ -115,6 +121,8 @@ export const ReportEditor = ({
       comment,
       data: reportData,
       teamKey: team,
+      reporterId,
+      realmId,
     }
   }
   const report = getReportIfValid()
@@ -124,8 +132,8 @@ export const ReportEditor = ({
     if (!report) return
     setIsSaving(true)
     uploadReport(report)
-      .then(() => {
-        onSaveSuccess(report)
+      .then((id) => {
+        onSaveSuccess({ ...report, id })
       })
       .catch(() => {
         saveReportLocally(report)

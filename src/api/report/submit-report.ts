@@ -3,12 +3,13 @@ import { Report } from '.'
 import { useEffect, useState } from 'preact/hooks'
 import { CancellablePromise } from '@/utils/cancellable-promise'
 
-export const uploadReport = (
-  report: Report,
-): CancellablePromise<number | null> =>
-  report.id === undefined
-    ? request<number>('POST', 'reports', {}, report)
-    : request<null>('PUT', `reports/${report.id}`, {}, report)
+export const uploadReport = (report: Report): CancellablePromise<number> => {
+  if (report.id === undefined) {
+    return request<number>('POST', 'reports', {}, report)
+  }
+  const id = report.id
+  return request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
+}
 
 // The 2 is the version number
 // There were breaking changes to the report shape in
