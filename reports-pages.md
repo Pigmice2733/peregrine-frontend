@@ -11,3 +11,6 @@
 - Edit offline reports
 - Delete offline reports
 - Notifications
+
+TODO: Fetch realm ids and use it on user dropdown in report editor
+TODO: ask in #peregrine about cancel/back button on report editor

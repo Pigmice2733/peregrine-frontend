@@ -15,6 +15,9 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { useMatchInfo } from '@/cache/match-info/use'
 import { deleteReport } from '@/api/report/delete-report'
 import { useJWT } from '@/jwt'
+import { Dropdown } from '../dropdown'
+import { usePromise } from '@/utils/use-promise'
+import { getUsers } from '@/api/user/get-users'
 
 // http://localhost:2733/reports/2911
 
@@ -66,7 +69,10 @@ export const ReportEditor = ({
   const schema = useSchema(schemaId)?.schema
   const match = useMatchInfo(eventKey, matchKey)
   const { jwt } = useJWT()
-
+  const isAdmin = jwt?.peregrineRoles.isAdmin
+  const users = usePromise(() => getUsers(), [])
+  const [reporterId, setReporterId] = useState(initialReport.reporterId)
+  const [realmId, setRealmId] = useState(initialReport.realmId)
   const [reportData, setReportData] = useState<Report['data']>(
     initialReport.data || [],
   )
@@ -107,13 +113,10 @@ export const ReportEditor = ({
     )
   }, [visibleFields])
 
-  // https://petstore.swagger.io/?url=https://raw.githubusercontent.com/Pigmice2733/peregrine-backend/develop/internal/server/openapi.yaml
-
   /** Returns the Report if all the required fields are filled in, false otherwise */
   const getReportIfValid = (): Report | false => {
     if (!matchKey || !team || !jwt) return false
-    const reporterId = initialReport.reporterId ?? Number(jwt.sub)
-    const realmId = initialReport.realmId ?? jwt.peregrineRealm
+
     return {
       id: initialReport.id,
       eventKey,
@@ -121,8 +124,8 @@ export const ReportEditor = ({
       comment,
       data: reportData,
       teamKey: team,
-      reporterId,
-      realmId,
+      reporterId: reporterId ?? Number(jwt.sub),
+      realmId: realmId ?? jwt.peregrineRealm,
     }
   }
   const report = getReportIfValid()
@@ -189,6 +192,21 @@ export const ReportEditor = ({
         onInput={setComment}
         value={comment}
       />
+      {isAdmin && users && (
+        <Dropdown
+          options={users.sort((a, b) =>
+            a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : -1,
+          )}
+          onChange={(user) => {
+            setReporterId(user.id)
+            setRealmId(user.realmId)
+          }}
+          getKey={(user) => user.id}
+          getText={(user) => `${user.firstName} ${user.lastName}`}
+          getGroup={(user) => String(user.realmId)}
+          value={users.find((user) => user.id === reporterId)}
+        />
+      )}
       <Button disabled={isSaving || isDeleting || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>
