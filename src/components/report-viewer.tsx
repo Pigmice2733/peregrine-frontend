@@ -17,6 +17,7 @@ import { useMatchInfo } from '@/cache/match-info/use'
 import { CommentCard } from './comment-card'
 import { css } from 'linaria'
 import { cleanFieldName } from '@/utils/clean-field-name'
+import { pigmicePurple } from '@/colors'
 
 // http://localhost:2733/reports/3463
 
@@ -71,6 +72,13 @@ const ReportFieldViewer = ({
 const reporterStyle = css`
   display: flex;
   align-items: center;
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+  &:hover,
+  &:focus {
+    color: ${pigmicePurple};
+  }
 `
 const fieldValuesStyle = css`
   display: grid;
@@ -146,13 +154,13 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         />
       )}
 
-      <div class={reporterStyle}>
+      <a href={`/users/${reporterId}`} class={reporterStyle}>
         <Icon icon={mdiAccountCircle} />
         {formatUserName(reporter)}
-      </div>
+      </a>
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </Fragment>
   )
 }
 
-// http://localhost:2733/reports/2911
+// http://localhost:2733/reports/5295
