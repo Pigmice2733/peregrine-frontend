@@ -7,6 +7,7 @@ import Spinner from './spinner'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 import { formatMatchKey } from '@/utils/format-match-key'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   matches: ProcessedMatchInfo[]
@@ -80,7 +81,7 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
         label="Search"
         onInput={setSearchQuery}
       />
-      {matches ? (
+      {isData(matches) ? (
         <div class={matchListStyle}>
           {filteredMatches.map((m) => (
             <MatchCard eventKey={eventKey} match={m} key={m.key} link />

@@ -10,6 +10,8 @@ import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Spinner from '@/components/spinner'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { isData } from '@/utils/is-data'
+import { NetworkError } from '@/api/base'
 
 interface Props {
   eventKey: string
@@ -52,8 +54,8 @@ const noMatchesStyle = css`
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
-
+  const newestIncompleteMatch = isData(matches) && nextIncompleteMatch(matches)
+  console.log(matches)
   return (
     <Page
       name={eventInfo?.name || <code>{eventKey}</code>}
@@ -64,14 +66,24 @@ const Event = ({ eventKey }: Props) => {
         <Heading level={2} class={headingStyle}>
           Information
         </Heading>
-        {eventInfo && <EventInfoCard event={eventInfo} />}
-        <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+        {isData(eventInfo)
+          ? isData(eventInfo) && <EventInfoCard event={eventInfo} />
+          : 'This event does not exist.'}
+        {isData(eventInfo) ? (
+          <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+        ) : (
+          <Button href={`/`}>Existing Events</Button>
+        )}
       </div>
 
       <div class={sectionStyle}>
-        <Heading level={2} class={headingStyle}>
-          {newestIncompleteMatch ? 'Next Match' : 'Matches'}
-        </Heading>
+        {isData(eventInfo) ? (
+          <Heading level={2} class={headingStyle}>
+            {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+          </Heading>
+        ) : (
+          []
+        )}
         {newestIncompleteMatch && (
           <MatchCard
             key={newestIncompleteMatch.key}
@@ -80,11 +92,17 @@ const Event = ({ eventKey }: Props) => {
             link
           />
         )}
-        {matches ? (
+        {isData(matches) ? (
           matches.length > 0 ? (
             <EventMatches matches={matches} eventKey={eventKey} />
           ) : (
             <p class={noMatchesStyle}>No matches yet</p>
+          )
+        ) : matches ? (
+          NetworkError ? (
+            'Network error. Please check your connection.'
+          ) : (
+            <Spinner />
           )
         ) : (
           <Spinner />

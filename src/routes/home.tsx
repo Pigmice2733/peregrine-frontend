@@ -14,6 +14,7 @@ import { UnstyledList } from '@/components/unstyled-list'
 import { useYears } from '@/utils/use-years'
 import IconButton from '@/components/icon-button'
 import { mdiCrosshairsGps } from '@mdi/js'
+import { isData } from '@/utils/is-data'
 
 const homeStyle = css`
   display: grid;
@@ -67,7 +68,7 @@ const Home = () => {
         )}
       </div>
 
-      {events ? (
+      {isData(events) ? (
         <Fragment>
           <UnstyledList class={matchListStyle}>
             {events
