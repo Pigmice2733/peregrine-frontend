@@ -42,8 +42,8 @@ const Report = ({ reportId }: { reportId: number }) => {
       jwt.peregrineRoles.isSuperAdmin)
   return (
     <Page
-      name="Report"
-      back={() => window.history.back()}
+      name={isEditing ? 'Edit Report' : 'Report'}
+      back={isEditing ? () => setIsEditing(false) : () => window.history.back()}
       class={reportPageStyle}
     >
       {report ? (
