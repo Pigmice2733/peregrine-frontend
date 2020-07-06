@@ -14,3 +14,4 @@
 
 TODO: Fetch realm ids and use it on user dropdown in report editor
 TODO: ask in #peregrine about cancel/back button on report editor
+TODO: Fix weird padding in report editor on report page
