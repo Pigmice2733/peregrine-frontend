@@ -6,12 +6,11 @@
 - [done] Don't show comment in report viewer if it is empty
 - [done] Link from report viewer to user profile
 - [done] Link from report editor to report viewer
-- Add user dropdown for admins in report editor
-- Allow switching match/event that report belongs to
+- [done] Add user dropdown for admins in report editor
+- [done] Allow switching match/event that report belongs to
+- Fix weird padding in report editor on report page
 - Edit offline reports
 - Delete offline reports
 - Notifications
 
-TODO: Fetch realm ids and use it on user dropdown in report editor
 TODO: ask in #peregrine about cancel/back button on report editor
-TODO: Fix weird padding in report editor on report page

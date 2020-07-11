@@ -12,12 +12,17 @@ import { Report, Field, GetReport } from '@/api/report'
 import { useSchema } from '@/cache/schema/use'
 import { SetRequired } from 'type-fest'
 import { useEventInfo } from '@/cache/event-info/use'
-import { useMatchInfo } from '@/cache/match-info/use'
 import { deleteReport } from '@/api/report/delete-report'
 import { useJWT } from '@/jwt'
 import { Dropdown } from '../dropdown'
 import { usePromise } from '@/utils/use-promise'
 import { getUsers } from '@/api/user/get-users'
+import { getRealms } from '@/api/realm/get-realms'
+import Icon from '../icon'
+import { mdiAccountCircle } from '@mdi/js'
+import { useEventMatches } from '@/cache/event-matches/use'
+import { formatMatchKeyShort } from '@/utils/format-match-key-short'
+import { matchHasTeam } from '@/utils/match-has-team'
 
 // http://localhost:2733/reports/2911
 
@@ -25,7 +30,6 @@ const scoutStyles = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
 `
 
 const commentStyles = css`
@@ -38,7 +42,7 @@ const buttonStyles = css`
 `
 
 interface Props {
-  initialReport: SetRequired<Partial<Report>, 'eventKey'>
+  initialReport: SetRequired<Partial<Report>, 'eventKey' | 'matchKey'>
   onSaveSuccess: (report: GetReport) => void
   onSaveLocally?: (report: Report) => void
   onDelete: () => void
@@ -53,6 +57,12 @@ const isTeleop = (field: ReportStatDescription) => field.period === 'teleop'
 // Number properties default to 0 and boolean properties default to 0 which represents false
 const defaultFieldValue = 0
 
+const userDropdownStyle = css`
+  display: flex;
+  margin: 1rem;
+  align-items: center;
+`
+
 export const ReportEditor = ({
   initialReport,
   onSaveLocally,
@@ -63,11 +73,12 @@ export const ReportEditor = ({
   const [team, setTeam] = useState<string | null>(initialReport.teamKey || null)
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
-  const [matchKey] = useState<string | undefined>(initialReport.matchKey)
+  const [matchKey, setMatchKey] = useState(initialReport.matchKey)
   const [comment, setComment] = useState(initialReport.comment || '')
   const schemaId = useEventInfo(eventKey)?.schemaId
   const schema = useSchema(schemaId)?.schema
-  const match = useMatchInfo(eventKey, matchKey)
+  const eventMatches = useEventMatches(eventKey)
+  const match = eventMatches?.find((match) => matchKey === match.key)
   const { jwt } = useJWT()
   const isAdmin = jwt?.peregrineRoles.isAdmin
   const users = usePromise(() => getUsers(), [])
@@ -76,6 +87,17 @@ export const ReportEditor = ({
   const [reportData, setReportData] = useState<Report['data']>(
     initialReport.data || [],
   )
+
+  useEffect(() => {
+    if (team && match && !matchHasTeam(team)(match)) setTeam(null)
+  }, [team, match])
+
+  useEffect(() => {
+    if (!jwt) return
+    setReporterId((reporterId) => reporterId ?? Number(jwt.sub))
+    setRealmId((realmId) => realmId ?? jwt.peregrineRealm)
+  }, [jwt])
+
   const updateReportField = (fieldName: string) => (value: number) =>
     setReportData((reportData) =>
       reportData.map(
@@ -94,7 +116,7 @@ export const ReportEditor = ({
   const visibleFields = useMemo(() => schema?.filter(isFieldReportable), [
     schema,
   ])
-
+  const realms = usePromise(() => getRealms(), [])
   const blueAlliance = match?.blueAlliance
   const redAlliance = match?.redAlliance
 
@@ -115,7 +137,8 @@ export const ReportEditor = ({
 
   /** Returns the Report if all the required fields are filled in, false otherwise */
   const getReportIfValid = (): Report | false => {
-    if (!matchKey || !team || !jwt) return false
+    if (!matchKey || !team || !jwt || !match || !reporterId || !realmId)
+      return false
 
     return {
       id: initialReport.id,
@@ -160,6 +183,15 @@ export const ReportEditor = ({
   return (
     <form class={scoutStyles} onSubmit={submit}>
       <h1>Scout {team && formatTeamNumber(team)}</h1>
+      {eventMatches && (
+        <Dropdown
+          options={eventMatches}
+          onChange={(match) => setMatchKey(match.key)}
+          getKey={(match) => match.key}
+          getText={(match) => formatMatchKeyShort(match.key)}
+          value={eventMatches.find((match) => match.key === matchKey)}
+        />
+      )}
       {blueAlliance && redAlliance && (
         <TeamPicker
           onChange={setTeam}
@@ -193,19 +225,25 @@ export const ReportEditor = ({
         value={comment}
       />
       {isAdmin && users && (
-        <Dropdown
-          options={users.sort((a, b) =>
-            a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : -1,
-          )}
-          onChange={(user) => {
-            setReporterId(user.id)
-            setRealmId(user.realmId)
-          }}
-          getKey={(user) => user.id}
-          getText={(user) => `${user.firstName} ${user.lastName}`}
-          getGroup={(user) => String(user.realmId)}
-          value={users.find((user) => user.id === reporterId)}
-        />
+        <div class={userDropdownStyle}>
+          <Icon icon={mdiAccountCircle} />
+          <Dropdown
+            options={users.sort((a, b) =>
+              a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : -1,
+            )}
+            onChange={(user) => {
+              setReporterId(user.id)
+              setRealmId(user.realmId)
+            }}
+            getKey={(user) => user.id}
+            getText={(user) => `${user.firstName} ${user.lastName}`}
+            getGroup={(user) =>
+              realms?.find((realm) => realm.id === user.realmId)?.name ||
+              String(user.realmId)
+            }
+            value={users.find((user) => user.id === reporterId)}
+          />
+        </div>
       )}
       <Button disabled={isSaving || isDeleting || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
@@ -221,4 +259,4 @@ export const ReportEditor = ({
   )
 }
 
-// http://localhost:2733/reports/5279
+// http://localhost:2733/reports/3466

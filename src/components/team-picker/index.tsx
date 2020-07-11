@@ -7,7 +7,7 @@ interface Props {
   redAlliance: string[]
   blueAlliance: string[]
   onChange?: (newTeam: string) => void
-  value?: string
+  value?: string | null
   editable?: boolean
 }
 
