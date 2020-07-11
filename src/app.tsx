@@ -23,8 +23,8 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 
-setTimeout(uploadSavedReports, 2_000)
-setInterval(uploadSavedReports, 30_000)
+// setTimeout(uploadSavedReports, 2_000)
+// setInterval(uploadSavedReports, 30_000)
 
 const App = () => (
   <Fragment>

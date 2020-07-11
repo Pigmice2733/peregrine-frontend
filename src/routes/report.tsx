@@ -24,14 +24,13 @@ const reportCardBlock = css`
   grid-gap: 1rem;
 `
 
-const Report = ({ reportId }: { reportId: number }) => {
-  const [report, setReport] = useState<GetReport | undefined>(undefined)
-  useEffect(() => {
-    setReport(undefined)
-    getReport(reportId).then((report) => {
-      setReport(report)
-    })
-  }, [reportId])
+export const ReportPage = ({
+  report,
+  onSaveSuccess,
+}: {
+  report: GetReport
+  onSaveSuccess: (report: GetReport) => void
+}) => {
   const [isEditing, setIsEditing] = useState(false)
   const { jwt } = useJWT()
   const canEdit =
@@ -46,30 +45,41 @@ const Report = ({ reportId }: { reportId: number }) => {
       back={isEditing ? () => setIsEditing(false) : () => window.history.back()}
       class={reportPageStyle}
     >
-      {report ? (
-        <Card class={reportCardBlock}>
-          {isEditing ? (
-            <ReportEditor
-              initialReport={report}
-              onSaveSuccess={(report) => {
-                setReport(report)
-                setIsEditing(false)
-              }}
-              onDelete={() =>
-                route(`/events/${report.eventKey}/matches/${report.matchKey}`)
-              }
-            />
-          ) : (
-            <ReportViewer
-              report={report}
-              onEditClick={canEdit ? () => setIsEditing(true) : undefined}
-            />
-          )}
-        </Card>
-      ) : (
-        <Spinner />
-      )}
+      <Card class={reportCardBlock}>
+        {isEditing ? (
+          <ReportEditor
+            initialReport={report}
+            onSaveSuccess={(report) => {
+              onSaveSuccess(report)
+              setIsEditing(false)
+            }}
+            onDelete={() =>
+              route(`/events/${report.eventKey}/matches/${report.matchKey}`)
+            }
+          />
+        ) : (
+          <ReportViewer
+            report={report}
+            onEditClick={canEdit ? () => setIsEditing(true) : undefined}
+          />
+        )}
+      </Card>
     </Page>
+  )
+}
+
+const Report = ({ reportId }: { reportId: number }) => {
+  const [report, setReport] = useState<GetReport | undefined>(undefined)
+  useEffect(() => {
+    setReport(undefined)
+    getReport(reportId).then((report) => {
+      setReport(report)
+    })
+  }, [reportId])
+  return report ? (
+    <ReportPage report={report} onSaveSuccess={setReport} />
+  ) : (
+    <Spinner />
   )
 }
 
