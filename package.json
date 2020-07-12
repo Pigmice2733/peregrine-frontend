@@ -46,7 +46,7 @@
     "@babel/preset-typescript": "7.10.4",
     "@calebeby/preact-testing-library": "0.0.4",
     "@rollup/plugin-babel": "5.1.0",
-    "@rollup/plugin-node-resolve": "8.1.0",
+    "@rollup/plugin-node-resolve": "8.4.0",
     "@testing-library/jest-dom": "5.11.0",
     "@types/jest": "26.0.4",
     "@types/node-fetch": "2.5.7",
