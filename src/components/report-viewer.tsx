@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { GetReport } from '@/api/report'
+import { GetReport, OfflineReport, Report } from '@/api/report'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Icon from './icon'
 import { mdiAccountCircle } from '@mdi/js'
@@ -19,23 +19,10 @@ import { css } from 'linaria'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { pigmicePurple } from '@/colors'
 
-// http://localhost:2733/reports/3463
-
 interface Props {
-  report: GetReport
+  report: Report
   onEditClick?: () => void
 }
-// What we want to display
-// xReporter name
-// -Reporter realm
-// xTeam num
-// x-Auto
-// x-Teleop
-// xEvent
-// xMatch
-// -Opponents/Alliance members
-// xComment
-// xEdit button (if they can edit)
 
 const nameTypeSeparatorStyle = css`
   display: flex;
@@ -67,7 +54,6 @@ const ReportFieldViewer = ({
     </div>
   )
 }
-// http://localhost:2733/reports/4086
 
 const reporterStyle = css`
   display: flex;
@@ -162,5 +148,3 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
     </Fragment>
   )
 }
-
-// http://localhost:2733/reports/5295

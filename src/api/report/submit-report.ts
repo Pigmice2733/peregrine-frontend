@@ -1,26 +1,30 @@
 import { request } from '../base'
-import { Report } from '.'
+import { Report, OfflineReport } from '.'
 import { useEffect, useState } from 'preact/hooks'
 import { CancellablePromise } from '@/utils/cancellable-promise'
 
 export const uploadReport = (report: Report): CancellablePromise<number> => {
-  if (report.id === undefined) {
-    return request<number>('POST', 'reports', {}, report)
-  }
   const id = report.id
-  return request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
+  const req =
+    id === undefined
+      ? request<number>('POST', 'reports', {}, report)
+      : request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
+  return req.then(() => {
+    if (report.key) {
+    }
+  })
 }
 
 // The 2 is the version number
 // There were breaking changes to the report shape in
 // https://github.com/Pigmice2733/peregrine-backend/pull/266
-const SAVED_REPORTS = 'savedReports2'
+const SAVED_REPORTS = 'savedReports3'
 
-const getSavedReports = (): Report[] =>
+const getSavedReports = (): OfflineReport[] =>
   JSON.parse(localStorage.getItem(SAVED_REPORTS) || '[]')
 
 export const useSavedReports = () => {
-  const [savedReports, setSavedReports] = useState<Report[]>([])
+  const [savedReports, setSavedReports] = useState<OfflineReport[]>([])
   const refreshSavedReports = () => setSavedReports(getSavedReports())
 
   useEffect(() => {
@@ -46,8 +50,32 @@ export const uploadSavedReports = async () => {
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(unsuccessfulReports))
 }
 
-export const saveReportLocally = (report: Report) => {
+/** Only used for offline reports */
+export const generateReportKey = () => Math.random().toString(36).slice(2, 10)
+
+export const saveReportLocally = (report: OfflineReport) => {
   const savedReports = getSavedReports()
-  savedReports.push(report)
+  const existingReportIndex = savedReports.findIndex(
+    (savedReport) => savedReport.key === report.key,
+  )
+  if (existingReportIndex === -1) {
+    savedReports.push(report)
+  } else {
+    savedReports[existingReportIndex] = report
+  }
+  localStorage.setItem(SAVED_REPORTS, JSON.stringify(savedReports))
+}
+export const deleteReportLocally = (report: OfflineReport) => {
+  // TODO: Pick up here next time
+  // uploadReport function should call this if report.key exists
+  const savedReports = getSavedReports()
+  const existingReportIndex = savedReports.findIndex(
+    (savedReport) => savedReport.key === report.key,
+  )
+  if (existingReportIndex === -1) {
+    savedReports.push(report)
+  } else {
+    savedReports[existingReportIndex] = report
+  }
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(savedReports))
 }

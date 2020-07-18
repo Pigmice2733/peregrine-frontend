@@ -2,13 +2,17 @@ import { css } from 'linaria'
 import { StatDescription, ReportStatDescription } from '@/api/schema'
 import { h } from 'preact'
 import { useState, useMemo, useEffect } from 'preact/hooks'
-import { uploadReport, saveReportLocally } from '@/api/report/submit-report'
+import {
+  uploadReport,
+  saveReportLocally,
+  generateReportKey,
+} from '@/api/report/submit-report'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import TeamPicker from '../team-picker'
 import FieldCard from '../field-card'
 import TextInput from '../text-input'
 import Button from '../button'
-import { Report, Field, GetReport } from '@/api/report'
+import { Report, Field, GetReport, OfflineReport } from '@/api/report'
 import { useSchema } from '@/cache/schema/use'
 import { SetRequired } from 'type-fest'
 import { useEventInfo } from '@/cache/event-info/use'
@@ -44,7 +48,7 @@ const buttonStyles = css`
 interface Props {
   initialReport: SetRequired<Partial<Report>, 'eventKey' | 'matchKey'>
   onSaveSuccess: (report: GetReport) => void
-  onSaveLocally?: (report: Report) => void
+  onSaveLocally?: (report: OfflineReport) => void
   onDelete: () => void
 }
 
@@ -162,8 +166,12 @@ export const ReportEditor = ({
         onSaveSuccess({ ...report, id })
       })
       .catch(() => {
-        saveReportLocally(report)
-        if (onSaveLocally) onSaveLocally(report)
+        const reportWithKey = {
+          ...report,
+          key: initialReport.key || generateReportKey(),
+        }
+        saveReportLocally(reportWithKey)
+        if (onSaveLocally) onSaveLocally(reportWithKey)
       })
       .finally(() => {
         setIsSaving(false)

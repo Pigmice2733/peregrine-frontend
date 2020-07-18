@@ -7,9 +7,7 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Button from '@/components/button'
-import { Report } from '@/api/report'
-import { useState } from 'preact/hooks'
-import { ReportPage } from './report'
+import { OfflineReport } from '@/api/report'
 
 const savedReportCardStyle = css`
   padding: 1rem;
@@ -17,13 +15,7 @@ const savedReportCardStyle = css`
   margin: 1rem;
 `
 
-const SavedReportCard = ({
-  report,
-  onClick,
-}: {
-  report: Report
-  onClick: () => void
-}) => {
+const SavedReportCard = ({ report }: { report: OfflineReport }) => {
   const eventInfo = useEventInfo(report.eventKey)
   const matchKey = formatMatchKey(report.matchKey)
   const formattedMatchKey = matchKey.num
@@ -32,7 +24,7 @@ const SavedReportCard = ({
   const eventName = eventInfo ? eventInfo.name : report.eventKey
   const teamName = formatTeamNumber(report.teamKey)
   return (
-    <Card class={savedReportCardStyle} onClick={onClick}>
+    <Card class={savedReportCardStyle} href={`/saved-reports/${report.key}`}>
       {`${teamName} in ${formattedMatchKey} @ ${eventName}`}
     </Card>
   )
@@ -46,38 +38,29 @@ const savedReportsPageStyle = css`
 
 const SavedReportsPage = () => {
   const savedReports = useSavedReports()
-  const [selectedReportIndex, setSelectedReportIndex] = useState<number | null>(
-    null,
+  return (
+    <Page name="Offline Saved Reports" back="/" class={savedReportsPageStyle}>
+      {savedReports.length > 0 ? (
+        <Fragment>
+          {savedReports.map((report, i) => (
+            <SavedReportCard
+              report={report}
+              key={report.eventKey + report.matchKey + report.teamKey}
+            />
+          ))}
+          <Button onClick={uploadSavedReports}>Sync now</Button>
+        </Fragment>
+      ) : (
+        <p
+          class={css`
+            padding: 1rem;
+          `}
+        >
+          No offline saved reports
+        </p>
+      )}
+    </Page>
   )
-  if (selectedReportIndex === null)
-    return (
-      <Page name="Offline Saved Reports" back="/" class={savedReportsPageStyle}>
-        {savedReports.length > 0 ? (
-          <Fragment>
-            {savedReports.map((report, i) => (
-              <SavedReportCard
-                report={report}
-                onClick={() => setSelectedReportIndex(i)}
-                key={report.eventKey + report.matchKey + report.teamKey}
-              />
-            ))}
-            <Button onClick={uploadSavedReports}>Sync now</Button>
-          </Fragment>
-        ) : (
-          <p
-            class={css`
-              padding: 1rem;
-            `}
-          >
-            No offline saved reports
-          </p>
-        )}
-      </Page>
-    )
-  // TODO: Fix typescript error
-  // TODO: back button needs to work
-  // TODO: save reports should save offline
-  return <ReportPage report={savedReports[selectedReportIndex]} />
 }
 
 export default SavedReportsPage

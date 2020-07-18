@@ -9,7 +9,7 @@ import Spinner from '@/components/spinner'
 import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
 import { route } from '@/router'
-import { GetReport } from '@/api/report'
+import { Report, OfflineReport } from '@/api/report'
 
 const reportPageStyle = css`
   display: flex;
@@ -27,9 +27,11 @@ const reportCardBlock = css`
 export const ReportPage = ({
   report,
   onSaveSuccess,
+  onSaveLocally,
 }: {
-  report: GetReport
-  onSaveSuccess: (report: GetReport) => void
+  report: Report
+  onSaveSuccess: (report: Report) => void
+  onSaveLocally: (report: OfflineReport) => void
 }) => {
   const [isEditing, setIsEditing] = useState(false)
   const { jwt } = useJWT()
@@ -53,6 +55,10 @@ export const ReportPage = ({
               onSaveSuccess(report)
               setIsEditing(false)
             }}
+            onSaveLocally={(report) => {
+              onSaveLocally(report)
+              setIsEditing(false)
+            }}
             onDelete={() =>
               route(`/events/${report.eventKey}/matches/${report.matchKey}`)
             }
@@ -68,8 +74,8 @@ export const ReportPage = ({
   )
 }
 
-const Report = ({ reportId }: { reportId: number }) => {
-  const [report, setReport] = useState<GetReport | undefined>(undefined)
+const ReportRoute = ({ reportId }: { reportId: number }) => {
+  const [report, setReport] = useState<Report | undefined>(undefined)
   useEffect(() => {
     setReport(undefined)
     getReport(reportId).then((report) => {
@@ -77,10 +83,16 @@ const Report = ({ reportId }: { reportId: number }) => {
     })
   }, [reportId])
   return report ? (
-    <ReportPage report={report} onSaveSuccess={setReport} />
+    <ReportPage
+      report={report}
+      onSaveSuccess={setReport}
+      onSaveLocally={(report) => {
+        route(`/saved-reports/${report.key}`)
+      }}
+    />
   ) : (
     <Spinner />
   )
 }
 
-export default Report
+export default ReportRoute

@@ -52,6 +52,10 @@ const routes = [
     component: () => import('./routes/saved-reports'),
   },
   {
+    path: '/saved-reports/:reportKey',
+    component: () => import('./routes/saved-report'),
+  },
+  {
     path: '/users/:userId',
     component: () => import('./routes/user'),
   },
