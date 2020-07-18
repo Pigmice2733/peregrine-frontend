@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { MatchCard } from '@/components/match-card'
 import { useEventInfo } from '@/cache/event-info/use'
@@ -62,52 +62,57 @@ const Event = ({ eventKey }: Props) => {
       back="/"
       class={eventStyle}
     >
-      <div class={sectionStyle}>
-        <Heading level={2} class={headingStyle}>
-          Information
-        </Heading>
-        {isData(eventInfo)
-          ? isData(eventInfo) && <EventInfoCard event={eventInfo} />
-          : 'This event does not exist.'}
-        {isData(eventInfo) ? (
-          <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
-        ) : (
-          <Button href={`/`}>Existing Events</Button>
-        )}
-      </div>
+      {eventInfo instanceof NetworkError
+        ? 'Could not connect to server. Please check your connection.'
+        : eventInfo instanceof Error && (
+            <Fragment>
+              This event does not exist.
+              <Button href={`/`}>Existing Events</Button>
+            </Fragment>
+          )}
+      {!eventInfo && <Spinner />}
+      {isData(eventInfo) && (
+        <Fragment>
+          <div class={sectionStyle}>
+            <Heading level={2} class={headingStyle}>
+              Information
+            </Heading>
+            <EventInfoCard event={eventInfo} />
+            <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+          </div>
 
-      <div class={sectionStyle}>
-        {isData(eventInfo) ? (
-          <Heading level={2} class={headingStyle}>
-            {newestIncompleteMatch ? 'Next Match' : 'Matches'}
-          </Heading>
-        ) : (
-          []
-        )}
-        {newestIncompleteMatch && (
-          <MatchCard
-            key={newestIncompleteMatch.key}
-            match={newestIncompleteMatch}
-            eventKey={eventKey}
-            link
-          />
-        )}
-        {isData(matches) ? (
-          matches.length > 0 ? (
-            <EventMatches matches={matches} eventKey={eventKey} />
-          ) : (
-            <p class={noMatchesStyle}>No matches yet</p>
-          )
-        ) : matches ? (
-          NetworkError ? (
-            'Network error. Please check your connection.'
-          ) : (
-            <Spinner />
-          )
-        ) : (
-          <Spinner />
-        )}
-      </div>
+          <div class={sectionStyle}>
+            <Heading level={2} class={headingStyle}>
+              {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+            </Heading>
+            {newestIncompleteMatch && (
+              <MatchCard
+                key={newestIncompleteMatch.key}
+                match={newestIncompleteMatch}
+                eventKey={eventKey}
+                link
+              />
+            )}
+            {isData(matches) ? (
+              matches.length > 0 ? (
+                <EventMatches matches={matches} eventKey={eventKey} />
+              ) : (
+                <p class={noMatchesStyle}>No matches yet</p>
+              )
+            ) : matches ? (
+              matches instanceof NetworkError ? (
+                'Network error. Please check your connection.'
+              ) : (
+                matches instanceof Error && (
+                  <Fragment>This Event Does Not Exist.</Fragment>
+                )
+              )
+            ) : (
+              <Spinner />
+            )}
+          </div>
+        </Fragment>
+      )}
     </Page>
   )
 }
