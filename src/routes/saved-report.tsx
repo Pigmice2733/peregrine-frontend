@@ -3,6 +3,7 @@ import { useSavedReports } from '@/api/report/submit-report'
 import { ReportPage } from './report'
 import Page from '@/components/page'
 import { css } from 'linaria'
+import { route } from '@/router'
 
 const missingReportStyle = css`
   padding: 2rem;
@@ -11,9 +12,6 @@ const missingReportStyle = css`
 
 const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
   const savedReports = useSavedReports()
-  // TODO: Fix typescript error
-  // TODO: back button needs to work
-  // TODO: save reports should save offline
   const report = savedReports.find((report) => reportKey === report.key)
 
   if (!report) {
@@ -28,7 +26,18 @@ const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
     )
   }
 
-  return <ReportPage report={report} onSaveSuccess={() => {}} />
+  return (
+    <ReportPage
+      report={report}
+      onSaveSuccess={(report) => {
+        route(`/reports/${report.id}`)
+      }}
+      onDelete={() => {
+        route('/saved-reports')
+      }}
+      back="/saved-reports"
+    />
+  )
 }
 
 export default SavedReportsPage

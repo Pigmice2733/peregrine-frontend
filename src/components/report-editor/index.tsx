@@ -6,6 +6,8 @@ import {
   uploadReport,
   saveReportLocally,
   generateReportKey,
+  isOfflineReport,
+  deleteReportLocally,
 } from '@/api/report/submit-report'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import TeamPicker from '../team-picker'
@@ -146,6 +148,7 @@ export const ReportEditor = ({
 
     return {
       id: initialReport.id,
+      key: initialReport.key,
       eventKey,
       matchKey,
       comment,
@@ -179,11 +182,15 @@ export const ReportEditor = ({
   }
   const handleDelete = async (e: Event) => {
     e.preventDefault()
-    const reportId = initialReport.id
-    if (reportId !== undefined) {
-      setIsDeleting(true)
-      await deleteReport(reportId)
-      setIsDeleting(false)
+    if (initialReport.key) {
+      deleteReportLocally(initialReport.key)
+    } else {
+      const reportId = initialReport.id
+      if (reportId !== undefined) {
+        setIsDeleting(true)
+        await deleteReport(reportId)
+        setIsDeleting(false)
+      }
     }
     onDelete()
   }

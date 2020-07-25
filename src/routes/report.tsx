@@ -28,10 +28,14 @@ export const ReportPage = ({
   report,
   onSaveSuccess,
   onSaveLocally,
+  onDelete,
+  back,
 }: {
   report: Report
   onSaveSuccess: (report: Report) => void
   onSaveLocally: (report: OfflineReport) => void
+  onDelete: () => void
+  back: string | (() => void)
 }) => {
   const [isEditing, setIsEditing] = useState(false)
   const { jwt } = useJWT()
@@ -44,7 +48,7 @@ export const ReportPage = ({
   return (
     <Page
       name={isEditing ? 'Edit Report' : 'Report'}
-      back={isEditing ? () => setIsEditing(false) : () => window.history.back()}
+      back={isEditing ? () => setIsEditing(false) : back}
       class={reportPageStyle}
     >
       <Card class={reportCardBlock}>
@@ -59,9 +63,7 @@ export const ReportPage = ({
               onSaveLocally(report)
               setIsEditing(false)
             }}
-            onDelete={() =>
-              route(`/events/${report.eventKey}/matches/${report.matchKey}`)
-            }
+            onDelete={onDelete}
           />
         ) : (
           <ReportViewer
@@ -89,6 +91,10 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
       onSaveLocally={(report) => {
         route(`/saved-reports/${report.key}`)
       }}
+      onDelete={() =>
+        route(`/events/${report.eventKey}/matches/${report.matchKey}`)
+      }
+      back={() => window.history.back()}
     />
   ) : (
     <Spinner />

@@ -9,15 +9,16 @@ export const uploadReport = (report: Report): CancellablePromise<number> => {
     id === undefined
       ? request<number>('POST', 'reports', {}, report)
       : request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
-  return req.then(() => {
+  return req.then((id) => {
     if (report.key) {
+      deleteReportLocally(report.key)
     }
+    return id
   })
 }
 
-// The 2 is the version number
-// There were breaking changes to the report shape in
-// https://github.com/Pigmice2733/peregrine-backend/pull/266
+// The 3 is the version number
+// Increment whenever there are breaking changes to the stored data
 const SAVED_REPORTS = 'savedReports3'
 
 const getSavedReports = (): OfflineReport[] =>
@@ -65,17 +66,11 @@ export const saveReportLocally = (report: OfflineReport) => {
   }
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(savedReports))
 }
-export const deleteReportLocally = (report: OfflineReport) => {
-  // TODO: Pick up here next time
-  // uploadReport function should call this if report.key exists
+export const deleteReportLocally = (reportKey: string) => {
   const savedReports = getSavedReports()
-  const existingReportIndex = savedReports.findIndex(
-    (savedReport) => savedReport.key === report.key,
+  const filteredReports = savedReports.filter(
+    (savedReport) => savedReport.key !== reportKey,
   )
-  if (existingReportIndex === -1) {
-    savedReports.push(report)
-  } else {
-    savedReports[existingReportIndex] = report
-  }
-  localStorage.setItem(SAVED_REPORTS, JSON.stringify(savedReports))
+
+  localStorage.setItem(SAVED_REPORTS, JSON.stringify(filteredReports))
 }
