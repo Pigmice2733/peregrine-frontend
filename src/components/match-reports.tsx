@@ -88,6 +88,7 @@ export const MatchReports = ({ match, reports, class: className }: Props) => {
             reportsForTeam={reportsForTeam}
             teamNum={teamNum}
             isRed
+            key={teamNum}
           />
         )
       })}
@@ -100,6 +101,7 @@ export const MatchReports = ({ match, reports, class: className }: Props) => {
             reportsForTeam={reportsForTeam}
             teamNum={teamNum}
             isRed={false}
+            key={teamNum}
           />
         )
       })}

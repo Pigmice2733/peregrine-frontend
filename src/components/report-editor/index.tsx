@@ -6,7 +6,6 @@ import {
   uploadReport,
   saveReportLocally,
   generateReportKey,
-  isOfflineReport,
   deleteReportLocally,
 } from '@/api/report/submit-report'
 import { formatTeamNumber } from '@/utils/format-team-number'
@@ -29,8 +28,6 @@ import { mdiAccountCircle } from '@mdi/js'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { matchHasTeam } from '@/utils/match-has-team'
-
-// http://localhost:2733/reports/2911
 
 const scoutStyles = css`
   display: flex;

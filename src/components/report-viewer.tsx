@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { GetReport, OfflineReport, Report } from '@/api/report'
+import { Report } from '@/api/report'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Icon from './icon'
 import { mdiAccountCircle } from '@mdi/js'
@@ -34,7 +34,7 @@ const ReportFieldViewer = ({
   report,
 }: {
   field: StatDescription
-  report: GetReport
+  report: Report
 }) => {
   const value =
     report.data.find((data) => data.name === field.reportReference)?.value ??

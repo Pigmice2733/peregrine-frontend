@@ -445,7 +445,7 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
           isSuperAdmin={isSuperAdmin || false}
         />
       ) : (
-        <AnonymousProfileCard userId={userId} />
+        <AnonymousProfileCard userId={Number(userId)} />
       )}
     </Page>
   )

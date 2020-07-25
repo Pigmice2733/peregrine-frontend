@@ -9,10 +9,6 @@
 - [done] Add user dropdown for admins in report editor
 - [done] Allow switching match/event that report belongs to
 - [done] Fix weird padding in report editor on report page
-- Edit offline reports
-- Delete offline reports
+- [done] Edit offline reports
+- [done] Delete offline reports
 - Notifications
-
-Next step: offline saved reports needs to save locally
-
-TODO: ask in #peregrine about cancel/back button on report editor

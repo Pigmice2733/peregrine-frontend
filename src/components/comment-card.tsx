@@ -1,6 +1,6 @@
 import { h } from 'preact'
 import { css } from 'linaria'
-import { GetReport } from '@/api/report'
+import { Report } from '@/api/report'
 import { usePromise } from '@/utils/use-promise'
 import { getUser } from '@/api/user/get-user'
 import Card from './card'
@@ -31,7 +31,7 @@ const commentCardStyle = css`
 `
 
 interface Props {
-  report: GetReport
+  report: Report
   showReporter?: boolean
   linkToReport?: boolean
 }
@@ -49,7 +49,6 @@ export const CommentCard = ({
   return (
     <Card
       outlined
-      as={linkToReport ? 'a' : 'div'}
       href={linkToReport ? `/reports/${report.id}` : undefined}
       class={commentCardStyle}
     >
@@ -61,5 +60,3 @@ export const CommentCard = ({
     </Card>
   )
 }
-
-// http://localhost:2733/events/2020orore/teams/2471?stat=teleop::Balls%20Scored%20High
