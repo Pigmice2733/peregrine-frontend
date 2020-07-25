@@ -21,7 +21,7 @@ export const uploadReport = (report: Report): CancellablePromise<number> => {
 // Increment whenever there are breaking changes to the stored data
 const SAVED_REPORTS = 'savedReports3'
 
-const getSavedReports = (): OfflineReport[] =>
+export const getSavedReports = (): OfflineReport[] =>
   JSON.parse(localStorage.getItem(SAVED_REPORTS) || '[]')
 
 export const useSavedReports = () => {

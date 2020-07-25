@@ -1,9 +1,11 @@
 import { h } from 'preact'
-import { useSavedReports } from '@/api/report/submit-report'
+import { getSavedReports } from '@/api/report/submit-report'
 import { ReportPage } from './report'
 import Page from '@/components/page'
 import { css } from 'linaria'
 import { route } from '@/router'
+import { useState, useEffect } from 'preact/hooks'
+import { Report } from '@/api/report'
 
 const missingReportStyle = css`
   padding: 2rem;
@@ -11,8 +13,11 @@ const missingReportStyle = css`
 `
 
 const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
-  const savedReports = useSavedReports()
-  const report = savedReports.find((report) => reportKey === report.key)
+  const [report, setReport] = useState<undefined | Report>(undefined)
+
+  useEffect(() => {
+    setReport(getSavedReports().find((report) => reportKey === report.key))
+  }, [reportKey])
 
   if (!report) {
     return (
@@ -32,6 +37,7 @@ const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
       onSaveSuccess={(report) => {
         route(`/reports/${report.id}`)
       }}
+      onSaveLocally={setReport}
       onDelete={() => {
         route('/saved-reports')
       }}
