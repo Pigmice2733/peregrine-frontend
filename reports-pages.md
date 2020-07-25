@@ -11,4 +11,4 @@
 - [done] Fix weird padding in report editor on report page
 - [done] Edit offline reports
 - [done] Delete offline reports
-- Notifications
+- Notifications/Alerts
