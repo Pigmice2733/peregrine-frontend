@@ -22,6 +22,8 @@ import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 import { isData } from '@/utils/is-data'
+import Icon from '@/components/icon'
+import { alert } from '@/icons/alert'
 
 interface Props {
   eventKey: string
@@ -61,11 +63,12 @@ const showEventResults = 'Event Results'
 
 type SelectedDisplay = typeof showMatchResults | typeof showEventResults
 
+// eslint-disable-next-line complexity
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  const schema = useSchema(event?.schemaId)
+  const schema = useSchema(isData(event) ? event?.schemaId : undefined)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
 
   const [selectedDisplay, setSelectedDisplay] = useState<SelectedDisplay>(
@@ -73,7 +76,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 
   const matchHasBeenPlayed =
-    match?.blueScore !== undefined && match.redScore !== undefined
+    isData(match) && match?.blueScore !== undefined && match.redScore !== undefined
 
   // When the match loads (or changes),
   useEffect(() => {
@@ -82,7 +85,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
 
   const teamsStats = usePromise(
     () =>
-      match &&
+      isData(match) &&
       Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
@@ -91,6 +94,36 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     [match],
   )
 
+//  Variables used to assist in deciding if match key is parse-able 
+const parsedMatchType = m.group.replace(/\d+/g, '')
+const matchKeyFinalChar = m.group.charAt(m.group.length - 1)
+const numbers = ["1","2","3","4","5","6","7","8","9","0"]
+
+  if (isData(match) === false) {
+    return(
+      <Page
+      back={`/events/${eventKey}`}
+      name={
+        m.group +
+        (m.num ? ' Match ' + m.num : '') +
+        ' - ' +
+        (event ? event.name : eventKey)
+      }
+      class={matchStyle}
+    > 
+    <Card class = {matchStyle}>
+      <Icon icon={alert}/>
+      <div class={css`font-size: 2rem; text-align: center`}
+      > {((parsedMatchType !== "undefined " && numbers.includes(matchKeyFinalChar)) ? 
+      m.group + (m.num ? ' Match ' + m.num : '') : "This Match") + " Does Not Exist"}
+      </div>
+      <Button href={`/events/${eventKey}`}
+      > Return to Event Page
+      </Button>
+    </Card>
+    </Page>
+    )}
+  
   return (
     <Page
       back={`/events/${eventKey}`}
@@ -105,14 +138,14 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
         Scout Match
       </Button>
-      {match ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
-      {match && matchHasBeenPlayed && (
+      {isData(match) ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
+      {isData(match) && matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
           <div class={blueScoreStyle}>{match.blueScore}</div>
         </Card>
       )}
-      {match && schema && (
+      {isData(match) && schema && (
         <Card
           class={css`
             overflow-y: hidden;
@@ -139,8 +172,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           <AnalysisTable
             eventKey={eventKey}
             teams={
-              selectedDisplay === showEventResults
-                ? teams?.filter((t) => matchHasTeam('frc' + t.team)(match))
+              isData(teams) && selectedDisplay === showEventResults
+                ? teams?.filter((t: { team: string }) => matchHasTeam('frc' + t.team)(match))
                 : teamsStats
             }
             schema={schema}
@@ -166,7 +199,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           />
         </Card>
       )}
-      {match?.videos?.map((v) => (
+      {isData(match) && match?.videos?.map((v) => (
         <VideoCard key={v} url={cleanYoutubeUrl(v)} />
       ))}
     </Page>

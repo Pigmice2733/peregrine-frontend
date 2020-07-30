@@ -30,7 +30,7 @@ import { EventTeamInfo } from '@/api/event-team-info'
 interface Props {
   eventKey: string
   teams: ProcessedTeamStats[] | undefined
-  schema: Schema
+  schema: Schema | Error
   renderTeam: (team: string, link: string) => JSX.Element
   renderBoolean?: (cell: StatWithType, avgTypeStr: 'avg' | 'max') => JSX.Element
   enableSettings?: boolean
@@ -225,7 +225,7 @@ const AnalysisTable = ({
   const rankColumn: Column<EventTeamInfo | undefined, RowType> = {
     title: 'Rank',
     key: 'Rank',
-    getCell: (row) => rankingInfo?.find((r) => r.team === 'frc' + row.team),
+    getCell: (row) => rankingInfo?.find((r: { team: string }) => r.team === 'frc' + row.team),
     getCellValue: (cell) => cell?.rank ?? Infinity,
     renderCell: (cell) => (
       <td class={rankCellStyle}>
@@ -237,9 +237,9 @@ const AnalysisTable = ({
     ),
     sortOrder: SortOrder.ASC,
   }
-  const allDisplayableFields = schema.schema.filter((f) => !f.hide)
-  const autoFields = allDisplayableFields.filter((f) => f.period === 'auto')
-  const teleopFields = allDisplayableFields.filter((f) => f.period === 'teleop')
+  const allDisplayableFields = schema.schema.filter((f: { hide: any }) => !f.hide)
+  const autoFields = allDisplayableFields.filter((f: { period: string }) => f.period === 'auto')
+  const teleopFields = allDisplayableFields.filter((f: { period: string }) => f.period === 'teleop')
   const columns = [
     teamColumn,
     rankColumn,

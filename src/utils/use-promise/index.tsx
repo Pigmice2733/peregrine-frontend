@@ -4,11 +4,11 @@ import { CancellablePromise } from '@/utils/cancellable-promise'
 import { NetworkError } from '@/api/base'
 
 export const usePromise = <T extends any>(
-  promiseCreator: () => Promise<T> | T,
+  promiseCreator: () => Promise<T> | T | false,
   dependencies: any[] = [promiseCreator],
 ) => {
   const emitError = useErrorEmitter()
-  const [val, setVal] = useState<T | undefined | Error | NetworkError>(
+  const [val, setVal] = useState<T | undefined | Error | NetworkError | false>(
     undefined,
   )
   useEffect(() => {
