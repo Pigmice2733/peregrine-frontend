@@ -48,7 +48,7 @@
     "@rollup/plugin-babel": "5.1.0",
     "@rollup/plugin-node-resolve": "8.4.0",
     "@testing-library/jest-dom": "5.11.2",
-    "@types/jest": "26.0.8",
+    "@types/jest": "26.0.9",
     "@types/node-fetch": "2.5.7",
     "@types/sharp": "0.25.1",
     "babel-jest": "26.2.2",
