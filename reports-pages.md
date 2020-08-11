@@ -12,3 +12,4 @@
 - [done] Edit offline reports
 - [done] Delete offline reports
 - Notifications/Alerts
+- "Delete report" button should not be on scout page

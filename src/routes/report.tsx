@@ -10,6 +10,7 @@ import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
 import { route } from '@/router'
 import { Report, OfflineReport } from '@/api/report'
+import { AlertType } from '@/components/alert'
 
 const reportPageStyle = css`
   display: flex;
@@ -92,7 +93,10 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
         route(`/saved-reports/${report.key}`)
       }}
       onDelete={() =>
-        route(`/events/${report.eventKey}/matches/${report.matchKey}`)
+        route(`/events/${report.eventKey}/matches/${report.matchKey}`, {
+          type: AlertType.Success,
+          message: 'Report was successfully deleted!',
+        })
       }
       back={() => window.history.back()}
     />

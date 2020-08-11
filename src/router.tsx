@@ -1,8 +1,10 @@
-import { ComponentType, VNode, h } from 'preact'
+import { ComponentType, VNode, h, Fragment } from 'preact'
 import { useState, useEffect, useMemo, useLayoutEffect } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
 import Spinner from './components/spinner'
 import { updateUrl, useUrl } from './url-manager'
+import Alert, { AlertType } from '@/components/alert'
+import { css } from 'linaria'
 
 type AnyComponent = ComponentType<any> | ((props: any) => VNode<any> | null)
 
@@ -15,7 +17,21 @@ interface Route {
   component: () => Promise<ComponentModule>
 }
 
-export const route = (url: string) => {
+interface Alert {
+  type: AlertType
+  message: string
+}
+
+const alertsOuter: Alert[] = [
+  { type: AlertType.Success, message: 'This is an alert' },
+  { type: AlertType.Warning, message: 'WARNING!' },
+  { type: AlertType.Error, message: "It didn't work" },
+]
+
+export const route = (url: string, alert?: Alert) => {
+  if (alert) {
+    alertsOuter.push(alert)
+  }
   updateUrl(url)
 }
 
@@ -25,6 +41,15 @@ export const Router = ({ routes }: { routes: Route[] }) => {
   const parsedRoutes = useMemo(() => routes.map((route) => parse(route.path)), [
     routes,
   ])
+
+  const [setAlerts, alerts] = useState(alertsOuter)
+
+  useEffect(() => {
+    // TODO: Implement addAlertsListener and removeAlertsListener
+    addAlertsListener(setAlerts)
+    
+    return (() => removeAlertsListener(setAlerts))
+  })
 
   useEffect(() => {
     // when a link is clicked, don't do a full reload, intercept and update state
@@ -79,7 +104,28 @@ export const Router = ({ routes }: { routes: Route[] }) => {
 
   if (matchingFullRoute === null) return <h1>404</h1>
 
-  if (ResolvedComponent) return <ResolvedComponent {...routeProps} />
+  if (ResolvedComponent) {
+    return (
+      <Fragment>
+        <div class={alertListStyle}>
+          {alerts.map((alert) => (
+            <Alert type={alert.type}>
+              {alert.message}
+              <button onClick={() => }>x</button>
+            </Alert>
+          ))}
+        </div>
+        <ResolvedComponent {...routeProps} />
+      </Fragment>
+    )
+  }
 
   return <Spinner />
 }
+
+const alertListStyle = css`
+  position: fixed;
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
+`
