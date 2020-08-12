@@ -91,7 +91,7 @@
     "rollup": "2.23.1",
     "rollup-plugin-netlify-push": "1.0.0",
     "rollup-plugin-postcss": "3.1.5",
-    "rollup-plugin-terser": "6.1.0",
+    "rollup-plugin-terser": "7.0.0",
     "sharp": "0.25.4",
     "templite": "1.1.0",
     "type-fest": "0.16.0",
