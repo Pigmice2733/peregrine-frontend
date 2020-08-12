@@ -1,2 +1,2 @@
 export const getScrollbarWidth = () =>
-  window.innerWidth - document.body.clientWidth + 'px'
+  `${window.innerWidth - document.body.clientWidth}px`
