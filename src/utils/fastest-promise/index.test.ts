@@ -14,9 +14,9 @@ const createModifyablePromise = <T = never>() => {
     resolvePromise = resolve
     rejectPromise = reject
   })
-  // @ts-ignore
+  // @ts-expect-error
   promise.resolve = resolvePromise
-  // @ts-ignore
+  // @ts-expect-error
   promise.reject = rejectPromise
   return promise as ModifyablePromise<T>
 }

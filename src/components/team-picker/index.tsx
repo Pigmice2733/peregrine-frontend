@@ -34,7 +34,6 @@ const Item = ({
   onChange,
 }: {
   team: string
-  key?: string
   onChange: (team: string) => void
 }) => (
   <label class={labelStyle}>
