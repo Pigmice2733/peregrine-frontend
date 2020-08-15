@@ -51,6 +51,6 @@ export const transaction = async <ResolvedResult = void>(
       ? idbPromise(handlerResult)
       : handlerResult
   // wait for transaction to finish
-  await new Promise((resolve) => (tx.oncomplete = resolve as () => {}))
+  await new Promise((resolve) => (tx.oncomplete = resolve as () => void))
   return data
 }
