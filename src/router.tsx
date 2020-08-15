@@ -1,10 +1,14 @@
 import { ComponentType, VNode, h, Fragment } from 'preact'
 import { useState, useEffect, useMemo, useLayoutEffect } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
-import Spinner from './components/spinner'
+import Spinner from '@/components/spinner'
 import { updateUrl, useUrl } from './url-manager'
 import Alert, { AlertType } from '@/components/alert'
 import { css } from 'linaria'
+import { close } from '@/icons/close'
+import IconButton from '@/components/icon-button'
+import Icon from './components/icon'
+import { createShadow } from './utils/create-shadow'
 
 type AnyComponent = ComponentType<any> | ((props: any) => VNode<any> | null)
 
@@ -19,19 +23,28 @@ interface Route {
 
 interface Alert {
   type: AlertType
-  message: string
+  message: string | h.JSX.Element
 }
 
-const alertsOuter: Alert[] = [
-  { type: AlertType.Success, message: 'This is an alert' },
-  { type: AlertType.Warning, message: 'WARNING!' },
-  { type: AlertType.Error, message: "It didn't work" },
-]
+let alertsOuter: Alert[] = []
+
+const alertsListeners = new Set<(alerts: Alert[]) => void>()
+
+const handleAlertsChange = () =>
+  alertsListeners.forEach((listener) => listener(alertsOuter))
+
+export const createAlert = (alert: Alert) => {
+  alertsOuter = alertsOuter.concat(alert)
+  handleAlertsChange()
+}
 
 export const route = (url: string, alert?: Alert) => {
   if (alert) {
-    alertsOuter.push(alert)
+    alertsOuter = alertsOuter.concat(alert)
+  } else {
+    alertsOuter = []
   }
+  handleAlertsChange()
   updateUrl(url)
 }
 
@@ -42,15 +55,13 @@ export const Router = ({ routes }: { routes: Route[] }) => {
     routes,
   ])
 
-  const [setAlerts, alerts] = useState(alertsOuter)
+  const [alerts, setAlerts] = useState(alertsOuter)
 
   useEffect(() => {
-    // TODO: Implement addAlertsListener and removeAlertsListener
-    addAlertsListener(setAlerts)
-    
-    return (() => removeAlertsListener(setAlerts))
-  })
+    alertsListeners.add(setAlerts)
 
+    return () => alertsListeners.delete(setAlerts)
+  }, [])
   useEffect(() => {
     // when a link is clicked, don't do a full reload, intercept and update state
     const clickListener = (e: MouseEvent) => {
@@ -90,6 +101,10 @@ export const Router = ({ routes }: { routes: Route[] }) => {
   const matchingFullRoute =
     matchingRoute.length > 0 ? matchingRoute[0].old : null
   const matchingRouteObj = routes.find((r) => r.path === matchingFullRoute)
+  /* useEffect(() => {
+    alertsOuter = []
+    handleAlertsChange()
+  }, [matchingRoute]) */
 
   // This has to be a layout effect because it needs to run
   // before other components that are url-dependent are rendered
@@ -108,10 +123,21 @@ export const Router = ({ routes }: { routes: Route[] }) => {
     return (
       <Fragment>
         <div class={alertListStyle}>
-          {alerts.map((alert) => (
-            <Alert type={alert.type}>
-              {alert.message}
-              <button onClick={() => }>x</button>
+          {alerts.map((alert, i) => (
+            <Alert type={alert.type} class={alertStyle}>
+              <div>{alert.message}</div>
+              <button
+                class={closeButtonStyle}
+                onClick={() => {
+                  alertsOuter.splice(i, 1)
+                  // Need to copy the array so that setState triggers a rerender
+                  // Otherwise it is still pointing to the old array
+                  alertsOuter = alertsOuter.slice()
+                  handleAlertsChange()
+                }}
+              >
+                <Icon icon={close} />
+              </button>
             </Alert>
           ))}
         </div>
@@ -128,4 +154,36 @@ const alertListStyle = css`
   z-index: 5;
   left: 50%;
   transform: translateX(-50%);
+`
+
+const alertStyle = css`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-gap: 0.5rem;
+  align-items: center;
+  box-shadow: ${createShadow(1)};
+`
+
+const closeButtonStyle = css`
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  outline: none;
+  transition: background 0.2s ease;
+
+  &:hover,
+  &:focus {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  & svg {
+    width: 1.2rem;
+  }
 `

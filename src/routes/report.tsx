@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { ReportEditor } from '@/components/report-editor'
 import { ReportViewer } from '@/components/report-viewer'
@@ -8,7 +8,7 @@ import { getReport } from '@/api/report/get-report'
 import Spinner from '@/components/spinner'
 import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
-import { route } from '@/router'
+import { route, createAlert } from '@/router'
 import { Report, OfflineReport } from '@/api/report'
 import { AlertType } from '@/components/alert'
 
@@ -88,10 +88,23 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
   return report ? (
     <ReportPage
       report={report}
-      onSaveSuccess={setReport}
-      onSaveLocally={(report) => {
-        route(`/saved-reports/${report.key}`)
-      }}
+      onSaveSuccess={() =>
+        createAlert({
+          type: AlertType.Success,
+          message: 'Report was updated!',
+        })
+      }
+      onSaveLocally={(report) =>
+        route(`/saved-reports/${report.key}`, {
+          type: AlertType.Success,
+          message: (
+            <Fragment>
+              Report was saved locally!{' '}
+              <a href={`/saved-reports/${report.key}`}>View Report</a>
+            </Fragment>
+          ),
+        })
+      }
       onDelete={() =>
         route(`/events/${report.eventKey}/matches/${report.matchKey}`, {
           type: AlertType.Success,
