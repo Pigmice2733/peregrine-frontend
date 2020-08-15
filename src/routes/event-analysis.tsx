@@ -36,18 +36,22 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       wrapperClass={tablePageWrapperStyle}
     >
       {eventStats && schema ? (
-        <Card class={tablePageTableStyle}>
-          <AnalysisTable
-            eventKey={eventKey}
-            teams={eventStats}
-            schema={schema}
-            renderTeam={(team, link) => (
-              <a class={teamStyle} href={link}>
-                {team}
-              </a>
-            )}
-          />
-        </Card>
+        eventStats.length === 0 ? (
+          'No Event Data'
+        ) : (
+          <Card class={tablePageTableStyle}>
+            <AnalysisTable
+              eventKey={eventKey}
+              teams={eventStats}
+              schema={schema}
+              renderTeam={(team, link) => (
+                <a class={teamStyle} href={link}>
+                  {team}
+                </a>
+              )}
+            />
+          </Card>
+        )
       ) : (
         <Spinner />
       )}
