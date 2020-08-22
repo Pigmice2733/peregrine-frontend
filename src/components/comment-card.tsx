@@ -53,9 +53,7 @@ export const CommentCard = ({
       class={commentCardStyle}
     >
       <Icon icon={commentIcon} />
-      {showReporter && (
-        <span>{showReporter ? formatUserName(reporter) : undefined}</span>
-      )}
+      {showReporter && <span>{formatUserName(reporter)}</span>}
       <p>{report.comment}</p>
     </Card>
   )
