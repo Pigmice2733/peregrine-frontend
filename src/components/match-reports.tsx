@@ -7,8 +7,6 @@ import { css } from 'linaria'
 import { blue, red } from '@/colors'
 import clsx from 'clsx'
 
-// http://localhost:2733/events/2020waspo/matches/qm1
-
 interface MatchTeamReportsProps {
   reportsForTeam: GetReport[]
   teamNum: string
@@ -78,7 +76,6 @@ interface Props {
 export const MatchReports = ({ match, reports, class: className }: Props) => {
   return (
     <Card as="ul" class={clsx(matchReportsStyle, className)}>
-      {' '}
       {match.redAlliance.map((teamNum) => {
         const reportsForTeam = reports.filter(
           (report) => report.teamKey === teamNum,

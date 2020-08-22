@@ -25,7 +25,7 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
                 type: AlertType.Success,
                 message: (
                   <Fragment>
-                    Report was saved successfully!{' '}
+                    {'Report was saved successfully! '}
                     <a href={`/reports/${report.id}`}>View Report</a>
                   </Fragment>
                 ),
@@ -36,7 +36,7 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
                 type: AlertType.Success,
                 message: (
                   <Fragment>
-                    Report was saved locally!{' '}
+                    {'Report was saved locally! '}
                     <a href={`/saved-reports/${report.key}`}>View Report</a>
                   </Fragment>
                 ),
