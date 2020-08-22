@@ -3,9 +3,11 @@ import { FunctionComponent, Component, h } from 'preact'
 /**
  * Check if two objects have a different shape
  */
-function shallowDiffers(a: object, b: object): boolean {
+function shallowDiffers(
+  a: Record<string, unknown>,
+  b: Record<string, unknown>,
+): boolean {
   for (const i in a) if (!(i in b)) return true
-  // @ts-ignore
   for (const i in b) if (a[i] !== b[i]) return true
   return false
 }
@@ -24,9 +26,9 @@ export function memo<Props>(
     // eslint-disable-next-line eqeqeq
     const updateRef = ref == nextProps.ref
     if (!updateRef) {
-      // @ts-ignore
+      // @ts-expect-error
       if (ref.call) ref(null)
-      // @ts-ignore
+      // @ts-expect-error
       else ref.current = null
     }
     return (
