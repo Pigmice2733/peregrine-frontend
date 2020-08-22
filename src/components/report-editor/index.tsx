@@ -48,7 +48,7 @@ interface Props {
   initialReport: SetRequired<Partial<Report>, 'eventKey' | 'matchKey'>
   onSaveSuccess: (report: GetReport) => void
   onSaveLocally?: (report: OfflineReport) => void
-  onDelete: () => void
+  onDelete?: () => void
 }
 
 const isFieldReportable = (
@@ -260,15 +260,15 @@ export const ReportEditor = ({
       <Button disabled={isSaving || isDeleting || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>
-      <Button
-        disabled={isSaving || isDeleting || !report}
-        class={buttonStyles}
-        onClick={handleDelete}
-      >
-        {isDeleting ? 'Deleting Report' : 'Delete Report'}
-      </Button>
+      {report && (report.key !== undefined || report.id !== undefined) && (
+        <Button
+          disabled={isSaving || isDeleting || !report}
+          class={buttonStyles}
+          onClick={handleDelete}
+        >
+          {isDeleting ? 'Deleting Report' : 'Delete Report'}
+        </Button>
+      )}
     </form>
   )
 }
-
-// http://localhost:2733/reports/3466

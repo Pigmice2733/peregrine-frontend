@@ -3,9 +3,10 @@ import { getSavedReports } from '@/api/report/submit-report'
 import { ReportPage } from './report'
 import Page from '@/components/page'
 import { css } from 'linaria'
-import { route } from '@/router'
+import { route, createAlert } from '@/router'
 import { useState, useEffect } from 'preact/hooks'
 import { Report } from '@/api/report'
+import { AlertType } from '@/components/alert'
 
 const missingReportStyle = css`
   padding: 2rem;
@@ -35,11 +36,23 @@ const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
     <ReportPage
       report={report}
       onSaveSuccess={(report) => {
-        route(`/reports/${report.id}`)
+        route(`/reports/${report.id}`, {
+          type: AlertType.Success,
+          message: 'Report was uploaded!',
+        })
       }}
-      onSaveLocally={setReport}
+      onSaveLocally={(report) => {
+        setReport(report)
+        createAlert({
+          type: AlertType.Success,
+          message: 'Report was updated locally!',
+        })
+      }}
       onDelete={() => {
-        route('/saved-reports')
+        route('/saved-reports', {
+          type: AlertType.Success,
+          message: 'Report was deleted locally!',
+        })
       }}
       back="/saved-reports"
     />

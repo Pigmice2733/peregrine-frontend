@@ -88,21 +88,17 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
   return report ? (
     <ReportPage
       report={report}
-      onSaveSuccess={() =>
+      onSaveSuccess={(report) => {
+        setReport(report)
         createAlert({
           type: AlertType.Success,
           message: 'Report was updated!',
         })
-      }
+      }}
       onSaveLocally={(report) =>
         route(`/saved-reports/${report.key}`, {
           type: AlertType.Success,
-          message: (
-            <Fragment>
-              Report was saved locally!{' '}
-              <a href={`/saved-reports/${report.key}`}>View Report</a>
-            </Fragment>
-          ),
+          message: 'Report was saved locally!',
         })
       }
       onDelete={() =>

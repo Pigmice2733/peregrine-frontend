@@ -11,6 +11,5 @@
 - [done] Fix weird padding in report editor on report page
 - [done] Edit offline reports
 - [done] Delete offline reports
-- Notifications/Alerts
-  Next thing TODO: add alerts to offline reports page
-- "Delete report" button should not be on scout page
+- [done] Notifications/Alerts
+- [done] "Delete report" button should not be on scout page

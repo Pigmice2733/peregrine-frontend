@@ -4,7 +4,6 @@ import Authenticated from '@/components/authenticated'
 import { ReportEditor } from '@/components/report-editor'
 import { route } from '@/router'
 import { AlertType } from '@/components/alert'
-import Button from '@/components/button'
 
 interface Props {
   eventKey: string
@@ -13,7 +12,7 @@ interface Props {
 
 const ScoutPage = ({ eventKey, matchKey }: Props) => {
   const matchUrl = `/events/${eventKey}/matches/${matchKey}`
-  const goToMatchPage = () => route(`/events/${eventKey}/matches/${matchKey}`)
+
   return (
     <Authenticated
       label="Log In to Scout"
@@ -43,7 +42,6 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
                 ),
               })
             }
-            onDelete={goToMatchPage}
           />
         </Page>
       )}
