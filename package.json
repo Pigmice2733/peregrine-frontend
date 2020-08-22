@@ -47,7 +47,7 @@
     "@calebeby/preact-testing-library": "0.0.4",
     "@rollup/plugin-babel": "5.2.0",
     "@rollup/plugin-node-resolve": "9.0.0",
-    "@testing-library/jest-dom": "5.11.3",
+    "@testing-library/jest-dom": "5.11.4",
     "@types/jest": "26.0.10",
     "@types/node-fetch": "2.5.7",
     "@types/sharp": "0.25.1",
