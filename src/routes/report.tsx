@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact'
+import { h } from 'preact'
 import Page from '@/components/page'
 import { ReportEditor } from '@/components/report-editor'
 import { ReportViewer } from '@/components/report-viewer'

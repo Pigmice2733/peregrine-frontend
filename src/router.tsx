@@ -6,7 +6,6 @@ import { updateUrl, useUrl } from './url-manager'
 import Alert, { AlertType } from '@/components/alert'
 import { css } from 'linaria'
 import { close } from '@/icons/close'
-import IconButton from '@/components/icon-button'
 import Icon from './components/icon'
 import { createShadow } from './utils/create-shadow'
 
@@ -101,10 +100,6 @@ export const Router = ({ routes }: { routes: Route[] }) => {
   const matchingFullRoute =
     matchingRoute.length > 0 ? matchingRoute[0].old : null
   const matchingRouteObj = routes.find((r) => r.path === matchingFullRoute)
-  /* useEffect(() => {
-    alertsOuter = []
-    handleAlertsChange()
-  }, [matchingRoute]) */
 
   // This has to be a layout effect because it needs to run
   // before other components that are url-dependent are rendered
@@ -124,6 +119,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
       <Fragment>
         <div class={alertListStyle}>
           {alerts.map((alert, i) => (
+            // eslint-disable-next-line caleb/react/jsx-key
             <Alert type={alert.type} class={alertStyle}>
               <div>{alert.message}</div>
               <button

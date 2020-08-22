@@ -189,7 +189,7 @@ export const ReportEditor = ({
         setIsDeleting(false)
       }
     }
-    onDelete()
+    onDelete?.()
   }
 
   return (

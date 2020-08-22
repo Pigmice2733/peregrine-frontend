@@ -5,7 +5,7 @@ import Spinner from '@/components/spinner'
 import { compareEvents } from '@/utils/compare-events'
 import { useGeoLocation } from '@/utils/use-geo-location'
 import { useEvents } from '@/cache/events/use'
-import { useState, useEffect } from 'preact/hooks'
+import { useState } from 'preact/hooks'
 import TextInput from '@/components/text-input'
 import { css } from 'linaria'
 import { Dropdown } from '@/components/dropdown'
@@ -14,7 +14,6 @@ import { UnstyledList } from '@/components/unstyled-list'
 import { useYears } from '@/utils/use-years'
 import IconButton from '@/components/icon-button'
 import { mdiCrosshairsGps } from '@mdi/js'
-import { useErrorEmitter } from '@/components/error-boundary'
 
 const homeStyle = css`
   display: grid;
@@ -53,8 +52,6 @@ const Home = () => {
   const year = Number(yearVal)
   const years = useYears()
   const events = useEvents(year)
-  const emitError = useErrorEmitter()
-  useEffect(() => emitError(new Error('something')), [])
 
   return (
     <Page name="Home" back={false} class={homeStyle}>

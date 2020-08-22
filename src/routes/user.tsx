@@ -23,7 +23,7 @@ import { deleteUser } from '@/api/user/delete-user'
 import { deleteIcon } from '@/icons/delete'
 import { route } from '@/router'
 import { createDialog } from '@/components/dialog'
-import Alert from '@/components/alert'
+import Alert, { AlertType } from '@/components/alert'
 import Button, { buttonFontStyle } from '@/components/button'
 import Icon from '@/components/icon'
 import { alert } from '@/icons/alert'
@@ -82,8 +82,7 @@ const VerifiedInfo = ({
   const emitError = useErrorEmitter()
   return (
     <Alert
-      warning={!isVerified}
-      success={isVerified}
+      type={isVerified ? AlertType.Success : AlertType.Warning}
       class={css`
         display: grid;
         grid-auto-flow: column;
@@ -393,7 +392,9 @@ const AnonymousProfileCard = ({ userId }: { userId: number }) => {
   return (
     <Card class={profileCardStyle} as="section">
       <h1 class={userNameStyle}>Anonymous</h1>
-      <Alert warning>{"You do not have access to this user's profile."}</Alert>
+      <Alert type={AlertType.Warning}>
+        {"You do not have access to this user's profile."}
+      </Alert>
       {reports && (
         <Button flat href={`/users/${userId}/reports`}>
           <Icon
