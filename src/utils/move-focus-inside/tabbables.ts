@@ -2,7 +2,7 @@
 
 // Commented out things we don't use (at least yet) to save bytes
 
-export default [
+const tabbables = [
   'button:enabled:not([readonly])',
   'select:enabled:not([readonly])',
   'textarea:enabled:not([readonly])',
@@ -19,3 +19,5 @@ export default [
   // '[contenteditable]',
   // '[autofocus]',
 ]
+
+export default tabbables
