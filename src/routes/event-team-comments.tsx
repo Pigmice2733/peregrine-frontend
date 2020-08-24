@@ -37,6 +37,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
     (acc, report) => {
       if (report.comment) {
+        // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
         ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
       }
       return acc

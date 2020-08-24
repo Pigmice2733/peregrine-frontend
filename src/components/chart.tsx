@@ -85,7 +85,7 @@ export const ChartCard = ({
         teamMatches.sort(compareMatches).map(async (match) => ({
           matchKey: match.key,
           stats: await getMatchTeamStats(eventKey, match.key, team)
-            .then((s) => s.summary || [])
+            .then((s) => s.summary)
             .catch(() => []),
         })),
       ),
@@ -493,7 +493,7 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
   points,
   onPointClick,
 }) => {
-  const elementRef = useRef<HTMLDivElement>()
+  const elementRef = useRef<HTMLDivElement | null>()
   const [isOverflowingLeft, setIsOverflowingLeft] = useState<boolean>(false)
   const [isOverflowingRight, setIsOverflowingRight] = useState<boolean>(false)
 

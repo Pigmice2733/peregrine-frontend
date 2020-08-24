@@ -10,6 +10,13 @@ export interface LatLong {
   longitude: number
 }
 
+declare global {
+  interface Navigator {
+    // @ts-expect-error TS does not want to merge these types, but this is correct
+    permissions: Permissions | undefined
+  }
+}
+
 const getIpLocation = () =>
   apiUrl
     ? fetch(apiUrl)
@@ -33,9 +40,11 @@ const getGeoLocation = () =>
     ),
   )
 
+const permissions = navigator.permissions as Permissions | undefined
+
 const getLocation = async (): Promise<LatLong> => {
-  if (navigator.permissions) {
-    const geoPermission = await navigator.permissions.query({
+  if (permissions) {
+    const geoPermission = await permissions.query({
       name: 'geolocation',
     })
     if (geoPermission.state === 'granted') return getGeoLocation()
@@ -59,9 +68,7 @@ export const useGeoLocation = () => {
   const [location, setLocation] = useState<LatLong | undefined>(
     getLocationFromLocalStorage(),
   )
-  const [canPrompt, setCanPrompt] = useState<boolean>(
-    navigator.permissions === undefined,
-  )
+  const [canPrompt, setCanPrompt] = useState<boolean>(permissions === undefined)
   useEffect(() => {
     getLocation().then(saveLocationToLocalStorage).then(setLocation)
   }, [])
@@ -71,14 +78,12 @@ export const useGeoLocation = () => {
     const onPositionChange = () => {
       if (geoPermission) setCanPrompt(geoPermission.state === 'prompt')
     }
-    if (navigator.permissions) {
-      navigator.permissions
-        .query({ name: 'geolocation' })
-        .then((permission) => {
-          geoPermission = permission
-          geoPermission.addEventListener('change', onPositionChange)
-          onPositionChange()
-        })
+    if (permissions) {
+      permissions.query({ name: 'geolocation' }).then((permission) => {
+        geoPermission = permission
+        geoPermission.addEventListener('change', onPositionChange)
+        onPositionChange()
+      })
     }
 
     return () => {
