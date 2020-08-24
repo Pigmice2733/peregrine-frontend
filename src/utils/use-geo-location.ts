@@ -37,9 +37,7 @@ const permissions = navigator.permissions as Permissions | undefined
 
 const getLocation = async (): Promise<LatLong> => {
   if (permissions) {
-    const geoPermission = await permissions.query({
-      name: 'geolocation',
-    })
+    const geoPermission = await permissions.query({ name: 'geolocation' })
     if (geoPermission.state === 'granted') return getGeoLocation()
   }
   return getIpLocation()
