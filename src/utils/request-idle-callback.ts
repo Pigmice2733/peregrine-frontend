@@ -35,4 +35,5 @@ const requestIdleCallbackPolyfill: typeof window.requestIdleCallback = (
 }
 
 export const requestIdleCallback =
+  // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
   self.requestIdleCallback || requestIdleCallbackPolyfill

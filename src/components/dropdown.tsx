@@ -59,7 +59,7 @@ export const Dropdown = <T extends any>({
   const optionsByGroup = options.reduce<{ [key: string]: JSX.Element[] }>(
     (acc, opt) => {
       const group = getGroup(opt) || ''
-      acc[group] = (acc[group] || []).concat(
+      acc[group] = ((acc[group] as JSX.Element[] | null) || []).concat(
         <option value={getKey(opt)} key={getKey(opt)}>
           {getText(opt)}
         </option>,

@@ -73,7 +73,7 @@ export const Scrim = ({
     if (visible) {
       let hasFired = false
       const scrim = scrimEl.current as HTMLDivElement
-      const firstChild = scrim.firstElementChild as HTMLElement
+      const firstChild = scrim.firstElementChild as HTMLElement | null
       const transitionEndHandler = (e: TransitionEvent) => {
         if ((e.target !== firstChild && e.target !== scrim) || hasFired) return
         hasFired = true
