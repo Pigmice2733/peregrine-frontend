@@ -10,13 +10,6 @@ export interface LatLong {
   longitude: number
 }
 
-declare global {
-  interface Navigator {
-    // @ts-expect-error TS does not want to merge these types, but this is correct
-    permissions: Permissions | undefined
-  }
-}
-
 const getIpLocation = () =>
   apiUrl
     ? fetch(apiUrl)
