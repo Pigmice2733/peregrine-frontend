@@ -42,7 +42,6 @@ export const ReportPage = ({
   const { jwt } = useJWT()
   const canEdit =
     jwt &&
-    report &&
     (report.reporterId === Number.parseInt(jwt.sub) ||
       (jwt.peregrineRoles.isAdmin && report.realmId === jwt.peregrineRealm) ||
       jwt.peregrineRoles.isSuperAdmin)

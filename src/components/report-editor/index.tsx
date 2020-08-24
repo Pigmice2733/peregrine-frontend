@@ -151,8 +151,8 @@ export const ReportEditor = ({
       comment,
       data: reportData,
       teamKey: team,
-      reporterId: reporterId ?? Number(jwt.sub),
-      realmId: realmId ?? jwt.peregrineRealm,
+      reporterId: Number(jwt.sub),
+      realmId: jwt.peregrineRealm,
     }
   }
   const report = getReportIfValid()
