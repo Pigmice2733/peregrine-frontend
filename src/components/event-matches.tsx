@@ -3,7 +3,6 @@ import { Fragment, h } from 'preact'
 import TextInput from './text-input'
 import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
 import { MatchCard } from './match-card'
-import Spinner from './spinner'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 import { formatMatchKey } from '@/utils/format-match-key'
@@ -80,15 +79,11 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
         label="Search"
         onInput={setSearchQuery}
       />
-      {matches ? (
-        <div class={matchListStyle}>
-          {filteredMatches.map((m) => (
-            <MatchCard eventKey={eventKey} match={m} key={m.key} link />
-          ))}
-        </div>
-      ) : (
-        <Spinner />
-      )}
+      <div class={matchListStyle}>
+        {filteredMatches.map((m) => (
+          <MatchCard eventKey={eventKey} match={m} key={m.key} link />
+        ))}
+      </div>
     </Fragment>
   )
 }

@@ -59,7 +59,7 @@ const createStatCell = (
   return {
     title: cleanFieldName(statDescription.name),
     getCell: (row) => {
-      const matchingCell = row.summary[statDescription.name]
+      const matchingCell = row.summary[statDescription.name] as Stat | undefined
       if (matchingCell)
         return {
           ...matchingCell,
