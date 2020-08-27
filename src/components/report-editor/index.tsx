@@ -28,6 +28,10 @@ import { mdiAccountCircle } from '@mdi/js'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { matchHasTeam } from '@/utils/match-has-team'
+import { request } from '@/api/base'
+import { createDialog } from '../dialog'
+import { route, createAlert } from '@/router'
+import { AlertType } from '../alert'
 
 const scoutStyles = css`
   display: flex;
@@ -165,13 +169,40 @@ export const ReportEditor = ({
       .then((id) => {
         onSaveSuccess({ ...report, id })
       })
-      .catch(() => {
-        const reportWithKey = {
-          ...report,
-          key: initialReport.key || generateReportKey(),
+      .catch(async (error: { error?: string; id?: number }) => {
+        if (error.error === 'conflicts' && error.id !== undefined) {
+          const conflictingId = error.id
+          const shouldOverride = await createDialog({
+            confirm: `Override Report ${conflictingId}`,
+            dismiss: 'Cancel',
+            description: `There is already a report with the same reporter, team, and match.`,
+            title: `This report conflicts with report ${conflictingId}`,
+          })
+          if (shouldOverride) {
+            await request<null>(
+              'PUT',
+              `reports/${report.id}`,
+              { replace: true },
+              report,
+            )
+            createAlert({
+              type: AlertType.Success,
+              message: `Report ${conflictingId} was overridden`,
+            })
+            onSaveSuccess(report as GetReport)
+          }
+          if (report.key) {
+            deleteReportLocally(report.key)
+            onDelete?.()
+          }
+        } else {
+          const reportWithKey = {
+            ...report,
+            key: initialReport.key || generateReportKey(),
+          }
+          saveReportLocally(reportWithKey)
+          if (onSaveLocally) onSaveLocally(reportWithKey)
         }
-        saveReportLocally(reportWithKey)
-        if (onSaveLocally) onSaveLocally(reportWithKey)
       })
       .finally(() => {
         setIsSaving(false)

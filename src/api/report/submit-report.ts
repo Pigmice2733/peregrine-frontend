@@ -3,6 +3,10 @@ import { Report, OfflineReport } from '.'
 import { useEffect, useState } from 'preact/hooks'
 import { CancellablePromise } from '@/utils/cancellable-promise'
 
+/**
+ * Uploads a report via PUT or POST, depending on if the report already has an ID
+ * @returns a promise that resolves to the new report's ID
+ */
 export const uploadReport = (report: Report): CancellablePromise<number> => {
   const id = report.id
   const req =
