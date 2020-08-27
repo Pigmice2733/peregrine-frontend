@@ -8,7 +8,6 @@ import {
   generateReportKey,
   deleteReportLocally,
 } from '@/api/report/submit-report'
-import { formatTeamNumber } from '@/utils/format-team-number'
 import TeamPicker from '../team-picker'
 import FieldCard from '../field-card'
 import TextInput from '../text-input'
@@ -32,20 +31,23 @@ import { request } from '@/api/base'
 import { createDialog } from '../dialog'
 import { createAlert } from '@/router'
 import { AlertType } from '../alert'
+import Spinner from '../spinner'
+import Card from '../card'
 
-const scoutStyles = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const reportEditorStyle = css`
+  padding: 1.5rem 2rem;
+  display: grid;
+  grid-gap: 1.2rem;
+  justify-items: center;
+
+  & > h2 {
+    justify-self: center;
+    margin: 0;
+  }
 `
 
 const commentStyles = css`
-  width: 25rem;
-  max-width: 80%;
-`
-
-const buttonStyles = css`
-  margin: 1rem;
+  justify-self: stretch;
 `
 
 interface Props {
@@ -66,7 +68,6 @@ const defaultFieldValue = 0
 
 const userDropdownStyle = css`
   display: flex;
-  margin: 1rem;
   align-items: center;
 `
 
@@ -124,8 +125,6 @@ export const ReportEditor = ({
     schema,
   ])
   const realms = usePromise(() => getRealms(), [])
-  const blueAlliance = match?.blueAlliance
-  const redAlliance = match?.redAlliance
 
   useEffect(() => {
     if (!visibleFields) return
@@ -225,28 +224,23 @@ export const ReportEditor = ({
   const reportAlreadyExists =
     initialReport.key !== undefined || initialReport.id !== undefined
 
-  return (
-    <form class={scoutStyles} onSubmit={submit}>
-      <h1>Scout {team && formatTeamNumber(team)}</h1>
-      {eventMatches && (
-        <Dropdown
-          options={eventMatches}
-          onChange={(match) => setMatchKey(match.key)}
-          getKey={(match) => match.key}
-          getText={(match) => formatMatchKeyShort(match.key)}
-          value={eventMatches.find((match) => match.key === matchKey)}
-        />
-      )}
-      {blueAlliance && redAlliance && (
-        <TeamPicker
-          onChange={setTeam}
-          blueAlliance={blueAlliance}
-          redAlliance={redAlliance}
-          value={team}
-        />
-      )}
+  return eventMatches && match && visibleFields ? (
+    <Card as="form" class={reportEditorStyle} onSubmit={submit}>
+      <Dropdown
+        options={eventMatches}
+        onChange={(match) => setMatchKey(match.key)}
+        getKey={(match) => match.key}
+        getText={(match) => formatMatchKeyShort(match.key)}
+        value={eventMatches.find((match) => match.key === matchKey)}
+      />
+      <TeamPicker
+        onChange={setTeam}
+        blueAlliance={match.blueAlliance}
+        redAlliance={match.redAlliance}
+        value={team}
+      />
       <h2>Auto</h2>
-      {visibleFields?.filter(isAuto).map((stat) => (
+      {visibleFields.filter(isAuto).map((stat) => (
         <FieldCard
           key={'auto' + stat.reportReference}
           statDescription={stat}
@@ -255,7 +249,7 @@ export const ReportEditor = ({
         />
       ))}
       <h2>Teleop</h2>
-      {visibleFields?.filter(isTeleop).map((stat) => (
+      {visibleFields.filter(isTeleop).map((stat) => (
         <FieldCard
           key={'teleop' + stat.reportReference}
           statDescription={stat}
@@ -264,7 +258,7 @@ export const ReportEditor = ({
         />
       ))}
       <TextInput
-        class={commentStyles}
+        labelClass={commentStyles}
         label="Comments"
         onInput={setComment}
         value={comment}
@@ -290,18 +284,19 @@ export const ReportEditor = ({
           />
         </div>
       )}
-      <Button disabled={isSaving || isDeleting || !report} class={buttonStyles}>
+      <Button disabled={isSaving || isDeleting || !report}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>
       {reportAlreadyExists && (
         <Button
           disabled={isSaving || isDeleting || !report}
-          class={buttonStyles}
           onClick={handleDelete}
         >
           {isDeleting ? 'Deleting Report' : 'Delete Report'}
         </Button>
       )}
-    </form>
+    </Card>
+  ) : (
+    <Spinner />
   )
 }

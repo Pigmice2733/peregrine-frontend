@@ -4,11 +4,18 @@ import Authenticated from '@/components/authenticated'
 import { ReportEditor } from '@/components/report-editor'
 import { route } from '@/router'
 import { AlertType } from '@/components/alert'
+import { css } from 'linaria'
 
 interface Props {
   eventKey: string
   matchKey: string
 }
+
+const scoutPageStyle = css`
+  display: flex;
+  padding: 2rem;
+  justify-content: center;
+`
 
 const ScoutPage = ({ eventKey, matchKey }: Props) => {
   const matchUrl = `/events/${eventKey}/matches/${matchKey}`
@@ -17,7 +24,7 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
     <Authenticated
       label="Log In to Scout"
       render={() => (
-        <Page name="Scout" back={matchUrl}>
+        <Page name="Scout" back={matchUrl} class={scoutPageStyle}>
           <ReportEditor
             initialReport={{ eventKey, matchKey }}
             onSaveSuccess={(report) =>

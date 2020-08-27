@@ -80,7 +80,6 @@ const teamPickerStyle = css`
   width: 12rem;
   border-radius: 0.3rem;
   overflow: hidden;
-  box-shadow: var(--card-shadow);
 `
 
 const editableTeamPickerStyle = css`

@@ -17,8 +17,7 @@ const reportPageStyle = css`
   padding: 2rem;
   justify-content: center;
 `
-const reportCardBlock = css`
-  width: 30rem;
+const reportViewerCardStyle = css`
   padding: 2rem;
   display: grid;
   justify-items: center;
@@ -51,27 +50,27 @@ export const ReportPage = ({
       back={isEditing ? () => setIsEditing(false) : back}
       class={reportPageStyle}
     >
-      <Card class={reportCardBlock}>
-        {isEditing ? (
-          <ReportEditor
-            initialReport={report}
-            onSaveSuccess={(report) => {
-              onSaveSuccess(report)
-              setIsEditing(false)
-            }}
-            onSaveLocally={(report) => {
-              onSaveLocally(report)
-              setIsEditing(false)
-            }}
-            onDelete={onDelete}
-          />
-        ) : (
+      {isEditing ? (
+        <ReportEditor
+          initialReport={report}
+          onSaveSuccess={(report) => {
+            onSaveSuccess(report)
+            setIsEditing(false)
+          }}
+          onSaveLocally={(report) => {
+            onSaveLocally(report)
+            setIsEditing(false)
+          }}
+          onDelete={onDelete}
+        />
+      ) : (
+        <Card class={reportViewerCardStyle}>
           <ReportViewer
             report={report}
             onEditClick={canEdit ? () => setIsEditing(true) : undefined}
           />
-        )}
-      </Card>
+        </Card>
+      )}
     </Page>
   )
 }
