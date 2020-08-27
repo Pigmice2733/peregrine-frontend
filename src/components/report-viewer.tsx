@@ -61,9 +61,12 @@ const reporterStyle = css`
   color: inherit;
   text-decoration: none;
   font-weight: 500;
-  &:hover,
+  &[href]:hover,
   &:focus {
     color: ${pigmicePurple};
+  }
+  & > :first-child {
+    padding-right: 0.2rem;
   }
 `
 const fieldValuesStyle = css`
@@ -78,11 +81,6 @@ const fieldValuesStyle = css`
 
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
-  const reporter = usePromise(() => {
-    if (reporterId !== undefined && reporterId !== null) {
-      return getUser(reporterId).catch(() => undefined)
-    }
-  }, [reporterId])
   const eventInfo = useEventInfo(report.eventKey)
   const matchInfo = useMatchInfo(report.eventKey, report.matchKey)
   const schema = useSchema(eventInfo?.schemaId)
@@ -140,11 +138,30 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         />
       )}
 
-      <a href={`/users/${reporterId}`} class={reporterStyle}>
-        <Icon icon={mdiAccountCircle} />
-        {formatUserName(reporter)}
-      </a>
+      <ProfileLink reporterId={reporterId} />
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </Fragment>
+  )
+}
+
+const ProfileLink = ({
+  reporterId,
+}: {
+  reporterId: number | null | undefined
+}) => {
+  const reporter = usePromise(() => {
+    if (reporterId !== undefined && reporterId !== null) {
+      return getUser(reporterId).catch(() => undefined)
+    }
+  }, [reporterId])
+  const El = reporterId === null ? 'div' : 'a'
+  return (
+    <El
+      href={reporterId === null ? undefined : `/users/${reporterId}`}
+      class={reporterStyle}
+    >
+      <Icon icon={mdiAccountCircle} />
+      {formatUserName(reporter, reporterId)}
+    </El>
   )
 }

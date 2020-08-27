@@ -41,10 +41,10 @@ export const CommentCard = ({
   showReporter = true,
   linkToReport = true,
 }: Props) => {
-  const userId = report.reporterId
+  const reporterId = report.reporterId
   const reporter = usePromise(
-    () => (userId ? getUser(userId).catch(() => null) : null),
-    [userId],
+    () => (reporterId ? getUser(reporterId).catch(() => null) : null),
+    [reporterId],
   )
   return (
     <Card
@@ -53,7 +53,7 @@ export const CommentCard = ({
       class={commentCardStyle}
     >
       <Icon icon={commentIcon} />
-      {showReporter && <span>{formatUserName(reporter)}</span>}
+      {showReporter && <span>{formatUserName(reporter, reporterId)}</span>}
       <p>{report.comment}</p>
     </Card>
   )
