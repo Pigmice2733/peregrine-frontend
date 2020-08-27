@@ -37,7 +37,7 @@ const blueStyle = css``
 const matchStyle = css`
   display: grid;
   max-width: 100%;
-  grid-template-columns: 1fr;
+  grid-template-columns: 100%;
   padding: 1.5rem;
   grid-gap: 1.5rem;
   justify-items: center;
