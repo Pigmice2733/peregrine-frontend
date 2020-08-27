@@ -53,6 +53,7 @@ export const request = <Expected>(
     if (resp.status === 401) removeAccessToken()
 
     if (typeof parsed === 'string') {
+      // eslint-disable-next-line caleb/unicorn/prefer-type-error
       throw new Error(parsed)
     }
 
