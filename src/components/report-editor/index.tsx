@@ -30,7 +30,7 @@ import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { request } from '@/api/base'
 import { createDialog } from '../dialog'
-import { route, createAlert } from '@/router'
+import { createAlert } from '@/router'
 import { AlertType } from '../alert'
 
 const scoutStyles = css`
