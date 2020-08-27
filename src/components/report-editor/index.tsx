@@ -52,6 +52,7 @@ const commentStyles = css`
 
 interface Props {
   initialReport: SetRequired<Partial<Report>, 'eventKey' | 'matchKey'>
+  onMatchSelect?: (newMatchKey: string) => void
   onSaveSuccess: (report: GetReport) => void
   onSaveLocally?: (report: OfflineReport) => void
   onDelete?: () => void
@@ -73,6 +74,7 @@ const userDropdownStyle = css`
 
 export const ReportEditor = ({
   initialReport,
+  onMatchSelect,
   onSaveLocally,
   onSaveSuccess,
   onDelete,
@@ -228,7 +230,10 @@ export const ReportEditor = ({
     <Card as="form" class={reportEditorStyle} onSubmit={submit}>
       <Dropdown
         options={eventMatches}
-        onChange={(match) => setMatchKey(match.key)}
+        onChange={(match) => {
+          onMatchSelect?.(match.key)
+          setMatchKey(match.key)
+        }}
         getKey={(match) => match.key}
         getText={(match) => formatMatchKeyShort(match.key)}
         value={eventMatches.find((match) => match.key === matchKey)}

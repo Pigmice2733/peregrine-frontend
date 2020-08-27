@@ -27,6 +27,13 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
         <Page name="Scout" back={matchUrl} class={scoutPageStyle}>
           <ReportEditor
             initialReport={{ eventKey, matchKey }}
+            onMatchSelect={(newMatchKey) =>
+              history.replaceState(
+                null,
+                '',
+                `/events/${eventKey}/matches/${newMatchKey}/scout`,
+              )
+            }
             onSaveSuccess={(report) =>
               route(matchUrl, {
                 type: AlertType.Success,
