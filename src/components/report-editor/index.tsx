@@ -222,6 +222,8 @@ export const ReportEditor = ({
     }
     onDelete?.()
   }
+  const reportAlreadyExists =
+    initialReport.key !== undefined || initialReport.id !== undefined
 
   return (
     <form class={scoutStyles} onSubmit={submit}>
@@ -267,7 +269,7 @@ export const ReportEditor = ({
         onInput={setComment}
         value={comment}
       />
-      {isAdmin && users && (
+      {reportAlreadyExists && isAdmin && users && (
         <div class={userDropdownStyle}>
           <Icon icon={mdiAccountCircle} />
           <Dropdown
@@ -291,7 +293,7 @@ export const ReportEditor = ({
       <Button disabled={isSaving || isDeleting || !report} class={buttonStyles}>
         {isSaving ? 'Saving Report' : 'Save Report'}
       </Button>
-      {report && (report.key !== undefined || report.id !== undefined) && (
+      {reportAlreadyExists && (
         <Button
           disabled={isSaving || isDeleting || !report}
           class={buttonStyles}
