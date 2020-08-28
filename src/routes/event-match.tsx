@@ -21,6 +21,8 @@ import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
+import { MatchReports } from '@/components/match-reports'
+import { getReports } from '@/api/report/get-reports'
 
 interface Props {
   eventKey: string
@@ -39,8 +41,13 @@ const matchStyle = css`
   padding: 1.5rem;
   grid-gap: 1.5rem;
   justify-items: center;
-
+  @media (min-width: 750px) {
+    grid-template-columns: 1fr 1fr;
+  }
   & > * {
+    @media (min-width: 750px) {
+      grid-column: 1 / 3;
+    }
     max-width: 100%;
     overflow-x: auto;
   }
@@ -55,6 +62,20 @@ const matchStyle = css`
   }
 `
 
+const leftColumnStyle = css`
+  @media (min-width: 750px) {
+    grid-column: 1 / 2;
+  }
+`
+
+const matchReportsStyle = css`
+  @media (min-width: 750px) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 4;
+    align-self: start;
+  }
+`
+
 const showMatchResults = 'Match Results'
 const showEventResults = 'Event Results'
 
@@ -64,6 +85,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
+  const reports = usePromise(
+    () => getReports({ event: eventKey, match: matchKey }),
+    [eventKey, matchKey],
+  )
   const schema = useSchema(event?.schemaId)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
 
@@ -101,15 +126,29 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
       class={matchStyle}
     >
-      <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+      <Button
+        href={`/events/${eventKey}/matches/${matchKey}/scout`}
+        class={leftColumnStyle}
+      >
         Scout Match
       </Button>
-      {match ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
+      {match ? (
+        <MatchCard match={match} eventKey={eventKey} class={leftColumnStyle} />
+      ) : (
+        <Spinner />
+      )}
       {match && matchHasBeenPlayed && (
-        <Card class={matchScoreStyle}>
+        <Card class={clsx(matchScoreStyle, leftColumnStyle)}>
           <div class={redScoreStyle}>{match.redScore}</div>
           <div class={blueScoreStyle}>{match.blueScore}</div>
         </Card>
+      )}
+      {match && reports && (
+        <MatchReports
+          match={match}
+          reports={reports}
+          class={matchReportsStyle}
+        />
       )}
       {match && schema && (
         <Card

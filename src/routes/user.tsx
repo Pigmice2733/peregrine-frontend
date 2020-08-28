@@ -23,13 +23,16 @@ import { deleteUser } from '@/api/user/delete-user'
 import { deleteIcon } from '@/icons/delete'
 import { route } from '@/router'
 import { createDialog } from '@/components/dialog'
-import Alert from '@/components/alert'
+import Alert, { AlertType } from '@/components/alert'
 import Button, { buttonFontStyle } from '@/components/button'
 import Icon from '@/components/icon'
 import { alert } from '@/icons/alert'
 import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
 import clsx from 'clsx'
+import { getReports } from '@/api/report/get-reports'
+import { mdiClipboardTextMultipleOutline } from '@mdi/js'
+import { noop } from '@/utils/empty-promise'
 
 const RoleInfo = ({
   save,
@@ -79,8 +82,7 @@ const VerifiedInfo = ({
   const emitError = useErrorEmitter()
   return (
     <Alert
-      warning={!isVerified}
-      success={isVerified}
+      type={isVerified ? AlertType.Success : AlertType.Warning}
       class={css`
         display: grid;
         grid-auto-flow: column;
@@ -280,6 +282,10 @@ const profileCardStyle = css`
   grid-gap: 1rem;
   justify-items: center;
 `
+const userNameStyle = css`
+  font-size: 1.5rem;
+  margin: 0;
+`
 
 const UserProfileCard = ({
   user,
@@ -292,6 +298,7 @@ const UserProfileCard = ({
   const canEditRoles = editable && !isCurrentUser
   const updateUser = (...args: Parameters<typeof modifyUser>) =>
     modifyUser(...args).then(refetch)
+  const reports = usePromise(() => getReports({ reporter: user.id }), [user.id])
   return (
     <Card class={profileCardStyle} as="section">
       <ErrorBoundary>
@@ -305,12 +312,7 @@ const UserProfileCard = ({
           value={`${user.firstName} ${user.lastName}`}
         >
           {(value, editIcon) => (
-            <h1
-              class={css`
-                font-size: 1.5rem;
-                margin: 0;
-              `}
-            >
+            <h1 class={userNameStyle}>
               {value} {editIcon}
             </h1>
           )}
@@ -333,6 +335,16 @@ const UserProfileCard = ({
             </h2>
           )}
         </EditableText>
+        {reports && (
+          <Button flat href={`/users/${user.id}/reports`}>
+            <Icon
+              class={iconInButtonStyle}
+              icon={mdiClipboardTextMultipleOutline}
+            />
+
+            {`${reports.length} reports`}
+          </Button>
+        )}
         <VerifiedInfo user={user} refetch={refetch} editable={canEditRoles} />
         <dl
           class={css`
@@ -374,6 +386,29 @@ const UserProfileCard = ({
   )
 }
 
+const AnonymousProfileCard = ({ userId }: { userId: number }) => {
+  const reports = usePromise(() => getReports({ reporter: userId }), [userId])
+
+  return (
+    <Card class={profileCardStyle} as="section">
+      <h1 class={userNameStyle}>Anonymous</h1>
+      <Alert type={AlertType.Warning}>
+        {"You do not have access to this user's profile."}
+      </Alert>
+      {reports && (
+        <Button flat href={`/users/${userId}/reports`}>
+          <Icon
+            class={iconInButtonStyle}
+            icon={mdiClipboardTextMultipleOutline}
+          />
+
+          {`${reports.length} reports`}
+        </Button>
+      )}
+    </Card>
+  )
+}
+
 const userPageStyle = css`
   display: flex;
   flex-direction: column;
@@ -382,10 +417,13 @@ const userPageStyle = css`
 
 const InnerUserPage = ({ userId }: { userId: string }) => {
   const [user, setUser] = useState<UserInfo | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
   const fetchUser = useCallback(() => getUser(userId).then(setUser), [userId])
   const emitError = useErrorEmitter()
   useEffect(() => {
-    fetchUser().catch(emitError)
+    fetchUser()
+      .catch(noop)
+      .finally(() => setIsLoading(false))
   }, [emitError, fetchUser])
   const { jwt } = useJWT()
   const realm = jwt?.peregrineRealm
@@ -397,7 +435,9 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
 
   return (
     <Page name="User" back={() => window.history.back()} class={userPageStyle}>
-      {user ? (
+      {isLoading ? (
+        <Spinner />
+      ) : user ? (
         <UserProfileCard
           user={user}
           editable={canEditUser}
@@ -406,7 +446,7 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
           isSuperAdmin={isSuperAdmin || false}
         />
       ) : (
-        <Spinner />
+        <AnonymousProfileCard userId={Number(userId)} />
       )}
     </Page>
   )

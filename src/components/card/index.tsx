@@ -27,6 +27,13 @@ const cardStyle = css`
 
 const outlinedCardStyle = css`
   box-shadow: 0 0 0 0.1rem #99999973;
+
+  &[href]:hover,
+  &:focus:not(:active),
+  &:focus-within:not(:active) {
+    box-shadow: 0 0 0 0.1rem #33333373;
+    background-color: #08080814;
+  }
 `
 
 interface BaseCardProps {
