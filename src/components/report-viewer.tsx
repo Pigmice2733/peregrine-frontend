@@ -1,11 +1,6 @@
 import { h, Fragment } from 'preact'
 import { Report } from '@/api/report'
 import { formatTeamNumber } from '@/utils/format-team-number'
-import Icon from './icon'
-import { mdiAccountCircle } from '@mdi/js'
-import { getUser } from '@/api/user/get-user'
-import { usePromise } from '@/utils/use-promise'
-import { formatUserName } from '@/utils/format-user-name'
 import Button from './button'
 import { useSchema } from '@/cache/schema/use'
 import { useEventInfo } from '@/cache/event-info/use'
@@ -17,7 +12,7 @@ import { useMatchInfo } from '@/cache/match-info/use'
 import { CommentCard } from './comment-card'
 import { css } from 'linaria'
 import { cleanFieldName } from '@/utils/clean-field-name'
-import { pigmicePurple } from '@/colors'
+import { ProfileLink } from './profile-link'
 
 interface Props {
   report: Report
@@ -55,20 +50,6 @@ const ReportFieldViewer = ({
   )
 }
 
-const reporterStyle = css`
-  display: flex;
-  align-items: center;
-  color: inherit;
-  text-decoration: none;
-  font-weight: 500;
-  &[href]:hover,
-  &:focus {
-    color: ${pigmicePurple};
-  }
-  & > :first-child {
-    padding-right: 0.2rem;
-  }
-`
 const fieldValuesStyle = css`
   display: grid;
   grid-gap: 1rem;
@@ -141,27 +122,5 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       <ProfileLink reporterId={reporterId} />
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </Fragment>
-  )
-}
-
-const ProfileLink = ({
-  reporterId,
-}: {
-  reporterId: number | null | undefined
-}) => {
-  const reporter = usePromise(() => {
-    if (reporterId !== undefined && reporterId !== null) {
-      return getUser(reporterId).catch(() => undefined)
-    }
-  }, [reporterId])
-  const El = reporterId === null ? 'div' : 'a'
-  return (
-    <El
-      href={reporterId === null ? undefined : `/users/${reporterId}`}
-      class={reporterStyle}
-    >
-      <Icon icon={mdiAccountCircle} />
-      {formatUserName(reporter, reporterId)}
-    </El>
   )
 }

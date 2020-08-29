@@ -148,6 +148,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           match={match}
           reports={reports}
           class={matchReportsStyle}
+          eventKey={eventKey}
         />
       )}
       {match && schema && (
