@@ -26,6 +26,11 @@ const setupCache = async () => {
 
 self.addEventListener('install', function (event) {
   event.waitUntil(setupCache())
+  // If there is not an existing service worker installed
+  // And the browser supports skipWaiting, call skipWaiting
+  if (!self.registration.installing) {
+    self.skipWaiting()
+  }
 })
 
 // When the new SW activates, delete any old caches
