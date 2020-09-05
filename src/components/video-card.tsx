@@ -11,10 +11,10 @@ import Icon from './icon'
 import { mdiPlay } from '@mdi/js'
 
 const videoCardStyle = css`
-  width: 40rem;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 100%;
+  overflow: hidden;
   div& {
     background: black;
   }

@@ -34,24 +34,20 @@ const tableTeamStyle = css``
 const redStyle = css``
 const blueStyle = css``
 
+// http://grid.malven.co/
+
+// We are using margins instead of grid-gap
+// because we don't want grid-gap to be applied to the empty spacing columns
 const matchStyle = css`
   display: grid;
-  max-width: 100%;
-  grid-template-columns: 100%;
-  padding: 1.5rem;
-  grid-gap: 1.5rem;
-  justify-items: center;
-  @media (min-width: 750px) {
-    grid-template-columns: 1fr 1fr;
-  }
+  grid-template-columns: 1fr auto auto 1fr;
+  grid-template-areas:
+    '. leftColumn rightColumn .'
+    'analysisTable analysisTable analysisTable analysisTable';
+  padding: 0.75rem;
   & > * {
-    @media (min-width: 750px) {
-      grid-column: 1 / 3;
-    }
-    max-width: 100%;
-    overflow-x: auto;
+    margin: 0.75rem;
   }
-
   /* extra selectors for specificity */
   a.${tableTeamStyle}.${redStyle} {
     color: ${red};
@@ -61,19 +57,10 @@ const matchStyle = css`
     color: ${blue};
   }
 `
-
 const leftColumnStyle = css`
-  @media (min-width: 750px) {
-    grid-column: 1 / 2;
-  }
-`
-
-const matchReportsStyle = css`
-  @media (min-width: 750px) {
-    grid-column: 2 / 3;
-    grid-row: 1 / 4;
-    align-self: start;
-  }
+  grid-area: leftColumn;
+  display: grid;
+  grid-gap: 1.5rem;
 `
 
 const showMatchResults = 'Match Results'
@@ -126,35 +113,29 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
       class={matchStyle}
     >
-      <Button
-        href={`/events/${eventKey}/matches/${matchKey}/scout`}
-        class={leftColumnStyle}
-      >
-        Scout Match
-      </Button>
-      {match ? (
-        <MatchCard match={match} eventKey={eventKey} class={leftColumnStyle} />
-      ) : (
-        <Spinner />
-      )}
-      {match && matchHasBeenPlayed && (
-        <Card class={clsx(matchScoreStyle, leftColumnStyle)}>
-          <div class={redScoreStyle}>{match.redScore}</div>
-          <div class={blueScoreStyle}>{match.blueScore}</div>
-        </Card>
-      )}
-      {match && reports && (
-        <MatchReports
-          match={match}
-          reports={reports}
-          class={matchReportsStyle}
-          eventKey={eventKey}
-        />
-      )}
+      <div class={leftColumnStyle}>
+        {match ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
+        {match &&
+          reports &&
+          (reports.length > 0 ? (
+            <MatchReports match={match} reports={reports} eventKey={eventKey} />
+          ) : (
+            <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+              Scout Match
+            </Button>
+          ))}
+        {match && matchHasBeenPlayed && (
+          <Card class={clsx(matchScoreStyle)}>
+            <div class={redScoreStyle}>{match.redScore}</div>
+            <div class={blueScoreStyle}>{match.blueScore}</div>
+          </Card>
+        )}
+      </div>
       {match && schema && (
         <Card
           class={css`
             overflow-y: hidden;
+            grid-area: analysisTable;
           `}
         >
           <div class={displayModeSelectorStyle}>
@@ -205,12 +186,23 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           />
         </Card>
       )}
-      {match?.videos?.map((v) => (
+      {/* {match?.videos?.map((v) => (
         <VideoCard key={v} url={cleanYoutubeUrl(v)} />
-      ))}
+      ))} */}
+      {match?.videos?.[0] && (
+        <VideoCard
+          class={videoCardStyle}
+          url={cleanYoutubeUrl(match.videos[0])}
+        />
+      )}
     </Page>
   )
 }
+
+const videoCardStyle = css`
+  grid-area: rightColumn;
+  align-self: start;
+`
 
 const matchScoreStyle = css`
   display: grid;
