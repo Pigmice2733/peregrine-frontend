@@ -43,7 +43,7 @@ const matchReportsHeadingStyle = css`
 
 const matchReportStyle = css`
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto 4rem 1fr;
   padding: 0.5rem;
   grid-gap: 0.5rem;
   align-items: center;
@@ -56,7 +56,9 @@ const matchReportListStyle = css`
   grid-gap: 0.6rem;
 `
 
-// http://grid.malven.co/
+const teamNumberStyle = css`
+  justify-self: center;
+`
 
 export const MatchReports = ({
   match,
@@ -87,7 +89,9 @@ export const MatchReports = ({
                 class={matchReportStyle}
               >
                 <Icon icon={mdiClipboardText} />
-                <div>{formatTeamNumber(report.teamKey)}</div>
+                <div class={teamNumberStyle}>
+                  {formatTeamNumber(report.teamKey)}
+                </div>
                 <ProfileLink reporterId={report.reporterId} />
               </Card>
             )
