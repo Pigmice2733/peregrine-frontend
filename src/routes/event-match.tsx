@@ -68,7 +68,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  const schema = useSchema(isData(event) ? event?.schemaId : undefined)
+  const schema = useSchema(isData(event) ? event.schemaId : undefined)
   const teams = usePromise(() => getEventStats(eventKey), [eventKey])
 
   const [selectedDisplay, setSelectedDisplay] = useState<SelectedDisplay>(
@@ -76,7 +76,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 
   const matchHasBeenPlayed =
-    isData(match) && match?.blueScore !== undefined && match.redScore !== undefined
+    isData(match) &&
+    match.blueScore !== undefined &&
+    match.redScore !== undefined
 
   // When the match loads (or changes),
   useEffect(() => {
@@ -94,43 +96,43 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     [match],
   )
 
-//  Variables used to assist in deciding if match key is parse-able 
-const parsedMatchType = m.group.replace(/\d+/g, '')
-const matchKeyFinalChar = m.group.charAt(m.group.length - 1)
-const numbers = ["1","2","3","4","5","6","7","8","9","0"]
-
-  if (isData(match) === false) {
-    return(
+  if (!isData(match)) {
+    return (
       <Page
-      back={`/events/${eventKey}`}
-      name={
-        m.group +
-        (m.num ? ' Match ' + m.num : '') +
-        ' - ' +
-        (event ? event.name : eventKey)
-      }
-      class={matchStyle}
-    > 
-    <Card class = {matchStyle}>
-      <Icon icon={alert}/>
-      <div class={css`font-size: 2rem; text-align: center`}
-      > {((parsedMatchType !== "undefined " && numbers.includes(matchKeyFinalChar)) ? 
-      m.group + (m.num ? ' Match ' + m.num : '') : "This Match") + " Does Not Exist"}
-      </div>
-      <Button href={`/events/${eventKey}`}
-      > Return to Event Page
-      </Button>
-    </Card>
-    </Page>
-    )}
-  
+        back={`/events/${eventKey}`}
+        name={
+          (m === null
+            ? matchKey + ' - '
+            : m.group + (m.num ? ' Match ' + m.num : '') + ' - ') +
+          (event ? event.name : eventKey)
+        }
+        class={matchStyle}
+      >
+        <Card class={matchStyle}>
+          <Icon icon={alert} />
+          <div
+            class={css`
+              font-size: 2rem;
+              text-align: center;
+            `}
+          >
+            {m === null
+              ? 'This Match Does Not Exist'
+              : m.group + (m.num ? ' Match ' + m.num : '') + ' Does Not Exist'}
+          </div>
+          <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
+        </Card>
+      </Page>
+    )
+  }
+
   return (
     <Page
       back={`/events/${eventKey}`}
       name={
-        m.group +
-        (m.num ? ' Match ' + m.num : '') +
-        ' - ' +
+        (m === null
+          ? matchKey + ' - '
+          : m.group + (m.num ? ' Match ' + m.num : '') + ' - ') +
         (event ? event.name : eventKey)
       }
       class={matchStyle}
@@ -138,7 +140,11 @@ const numbers = ["1","2","3","4","5","6","7","8","9","0"]
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
         Scout Match
       </Button>
-      {isData(match) ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
+      {isData(match) ? (
+        <MatchCard match={match} eventKey={eventKey} />
+      ) : (
+        <Spinner />
+      )}
       {isData(match) && matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
@@ -173,7 +179,9 @@ const numbers = ["1","2","3","4","5","6","7","8","9","0"]
             eventKey={eventKey}
             teams={
               isData(teams) && selectedDisplay === showEventResults
-                ? teams?.filter((t: { team: string }) => matchHasTeam('frc' + t.team)(match))
+                ? teams.filter((t: { team: string }) =>
+                    matchHasTeam('frc' + t.team)(match),
+                  )
                 : teamsStats
             }
             schema={schema}
@@ -199,9 +207,10 @@ const numbers = ["1","2","3","4","5","6","7","8","9","0"]
           />
         </Card>
       )}
-      {isData(match) && match?.videos?.map((v) => (
-        <VideoCard key={v} url={cleanYoutubeUrl(v)} />
-      ))}
+      {isData(match) &&
+        match.videos?.map((v) => (
+          <VideoCard key={v} url={cleanYoutubeUrl(v)} />
+        ))}
     </Page>
   )
 }
