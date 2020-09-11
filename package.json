@@ -50,7 +50,7 @@
     "@testing-library/jest-dom": "5.11.4",
     "@types/jest": "26.0.13",
     "@types/node-fetch": "2.5.7",
-    "@types/sharp": "0.25.1",
+    "@types/sharp": "0.26.0",
     "babel-jest": "26.3.0",
     "babel-loader": "8.1.0",
     "babel-plugin-const-enum": "1.0.1",
