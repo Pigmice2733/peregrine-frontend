@@ -15,6 +15,8 @@ const videoCardStyle = css`
   grid-template-columns: 100%;
   grid-template-rows: 100%;
   overflow: hidden;
+  z-index: 1;
+  position: relative;
   div& {
     background: black;
   }

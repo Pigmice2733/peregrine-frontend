@@ -40,11 +40,19 @@ const blueStyle = css``
 // because we don't want grid-gap to be applied to the empty spacing columns
 const matchStyle = css`
   display: grid;
-  grid-template-columns: 1fr auto auto 1fr;
+  grid-template-columns: 1fr auto 30rem 1fr;
+  align-items: start;
   grid-template-areas:
     '. leftColumn rightColumn .'
     'analysisTable analysisTable analysisTable analysisTable';
   padding: 0.75rem;
+  @media (max-width: 930px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'leftColumn'
+      'analysisTable'
+      'rightColumn';
+  }
   & > * {
     margin: 0.75rem;
   }
@@ -61,6 +69,10 @@ const leftColumnStyle = css`
   grid-area: leftColumn;
   display: grid;
   grid-gap: 1.5rem;
+  justify-self: center;
+  @media (max-width: 540px) {
+    justify-self: stretch;
+  }
 `
 
 const showMatchResults = 'Match Results'
@@ -186,22 +198,66 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           />
         </Card>
       )}
-      {/* {match?.videos?.map((v) => (
-        <VideoCard key={v} url={cleanYoutubeUrl(v)} />
-      ))} */}
-      {match?.videos?.[0] && (
-        <VideoCard
-          class={videoCardStyle}
-          url={cleanYoutubeUrl(match.videos[0])}
-        />
-      )}
+      {match?.videos && <VideoList videos={match.videos} />}
     </Page>
   )
 }
 
-const videoCardStyle = css`
+const VideoList = ({ videos }: { videos: string[] }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  return (
+    <div
+      class={clsx(
+        videoListStyle,
+        videos.length > 1 && !isOpen && multipleVideoStyle,
+      )}
+    >
+      {isOpen
+        ? videos.map((v) => <VideoCard key={v} url={cleanYoutubeUrl(v)} />)
+        : videos
+            .slice(0, 2)
+            .map((v, i) =>
+              i === 0 ? (
+                <VideoCard key={v} url={cleanYoutubeUrl(v)} />
+              ) : (
+                <Card
+                  as="button"
+                  class={emptyVideoCardStyle}
+                  onClick={() => setIsOpen(true)}
+                />
+              ),
+            )}
+    </div>
+  )
+}
+
+const emptyVideoCardStyle = css`
+  width: 100%;
+  top: 3rem;
+  left: 1rem;
+  z-index: 0;
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  &:before {
+    display: block;
+    content: '';
+    width: 100%;
+    padding-top: calc(9 / 16 * 100%);
+  }
+`
+
+const videoListStyle = css`
   grid-area: rightColumn;
   align-self: start;
+  position: relative;
+  display: grid;
+  grid-gap: 1.5rem;
+`
+
+// We are adding spacing below the video list when there are multiple videos so that the spacing is correct for the absolute-positioned elements
+const multipleVideoStyle = css`
+  padding-bottom: 3rem;
 `
 
 const matchScoreStyle = css`
@@ -212,6 +268,7 @@ const matchScoreStyle = css`
   justify-content: center;
   text-align: center;
   font-size: 1.5rem;
+  overflow: hidden;
 
   & > * {
     padding: 1.5rem 0;
