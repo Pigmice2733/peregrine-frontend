@@ -54,6 +54,9 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
     if (networkData && !(networkData instanceof NetworkError)) {
       return networkData
     }
+    if (!cacheData) {
+      return networkData
+    }
     return cacheData
   }
   return resultingFunction

@@ -98,14 +98,18 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         m.group +
         (m.num ? ' Match ' + m.num : '') +
         ' - ' +
-        (event ? event.name : eventKey)
+        (isData(event) ? event.name : eventKey)
       }
       class={matchStyle}
     >
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
         Scout Match
       </Button>
-      {match ? <MatchCard match={match} eventKey={eventKey} /> : <Spinner />}
+      {isData(match) ? (
+        <MatchCard match={match} eventKey={eventKey} />
+      ) : (
+        <Spinner />
+      )}
       {match && matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
