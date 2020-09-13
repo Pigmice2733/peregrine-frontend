@@ -39,6 +39,13 @@ const sectionStyle = css`
   grid-gap: 2.5rem;
 `
 
+const errorSectionStyle = css`
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 2.5rem;
+  margin-bottom: 2.5rem;
+`
+
 const headingStyle = css`
   font-size: 1.2rem;
   justify-self: center;
@@ -51,25 +58,64 @@ const noMatchesStyle = css`
   margin: -0.35rem 0 0;
 `
 
+const eventErrorStyle = css`
+  justify-content: center;
+  align-items: start;
+  padding: ${spacing};
+  margin-top: 0.5rem;
+
+  @media (min-width: 800px) {
+    grid-template-columns: minmax(20rem, 25rem) 21rem;
+  }
+`
+
+const networkErrorStyle = css`
+  grid-template-columns: minmax(21rem, 23rem);
+  justify-content: center;
+  align-items: start;
+  grid-gap: ${spacing};
+  padding: ${spacing};
+  margin-top: 0.5rem;
+
+  @media (min-width: 800px) {
+    grid-template-columns: minmax(20rem, 25rem) 21rem;
+  }
+`
+
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
   const newestIncompleteMatch = isData(matches) && nextIncompleteMatch(matches)
-  console.log(matches)
   return (
     <Page
-      name={eventInfo?.name || <code>{eventKey}</code>}
+      name={isData(eventInfo) ? eventInfo.name : <code>{eventKey}</code>}
       back="/"
-      class={eventStyle}
+      class={
+        eventInfo instanceof Error
+          ? eventInfo instanceof NetworkError
+            ? networkErrorStyle
+            : eventErrorStyle
+          : eventStyle
+      }
     >
-      {eventInfo instanceof NetworkError
-        ? 'Could not connect to server. Please check your connection.'
-        : eventInfo instanceof Error && (
-            <Fragment>
-              This event does not exist.
-              <Button href={`/`}>Existing Events</Button>
-            </Fragment>
-          )}
+      {eventInfo instanceof NetworkError ? (
+        <div class={errorSectionStyle}>
+          <Heading level={2} class={headingStyle}>
+            Could not connect to server. Please check your connection.
+          </Heading>
+        </div>
+      ) : (
+        eventInfo instanceof Error && (
+          <Fragment>
+            <div class={errorSectionStyle}>
+              <Heading level={2} class={headingStyle}>
+                This event does not exist.
+              </Heading>
+            </div>
+            <Button href="/">Existing Events</Button>
+          </Fragment>
+        )
+      )}
       {!eventInfo && <Spinner />}
       {isData(eventInfo) && (
         <Fragment>
@@ -103,9 +149,7 @@ const Event = ({ eventKey }: Props) => {
               matches instanceof NetworkError ? (
                 'Network error. Please check your connection.'
               ) : (
-                matches instanceof Error && (
-                  <Fragment>This Event Does Not Exist.</Fragment>
-                )
+                matches instanceof Error && 'This Event Does Not Exist.'
               )
             ) : (
               <Spinner />
