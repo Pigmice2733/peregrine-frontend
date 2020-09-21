@@ -28,7 +28,7 @@
     "polished": "3.6.6",
     "preact": "10.4.8",
     "qss": "2.0.3",
-    "@mdi/js": "5.5.55"
+    "@mdi/js": "5.6.55"
   },
   "devDependencies": {
     "@babel/core": "7.11.6",
