@@ -106,10 +106,13 @@ export const Router = ({ routes }: { routes: Route[] }) => {
   useLayoutEffect(() => {
     setResolvedComponent(null)
     if (matchingRouteObj)
-      matchingRouteObj.component().then((comp) => {
-        setResolvedComponent(() => comp.default)
-        setRouteProps(exec(path, matchingRoute))
-      })
+      matchingRouteObj
+        .component()
+        .then((comp) => {
+          setResolvedComponent(() => comp.default)
+          setRouteProps(exec(path, matchingRoute))
+        })
+        .catch(() => location.reload())
   }, [matchingRoute, matchingRouteObj, path])
 
   if (matchingFullRoute === null) return <h1>404</h1>
