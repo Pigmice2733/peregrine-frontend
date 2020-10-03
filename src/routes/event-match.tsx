@@ -37,25 +37,21 @@ const tableTeamStyle = css``
 const redStyle = css``
 const blueStyle = css``
 
-// http://grid.malven.co/
-
 // We are using margins instead of grid-gap
 // because we don't want grid-gap to be applied to the empty spacing columns
 
 const loadedMatchStyle = css`
   display: grid;
-  grid-template-columns: 1fr auto 30rem 1fr;
-  align-items: start;
+  grid-template-columns: 1fr auto 1fr;
   grid-template-areas:
-    '. leftColumn rightColumn .'
-    'analysisTable analysisTable analysisTable analysisTable';
+    '. leftColumn .'
+    'analysisTable analysisTable analysisTable';
   padding: 0.75rem;
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       'leftColumn'
-      'analysisTable'
-      'rightColumn';
+      'analysisTable';
   }
   & > * {
     margin: 0.75rem;
@@ -78,6 +74,20 @@ const leftColumnStyle = css`
   justify-self: center;
   @media (max-width: 540px) {
     justify-self: stretch;
+  }
+`
+const matchWithVideoStyle = css`
+  grid-template-columns: 1fr auto 30rem 1fr;
+  align-items: start;
+  grid-template-areas:
+    '. leftColumn rightColumn .'
+    'analysisTable analysisTable analysisTable analysisTable';
+  @media (max-width: 930px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'leftColumn'
+      'analysisTable'
+      'rightColumn';
   }
 `
 
@@ -121,9 +131,6 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     [match],
   )
 
-  // TODO next time: when the reports list is in the right column, it shouldn't be that wide
-  // Also display scout button on the right
-
   return (
     <Page
       back={`/events/${eventKey}`}
@@ -133,25 +140,27 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         ' - ' +
         (event ? event.name : eventKey)
       }
-      class={clsx(matchStyle, match && reports && loadedMatchStyle)}
+      class={clsx(
+        matchStyle,
+        match && reports && loadedMatchStyle,
+        match?.videos && match.videos.length > 0 && matchWithVideoStyle,
+      )}
     >
       {match && reports ? (
         <Fragment>
           <div class={leftColumnStyle}>
             <MatchCard match={match} eventKey={eventKey} />
-            {match.videos &&
-              match.videos.length > 0 &&
-              (reports.length > 0 ? (
-                <MatchReports
-                  match={match}
-                  reports={reports}
-                  eventKey={eventKey}
-                />
-              ) : (
-                <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
-                  Scout Match
-                </Button>
-              ))}
+            {reports.length > 0 ? (
+              <MatchReports
+                match={match}
+                reports={reports}
+                eventKey={eventKey}
+              />
+            ) : (
+              <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+                Scout Match
+              </Button>
+            )}
             {matchHasBeenPlayed && (
               <Card class={clsx(matchScoreStyle)}>
                 <div class={redScoreStyle}>{match.redScore}</div>
@@ -216,15 +225,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               />
             </Card>
           )}
-          {match.videos && match.videos.length > 0 ? (
+          {match.videos && match.videos.length > 0 && (
             <VideoList videos={match.videos} />
-          ) : (
-            <MatchReports
-              match={match}
-              reports={reports}
-              class={videoListStyle}
-              eventKey={eventKey}
-            />
           )}
         </Fragment>
       ) : (

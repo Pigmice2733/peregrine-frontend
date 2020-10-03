@@ -9,18 +9,21 @@ import { pigmicePurple } from '@/colors'
 
 export const ProfileLink = ({
   reporterId,
+  link = true,
 }: {
   reporterId: number | null | undefined
+  link?: boolean
 }) => {
   const reporter = usePromise(() => {
     if (reporterId !== undefined && reporterId !== null) {
       return getUser(reporterId).catch(() => undefined)
     }
   }, [reporterId])
-  const El = reporterId === null ? 'div' : 'a'
+  const showLink = reporterId !== null && link
+  const El = showLink ? 'a' : 'div'
   return (
     <El
-      href={reporterId === null ? undefined : `/users/${reporterId}`}
+      href={showLink ? `/users/${reporterId}` : undefined}
       class={reporterStyle}
     >
       <Icon icon={mdiAccountCircle} />
@@ -28,8 +31,6 @@ export const ProfileLink = ({
     </El>
   )
 }
-
-// TODO: Next week add a prop to disable linking
 
 const reporterStyle = css`
   display: flex;

@@ -70,7 +70,7 @@ export const MatchReports = ({
   return (
     <Card class={clsx(matchReportsStyle, className)}>
       <div class={matchReportsHeadingStyle}>
-        <h1>{`${reports.length} Reports`}</h1>
+        <h1>{`${reports.length} Report${reports.length === 1 ? '' : 's'}`}</h1>
         <Button href={`/events/${eventKey}/matches/${match.key}/scout`}>
           Scout Match
         </Button>
@@ -92,7 +92,7 @@ export const MatchReports = ({
                 <div class={teamNumberStyle}>
                   {formatTeamNumber(report.teamKey)}
                 </div>
-                <ProfileLink reporterId={report.reporterId} />
+                <ProfileLink link={false} reporterId={report.reporterId} />
               </Card>
             )
           })}
@@ -101,5 +101,3 @@ export const MatchReports = ({
     </Card>
   )
 }
-
-// https://gist.github.com/calebeby/8799ad4d8edad2447ede61321799d7c7
