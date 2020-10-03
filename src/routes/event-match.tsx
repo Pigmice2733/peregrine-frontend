@@ -282,24 +282,26 @@ const moreVideoStyle = css`
 `
 
 const emptyVideoCardStyle = css`
-  width: 100%;
-  top: 3rem;
-  left: 1rem;
-  z-index: 0;
-  background: #292929;
-  position: absolute;
-  border: none;
-  cursor: pointer;
-  &:hover,
-  &:focus {
-    background: #454545;
-    box-shadow: ${createShadow(8)};
-  }
-  &:before {
-    display: block;
-    content: '';
+  button& {
     width: 100%;
-    padding-top: calc(9 / 16 * 100%);
+    top: 3rem;
+    left: 1rem;
+    z-index: 0;
+    background: #292929;
+    position: absolute;
+    border: none;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+      background: #454545;
+      box-shadow: ${createShadow(8)};
+    }
+    &:before {
+      display: block;
+      content: '';
+      width: 100%;
+      padding-top: calc(9 / 16 * 100%);
+    }
   }
 `
 

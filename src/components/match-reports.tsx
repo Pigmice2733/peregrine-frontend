@@ -12,8 +12,10 @@ import Button from './button'
 import Icon from './icon'
 import { ProfileLink } from './profile-link'
 
+// !important is used because rollup orders the CSS so that the default card background
+// has a higher priority than this
 const matchReportsStyle = css`
-  background: #d5d5d5;
+  background: #d5d5d5 !important;
 `
 
 interface Props {
