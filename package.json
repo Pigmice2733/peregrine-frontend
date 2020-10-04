@@ -133,7 +133,8 @@
             {
               "name": "preact",
               "importNames": [
-                "h", "Fragment"
+                "h",
+                "Fragment"
               ],
               "message": "The JSX runtime is injected automatically"
             }
