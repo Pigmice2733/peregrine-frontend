@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
@@ -90,12 +89,15 @@ export const MatchCard = memo(
     const createTeamLinks = (teams: string[]) =>
       teams.flatMap((t: string, i) => {
         const num = formatTeamNumber(t)
-        const El = link ? Fragment : 'a'
         return [
           i ? ' ' : null,
-          <El key={num} href={`/events/${eventKey}/teams/${num}`}>
-            {num}
-          </El>,
+          link ? (
+            num
+          ) : (
+            <a key={num} href={`/events/${eventKey}/teams/${num}`}>
+              {num}
+            </a>
+          ),
         ]
       })
     return (

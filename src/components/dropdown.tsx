@@ -1,5 +1,4 @@
 import { css } from 'linaria'
-import { h, JSX } from 'preact'
 import clsx from 'clsx'
 import { createShadow } from '@/utils/create-shadow'
 import { SetRequired } from 'type-fest'

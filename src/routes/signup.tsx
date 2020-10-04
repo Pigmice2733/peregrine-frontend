@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import Page from '@/components/page'
@@ -72,7 +71,7 @@ const SignUpForm = () => {
   return (
     <Form onSubmit={onSubmit}>
       {(isValid) => (
-        <Fragment>
+        <>
           <TextInput label="First Name" onInput={setFirstName} required />
           <TextInput label="Last Name" onInput={setLastName} required />
           <TextInput
@@ -104,7 +103,7 @@ const SignUpForm = () => {
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}
           </Button>
-        </Fragment>
+        </>
       )}
     </Form>
   )

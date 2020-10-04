@@ -1,4 +1,5 @@
-import { FunctionComponent, Component, h } from 'preact'
+import { FunctionComponent, Component } from 'preact'
+import { jsx } from 'preact/jsx-runtime'
 
 /**
  * Check if two objects have a different shape
@@ -40,7 +41,7 @@ export function memo<Props>(
 
   function Memoed(this: Component<Props>, props: Props) {
     this.shouldComponentUpdate = shouldUpdate
-    return h(c, Object.assign({}, props))
+    return jsx(c, props)
   }
   Memoed.displayName = 'Memo(' + (c.displayName || c.name) + ')'
   Memoed._forwarded = true

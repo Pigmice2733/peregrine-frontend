@@ -1,4 +1,4 @@
-import { h, RenderableProps } from 'preact'
+import { RenderableProps } from 'preact'
 import Card from '@/components/card'
 import NumberInput from './number-input'
 import { css } from 'linaria'

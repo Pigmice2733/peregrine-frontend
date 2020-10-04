@@ -1,4 +1,4 @@
-import { h, VNode } from 'preact'
+import { VNode } from 'preact'
 import { PropsOf, ElementName } from '@/type-utils'
 import clsx from 'clsx'
 import { css } from 'linaria'

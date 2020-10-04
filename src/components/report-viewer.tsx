@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import { Report } from '@/api/report'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Button from './button'
@@ -75,7 +74,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
     (field) => field.period === 'teleop',
   )
   return (
-    <Fragment>
+    <>
       <div>
         <a
           href={`/events/${report.eventKey}/teams/${formatTeamNumber(
@@ -121,6 +120,6 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
 
       <ProfileLink reporterId={reporterId} />
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
-    </Fragment>
+    </>
   )
 }

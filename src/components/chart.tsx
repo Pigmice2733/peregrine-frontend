@@ -1,5 +1,5 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { FunctionComponent, h, Fragment } from 'preact'
+import { FunctionComponent } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
@@ -351,7 +351,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
             {points[0]}
           </text>
         ) : (
-          <Fragment>
+          <>
             <line
               x1={0}
               x2={canvasWidth}
@@ -389,7 +389,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
             >
               {round(Math.min(...points))}
             </text>
-          </Fragment>
+          </>
         )}
 
         {lerpedPoints.map((y, x) => (

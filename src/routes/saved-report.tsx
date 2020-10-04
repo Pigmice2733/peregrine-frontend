@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { getSavedReports } from '@/api/report/submit-report'
 import { ReportPage } from './report'
 import Page from '@/components/page'

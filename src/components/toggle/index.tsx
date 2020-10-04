@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 import { lightGrey, pigmicePurple, grey } from '@/colors'
 import { tint, shade, transparentize } from 'polished'

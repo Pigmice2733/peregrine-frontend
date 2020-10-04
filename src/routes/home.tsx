@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
 import Spinner from '@/components/spinner'
@@ -68,7 +67,7 @@ const Home = () => {
       </div>
 
       {events ? (
-        <Fragment>
+        <>
           <UnstyledList class={matchListStyle}>
             {events
               .filter((event) => {
@@ -100,7 +99,7 @@ const Home = () => {
               src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
             />
           </a>
-        </Fragment>
+        </>
       ) : (
         <Spinner />
       )}

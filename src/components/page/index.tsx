@@ -1,4 +1,4 @@
-import { h, RenderableProps, ComponentChildren, Fragment, JSX } from 'preact'
+import { RenderableProps, ComponentChildren } from 'preact'
 import { ErrorBoundary } from '../error-boundary'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
@@ -66,7 +66,7 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
   const hideMenu = () => setIsMenuOpen(false)
 
   return (
-    <Fragment>
+    <>
       <header class={headerStyle}>
         {back && (
           <IconButton
@@ -79,7 +79,7 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
         <IconButton icon={menu} onClick={toggleMenu} aria-label="Open Menu" />
       </header>
       <Menu onHide={hideMenu} visible={isMenuOpen} />
-    </Fragment>
+    </>
   )
 }
 

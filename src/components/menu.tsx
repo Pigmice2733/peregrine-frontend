@@ -14,7 +14,7 @@ import { resolveUrl } from '@/utils/resolve-url'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { darken, lighten, rgba } from 'polished'
-import { ComponentChildren, h, Fragment } from 'preact'
+import { ComponentChildren } from 'preact'
 import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
 import { cloudSync } from '@/icons/cloud-sync'
@@ -217,14 +217,14 @@ export const Menu = ({ onHide, visible }: Props) => {
                 Log out
               </MenuItem>
             ) : (
-              <Fragment>
+              <>
                 <MenuItem icon={login} href="/login">
                   Log in
                 </MenuItem>
                 <MenuItem icon={accountPlus} href="/signup">
                   Sign Up
                 </MenuItem>
-              </Fragment>
+              </>
             )}
           </ul>
         </nav>

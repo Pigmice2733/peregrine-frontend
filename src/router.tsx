@@ -1,4 +1,4 @@
-import { ComponentType, VNode, h, Fragment } from 'preact'
+import { ComponentType, VNode } from 'preact'
 import { useState, useEffect, useMemo, useLayoutEffect } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
 import Spinner from '@/components/spinner'
@@ -119,7 +119,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
 
   if (ResolvedComponent) {
     return (
-      <Fragment>
+      <>
         <div class={alertListStyle}>
           {alerts.map((alert, i) => (
             // eslint-disable-next-line caleb/react/jsx-key
@@ -141,7 +141,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
           ))}
         </div>
         <ResolvedComponent {...routeProps} />
-      </Fragment>
+      </>
     )
   }
 

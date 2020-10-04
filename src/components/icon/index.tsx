@@ -1,4 +1,3 @@
-import { h, JSX } from 'preact'
 import { css } from 'linaria'
 
 interface Props extends JSX.HTMLAttributes<SVGSVGElement> {

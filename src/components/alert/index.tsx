@@ -1,4 +1,3 @@
-import { h, JSX } from 'preact'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { offBlack } from '@/colors'

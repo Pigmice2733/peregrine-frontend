@@ -1,5 +1,4 @@
 import Card, { CardProps } from './card'
-import { h } from 'preact'
 import {
   useNetworkConnection,
   ConnectionType,

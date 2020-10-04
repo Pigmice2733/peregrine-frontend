@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import InfoGroupCard from '@/components/info-group-card'
 import { sortAscending } from '@/icons/sort-ascending'
@@ -80,10 +79,9 @@ const formatTeamLocation = (
     </a>
   )
   if (teamLocation.state === TeamState.Queueing)
-    return <Fragment>Queueing for {match}</Fragment>
-  if (teamLocation.state === TeamState.InMatch)
-    return <Fragment>In {match}</Fragment>
-  return <Fragment>Just finished {match}</Fragment>
+    return <>Queueing for {match}</>
+  if (teamLocation.state === TeamState.InMatch) return <>In {match}</>
+  return <>Just finished {match}</>
 }
 
 const guessTeamLocation = (
@@ -197,10 +195,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       class={eventTeamStyle}
     >
       {nextMatch && (
-        <Fragment>
+        <>
           <h2 class={sectionStyle}>Next Match</h2>
           <MatchCard match={nextMatch} eventKey={eventKey} link />
-        </Fragment>
+        </>
       )}
       <InfoGroupCard
         info={[

@@ -1,4 +1,4 @@
-import { h, JSX, ComponentChildren } from 'preact'
+import { ComponentChildren } from 'preact'
 import { css } from 'linaria'
 import { Merge } from '@/type-utils'
 import { useRef } from 'preact/hooks'

@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import { css } from 'linaria'
 import clsx from 'clsx'
