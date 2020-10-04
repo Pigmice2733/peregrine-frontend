@@ -24,7 +24,7 @@ const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
   display: grid;
-  grid-template-columns: 1fr 1fr minmax(auto, 10rem);
+  grid-template-columns: auto auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
@@ -42,7 +42,7 @@ const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
   white-space: nowrap;
-  margin: 0.3rem 0.7rem;
+  margin: 0.3rem 0.6rem;
   & > * {
     margin: 0.3rem 0;
   }
