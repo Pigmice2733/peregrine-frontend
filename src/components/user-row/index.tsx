@@ -1,4 +1,4 @@
-import { h, Attributes } from 'preact'
+import { Attributes } from 'preact'
 import Toggle from '@/components/toggle'
 import { EditableUser, UserInfo } from '@/api/user'
 import Button from '@/components/button'

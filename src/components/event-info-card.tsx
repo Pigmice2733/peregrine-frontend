@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import InfoGroupCard from './info-group-card'
 import { mapMarker } from '@/icons/map-marker'
 import Icon from './icon'

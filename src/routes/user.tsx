@@ -1,4 +1,3 @@
-import { h, JSX, Fragment } from 'preact'
 import Page from '@/components/page'
 import Spinner from '@/components/spinner'
 import { getUser } from '@/api/user/get-user'
@@ -50,7 +49,7 @@ const RoleInfo = ({
   const [isSaving, setIsSaving] = useState(false)
   const emitError = useErrorEmitter()
   return (
-    <Fragment>
+    <>
       <dt>{title}</dt>
       <dd>
         <Toggle
@@ -64,7 +63,7 @@ const RoleInfo = ({
           }}
         />
       </dd>
-    </Fragment>
+    </>
   )
 }
 

@@ -1,5 +1,4 @@
 /* eslint-disable max-nested-callbacks */
-import { h } from 'preact'
 import Page from '@/components/page'
 import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'

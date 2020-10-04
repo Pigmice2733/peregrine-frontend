@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 import { rgba } from 'polished'
 import clsx from 'clsx'

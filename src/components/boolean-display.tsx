@@ -1,6 +1,6 @@
 import { css } from 'linaria'
 import { greenOnPurple, redOnPurple, focusRing } from '@/colors'
-import { FunctionComponent, JSX, h } from 'preact'
+import { FunctionComponent, JSX } from 'preact'
 import { Merge } from 'type-fest'
 import clsx from 'clsx'
 import Icon from './icon'

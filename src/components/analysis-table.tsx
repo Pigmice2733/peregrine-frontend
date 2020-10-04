@@ -1,4 +1,3 @@
-import { h, JSX, Fragment } from 'preact'
 import { Schema, StatDescription, StatType } from '@/api/schema'
 import { Stat, ProcessedTeamStats } from '@/api/stats'
 import clsx from 'clsx'
@@ -271,7 +270,7 @@ const AnalysisTable = ({
       columns={columns}
       rows={rows}
       contextRow={
-        <Fragment>
+        <>
           <th class={topLeftCellStyle}>
             {enableSettings && (
               <button class={iconButtonStyle} onClick={showSettings}>
@@ -294,7 +293,7 @@ const AnalysisTable = ({
           >
             <span>Teleop</span>
           </th>
-        </Fragment>
+        </>
       }
     />
   )

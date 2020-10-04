@@ -1,7 +1,7 @@
 module.exports = {
   presets: [
     ['linaria-preact/babel', { evaluate: true }],
-    ['@babel/preset-typescript', { jsxPragma: 'h' }],
+    '@babel/preset-typescript',
   ],
   plugins: [
     process.env.NODE_ENV !== 'production' &&
@@ -15,7 +15,8 @@ module.exports = {
     [
       '@babel/transform-react-jsx',
       {
-        pragma: 'h',
+        runtime: 'automatic',
+        importSource: 'preact',
         useBuiltIns: true, // object.assign instead of _extends
       },
     ],

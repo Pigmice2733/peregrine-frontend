@@ -1,6 +1,5 @@
 import { css } from 'linaria'
 import { StatDescription, ReportStatDescription } from '@/api/schema'
-import { h } from 'preact'
 import { useState, useMemo, useEffect } from 'preact/hooks'
 import {
   uploadReport,

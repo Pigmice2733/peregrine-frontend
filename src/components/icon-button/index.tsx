@@ -1,4 +1,4 @@
-import { h, VNode } from 'preact'
+import { VNode } from 'preact'
 import { PropsOf } from '@/type-utils'
 import Icon from '@/components/icon'
 import { css } from 'linaria'

@@ -1,6 +1,5 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { GetReport } from '@/api/report'
-import { h } from 'preact'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Card from './card'
 import { css } from 'linaria'

@@ -1,4 +1,4 @@
-import { h, FunctionComponent } from 'preact'
+import { FunctionComponent } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getEventStats } from '@/api/stats/get-event-stats'

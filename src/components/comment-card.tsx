@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 import { Report } from '@/api/report'
 import { usePromise } from '@/utils/use-promise'

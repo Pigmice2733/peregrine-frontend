@@ -1,5 +1,4 @@
 import Page from '@/components/page'
-import { h } from 'preact'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { EventMatches } from '@/components/event-matches'

@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import Page from '@/components/page'
 import { MatchCard } from '@/components/match-card'
 import { useEventInfo } from '@/cache/event-info/use'

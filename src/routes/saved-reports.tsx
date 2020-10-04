@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { useSavedReports, uploadSavedReports } from '@/api/report/submit-report'
 import Card from '@/components/card'
@@ -41,7 +40,7 @@ const SavedReportsPage = () => {
   return (
     <Page name="Offline Saved Reports" back="/" class={savedReportsPageStyle}>
       {savedReports.length > 0 ? (
-        <Fragment>
+        <>
           {savedReports.map((report) => (
             <SavedReportCard
               report={report}
@@ -49,7 +48,7 @@ const SavedReportsPage = () => {
             />
           ))}
           <Button onClick={uploadSavedReports}>Sync now</Button>
-        </Fragment>
+        </>
       ) : (
         <p
           class={css`

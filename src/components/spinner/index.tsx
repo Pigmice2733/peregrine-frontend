@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 import { useEffect, useState } from 'preact/hooks'
 

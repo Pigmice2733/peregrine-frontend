@@ -1,5 +1,4 @@
 import Page from '@/components/page'
-import { h } from 'preact'
 import { usePromise } from '@/utils/use-promise'
 import { getReports } from '@/api/report/get-reports'
 import Spinner from '@/components/spinner'

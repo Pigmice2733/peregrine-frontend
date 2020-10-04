@@ -1,4 +1,3 @@
-import { Fragment, h } from 'preact'
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchCard } from '@/components/match-card'
@@ -147,7 +146,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       )}
     >
       {match && reports ? (
-        <Fragment>
+        <>
           <div class={leftColumnStyle}>
             <MatchCard match={match} eventKey={eventKey} />
             {reports.length > 0 ? (
@@ -228,7 +227,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           {match.videos && match.videos.length > 0 && (
             <VideoList videos={match.videos} />
           )}
-        </Fragment>
+        </>
       ) : (
         <Spinner />
       )}

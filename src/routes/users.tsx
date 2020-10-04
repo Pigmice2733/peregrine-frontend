@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import Page from '@/components/page'
 import { getUsers } from '@/api/user/get-users'
 import Spinner from '@/components/spinner'
