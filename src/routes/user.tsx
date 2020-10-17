@@ -1,6 +1,5 @@
 import Page from '@/components/page'
 import Spinner from '@/components/spinner'
-import { getUser } from '@/api/user/get-user'
 import { UserInfo, Roles } from '@/api/user'
 import Card from '@/components/card'
 import { useJWT } from '@/jwt'
@@ -32,6 +31,7 @@ import clsx from 'clsx'
 import { getReports } from '@/api/report/get-reports'
 import { mdiClipboardTextMultipleOutline } from '@mdi/js'
 import { noop } from '@/utils/empty-promise'
+import { getFastestUser } from '@/cache/users/get-fastest'
 
 const RoleInfo = ({
   save,
@@ -417,13 +417,15 @@ const userPageStyle = css`
 const InnerUserPage = ({ userId }: { userId: string }) => {
   const [user, setUser] = useState<UserInfo | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const fetchUser = useCallback(() => getUser(userId).then(setUser), [userId])
-  const emitError = useErrorEmitter()
+  const fetchUser = useCallback(
+    () => getFastestUser(Number(userId)).then(setUser),
+    [userId],
+  )
   useEffect(() => {
     fetchUser()
       .catch(noop)
       .finally(() => setIsLoading(false))
-  }, [emitError, fetchUser])
+  }, [fetchUser])
   const { jwt } = useJWT()
   const realm = jwt?.peregrineRealm
   const roles = jwt?.peregrineRoles

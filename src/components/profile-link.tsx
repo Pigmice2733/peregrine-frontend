@@ -1,10 +1,10 @@
 import { usePromise } from '@/utils/use-promise'
-import { getUser } from '@/api/user/get-user'
 import { formatUserName } from '@/utils/format-user-name'
 import Icon from './icon'
 import { css } from 'linaria'
 import { mdiAccountCircle } from '@mdi/js'
 import { pigmicePurple } from '@/colors'
+import { getFastestUser } from '@/cache/users/get-fastest'
 
 export const ProfileLink = ({
   reporterId,
@@ -15,7 +15,7 @@ export const ProfileLink = ({
 }) => {
   const reporter = usePromise(() => {
     if (reporterId !== undefined && reporterId !== null) {
-      return getUser(reporterId).catch(() => undefined)
+      return getFastestUser(reporterId).catch(() => undefined)
     }
   }, [reporterId])
   const showLink = reporterId !== null && link
