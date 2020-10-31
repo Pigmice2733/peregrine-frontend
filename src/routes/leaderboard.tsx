@@ -1,4 +1,3 @@
-import { RenderableProps } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getLeaderboard } from '@/api/get-leaderboard'
