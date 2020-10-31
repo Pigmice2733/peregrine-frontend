@@ -19,6 +19,10 @@ const initDB = (db: IDBDatabase) => {
     db.createObjectStore(USER_STORE)
 }
 
+export const clearIndexedDB = () => {
+  indexedDB.deleteDatabase(DB_NAME)
+}
+
 let db: IDBDatabase | undefined
 
 const getDB = () => {
