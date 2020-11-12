@@ -2,7 +2,6 @@ import { h } from 'preact'
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchCard } from '@/components/match-card'
-import Spinner from '@/components/spinner'
 import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
 import { getEventStats } from '@/api/stats/get-event-stats'
@@ -63,7 +62,6 @@ const showEventResults = 'Event Results'
 
 type SelectedDisplay = typeof showMatchResults | typeof showEventResults
 
-// eslint-disable-next-line complexity
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
@@ -131,8 +129,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       back={`/events/${eventKey}`}
       name={
         (m === null
-          ? matchKey + ' - '
-          : m.group + (m.num ? ' Match ' + m.num : '') + ' - ') +
+          ? matchKey
+          : m.group + (m.num ? ' Match ' + m.num : '')) + ' - ' +
         (event ? event.name : eventKey)
       }
       class={matchStyle}
@@ -140,18 +138,14 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
         Scout Match
       </Button>
-      {isData(match) ? (
-        <MatchCard match={match} eventKey={eventKey} />
-      ) : (
-        <Spinner />
-      )}
-      {isData(match) && matchHasBeenPlayed && (
+      <MatchCard match={match} eventKey={eventKey} />
+      {matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
           <div class={blueScoreStyle}>{match.blueScore}</div>
         </Card>
       )}
-      {isData(match) && schema && (
+      {schema && (
         <Card
           class={css`
             overflow-y: hidden;
@@ -207,10 +201,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           />
         </Card>
       )}
-      {isData(match) &&
-        match.videos?.map((v) => (
-          <VideoCard key={v} url={cleanYoutubeUrl(v)} />
-        ))}
+      {match.videos?.map((v) => (
+        <VideoCard key={v} url={cleanYoutubeUrl(v)} />
+       ))}
     </Page>
   )
 }
