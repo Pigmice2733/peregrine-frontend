@@ -1,11 +1,11 @@
 import { css } from 'linaria'
 import { Report } from '@/api/report'
 import { usePromise } from '@/utils/use-promise'
-import { getUser } from '@/api/user/get-user'
 import Card from './card'
 import Icon from './icon'
 import { commentIcon } from '@/icons/comment'
 import { formatUserName } from '@/utils/format-user-name'
+import { getFastestUser } from '@/cache/users/get-fastest'
 
 const commentCardStyle = css`
   display: grid;
@@ -42,7 +42,7 @@ export const CommentCard = ({
 }: Props) => {
   const reporterId = report.reporterId
   const reporter = usePromise(
-    () => (reporterId ? getUser(reporterId).catch(() => null) : null),
+    () => (reporterId ? getFastestUser(reporterId).catch(() => null) : null),
     [reporterId],
   )
   return (
