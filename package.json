@@ -59,7 +59,7 @@
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "clsx": "1.1.1",
     "cpy": "8.1.1",
-    "css-loader": "3.6.0",
+    "css-loader": "5.0.1",
     "dotenv": "8.2.0",
     "eslint": "7.13.0",
     "eslint-formatter-pretty": "4.0.0",
