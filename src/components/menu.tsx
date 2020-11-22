@@ -218,7 +218,7 @@ export const Menu = ({ onHide, visible }: Props) => {
               </MenuItem>
             ) : (
               <>
-                <MenuItem icon={login} href="/login">
+                <MenuItem icon={login} href={`/login?from=${encodeURIComponent(window.location.href)}`}>
                   Log in
                 </MenuItem>
                 <MenuItem icon={accountPlus} href="/signup">
