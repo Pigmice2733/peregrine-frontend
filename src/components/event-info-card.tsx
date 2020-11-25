@@ -1,17 +1,17 @@
 import InfoGroupCard from './info-group-card'
-import { mapMarker } from '@/icons/map-marker'
+import { mdiMapMarker } from '@mdi/js'
 import Icon from './icon'
-import { googleMaps } from '@/icons/google-maps'
-import { infoOutline } from '@/icons/info-outline'
+import { mdiGoogleMaps } from '@mdi/js'
+import { mdiInformationOutline } from '@mdi/js'
 import Chip from './chip'
-import { calendar } from '@/icons/calendar'
+import { mdiCalendar } from '@mdi/js'
 import { formatDateRange } from '@/utils/format-date-range'
 import IconButton from './icon-button'
-import { calendarPlus } from '@/icons/calendar-plus'
-import { video } from '@/icons/video'
+import { mdiCalendarPlus } from '@mdi/js'
+import { mdiVideo } from '@mdi/js'
 import { ProcessedEventInfo } from '@/api/event-info'
-import { youtube } from '@/icons/youtube'
-import { twitch } from '@/icons/twitch'
+import { mdiYoutube } from '@mdi/js'
+import { mdiTwitch } from '@mdi/js'
 
 const gcalDate = (date: Date, dateOffset = 0) => {
   return (
@@ -21,7 +21,7 @@ const gcalDate = (date: Date, dateOffset = 0) => {
   )
 }
 
-const webcastIcon = (url: string) => (/youtube/i.exec(url) ? youtube : twitch)
+const webcastIcon = (url: string) => (/youtube/i.exec(url) ? mdiYoutube : mdiTwitch)
 
 const gcalUrl = ({
   name,
@@ -50,15 +50,15 @@ export const EventInfoCard = ({ event }: Props) => (
     info={[
       event.locationName &&
         event.gmapsUrl && {
-          icon: mapMarker,
+          icon: mdiMapMarker,
           title: event.locationName,
           href: event.gmapsUrl,
           target: '_blank',
           rel: 'noopener',
-          action: <Icon icon={googleMaps} />,
+          action: <Icon icon={mdiGoogleMaps} />,
         },
       event.district && {
-        icon: infoOutline,
+        icon: mdiInformationOutline,
         title: (
           <span>
             {(event as { fullDistrict: string }).fullDistrict}{' '}
@@ -67,7 +67,7 @@ export const EventInfoCard = ({ event }: Props) => (
         ),
       },
       {
-        icon: calendar,
+        icon: mdiCalendar,
         title: (
           <span>
             {formatDateRange(event.startDate, event.endDate)}{' '}
@@ -79,12 +79,12 @@ export const EventInfoCard = ({ event }: Props) => (
             href={gcalUrl(event)}
             target="_blank"
             rel="noopener"
-            icon={calendarPlus}
+            icon={mdiCalendarPlus}
           />
         ),
       },
       event.webcasts.length > 0 && {
-        icon: video,
+        icon: mdiVideo,
         title: 'Live Stream' + (event.webcasts.length === 1 ? '' : 's'),
         href: event.webcasts.length === 1 ? event.webcasts[0] : undefined,
         target: '_blank',

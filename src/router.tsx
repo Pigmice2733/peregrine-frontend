@@ -5,7 +5,7 @@ import Spinner from '@/components/spinner'
 import { updateUrl, useUrl } from './url-manager'
 import Alert, { AlertType } from '@/components/alert'
 import { css } from 'linaria'
-import { close } from '@/icons/close'
+import { mdiClose } from '@mdi/js'
 import Icon from './components/icon'
 import { createShadow } from './utils/create-shadow'
 
@@ -135,7 +135,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
                   handleAlertsChange()
                 }}
               >
-                <Icon icon={close} />
+                <Icon icon={mdiClose} />
               </button>
             </Alert>
           ))}

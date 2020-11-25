@@ -3,7 +3,7 @@ import { Report } from '@/api/report'
 import { usePromise } from '@/utils/use-promise'
 import Card from './card'
 import Icon from './icon'
-import { commentIcon } from '@/icons/comment'
+import { mdiComment } from '@mdi/js'
 import { formatUserName } from '@/utils/format-user-name'
 import { getFastestUser } from '@/cache/users/get-fastest'
 
@@ -51,7 +51,7 @@ export const CommentCard = ({
       href={linkToReport ? `/reports/${report.id}` : undefined}
       class={commentCardStyle}
     >
-      <Icon icon={commentIcon} />
+      <Icon icon={mdiComment} />
       {showReporter && <span>{formatUserName(reporter, reporterId)}</span>}
       <p>{report.comment}</p>
     </Card>

@@ -7,7 +7,7 @@ import { InnerTextInput } from '@/components/text-input'
 import { useErrorEmitter } from '@/components/error-boundary'
 import { css } from 'linaria'
 import IconButton from '@/components/icon-button'
-import { deleteIcon } from '@/icons/delete'
+import { mdiDelete } from '@mdi/js'
 import { useState } from 'preact/hooks'
 import { deleteUser } from '@/api/user/delete-user'
 import { createDialog } from '@/components/dialog'
@@ -121,7 +121,7 @@ export const UserRow = ({ user, refresh = () => {} }: Props) => {
         />
       </td>
       <td>
-        <IconButton icon={deleteIcon} onClick={confirmDelete} />
+        <IconButton icon={mdiDelete} onClick={confirmDelete} />
       </td>
       {hasUnsaved && (
         <td>
