@@ -22,7 +22,6 @@ import { accountPlus } from '@/icons/account-plus'
 import { mdiStarCircle } from '@mdi/js'
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
-import { encode } from 'qss'
 
 const spacing = '0.3rem'
 
