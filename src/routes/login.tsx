@@ -3,7 +3,7 @@ import { decode } from 'qss'
 
 const goBack = () => {
   window.location.href = decodeURIComponent(
-    decode(window.location.search.slice(1)).from || '',
+    decode(window.location.search.slice(1)).from || '/',
   )
 }
 
