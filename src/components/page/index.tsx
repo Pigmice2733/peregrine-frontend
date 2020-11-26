@@ -4,8 +4,7 @@ import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { pigmicePurple } from '@/colors'
 import IconButton, { iconButtonClass } from '../icon-button'
-import { mdiArrowLeft } from '@mdi/js'
-import { mdiMenu } from '@mdi/js'
+import { mdiArrowLeft, mdiMenu } from '@mdi/js'
 import clsx from 'clsx'
 import { useState } from 'preact/hooks'
 import { Menu } from '@/components/menu'
@@ -76,7 +75,11 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
           />
         )}
         <h1 class={headerText}>{name}</h1>
-        <IconButton icon={mdiMenu} onClick={toggleMenu} aria-label="Open Menu" />
+        <IconButton
+          icon={mdiMenu}
+          onClick={toggleMenu}
+          aria-label="Open Menu"
+        />
       </header>
       <Menu onHide={hideMenu} visible={isMenuOpen} />
     </>

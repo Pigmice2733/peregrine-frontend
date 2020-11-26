@@ -1,17 +1,19 @@
 import InfoGroupCard from './info-group-card'
-import { mdiMapMarker } from '@mdi/js'
+import {
+  mdiMapMarker,
+  mdiGoogleMaps,
+  mdiInformationOutline,
+  mdiCalendar,
+  mdiCalendarPlus,
+  mdiVideo,
+  mdiYoutube,
+  mdiTwitch,
+} from '@mdi/js'
 import Icon from './icon'
-import { mdiGoogleMaps } from '@mdi/js'
-import { mdiInformationOutline } from '@mdi/js'
 import Chip from './chip'
-import { mdiCalendar } from '@mdi/js'
 import { formatDateRange } from '@/utils/format-date-range'
 import IconButton from './icon-button'
-import { mdiCalendarPlus } from '@mdi/js'
-import { mdiVideo } from '@mdi/js'
 import { ProcessedEventInfo } from '@/api/event-info'
-import { mdiYoutube } from '@mdi/js'
-import { mdiTwitch } from '@mdi/js'
 
 const gcalDate = (date: Date, dateOffset = 0) => {
   return (
@@ -21,7 +23,8 @@ const gcalDate = (date: Date, dateOffset = 0) => {
   )
 }
 
-const webcastIcon = (url: string) => (/youtube/i.exec(url) ? mdiYoutube : mdiTwitch)
+const webcastIcon = (url: string) =>
+  /youtube/i.exec(url) ? mdiYoutube : mdiTwitch
 
 const gcalUrl = ({
   name,
