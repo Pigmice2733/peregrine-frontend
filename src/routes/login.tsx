@@ -1,12 +1,10 @@
 import Authenticated from '@/components/authenticated'
-
-const useQuery = () => {
-  return new URLSearchParams(window.location.search);
-}
+import { decode } from 'qss'
 
 const goBack = () => {
-  // eslint-disable-next-line caleb/react-hooks/rules-of-hooks
-  window.location.href = decodeURIComponent(useQuery().get("from") || '');
+  window.location.href = decodeURIComponent(
+    decode(window.location.search.slice(1)).from || '',
+  )
 }
 
 const Login = () => {
