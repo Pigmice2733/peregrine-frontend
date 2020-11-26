@@ -1,17 +1,12 @@
 import { pigmicePurple } from '@/colors'
 import Icon from '@/components/icon'
 import { Scrim, scrimHiddenClass } from '@/components/scrim'
-import {
-  mdiAccountCircle as accountCircle,
-  mdiClose as closeIcon,
-  mdiCrown as crown,
-  mdiHome as home,
-  mdiLogin as login,
-  mdiLogout as logoutIcon,
-  mdiAccountPlus as accountPlus,
-  mdiCloudSync as cloudSync,
-  mdiStarCircle,
-} from '@mdi/js'
+import { accountCircle } from '@/icons/account-circle'
+import { close as closeIcon } from '@/icons/close'
+import { crown } from '@/icons/crown'
+import { home } from '@/icons/home'
+import { login } from '@/icons/login'
+import { logout as logoutIcon } from '@/icons/logout'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
 import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
@@ -22,6 +17,9 @@ import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren } from 'preact'
 import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
+import { cloudSync } from '@/icons/cloud-sync'
+import { accountPlus } from '@/icons/account-plus'
+import { mdiStarCircle } from '@mdi/js'
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
 import { encode } from 'qss'

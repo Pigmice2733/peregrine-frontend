@@ -4,7 +4,8 @@ import { FunctionComponent, JSX } from 'preact'
 import { Merge } from 'type-fest'
 import clsx from 'clsx'
 import Icon from './icon'
-import { mdiCheckBold as checkBold, mdiCloseThick as xBold } from '@mdi/js'
+import { checkBold } from '@/icons/check-bold'
+import { xBold } from '@/icons/x-bold'
 
 const trueStyle = css`
   background: ${greenOnPurple};

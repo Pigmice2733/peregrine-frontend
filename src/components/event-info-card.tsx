@@ -1,19 +1,17 @@
 import InfoGroupCard from './info-group-card'
-import {
-  mdiMapMarker as mapMarker,
-  mdiGoogleMaps as googleMaps,
-  mdiInformationOutline as infoOutline,
-  mdiCalendar as calendar,
-  mdiCalendarPlus as calendarPlus,
-  mdiVideo as video,
-  mdiYoutube as youtube,
-  mdiTwitch as twitch,
-} from '@mdi/js'
+import { mapMarker } from '@/icons/map-marker'
 import Icon from './icon'
+import { googleMaps } from '@/icons/google-maps'
+import { infoOutline } from '@/icons/info-outline'
 import Chip from './chip'
+import { calendar } from '@/icons/calendar'
 import { formatDateRange } from '@/utils/format-date-range'
 import IconButton from './icon-button'
+import { calendarPlus } from '@/icons/calendar-plus'
+import { video } from '@/icons/video'
 import { ProcessedEventInfo } from '@/api/event-info'
+import { youtube } from '@/icons/youtube'
+import { twitch } from '@/icons/twitch'
 
 const gcalDate = (date: Date, dateOffset = 0) => {
   return (
