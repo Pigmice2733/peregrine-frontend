@@ -1,4 +1,4 @@
-import { pigmicePurple } from '@/colors'
+import { offBlack, pigmicePurple, textGrey } from '@/colors'
 import Icon from '@/components/icon'
 import { Scrim, scrimHiddenClass } from '@/components/scrim'
 import { accountCircle } from '@/icons/account-circle'
@@ -19,9 +19,10 @@ import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
 import { cloudSync } from '@/icons/cloud-sync'
 import { accountPlus } from '@/icons/account-plus'
-import { mdiStarCircle } from '@mdi/js'
+import { mdiAutorenew, mdiStarCircle } from '@mdi/js'
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
+import { useEffect, useState } from 'preact/hooks'
 
 const spacing = '0.3rem'
 
@@ -227,8 +228,98 @@ export const Menu = ({ onHide, visible }: Props) => {
               </>
             )}
           </ul>
+          <VersionInfo />
         </nav>
       </aside>
     </Scrim>
   )
 }
+
+const versionInfoStyle = css`
+  font-family: monospace;
+  text-align: center;
+  font-size: 0.8rem;
+  padding: 0.3rem;
+  color: ${textGrey};
+`
+
+navigator.serviceWorker.addEventListener('message', (event) => {
+  if (event.data !== 'refresh') return
+  location.reload()
+})
+
+const VersionInfo = () => {
+  const [isNewVersionAvailable, setIsNewVersionAvailable] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  useEffect(() => {
+    const checkForNewVersion = () => {
+      console.log('hi')
+      navigator.serviceWorker.getRegistration().then((registration) => {
+        setIsNewVersionAvailable(
+          registration ? registration.waiting !== null : false,
+        )
+      })
+    }
+    checkForNewVersion()
+    const listenForNewVersion = (event: MessageEvent) => {
+      if (event.data !== 'new version') return
+      checkForNewVersion()
+    }
+    navigator.serviceWorker.addEventListener('message', listenForNewVersion)
+    return () =>
+      navigator.serviceWorker.removeEventListener(
+        'message',
+        listenForNewVersion,
+      )
+  }, [])
+
+  return (
+    <>
+      {process.env.BRANCH && process.env.COMMIT_REF && (
+        <div class={versionInfoStyle}>{`${
+          process.env.BRANCH
+        }-${process.env.COMMIT_REF.slice(0, 7)}`}</div>
+      )}
+      {isNewVersionAvailable && (
+        <button
+          class={newVersionButtonStyle}
+          disabled={isRefreshing}
+          onClick={async () => {
+            setIsRefreshing(true)
+            const registration = await navigator.serviceWorker.getRegistration()
+            if (!registration) return
+            registration.waiting?.postMessage('refresh')
+          }}
+        >
+          {isRefreshing ? 'Updating...' : 'New Version Available'}
+          {!isRefreshing && (
+            <Icon class={updateButtonIconStyle} icon={mdiAutorenew} />
+          )}
+        </button>
+      )}
+    </>
+  )
+}
+
+const newVersionButtonStyle = css`
+  border: 0;
+  background: transparent;
+  text-decoration: underline;
+  color: #3976b7;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  &[disabled] {
+    color: ${offBlack};
+    text-decoration: none;
+    cursor: default;
+  }
+`
+
+const updateButtonIconStyle = css`
+  width: 1rem;
+  height: 1rem;
+  fill: currentColor;
+`
