@@ -74,9 +74,9 @@ export const Router = ({ routes }: { routes: Route[] }) => {
       const href = t.getAttribute('href')
 
       if (!href) return
-      
+
       // remove url queries
-      const hrefWithoutQuery = href.split('?')[0];
+      const hrefWithoutQuery = href.split('?')[0]
 
       // if link is handled by the router, prevent browser defaults
       if (match(hrefWithoutQuery, parsedRoutes).length !== 0) {
