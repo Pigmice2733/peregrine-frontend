@@ -243,17 +243,20 @@ const versionInfoStyle = css`
   color: ${textGrey};
 `
 
-navigator.serviceWorker.addEventListener('message', (event) => {
-  if (event.data !== 'refresh') return
-  location.reload()
-})
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data === 'refresh') {
+      location.reload()
+    }
+  })
+}
 
 const VersionInfo = () => {
   const [isNewVersionAvailable, setIsNewVersionAvailable] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
   useEffect(() => {
+    if (!('serviceWorker' in navigator)) return
     const checkForNewVersion = () => {
-      console.log('hi')
       navigator.serviceWorker.getRegistration().then((registration) => {
         setIsNewVersionAvailable(
           registration ? registration.waiting !== null : false,
