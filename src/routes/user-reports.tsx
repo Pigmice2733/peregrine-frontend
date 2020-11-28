@@ -8,10 +8,10 @@ import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { GetReport } from '@/api/report'
 import { useEventInfo } from '@/cache/event-info/use'
 import { formatTeamNumber } from '@/utils/format-team-number'
-import { getUser } from '@/api/user/get-user'
+import { getFastestUser } from '@/cache/users/get-fastest'
 
 interface Props {
-  userId: number
+  userId: string
 }
 
 const userReportsStyle = css`
@@ -27,8 +27,12 @@ const reportCardStyle = css`
 `
 
 const UserReports = ({ userId }: Props) => {
+  console.log(userId)
   const reports = usePromise(() => getReports({ reporter: userId }), [userId])
-  const user = usePromise(() => getUser(userId).catch(() => {}), [userId])
+  const user = usePromise(
+    () => getFastestUser(Number(userId)).catch(() => {}),
+    [userId],
+  )
   return (
     <Page
       name={`${
