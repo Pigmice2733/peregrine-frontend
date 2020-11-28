@@ -1,10 +1,9 @@
 import Authenticated from '@/components/authenticated'
 import { decode } from 'qss'
+import { route } from '@/router'
 
 const goBack = () => {
-  window.location.href = decodeURIComponent(
-    decode(window.location.search.slice(1)).from || '/',
-  )
+  route(decode(window.location.search.slice(1)).from || '/')
 }
 
 const Login = () => {
