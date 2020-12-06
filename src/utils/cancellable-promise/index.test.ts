@@ -57,7 +57,7 @@ describe('behaves like a normal promise', () => {
 
     const onResolve = jest.fn()
     const onReject = jest.fn(
-      () => new Promise<number>((resolve) => resolve(30)),
+      (_: any) => new Promise<number>((resolve) => resolve(30)),
     )
     const onResolve2 = jest.fn()
 
