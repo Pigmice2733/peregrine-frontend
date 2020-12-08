@@ -75,8 +75,11 @@ export const Router = ({ routes }: { routes: Route[] }) => {
 
       if (!href) return
 
+      // remove url queries
+      const hrefWithoutQuery = href.split('?')[0]
+
       // if link is handled by the router, prevent browser defaults
-      if (match(href, parsedRoutes).length !== 0) {
+      if (match(hrefWithoutQuery, parsedRoutes).length !== 0) {
         route(href)
         e.preventDefault()
         e.stopImmediatePropagation()

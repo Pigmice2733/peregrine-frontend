@@ -220,7 +220,10 @@ export const Menu = ({ onHide, visible }: Props) => {
               </MenuItem>
             ) : (
               <>
-                <MenuItem icon={mdiLogin} href="/login">
+                <MenuItem
+                  icon={mdiLogin}
+                  href={`/login?from=${encodeURIComponent(location.pathname)}`}
+                >
                   Log in
                 </MenuItem>
                 <MenuItem icon={mdiAccountPlus} href="/signup">
