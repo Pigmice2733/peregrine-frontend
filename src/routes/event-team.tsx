@@ -1,11 +1,11 @@
 import Page from '@/components/page'
 import InfoGroupCard from '@/components/info-group-card'
 import {
-  mdiSortAscending,
   mdiHistory,
   mdiMapMarker,
   mdiStarOutline,
   mdiStar,
+  mdiSortDescending,
 } from '@mdi/js'
 import { MatchCard } from '@/components/match-card'
 import { round } from '@/utils/round'
@@ -207,7 +207,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
         info={[
           {
             title: 'Rank',
-            icon: mdiSortAscending,
+            icon: mdiSortDescending,
             action: eventTeamInfo ? eventTeamInfo.rank : '?',
           },
           {

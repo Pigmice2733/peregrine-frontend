@@ -6,11 +6,11 @@ import {
   mdiClose,
   mdiCrown,
   mdiHome,
-  mdiLogin,
-  mdiLogout,
-  mdiCloudSync,
   mdiAccountPlus,
   mdiStarCircle,
+  mdiLoginVariant,
+  mdiLogoutVariant,
+  mdiCloudUpload,
 } from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
@@ -193,7 +193,7 @@ export const Menu = ({ onHide, visible }: Props) => {
               </MenuItem>
             )}
             {savedReports.length > 0 && (
-              <MenuItem icon={mdiCloudSync} href="/saved-reports">
+              <MenuItem icon={mdiCloudUpload} href="/saved-reports">
                 Offline Saved Reports
               </MenuItem>
             )}
@@ -215,13 +215,13 @@ export const Menu = ({ onHide, visible }: Props) => {
               </MenuItem>
             )}
             {isLoggedIn ? (
-              <MenuItem icon={mdiLogout} onClick={logoutHandler}>
+              <MenuItem icon={mdiLogoutVariant} onClick={logoutHandler}>
                 Log out
               </MenuItem>
             ) : (
               <>
                 <MenuItem
-                  icon={mdiLogin}
+                  icon={mdiLoginVariant}
                   href={`/login?from=${encodeURIComponent(location.pathname)}`}
                 >
                   Log in

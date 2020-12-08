@@ -1,7 +1,6 @@
 import InfoGroupCard from './info-group-card'
 import {
   mdiMapMarker,
-  mdiGoogleMaps,
   mdiInformationOutline,
   mdiCalendar,
   mdiCalendarPlus,
@@ -58,7 +57,6 @@ export const EventInfoCard = ({ event }: Props) => (
           href: event.gmapsUrl,
           target: '_blank',
           rel: 'noopener',
-          action: <Icon icon={mdiGoogleMaps} />,
         },
       event.district && {
         icon: mdiInformationOutline,

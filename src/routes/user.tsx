@@ -5,7 +5,7 @@ import Card from '@/components/card'
 import { useJWT } from '@/jwt'
 import { InlineIconButton } from '@/components/icon-button'
 import {
-  mdiAccountEdit,
+  mdiPencil,
   mdiClose,
   mdiCheck,
   mdiSync,
@@ -185,7 +185,7 @@ const SetPasswordButton = ({ user }: { user: UserInfo }) => {
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
-          <Icon class={iconInButtonStyle} icon={mdiAccountEdit} />
+          <Icon class={iconInButtonStyle} icon={mdiPencil} />
           Set Password
         </Button>
       )}
@@ -259,7 +259,7 @@ const EditableText = ({
     children(
       originalValue,
       editable ? (
-        <InlineIconButton icon={mdiAccountEdit} onClick={openEditor} />
+        <InlineIconButton icon={mdiPencil} onClick={openEditor} />
       ) : undefined,
       openEditor,
     )
