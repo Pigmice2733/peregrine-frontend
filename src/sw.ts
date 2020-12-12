@@ -24,13 +24,28 @@ const setupCache = async () => {
   })
 }
 
-self.addEventListener('install', function (event) {
+self.addEventListener('install', async (event) => {
   event.waitUntil(setupCache())
-  // If there is not an existing service worker installed
-  // And the browser supports skipWaiting, call skipWaiting
-  if (!self.registration.installing) {
+  if (self.registration.installing) {
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    const tabs = await self.clients.matchAll({ includeUncontrolled: true })
+    tabs.forEach((tab) => {
+      tab.postMessage('new version')
+    })
+  } else {
+    // If there is not an existing service worker installed
+    // And the browser supports skipWaiting, call skipWaiting
     self.skipWaiting()
   }
+})
+
+self.addEventListener('message', async (event) => {
+  if (event.data !== 'refresh') return
+  await self.skipWaiting()
+  const tabs = await self.clients.matchAll()
+  tabs.forEach((tab) => {
+    tab.postMessage('refresh')
+  })
 })
 
 // When the new SW activates, delete any old caches
