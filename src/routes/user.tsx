@@ -4,32 +4,34 @@ import { UserInfo, Roles } from '@/api/user'
 import Card from '@/components/card'
 import { useJWT } from '@/jwt'
 import { InlineIconButton } from '@/components/icon-button'
-import { edit } from '@/icons/edit'
+import {
+  mdiPencil,
+  mdiClose,
+  mdiCheck,
+  mdiSync,
+  mdiDelete,
+  mdiAlert,
+  mdiClipboardTextMultipleOutline,
+} from '@mdi/js'
 import { css } from 'linaria'
 import TextInput, { TextInputProps } from '@/components/text-input'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import { offBlack } from '@/colors'
 import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
 import { modifyUser } from '@/api/user/modify-user'
-import { close } from '@/icons/close'
-import { check } from '@/icons/check'
-import { sync } from '@/icons/sync'
 import { getRealm } from '@/api/realm/get-realm'
 import { usePromise } from '@/utils/use-promise'
 import Toggle from '@/components/toggle'
 import { deleteUser } from '@/api/user/delete-user'
-import { deleteIcon } from '@/icons/delete'
 import { route } from '@/router'
 import { createDialog } from '@/components/dialog'
 import Alert, { AlertType } from '@/components/alert'
 import Button, { buttonFontStyle } from '@/components/button'
 import Icon from '@/components/icon'
-import { alert } from '@/icons/alert'
 import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
 import clsx from 'clsx'
 import { getReports } from '@/api/report/get-reports'
-import { mdiClipboardTextMultipleOutline } from '@mdi/js'
 import { noop } from '@/utils/empty-promise'
 import { getFastestUser } from '@/cache/users/get-fastest'
 
@@ -90,7 +92,7 @@ const VerifiedInfo = ({
       `}
     >
       <Icon
-        icon={isVerified ? check : alert}
+        icon={isVerified ? mdiCheck : mdiAlert}
         class={css`
           width: 1.2rem;
           height: 1.2rem;
@@ -162,7 +164,7 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
           .catch(emitError)
       }}
     >
-      <Icon class={iconInButtonStyle} icon={deleteIcon} />
+      <Icon class={iconInButtonStyle} icon={mdiDelete} />
       {`Delete ${user.firstName} ${user.lastName}`}
     </Button>
   )
@@ -183,7 +185,7 @@ const SetPasswordButton = ({ user }: { user: UserInfo }) => {
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
-          <Icon class={iconInButtonStyle} icon={edit} />
+          <Icon class={iconInButtonStyle} icon={mdiPencil} />
           Set Password
         </Button>
       )}
@@ -242,11 +244,11 @@ const EditableText = ({
     <form class={editableTextStyle} onSubmit={saveNewValue}>
       <TextInput label={label} value={value} onInput={setValue} {...rest} />
       <InlineIconButton
-        icon={isSaving ? sync : check}
+        icon={isSaving ? mdiSync : mdiCheck}
         disabled={!isChanged || isSaving}
       />
       <InlineIconButton
-        icon={close}
+        icon={mdiClose}
         onClick={(e) => {
           e.preventDefault()
           closeEditor()
@@ -257,7 +259,7 @@ const EditableText = ({
     children(
       originalValue,
       editable ? (
-        <InlineIconButton icon={edit} onClick={openEditor} />
+        <InlineIconButton icon={mdiPencil} onClick={openEditor} />
       ) : undefined,
       openEditor,
     )
