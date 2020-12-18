@@ -172,6 +172,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               class={css`
                 overflow-y: hidden;
                 grid-area: analysisTable;
+                @media screen and (width > 118.75rem) {
+                  justify-self: center;
+                }
               `}
             >
               <div class={displayModeSelectorStyle}>
