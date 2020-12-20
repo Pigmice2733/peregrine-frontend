@@ -16,7 +16,7 @@ import { css } from 'linaria'
 import { createDialog } from './dialog'
 import { blue, red, grey, lightGrey, textGrey } from '@/colors'
 import Icon from './icon'
-import { settings as settingsIcon } from '@/icons/settings'
+import { mdiCog } from '@mdi/js'
 import { round } from '@/utils/round'
 import Spinner from './spinner'
 import { cleanFieldName } from '@/utils/clean-field-name'
@@ -274,7 +274,7 @@ const AnalysisTable = ({
           <th class={topLeftCellStyle}>
             {enableSettings && (
               <button class={iconButtonStyle} onClick={showSettings}>
-                <Icon icon={settingsIcon} class={iconStyle} />
+                <Icon icon={mdiCog} class={iconStyle} />
               </button>
             )}
           </th>
