@@ -5,7 +5,7 @@ import Spinner from '@/components/spinner'
 import { updateUrl, useUrl } from './url-manager'
 import Alert, { AlertType } from '@/components/alert'
 import { css } from 'linaria'
-import { close } from '@/icons/close'
+import { mdiClose } from '@mdi/js'
 import Icon from './components/icon'
 import { createShadow } from './utils/create-shadow'
 
@@ -75,8 +75,11 @@ export const Router = ({ routes }: { routes: Route[] }) => {
 
       if (!href) return
 
+      // remove url queries
+      const hrefWithoutQuery = href.split('?')[0]
+
       // if link is handled by the router, prevent browser defaults
-      if (match(href, parsedRoutes).length !== 0) {
+      if (match(hrefWithoutQuery, parsedRoutes).length !== 0) {
         route(href)
         e.preventDefault()
         e.stopImmediatePropagation()
@@ -135,7 +138,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
                   handleAlertsChange()
                 }}
               >
-                <Icon icon={close} />
+                <Icon icon={mdiClose} />
               </button>
             </Alert>
           ))}
