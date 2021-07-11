@@ -48,6 +48,14 @@ const routes = [
     component: () => import('./routes/leaderboard'),
   },
   {
+    path: '/springy',
+    component: () => import('./routes/springy'),
+  },
+  {
+    path: '/transitioney',
+    component: () => import('./routes/transitioney'),
+  },
+  {
     path: '/saved-reports',
     component: () => import('./routes/saved-reports'),
   },
