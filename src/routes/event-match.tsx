@@ -171,7 +171,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             <Card
               class={css`
                 overflow-y: hidden;
+                overflow-x: auto;
                 grid-area: analysisTable;
+                max-width: 100%;
+                justify-self: center;
               `}
             >
               <div class={displayModeSelectorStyle}>
