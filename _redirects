@@ -1,2 +1,2 @@
-/api/*  https://api.peregrinefrc.com/:splat 200!
+/api/*  http://api.peregrinefrc.com/:splat 200!
 /* /index.html 200
