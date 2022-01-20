@@ -59,6 +59,10 @@ const fieldValuesStyle = css`
   }
 `
 
+const reportCommentCard = css`
+  max-width: 10rem
+`
+
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
@@ -111,11 +115,11 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       </div>
 
       {report.comment && (
-        <CommentCard
+        <CommentCard class={reportCommentCard}>
           report={report}
           showReporter={false}
           linkToReport={false}
-        />
+        </CommentCard>
       )}
 
       <ProfileLink reporterId={reporterId} />
