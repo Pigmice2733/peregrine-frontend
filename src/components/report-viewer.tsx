@@ -60,7 +60,7 @@ const fieldValuesStyle = css`
 `
 
 const reportCommentCard = css`
-  max-width: 10rem
+  max-width: 10rem;
 `
 
 export const ReportViewer = ({ report, onEditClick }: Props) => {

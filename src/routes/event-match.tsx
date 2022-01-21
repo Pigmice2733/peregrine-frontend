@@ -173,7 +173,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 overflow-y: hidden;
                 grid-area: analysisTable;
                 justify-self: stretch;
-                @media (min-width: 1600px){
+                @media (min-width: 1600px) {
                   justify-self: center;
                 }
               `}
