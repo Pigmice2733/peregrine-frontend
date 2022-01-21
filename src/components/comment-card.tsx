@@ -30,14 +30,12 @@ const commentCardStyle = css`
 `
 
 interface Props {
-  class: string
   report: Report
   showReporter?: boolean
   linkToReport?: boolean
 }
 
 export const CommentCard = ({
-  class: cssID,
   report,
   showReporter = true,
   linkToReport = true,

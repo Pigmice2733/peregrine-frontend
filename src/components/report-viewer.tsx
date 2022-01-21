@@ -115,12 +115,13 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       </div>
 
       {report.comment && (
-        <CommentCard
-          class={reportCommentCard}
-          report={report}
-          showReporter={false}
-          linkToReport={false}
-        />
+        <div class={reportCommentCard}>
+          <CommentCard
+            report={report}
+            showReporter={false}
+            linkToReport={false}
+          />
+        </div>
       )}
 
       <ProfileLink reporterId={reporterId} />
