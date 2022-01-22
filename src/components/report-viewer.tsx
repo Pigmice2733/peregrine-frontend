@@ -59,10 +59,6 @@ const fieldValuesStyle = css`
   }
 `
 
-const reportCommentCard = css`
-  max-width: 1fr;
-`
-
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
@@ -94,14 +90,16 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
           eventInfo?.name ?? report.eventKey
         }`}</a>
       </div>
-      {matchInfo && (
-        <TeamPicker
-          redAlliance={matchInfo.redAlliance}
-          blueAlliance={matchInfo.blueAlliance}
-          value={report.teamKey}
-          editable={false}
-        />
-      )}
+      <div>
+        {matchInfo && (
+          <TeamPicker
+            redAlliance={matchInfo.redAlliance}
+            blueAlliance={matchInfo.blueAlliance}
+            value={report.teamKey}
+            editable={false}
+          />
+        )}
+      </div>
 
       <div class={fieldValuesStyle}>
         <h3>Auto</h3>
@@ -115,7 +113,11 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       </div>
 
       {report.comment && (
-        <div class={reportCommentCard}>
+        <div
+          class={css`
+            max-width: 15rem;
+          `}
+        >
           <CommentCard
             report={report}
             showReporter={false}
@@ -124,7 +126,9 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         </div>
       )}
 
-      <ProfileLink reporterId={reporterId} />
+      <div>
+        <ProfileLink reporterId={reporterId} />
+      </div>
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </>
   )
