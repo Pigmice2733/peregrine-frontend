@@ -16,11 +16,14 @@ const reportPageStyle = css`
   padding: 2rem;
   justify-content: center;
 `
+
+// defines qualities of the report area (white background) on the page
 const reportViewerCardStyle = css`
   padding: 2rem;
   display: grid;
   justify-items: center;
   grid-gap: 1rem;
+  max-width: 30rem;
 `
 
 export const ReportPage = ({
@@ -63,6 +66,7 @@ export const ReportPage = ({
           onDelete={onDelete}
         />
       ) : (
+        // the report
         <Card class={reportViewerCardStyle}>
           <ReportViewer
             report={report}

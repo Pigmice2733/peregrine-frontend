@@ -39,7 +39,9 @@ const ReportFieldViewer = ({
         class={css`
           margin-right: 1rem;
         `}
-      >{`${cleanFieldName(field.name)}: `}</div>
+      >
+        {`${cleanFieldName(field.name)}: `}
+      </div>
       {field.type === 'boolean' ? (
         <BooleanDisplay value={Boolean(value)} />
       ) : (
@@ -113,9 +115,11 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       </div>
 
       {report.comment && (
+        // the comment portion of the report
         <div
+          // makes sure the comment doesn't get too wide
           class={css`
-            max-width: 15rem;
+            max-width: 30rem;
           `}
         >
           <CommentCard
