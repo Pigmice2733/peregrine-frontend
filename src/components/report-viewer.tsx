@@ -61,6 +61,7 @@ const fieldValuesStyle = css`
   }
 `
 
+// viewing a report on the report page
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
@@ -77,7 +78,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
   )
   return (
     <>
-      <div>
+      <div /* links to team, match, and event pages */>
         <a
           href={`/events/${report.eventKey}/teams/${formatTeamNumber(
             report.teamKey,
@@ -92,7 +93,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
           eventInfo?.name ?? report.eventKey
         }`}</a>
       </div>
-      <div>
+      <div /* teams in match */>
         {matchInfo && (
           <TeamPicker
             redAlliance={matchInfo.redAlliance}
@@ -103,7 +104,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         )}
       </div>
 
-      <div class={fieldValuesStyle}>
+      <div class={fieldValuesStyle} /* scores for each match detail */>
         <h3>Auto</h3>
         {autoFields?.map((field) => (
           <ReportFieldViewer field={field} report={report} key={field.name} />
@@ -116,23 +117,16 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
 
       {report.comment && (
         // the comment portion of the report
-        <div
-          // makes sure the comment doesn't get too wide
-          class={css`
-            max-width: 30rem;
-          `}
-        >
-          <CommentCard
-            report={report}
-            showReporter={false}
-            linkToReport={false}
-          />
-        </div>
+        <CommentCard
+          report={report}
+          showReporter={false}
+          linkToReport={false}
+        />
       )}
 
-      <div>
-        <ProfileLink reporterId={reporterId} />
-      </div>
+      <ProfileLink
+        reporterId={reporterId} /* links to the author of the report */
+      />
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </>
   )

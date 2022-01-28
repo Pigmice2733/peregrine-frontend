@@ -11,13 +11,14 @@ import { route, createAlert } from '@/router'
 import { Report, OfflineReport } from '@/api/report'
 import { AlertType } from '@/components/alert'
 
+// qualities of the page
 const reportPageStyle = css`
   display: flex;
   padding: 2rem;
   justify-content: center;
 `
 
-// defines qualities of the report area (white background) on the page
+// defines qualities of the report card
 const reportViewerCardStyle = css`
   padding: 2rem;
   display: grid;
@@ -26,6 +27,7 @@ const reportViewerCardStyle = css`
   max-width: 30rem;
 `
 
+// setup code
 export const ReportPage = ({
   report,
   onSaveSuccess,
@@ -47,12 +49,14 @@ export const ReportPage = ({
       (jwt.peregrineRoles.isAdmin && report.realmId === jwt.peregrineRealm) ||
       jwt.peregrineRoles.isSuperAdmin)
   return (
+    // the entire page
     <Page
       name={isEditing ? 'Edit Report' : 'Report'}
       back={isEditing ? () => setIsEditing(false) : back}
       class={reportPageStyle}
     >
       {isEditing ? (
+        // shows the report editor
         <ReportEditor
           initialReport={report}
           onSaveSuccess={(report) => {
@@ -66,7 +70,7 @@ export const ReportPage = ({
           onDelete={onDelete}
         />
       ) : (
-        // the report
+        // shows the report
         <Card class={reportViewerCardStyle}>
           <ReportViewer
             report={report}
@@ -87,6 +91,7 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
     })
   }, [reportId])
   return report ? (
+    // shows a page from cache
     <ReportPage
       report={report}
       onSaveSuccess={(report) => {
@@ -111,6 +116,7 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
       back={() => window.history.back()}
     />
   ) : (
+    // loading page
     <Spinner />
   )
 }
