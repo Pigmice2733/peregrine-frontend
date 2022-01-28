@@ -1,12 +1,17 @@
 import { offBlack, pigmicePurple, textGrey } from '@/colors'
 import Icon from '@/components/icon'
 import { Scrim, scrimHiddenClass } from '@/components/scrim'
-import { accountCircle } from '@/icons/account-circle'
-import { close as closeIcon } from '@/icons/close'
-import { crown } from '@/icons/crown'
-import { home } from '@/icons/home'
-import { login } from '@/icons/login'
-import { logout as logoutIcon } from '@/icons/logout'
+import {
+  mdiAccountCircle,
+  mdiClose,
+  mdiCrown,
+  mdiHome,
+  mdiAccountPlus,
+  mdiStarCircle,
+  mdiLoginVariant,
+  mdiLogoutVariant,
+  mdiCloudUpload,
+} from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
 import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
@@ -17,9 +22,7 @@ import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren } from 'preact'
 import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
-import { cloudSync } from '@/icons/cloud-sync'
-import { accountPlus } from '@/icons/account-plus'
-import { mdiAutorenew, mdiStarCircle } from '@mdi/js'
+import { mdiAutorenew } from '@mdi/js'
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEffect, useState } from 'preact/hooks'
@@ -173,26 +176,26 @@ export const Menu = ({ onHide, visible }: Props) => {
       <aside class={menuStyle}>
         <IconButton
           aria-label="Close Menu"
-          icon={closeIcon}
+          icon={mdiClose}
           onClick={onHide}
           class={closeButtonStyle}
           style={{ marginRight: getScrollbarWidth() }}
         />
         <nav class={navStyle}>
           <ul>
-            <MenuItem icon={home} href="/">
+            <MenuItem icon={mdiHome} href="/">
               Home
             </MenuItem>
-            <MenuItem icon={crown} href="/leaderboard">
+            <MenuItem icon={mdiCrown} href="/leaderboard">
               Leaderboard
             </MenuItem>
             {isAdmin && (
-              <MenuItem icon={accountCircle} href="/users">
+              <MenuItem icon={mdiAccountCircle} href="/users">
                 Users
               </MenuItem>
             )}
             {savedReports.length > 0 && (
-              <MenuItem icon={cloudSync} href="/saved-reports">
+              <MenuItem icon={mdiCloudUpload} href="/saved-reports">
                 Offline Saved Reports
               </MenuItem>
             )}
@@ -209,23 +212,23 @@ export const Menu = ({ onHide, visible }: Props) => {
           </ul>
           <ul>
             {jwt && (
-              <MenuItem icon={accountCircle} href={`/users/${jwt.sub}`}>
+              <MenuItem icon={mdiAccountCircle} href={`/users/${jwt.sub}`}>
                 Profile
               </MenuItem>
             )}
             {isLoggedIn ? (
-              <MenuItem icon={logoutIcon} onClick={logoutHandler}>
+              <MenuItem icon={mdiLogoutVariant} onClick={logoutHandler}>
                 Log out
               </MenuItem>
             ) : (
               <>
                 <MenuItem
-                  icon={login}
+                  icon={mdiLoginVariant}
                   href={`/login?from=${encodeURIComponent(location.pathname)}`}
                 >
                   Log in
                 </MenuItem>
-                <MenuItem icon={accountPlus} href="/signup">
+                <MenuItem icon={mdiAccountPlus} href="/signup">
                   Sign Up
                 </MenuItem>
               </>

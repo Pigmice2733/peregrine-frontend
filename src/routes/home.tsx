@@ -49,7 +49,7 @@ const Home = () => {
   const lowerCaseQuery = query.toLowerCase()
   const [yearVal, setYear] = useQueryState('year', currentYear)
   const year = Number(yearVal)
-  const years = useYears()
+  const years = useYears().sort().reverse()
   const events = useEvents(year)
 
   return (
