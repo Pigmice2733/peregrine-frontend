@@ -11,6 +11,7 @@ import {
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiCloudUpload,
+  mdiAutorenew,
 } from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
@@ -22,7 +23,7 @@ import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren } from 'preact'
 import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
-import { mdiAutorenew } from '@mdi/js'
+
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEffect, useState } from 'preact/hooks'
