@@ -131,7 +131,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 
   return (
-    <Page
+    <Page /* page setup */
       back={`/events/${eventKey}`}
       name={
         m.group +
@@ -146,21 +146,22 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       )}
     >
       {match && reports ? (
-        <>
+        </* parts of the page */>
           <div class={leftColumnStyle}>
-            <MatchCard match={match} eventKey={eventKey} />
+            <MatchCard match={match} eventKey={eventKey} /* match detail */ />
             {reports.length > 0 ? (
-              <MatchReports
+              <MatchReports /* shows reports */
                 match={match}
                 reports={reports}
                 eventKey={eventKey}
               />
             ) : (
+              /* button to submit a report */
               <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
                 Scout Match
               </Button>
             )}
-            {matchHasBeenPlayed && (
+            {matchHasBeenPlayed /* final score */ && (
               <Card class={clsx(matchScoreStyle)}>
                 <div class={redScoreStyle}>{match.redScore}</div>
                 <div class={blueScoreStyle}>{match.blueScore}</div>
@@ -168,9 +169,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             )}
           </div>
           {schema && (
-            <Card
+            <Card /* analysis table */
               class={css`
-                overflow-y: hidden;
                 overflow-x: auto;
                 grid-area: analysisTable;
                 max-width: 100%;
@@ -228,7 +228,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             </Card>
           )}
           {match.videos && match.videos.length > 0 && (
-            <VideoList videos={match.videos} />
+            <VideoList videos={match.videos} /> // shows videos at the top
           )}
         </>
       ) : (
@@ -238,6 +238,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 }
 
+// displays the videos of the match
 const VideoList = ({ videos }: { videos: string[] }) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -315,7 +316,8 @@ const videoListStyle = css`
   grid-gap: 1.5rem;
 `
 
-// We are adding spacing below the video list when there are multiple videos so that the spacing is correct for the absolute-positioned elements
+/* We are adding spacing below the video list when there are multiple videos
+ *  so that the spacing is correct for the absolute-positioned elements */
 const multipleVideoStyle = css`
   padding-bottom: 3rem;
 `
