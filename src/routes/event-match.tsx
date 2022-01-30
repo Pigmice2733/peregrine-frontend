@@ -25,6 +25,10 @@ import { getReports } from '@/api/report/get-reports'
 import Icon from '@/components/icon'
 import { mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
+import {
+  ConnectionType,
+  useNetworkConnection,
+} from '@/utils/use-network-connection'
 
 interface Props {
   eventKey: string
@@ -97,15 +101,24 @@ type SelectedDisplay = typeof showMatchResults | typeof showEventResults
 
 // eslint-disable-next-line complexity
 const EventMatch = ({ eventKey, matchKey }: Props) => {
+  // checks for no network connection
+  const netConn = useNetworkConnection()
+  const isOnline = netConn !== ConnectionType.Offline
+
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  const reports = usePromise(
-    () => getReports({ event: eventKey, match: matchKey }),
-    [eventKey, matchKey],
-  )
-  const schema = useSchema(event?.schemaId)
-  const teams = usePromise(() => getEventStats(eventKey), [eventKey])
+  const reports = usePromise(() => {
+    if (isOnline) {
+      return getReports({ event: eventKey, match: matchKey })
+    }
+  }, [eventKey, matchKey, isOnline])
+  const schema = useSchema(isOnline ? event?.schemaId : undefined)
+  const eventTeamsStats = usePromise(() => {
+    if (isOnline) {
+      return getEventStats(eventKey)
+    }
+  }, [eventKey, isOnline])
 
   const [selectedDisplay, setSelectedDisplay] = useState<SelectedDisplay>(
     showEventResults,
@@ -119,16 +132,15 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     if (matchHasBeenPlayed) setSelectedDisplay(showMatchResults)
   }, [matchHasBeenPlayed])
 
-  const teamsStats = usePromise(
-    () =>
-      match &&
-      Promise.all(
+  const teamsStats = usePromise(() => {
+    if (match && isOnline) {
+      return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
         ),
-      ),
-    [match],
-  )
+      )
+    }
+  }, [match, isOnline])
 
   return (
     // page setup
@@ -169,7 +181,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               </Card>
             )}
           </div>
-          {schema && (
+          {schema && isOnline && (
             // card including the analysis table and tabs for match/event data
             <Card
               class={css`
@@ -203,7 +215,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 eventKey={eventKey}
                 teams={
                   selectedDisplay === showEventResults
-                    ? teams?.filter((t) => matchHasTeam('frc' + t.team)(match))
+                    ? eventTeamsStats?.filter((t) =>
+                        matchHasTeam('frc' + t.team)(match),
+                      )
                     : teamsStats
                 }
                 schema={schema}
