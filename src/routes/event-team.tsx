@@ -7,7 +7,7 @@ import {
   mdiStar,
   mdiSortDescending,
 } from '@mdi/js'
-import { MatchCard } from '@/components/match-card'
+import { MatchDetailsCard } from '@/components/match-card'
 import { round } from '@/utils/round'
 import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { css } from 'linaria'
@@ -200,7 +200,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       {nextMatch && (
         <>
           <h2 class={sectionStyle}>Next Match</h2>
-          <MatchCard match={nextMatch} eventKey={eventKey} link />
+          <MatchDetailsCard match={nextMatch} eventKey={eventKey} link />
         </>
       )}
       <InfoGroupCard

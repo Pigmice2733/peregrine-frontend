@@ -1,5 +1,5 @@
 import Page from '@/components/page'
-import { MatchCard } from '@/components/match-card'
+import { MatchDetailsCard } from '@/components/match-card'
 import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
@@ -72,7 +72,7 @@ const Event = ({ eventKey }: Props) => {
           {newestIncompleteMatch ? 'Next Match' : 'Matches'}
         </Heading>
         {newestIncompleteMatch && (
-          <MatchCard
+          <MatchDetailsCard
             key={newestIncompleteMatch.key}
             match={newestIncompleteMatch}
             eventKey={eventKey}

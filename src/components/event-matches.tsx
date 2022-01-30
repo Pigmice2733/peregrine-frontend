@@ -1,7 +1,7 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
 import TextInput from './text-input'
 import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
-import { MatchCard } from './match-card'
+import { MatchDetailsCard } from './match-card'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 import { formatMatchKey } from '@/utils/format-match-key'
@@ -80,7 +80,7 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       />
       <div class={matchListStyle}>
         {filteredMatches.map((m) => (
-          <MatchCard eventKey={eventKey} match={m} key={m.key} link />
+          <MatchDetailsCard eventKey={eventKey} match={m} key={m.key} link />
         ))}
       </div>
     </>
