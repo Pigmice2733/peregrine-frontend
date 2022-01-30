@@ -4,7 +4,7 @@ import { ReportViewer } from '@/components/report-viewer'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { getReport } from '@/api/report/get-report'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
 import { route, createAlert } from '@/router'
@@ -16,11 +16,13 @@ const reportPageStyle = css`
   padding: 2rem;
   justify-content: center;
 `
+
 const reportViewerCardStyle = css`
   padding: 2rem;
   display: grid;
   justify-items: center;
   grid-gap: 1rem;
+  max-width: 30rem;
 `
 
 export const ReportPage = ({
@@ -63,6 +65,7 @@ export const ReportPage = ({
           onDelete={onDelete}
         />
       ) : (
+        // shows the report
         <Card class={reportViewerCardStyle}>
           <ReportViewer
             report={report}
@@ -83,6 +86,7 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
     })
   }, [reportId])
   return report ? (
+    // shows a page from cache or from network
     <ReportPage
       report={report}
       onSaveSuccess={(report) => {
@@ -107,7 +111,8 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
       back={() => window.history.back()}
     />
   ) : (
-    <Spinner />
+    // loading page if it hasn't been loaded from cache/network
+    <Loader />
   )
 }
 
