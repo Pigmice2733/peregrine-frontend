@@ -67,7 +67,10 @@ export const useNetworkConnection = () => {
     const connection = navigator.connection
     const updateConnectionStatus = () => {
       if (navigator.onLine) {
-        if (connection?.effectiveType === '4g' && (connection.type === 'wifi' || connection.type === 'ethernet')) {
+        if (
+          connection?.effectiveType === '4g' &&
+          (connection.type === 'wifi' || connection.type === 'ethernet')
+        ) {
           setConnectionState(ConnectionType.Default)
         } else {
           setConnectionState(ConnectionType.Limited)
