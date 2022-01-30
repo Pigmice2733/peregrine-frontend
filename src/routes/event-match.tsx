@@ -243,9 +243,23 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               />
             </Card>
           )}
-          {/* shows videos if the match has them */}
-          {match.videos && match.videos.length > 0 && (
-            <VideoList videos={match.videos} />
+          {/* shows videos if the match has them, or if offline, a display that only the match details can be displayed */}
+          {isOnline ? (
+            match.videos &&
+            match.videos.length > 0 && <VideoList videos={match.videos} />
+          ) : (
+            <Card
+              class={css`
+                grid-area: analysisTable;
+                justify-self: center;
+              `}
+            >
+              <p>
+                <em>
+                  Analysis table, videos, and reports are only available online.
+                </em>
+              </p>
+            </Card>
           )}
         </>
       ) : (

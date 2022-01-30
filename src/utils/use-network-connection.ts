@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'preact/hooks'
 
 export const enum ConnectionType {
+  /** No Internet */
   Offline,
+  /** Slow WiFi (slower than 4G) or cellular connection */
   Limited,
+  /** Strong WiFi connection (4G speed or faster) */
   Default,
 }
 
@@ -64,7 +67,7 @@ export const useNetworkConnection = () => {
     const connection = navigator.connection
     const updateConnectionStatus = () => {
       if (navigator.onLine) {
-        if (connection?.effectiveType === '4g') {
+        if (connection?.effectiveType === '4g' && (connection.type === 'wifi' || connection.type === 'ethernet')) {
           setConnectionState(ConnectionType.Default)
         } else {
           setConnectionState(ConnectionType.Limited)
