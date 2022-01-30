@@ -146,11 +146,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         match?.videos && match.videos.length > 0 && matchWithVideoStyle,
       )}
     >
-      {match && reports ? (
+      {match ? (
         <>
           <div class={leftColumnStyle}>
             <MatchDetailsCard match={match} eventKey={eventKey} />
-            {reports.length > 0 ? (
+            {reports && reports.length > 0 ? (
               <MatchReports
                 match={match}
                 reports={reports}
