@@ -82,7 +82,7 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
-export const MatchCard = memo(
+export const MatchDetailsCard = memo(
   ({ match, eventKey, link, class: className }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
