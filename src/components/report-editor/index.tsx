@@ -30,7 +30,7 @@ import { request } from '@/api/base'
 import { createDialog } from '../dialog'
 import { createAlert } from '@/router'
 import { AlertType } from '../alert'
-import Spinner from '../spinner'
+import Loader from '../loader'
 import Card from '../card'
 
 const reportEditorStyle = css`
@@ -301,6 +301,6 @@ export const ReportEditor = ({
       )}
     </Card>
   ) : (
-    <Spinner />
+    <Loader />
   )
 }

@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchCard } from '@/components/match-card'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
 import { getEventStats } from '@/api/stats/get-event-stats'
@@ -229,7 +229,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           )}
         </>
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

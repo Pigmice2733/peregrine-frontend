@@ -7,7 +7,7 @@ import Button from '@/components/button'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
 
 interface Props {
@@ -86,7 +86,7 @@ const Event = ({ eventKey }: Props) => {
             <p class={noMatchesStyle}>No matches yet</p>
           )
         ) : (
-          <Spinner />
+          <Loader />
         )}
       </div>
     </Page>
