@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getReports } from '@/api/report/get-reports'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
@@ -46,7 +46,7 @@ const UserReports = ({ userId }: Props) => {
           return <ReportCard key={report.id} report={report} />
         })
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

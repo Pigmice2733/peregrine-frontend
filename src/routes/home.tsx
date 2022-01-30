@@ -1,6 +1,6 @@
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { compareEvents } from '@/utils/compare-events'
 import { useGeoLocation } from '@/utils/use-geo-location'
 import { useEvents } from '@/cache/events/use'
@@ -101,7 +101,7 @@ const Home = () => {
           </a>
         </>
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

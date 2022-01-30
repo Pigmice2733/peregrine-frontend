@@ -78,7 +78,8 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
   )
   return (
     <>
-      <div /* links to team, match, and event pages */>
+      {/* links to team, match, and event pages */}
+      <div>
         <a
           href={`/events/${report.eventKey}/teams/${formatTeamNumber(
             report.teamKey,
@@ -93,7 +94,9 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
           eventInfo?.name ?? report.eventKey
         }`}</a>
       </div>
-      <div /* teams in match */>
+
+      {/* teams in match */}
+      <div>
         {matchInfo && (
           <TeamPicker
             redAlliance={matchInfo.redAlliance}
@@ -104,7 +107,8 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         )}
       </div>
 
-      <div class={fieldValuesStyle} /* scores for each match detail */>
+      <div class={fieldValuesStyle}>
+        {/* scores for each match detail */}
         <h3>Auto</h3>
         {autoFields?.map((field) => (
           <ReportFieldViewer field={field} report={report} key={field.name} />
@@ -124,9 +128,8 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
         />
       )}
 
-      <ProfileLink
-        reporterId={reporterId} /* links to the author of the report */
-      />
+      {/* links to the author of the report */}
+      <ProfileLink reporterId={reporterId} />
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </>
   )
