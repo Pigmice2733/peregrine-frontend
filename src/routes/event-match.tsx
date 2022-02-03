@@ -155,7 +155,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       class={clsx(
         matchStyle,
         match && loadedMatchStyle,
-        match?.videos && match.videos.length > 0 && isOnline && matchWithVideoStyle,
+        match?.videos &&
+          match.videos.length > 0 &&
+          isOnline &&
+          matchWithVideoStyle,
       )}
     >
       {match ? (
