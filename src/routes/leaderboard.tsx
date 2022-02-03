@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getLeaderboard } from '@/api/get-leaderboard'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import Authenticated from '@/components/authenticated'
@@ -61,7 +61,7 @@ const LeaderboardList = () => {
       <Dropdown options={years} onChange={setYear} value={year} />
       {leaderboard?.map((user) => (
         <LeaderboardCard key={user.id} user={user} />
-      )) || <Spinner />}
+      )) || <Loader />}
     </div>
   )
 }

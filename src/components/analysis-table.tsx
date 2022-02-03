@@ -18,7 +18,7 @@ import { blue, red, grey, lightGrey, textGrey } from '@/colors'
 import Icon from './icon'
 import { mdiCog } from '@mdi/js'
 import { round } from '@/utils/round'
-import Spinner from './spinner'
+import Loader from './loader'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
 import { usePromise } from '@/utils/use-promise'
@@ -245,7 +245,7 @@ const AnalysisTable = ({
     ...autoFields.map(createStatCell(avgType, renderBoolean)),
     ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
-  if (!teams) return <Spinner />
+  if (!teams) return <Loader />
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
   )

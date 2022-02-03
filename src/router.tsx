@@ -1,7 +1,7 @@
 import { ComponentType, VNode } from 'preact'
 import { useState, useEffect, useMemo, useLayoutEffect } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { updateUrl, useUrl } from './url-manager'
 import Alert, { AlertType } from '@/components/alert'
 import { css } from 'linaria'
@@ -148,7 +148,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
     )
   }
 
-  return <Spinner />
+  return <Loader />
 }
 
 const alertListStyle = css`
