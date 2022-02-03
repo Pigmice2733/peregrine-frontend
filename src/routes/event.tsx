@@ -39,16 +39,10 @@ const sectionStyle = css`
   grid-gap: 2.5rem;
 `
 
-const errorSectionStyle = css`
-  display: grid;
-  grid-template-columns: auto;
-  grid-gap: 2.5rem;
-  margin-bottom: 2.5rem;
-`
-
 const headingStyle = css`
   font-size: 1.2rem;
   justify-self: center;
+  grid-gap: 1rem;
 `
 
 const noMatchesStyle = css`
@@ -61,25 +55,10 @@ const noMatchesStyle = css`
 const eventErrorStyle = css`
   justify-content: center;
   align-items: start;
-  padding: ${spacing};
-  margin-top: 0.5rem;
-
-  @media (min-width: 800px) {
-    grid-template-columns: minmax(20rem, 25rem) 21rem;
-  }
-`
-
-const networkErrorStyle = css`
-  grid-template-columns: minmax(21rem, 23rem);
-  justify-content: center;
-  align-items: start;
   grid-gap: ${spacing};
   padding: ${spacing};
   margin-top: 0.5rem;
-
-  @media (min-width: 800px) {
-    grid-template-columns: minmax(20rem, 25rem) 21rem;
-  }
+  grid-template-columns: minmax(20rem, 25rem) 21rem;
 `
 
 const Event = ({ eventKey }: Props) => {
@@ -90,29 +69,26 @@ const Event = ({ eventKey }: Props) => {
     <Page
       name={isData(eventInfo) ? eventInfo.name : <code>{eventKey}</code>}
       back="/"
-      class={
-        eventInfo instanceof Error
-          ? eventInfo instanceof NetworkError
-            ? networkErrorStyle
-            : eventErrorStyle
-          : eventStyle
-      }
+      class={eventInfo instanceof Error ? eventErrorStyle : eventStyle}
     >
       {eventInfo instanceof NetworkError ? (
-        <div class={errorSectionStyle}>
-          <Heading level={2} class={headingStyle}>
-            Could not connect to server. Please check your connection.
-          </Heading>
-        </div>
+        <Heading level={1} class={headingStyle}>
+          Could not connect to server. Please check your connection.
+        </Heading>
       ) : (
         eventInfo instanceof Error && (
           <Fragment>
-            <div class={errorSectionStyle}>
-              <Heading level={2} class={headingStyle}>
-                This event does not exist.
-              </Heading>
-            </div>
-            <Button href="/">Existing Events</Button>
+            <Heading level={1} class={headingStyle}>
+              This event does not exist.
+            </Heading>
+            <Button
+              href="/"
+              class={css`
+                padding: 0.5rem;
+              `}
+            >
+              Existing Events
+            </Button>
           </Fragment>
         )
       )}
@@ -145,7 +121,8 @@ const Event = ({ eventKey }: Props) => {
               ) : (
                 <p class={noMatchesStyle}>No matches yet</p>
               )
-            ) : matches ? (
+            ) : // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
+            matches ? (
               matches instanceof NetworkError ? (
                 'Network error. Please check your connection.'
               ) : (
