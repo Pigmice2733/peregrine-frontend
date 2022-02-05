@@ -23,6 +23,7 @@ import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 import { isData } from '@/utils/is-data'
 import Icon from '@/components/icon'
 import { alert } from '@/icons/alert'
+import { NetworkError } from '@/api/base'
 
 interface Props {
   eventKey: string
@@ -47,7 +48,28 @@ const matchStyle = css`
     overflow-x: auto;
   }
 
-  /* extra selectors for specificity */
+  a.${tableTeamStyle}.${redStyle} {
+    color: ${red};
+  }
+
+  a.${tableTeamStyle}.${blueStyle} {
+    color: ${blue};
+  }
+`
+
+const undefinedMatchStyle = css`
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: 100%;
+  padding: 1.5rem;
+  grid-gap: 1.5rem;
+  justify-items: center;
+
+  & > * {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
   a.${tableTeamStyle}.${redStyle} {
     color: ${red};
   }
@@ -62,6 +84,7 @@ const showEventResults = 'Event Results'
 
 type SelectedDisplay = typeof showMatchResults | typeof showEventResults
 
+// eslint-disable-next-line complexity
 const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
@@ -78,45 +101,80 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     match.blueScore !== undefined &&
     match.redScore !== undefined
 
+  // displayed name of the tab, defining here to avoid repeated code
+  const pageName =
+    (m === null
+      ? matchKey + ' - '
+      : m.group + (m.num ? ' Match ' + m.num : '') + ' - ') +
+    (event ? event.name : eventKey)
+
   // When the match loads (or changes),
   useEffect(() => {
     if (matchHasBeenPlayed) setSelectedDisplay(showMatchResults)
   }, [matchHasBeenPlayed])
 
-  const teamsStats = usePromise(
-    () =>
-      isData(match) &&
-      Promise.all(
+  let teamsStats = usePromise(() => {
+    if (isData(match)) {
+      return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
         ),
-      ),
-    [match],
-  )
+      )
+    }
+  }, [match])
+
+  // check if the match is unloadable due to an error
+  let statsErrorType = 'non-existent'
+  if (teamsStats instanceof NetworkError) {
+    statsErrorType = 'network'
+    teamsStats = undefined
+  } else if (teamsStats instanceof Error) {
+    statsErrorType = 'other'
+    teamsStats = undefined
+  }
+
+  // define what to put in the card if the match data can't be loaded
+  let matchUndefinedStatement = ''
+  switch (statsErrorType) {
+    case 'non-existent':
+      matchUndefinedStatement =
+        m === null
+          ? 'This match does not exist.'
+          : m.group + (m.num ? ' ' + m.num : '') + ' does not exist.'
+      break
+    case 'network':
+      matchUndefinedStatement =
+        m === null
+          ? 'Unable to load match.'
+          : 'Unable to load ' + m.group + (m.num ? ' ' + m.num : '') + '.'
+      break
+    case 'other':
+      matchUndefinedStatement =
+        m === null
+          ? 'There was an error loading the match.'
+          : 'There was an error loading ' +
+            m.group +
+            (m.num ? ' ' + m.num : '') +
+            '.'
+      break
+    default:
+      matchUndefinedStatement = 'This match cannot be found.'
+  }
 
   if (!isData(match)) {
     return (
-      <Page
-        back={`/events/${eventKey}`}
-        name={
-          (m === null
-            ? matchKey + ' - '
-            : m.group + (m.num ? ' Match ' + m.num : '') + ' - ') +
-          (event ? event.name : eventKey)
-        }
-        class={matchStyle}
-      >
-        <Card class={matchStyle}>
+      /* if the match doesn't exist */
+      <Page back={`/events/${eventKey}`} name={pageName} class={matchStyle}>
+        <Card class={undefinedMatchStyle}>
           <Icon icon={alert} />
           <div
             class={css`
               font-size: 2rem;
               text-align: center;
             `}
+            /* display text to show that the match doesn't exist */
           >
-            {m === null
-              ? 'This Match Does Not Exist'
-              : m.group + (m.num ? ' Match ' + m.num : '') + ' Does Not Exist'}
+            {matchUndefinedStatement}
           </div>
           <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
         </Card>
@@ -125,14 +183,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }
 
   return (
-    <Page
+    <Page /* show match data if the match exists */
       back={`/events/${eventKey}`}
-      name={
-        (m === null
-          ? matchKey
-          : m.group + (m.num ? ' Match ' + m.num : '')) + ' - ' +
-        (event ? event.name : eventKey)
-      }
+      name={pageName}
       class={matchStyle}
     >
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
@@ -203,7 +256,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       )}
       {match.videos?.map((v) => (
         <VideoCard key={v} url={cleanYoutubeUrl(v)} />
-       ))}
+      ))}
     </Page>
   )
 }
