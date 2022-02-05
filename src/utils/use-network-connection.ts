@@ -69,7 +69,7 @@ export const useNetworkConnection = () => {
       if (navigator.onLine) {
         if (
           connection?.effectiveType === '4g' &&
-          (connection.type === 'wifi' || connection.type === 'ethernet')
+          (connection.type === 'wifi' || connection.type === 'ethernet' || connection.type === undefined)
         ) {
           setConnectionState(ConnectionType.Default)
         } else {
