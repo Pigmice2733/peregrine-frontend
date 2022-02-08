@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
-import { MatchCard } from '@/components/match-card'
-import Spinner from '@/components/spinner'
+import { MatchDetailsCard } from '@/components/match-card'
+import Loader from '@/components/loader'
 import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
 import { getEventStats } from '@/api/stats/get-event-stats'
@@ -131,6 +131,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 
   return (
+    // page setup
     <Page
       back={`/events/${eventKey}`}
       name={
@@ -148,7 +149,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       {match && reports ? (
         <>
           <div class={leftColumnStyle}>
-            <MatchCard match={match} eventKey={eventKey} />
+            <MatchDetailsCard match={match} eventKey={eventKey} />
             {reports.length > 0 ? (
               <MatchReports
                 match={match}
@@ -156,11 +157,12 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 eventKey={eventKey}
               />
             ) : (
+              // button to create a report
               <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
                 Scout Match
               </Button>
             )}
-            {matchHasBeenPlayed && (
+            {matchHasBeenPlayed /* final score if the match is over */ && (
               <Card class={clsx(matchScoreStyle)}>
                 <div class={redScoreStyle}>{match.redScore}</div>
                 <div class={blueScoreStyle}>{match.blueScore}</div>
@@ -168,10 +170,13 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             )}
           </div>
           {schema && (
+            // card including the analysis table and tabs for match/event data
             <Card
               class={css`
-                overflow-y: hidden;
+                overflow-x: auto;
                 grid-area: analysisTable;
+                max-width: 100%;
+                justify-self: center;
               `}
             >
               <div class={displayModeSelectorStyle}>
@@ -224,17 +229,19 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               />
             </Card>
           )}
+          {/* shows videos if the match has them */}
           {match.videos && match.videos.length > 0 && (
             <VideoList videos={match.videos} />
           )}
         </>
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )
 }
 
+// displays the videos of the match
 const VideoList = ({ videos }: { videos: string[] }) => {
   const [isOpen, setIsOpen] = useState(false)
   return (
@@ -312,7 +319,8 @@ const videoListStyle = css`
   grid-gap: 1.5rem;
 `
 
-// We are adding spacing below the video list when there are multiple videos so that the spacing is correct for the absolute-positioned elements
+// We are adding spacing below the video list when there are multiple videos
+// so that the spacing is correct for the absolute-positioned elements
 const multipleVideoStyle = css`
   padding-bottom: 3rem;
 `

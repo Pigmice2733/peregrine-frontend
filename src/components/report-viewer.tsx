@@ -39,7 +39,9 @@ const ReportFieldViewer = ({
         class={css`
           margin-right: 1rem;
         `}
-      >{`${cleanFieldName(field.name)}: `}</div>
+      >
+        {`${cleanFieldName(field.name)}: `}
+      </div>
       {field.type === 'boolean' ? (
         <BooleanDisplay value={Boolean(value)} />
       ) : (
@@ -59,10 +61,7 @@ const fieldValuesStyle = css`
   }
 `
 
-const reportCommentCard = css`
-  max-width: 10rem
-`
-
+// viewing a report on the report page
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
@@ -79,6 +78,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
   )
   return (
     <>
+      {/* links to team, match, and event pages */}
       <div>
         <a
           href={`/events/${report.eventKey}/teams/${formatTeamNumber(
@@ -94,16 +94,21 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
           eventInfo?.name ?? report.eventKey
         }`}</a>
       </div>
-      {matchInfo && (
-        <TeamPicker
-          redAlliance={matchInfo.redAlliance}
-          blueAlliance={matchInfo.blueAlliance}
-          value={report.teamKey}
-          editable={false}
-        />
-      )}
+
+      {/* teams in match */}
+      <div>
+        {matchInfo && (
+          <TeamPicker
+            redAlliance={matchInfo.redAlliance}
+            blueAlliance={matchInfo.blueAlliance}
+            value={report.teamKey}
+            editable={false}
+          />
+        )}
+      </div>
 
       <div class={fieldValuesStyle}>
+        {/* scores for each match detail */}
         <h3>Auto</h3>
         {autoFields?.map((field) => (
           <ReportFieldViewer field={field} report={report} key={field.name} />
@@ -115,13 +120,15 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       </div>
 
       {report.comment && (
-        <CommentCard class={reportCommentCard}>
+        // the comment portion of the report
+        <CommentCard
           report={report}
           showReporter={false}
           linkToReport={false}
-        </CommentCard>
+        />
       )}
 
+      {/* links to the author of the report */}
       <ProfileLink reporterId={reporterId} />
       {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
     </>

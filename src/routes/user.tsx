@@ -1,5 +1,5 @@
 import Page from '@/components/page'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { UserInfo, Roles } from '@/api/user'
 import Card from '@/components/card'
 import { useJWT } from '@/jwt'
@@ -439,7 +439,7 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
   return (
     <Page name="User" back={() => window.history.back()} class={userPageStyle}>
       {isLoading ? (
-        <Spinner />
+        <Loader />
       ) : user ? (
         <UserProfileCard
           user={user}
