@@ -51,6 +51,7 @@ const Home = () => {
   const year = Number(yearVal)
   const years = useYears().sort().reverse()
   const events = useEvents(year)
+  const eventsBackup = useEvents(year - 1)
 
   return (
     <Page name="Home" back={false} class={homeStyle}>
@@ -67,39 +68,81 @@ const Home = () => {
       </div>
 
       {events ? (
-        <>
-          <UnstyledList class={matchListStyle}>
-            {events
-              .filter((event) => {
-                if (!query) return true
-                return (
-                  event.name.toLowerCase().includes(lowerCaseQuery) ||
-                  event.key.toLowerCase().includes(lowerCaseQuery) ||
-                  event.locationName.toLowerCase().includes(lowerCaseQuery) ||
-                  event.district?.toLowerCase().includes(lowerCaseQuery) ||
-                  event.fullDistrict?.toLowerCase().includes(lowerCaseQuery)
-                )
-              })
-              .sort(compareEvents(now, location))
-              .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
-              .map((e) => (
-                <li key={e.key}>
-                  <EventCard event={e} />
-                </li>
-              ))}
-          </UnstyledList>
-          <a
-            href="https://www.netlify.com"
-            class={css`
-              margin: 1rem auto;
-            `}
-          >
-            <img
-              alt="Deploys by Netlify"
-              src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
-            />
-          </a>
-        </>
+        events.length === 0 ? (
+          eventsBackup ? (
+            <>
+              <UnstyledList class={matchListStyle}>
+                {eventsBackup
+                  .filter((event) => {
+                    if (!query) return true
+                    return (
+                      event.name.toLowerCase().includes(lowerCaseQuery) ||
+                      event.key.toLowerCase().includes(lowerCaseQuery) ||
+                      event.locationName
+                        .toLowerCase()
+                        .includes(lowerCaseQuery) ||
+                      event.district?.toLowerCase().includes(lowerCaseQuery) ||
+                      event.fullDistrict?.toLowerCase().includes(lowerCaseQuery)
+                    )
+                  })
+                  .sort(compareEvents(now, location))
+                  .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
+                  .map((e) => (
+                    <li key={e.key}>
+                      <EventCard event={e} />
+                    </li>
+                  ))}
+              </UnstyledList>
+              <a
+                href="https://www.netlify.com"
+                class={css`
+                  margin: 1rem auto;
+                `}
+              >
+                <img
+                  alt="Deploys by Netlify"
+                  src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+                />
+              </a>
+            </>
+          ) : (
+            <Loader />
+          )
+        ) : (
+          <>
+            <UnstyledList class={matchListStyle}>
+              {events
+                .filter((event) => {
+                  if (!query) return true
+                  return (
+                    event.name.toLowerCase().includes(lowerCaseQuery) ||
+                    event.key.toLowerCase().includes(lowerCaseQuery) ||
+                    event.locationName.toLowerCase().includes(lowerCaseQuery) ||
+                    event.district?.toLowerCase().includes(lowerCaseQuery) ||
+                    event.fullDistrict?.toLowerCase().includes(lowerCaseQuery)
+                  )
+                })
+                .sort(compareEvents(now, location))
+                .slice(0, 20) // Displaying just the first 20 to improve rendering/re-rendering performance (esp. while searching)
+                .map((e) => (
+                  <li key={e.key}>
+                    <EventCard event={e} />
+                  </li>
+                ))}
+            </UnstyledList>
+            <a
+              href="https://www.netlify.com"
+              class={css`
+                margin: 1rem auto;
+              `}
+            >
+              <img
+                alt="Deploys by Netlify"
+                src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
+              />
+            </a>
+          </>
+        )
       ) : (
         <Loader />
       )}
