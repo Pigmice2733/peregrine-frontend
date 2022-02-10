@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchDetailsCard } from '@/components/match-card'
@@ -23,7 +24,7 @@ import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
 import Icon from '@/components/icon'
-import { mdiPlus } from '@mdi/js'
+import { mdiCloudOffOutline, mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
 import {
   ConnectionType,
@@ -43,6 +44,35 @@ const blueStyle = css``
 // We are using margins instead of grid-gap
 // because we don't want grid-gap to be applied to the empty spacing columns
 
+const matchStyle = css`
+  /* extra selectors for specificity */
+  a.${tableTeamStyle}.${redStyle} {
+    color: ${red};
+  }
+
+  a.${tableTeamStyle}.${blueStyle} {
+    color: ${blue};
+  }
+`
+
+const offlineMatchStyle = css`
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-areas:
+    'topArea'
+    'leftColumn';
+  padding: 0.75rem;
+  @media (max-width: 930px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'topArea'
+      'leftColumn';
+  }
+  & > * {
+    margin: 0.75rem;
+  }
+`
+
 const loadedMatchStyle = css`
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -60,25 +90,7 @@ const loadedMatchStyle = css`
     margin: 0.75rem;
   }
 `
-const matchStyle = css`
-  /* extra selectors for specificity */
-  a.${tableTeamStyle}.${redStyle} {
-    color: ${red};
-  }
 
-  a.${tableTeamStyle}.${blueStyle} {
-    color: ${blue};
-  }
-`
-const leftColumnStyle = css`
-  grid-area: leftColumn;
-  display: grid;
-  grid-gap: 1.5rem;
-  justify-self: center;
-  @media (max-width: 540px) {
-    justify-self: stretch;
-  }
-`
 const matchWithVideoStyle = css`
   grid-template-columns: 1fr auto 30rem 1fr;
   align-items: start;
@@ -91,6 +103,29 @@ const matchWithVideoStyle = css`
       'leftColumn'
       'analysisTable'
       'rightColumn';
+  }
+`
+
+const leftColumnStyle = css`
+  grid-area: leftColumn;
+  display: grid;
+  grid-gap: 1.5rem;
+  justify-self: center;
+  @media (max-width: 540px) {
+    justify-self: stretch;
+  }
+`
+
+const offlineDisplayInfo = css`
+  grid-area: topArea;
+  display: grid;
+  grid-gap: 1.5rem;
+  justify-self: center;
+  max-width: 19rem;
+
+  @media (max-width: 540px) {
+    justify-self: stretch;
+    max-width: 600px;
   }
 `
 
@@ -154,7 +189,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
       class={clsx(
         matchStyle,
-        match && loadedMatchStyle,
+        match && offlineMatchStyle,
+        match && isOnline && loadedMatchStyle,
         match?.videos &&
           match.videos.length > 0 &&
           isOnline &&
@@ -163,6 +199,20 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     >
       {match ? (
         <>
+          {!isOnline && (
+            <div class={offlineDisplayInfo}>
+              <Card
+                class={css`
+                  justify-self: center;
+                  padding: 1rem;
+                  text-align: center;
+                `}
+              >
+                <Icon icon={mdiCloudOffOutline} /> <b> No Connection </b> <br />
+                Analysis table, videos, and reports are only available online.
+              </Card>
+            </div>
+          )}
           <div class={leftColumnStyle}>
             <MatchDetailsCard match={match} eventKey={eventKey} />
             {reports && reports.length > 0 ? (
@@ -246,28 +296,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               />
             </Card>
           )}
-          {/* shows videos if the match has them, or if offline,
-          a display that only the match details can be displayed */}
-          {isOnline ? (
-            match.videos &&
-            match.videos.length > 0 && <VideoList videos={match.videos} />
-          ) : (
-            <Card
-              class={css`
-                grid-area: analysisTable;
-                justify-self: center;
-                padding: 1rem;
-              `}
-            >
-              <p>
-                <em>
-                  <b>
-                    Analysis table, videos, and reports are only available
-                    online.
-                  </b>
-                </em>
-              </p>
-            </Card>
+          {/* shows videos if the match has them and online */}
+          {isOnline && match.videos && match.videos.length > 0 && (
+            <VideoList videos={match.videos} />
           )}
         </>
       ) : (
