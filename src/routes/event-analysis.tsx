@@ -26,7 +26,12 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
 
-  const schema = useSchema(eventInfo?.schemaId)
+  const now = new Date()
+  const eventNotStarted = eventInfo
+    ? now.getTime() < eventInfo.startDate.getTime()
+    : true
+
+  const schema = useSchema(eventNotStarted ? undefined : eventInfo?.schemaId)
 
   return (
     <Page
@@ -35,10 +40,10 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       class={tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >
-      {eventStats && schema ? (
-        eventStats.length === 0 ? (
-          'No Event Data'
-        ) : (
+      {eventNotStarted ? (
+        'This event has not happened yet. Check back after it starts!'
+      ) : eventStats ? (
+        schema && eventStats.length > 0 ? (
           <Card class={tablePageTableStyle}>
             <AnalysisTable
               eventKey={eventKey}
@@ -51,6 +56,8 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
               )}
             />
           </Card>
+        ) : (
+          'No Event Data'
         )
       ) : (
         <Loader />
