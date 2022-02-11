@@ -4,7 +4,7 @@ const nextTick = () => Promise.resolve()
 
 describe('behaves like a normal promise', () => {
   it('only resolves once', async () => {
-    let resolve: (value?: string | PromiseLike<string>) => void = () => {}
+    let resolve: (value: string | PromiseLike<string>) => void = () => {}
     let reject: (reason?: any) => void = () => {}
     const promise: Promise<string> = new CancellablePromise<string>(
       (res, rej) => {
@@ -57,7 +57,7 @@ describe('behaves like a normal promise', () => {
 
     const onResolve = jest.fn()
     const onReject = jest.fn(
-      () => new Promise<number>((resolve) => resolve(30)),
+      (_: any) => new Promise<number>((resolve) => resolve(30)),
     )
     const onResolve2 = jest.fn()
 
@@ -89,7 +89,7 @@ describe('behaves like a normal promise', () => {
 
 describe('cancellable functionality', () => {
   it('cancelling prevents .then and .catch callbacks from being called', async () => {
-    let resolve: (value?: string | PromiseLike<string>) => void = () => {}
+    let resolve: (value: string | PromiseLike<string>) => void = () => {}
     let reject: (reason?: any) => void = () => {}
     const cancelCallback = jest.fn()
     const promise = new CancellablePromise<string>((res, rej, onCanceled) => {

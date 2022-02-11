@@ -1,7 +1,7 @@
 import linaria from 'linaria-preact/rollup'
 import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
-import babel from 'rollup-plugin-babel'
+import { getBabelInputPlugin, getBabelOutputPlugin } from '@rollup/plugin-babel'
 import postcss from 'rollup-plugin-postcss'
 import netlifyPush, { printPush } from 'rollup-plugin-netlify-push'
 import parseRoutes from 'rollup-plugin-netlify-push/parse-routes'
@@ -9,7 +9,7 @@ import { apiUrl } from './src/api/api-url.ts'
 import crypto from 'crypto'
 import { promisify } from 'util'
 import { writeFile, readFile } from 'fs'
-import { join, resolve as pathResolve } from 'path'
+import * as path from 'path'
 import cpy from 'cpy'
 import templite from 'templite'
 import mkdirplz from 'mkdirplz'
@@ -18,6 +18,7 @@ import { generateIcons } from './generate-icons.mjs'
 const postcssPlugins = require('./postcss.config').plugins
 require('dotenv').config()
 const babelConfig = require('./.babelrc')
+const babelConfigProd = require('./.babelrc.output')
 
 const writeFileAsync = promisify(writeFile)
 const readFileAsync = promisify(readFile)
@@ -41,19 +42,14 @@ const terserOptions = (prod) => ({
     join_vars: prod,
   },
   mangle: prod,
-  output: {
-    beautify: !prod,
-  },
 })
 
 const outDir = 'dist'
-const chunksFile = join(outDir, 'chunks.json')
-
-const babelOptions = { extensions, babelrc: false, ...babelConfig }
+const chunksFile = path.join(outDir, 'chunks.json')
 
 mkdirplz(outDir)
 
-export default [
+const configs = [
   {
     input: './src/index.tsx',
     output: {
@@ -63,13 +59,12 @@ export default [
       sourcemap: false,
       chunkFileNames: '[hash].js',
     },
-    experimentalOptimizeChunks: true,
-    chunkGroupingSize: 50000,
+    preserveEntrySignatures: false,
     plugins: [
       node(rollupNodeOptions),
       linaria({ sourceMap: false }),
       postcss({
-        extract: pathResolve('./dist/style.css'),
+        extract: path.resolve('./dist/style.css'),
         modules: cssModulesConfig,
         plugins: Object.entries(postcssPlugins).reduce(
           (plugins, [key, value]) =>
@@ -81,7 +76,13 @@ export default [
         config: false,
         minimize: { zindex: false },
       }),
-      babel(babelOptions),
+      getBabelInputPlugin({
+        extensions,
+        babelHelpers: 'bundled',
+        babelrc: false,
+        ...babelConfig,
+      }),
+      getBabelOutputPlugin({ babelrc: false, ...babelConfigProd }),
       terser(terserOptions(prod)),
       netlifyPush({
         getRoutes: () => parseRoutes('./src/routes.ts'),
@@ -94,14 +95,14 @@ export default [
         async writeBundle() {
           const htmlSrc = await readFileAsync('rollup-index.html', 'utf8')
           const htmlOut = templite(htmlSrc, { apiUrl })
-          writeFileAsync(join(outDir, 'index.html'), htmlOut)
+          writeFileAsync(path.join(outDir, 'index.html'), htmlOut)
         },
       },
       {
         name: 'rollup-plugin-chunks-json',
-        async writeBundle(bundle) {
+        async writeBundle(_, bundle) {
           const chunksJSON = Object.values(bundle)
-            .filter((chunk) => !chunk.isAsset)
+            .filter((chunk) => chunk.type === 'chunk')
             .map((chunk) => `/${chunk.fileName}`)
           await writeFileAsync(chunksFile, JSON.stringify(chunksJSON))
         },
@@ -145,14 +146,20 @@ export default [
         },
       },
       node(rollupNodeOptions),
-      babel(babelOptions),
+      getBabelInputPlugin({
+        extensions,
+        babelHelpers: 'bundled',
+        babelrc: false,
+        ...babelConfig,
+      }),
+      getBabelOutputPlugin({ babelrc: false, ...babelConfigProd }),
       terser(terserOptions(prod)),
       {
         name: 'write-manifest',
         async writeBundle() {
           const manifestSrc = await readFileAsync('./src/manifest.json', 'utf8')
           await writeFileAsync(
-            join(outDir, 'manifest.json'),
+            path.join(outDir, 'manifest.json'),
             JSON.stringify(JSON.parse(manifestSrc)),
           )
         },
@@ -166,3 +173,5 @@ export default [
     ],
   },
 ]
+
+export default configs

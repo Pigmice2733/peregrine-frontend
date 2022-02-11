@@ -5,6 +5,7 @@
     "strict": true,
     "jsx": "react",
     "jsxFactory": "h",
+    "jsxFragmentFactory": "h",
     "lib": ["esnext", "dom", "webworker"],
     "allowSyntheticDefaultImports": true,
     "allowJs": true,

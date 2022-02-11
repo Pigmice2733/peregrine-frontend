@@ -1,4 +1,3 @@
-import { h, JSX, Fragment } from 'preact'
 import { Schema, StatDescription, StatType } from '@/api/schema'
 import { Stat, ProcessedTeamStats } from '@/api/stats'
 import clsx from 'clsx'
@@ -17,9 +16,9 @@ import { css } from 'linaria'
 import { createDialog } from './dialog'
 import { blue, red, grey, lightGrey, textGrey } from '@/colors'
 import Icon from './icon'
-import { settings as settingsIcon } from '@/icons/settings'
+import { mdiCog } from '@mdi/js'
 import { round } from '@/utils/round'
-import Spinner from './spinner'
+import Loader from './loader'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
 import { usePromise } from '@/utils/use-promise'
@@ -59,7 +58,7 @@ const createStatCell = (
   return {
     title: cleanFieldName(statDescription.name),
     getCell: (row) => {
-      const matchingCell = row.summary[statDescription.name]
+      const matchingCell = row.summary[statDescription.name] as Stat | undefined
       if (matchingCell)
         return {
           ...matchingCell,
@@ -187,7 +186,7 @@ const AnalysisTable = ({
     title: 'Team',
     key: 'Team',
     getCell: (row) => row.team,
-    getCellValue: (team) => parseInt(team),
+    getCellValue: (team) => Number.parseInt(team),
     renderCell: (team, _row, rowIndex, sortColKey) => {
       const isSortingByStat =
         sortColKey.startsWith('auto') || sortColKey.startsWith('teleop')
@@ -246,7 +245,7 @@ const AnalysisTable = ({
     ...autoFields.map(createStatCell(avgType, renderBoolean)),
     ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
-  if (!teams) return <Spinner />
+  if (!teams) return <Loader />
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
   )
@@ -271,11 +270,11 @@ const AnalysisTable = ({
       columns={columns}
       rows={rows}
       contextRow={
-        <Fragment>
+        <>
           <th class={topLeftCellStyle}>
             {enableSettings && (
               <button class={iconButtonStyle} onClick={showSettings}>
-                <Icon icon={settingsIcon} class={iconStyle} />
+                <Icon icon={mdiCog} class={iconStyle} />
               </button>
             )}
           </th>
@@ -294,7 +293,7 @@ const AnalysisTable = ({
           >
             <span>Teleop</span>
           </th>
-        </Fragment>
+        </>
       }
     />
   )

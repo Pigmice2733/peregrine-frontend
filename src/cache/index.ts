@@ -1,11 +1,12 @@
 import { idbPromise } from '@/utils/idb-promise'
 
 const DB_NAME = 'CACHE'
-const DB_VERSION = 4
+const DB_VERSION = 5
 
 const EVENT_STORE = 'events'
 const MATCH_STORE = 'matches'
 const SCHEMA_STORE = 'schemas'
+const USER_STORE = 'users'
 
 const initDB = (db: IDBDatabase) => {
   if (!db.objectStoreNames.contains(EVENT_STORE))
@@ -14,6 +15,12 @@ const initDB = (db: IDBDatabase) => {
     db.createObjectStore(MATCH_STORE)
   if (!db.objectStoreNames.contains(SCHEMA_STORE))
     db.createObjectStore(SCHEMA_STORE)
+  if (!db.objectStoreNames.contains(USER_STORE))
+    db.createObjectStore(USER_STORE)
+}
+
+export const clearIndexedDB = () => {
+  indexedDB.deleteDatabase(DB_NAME)
 }
 
 let db: IDBDatabase | undefined
@@ -51,6 +58,6 @@ export const transaction = async <ResolvedResult = void>(
       ? idbPromise(handlerResult)
       : handlerResult
   // wait for transaction to finish
-  await new Promise((resolve) => (tx.oncomplete = resolve as () => {}))
+  await new Promise((resolve) => (tx.oncomplete = resolve as () => void))
   return data
 }

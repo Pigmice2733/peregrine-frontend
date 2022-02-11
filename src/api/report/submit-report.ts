@@ -1,25 +1,35 @@
 import { request } from '../base'
-import { Report } from '.'
+import { Report, OfflineReport } from '.'
 import { useEffect, useState } from 'preact/hooks'
 import { CancellablePromise } from '@/utils/cancellable-promise'
 
-export const uploadReport = (
-  report: Report,
-): CancellablePromise<number | null> =>
-  report.id === undefined
-    ? request<number>('POST', 'reports', {}, report)
-    : request<null>('PUT', `reports/${report.id}`, {}, report)
+/**
+ * Uploads a report via PUT or POST, depending on if the report already has an ID
+ * @returns a promise that resolves to the new report's ID
+ */
+export const uploadReport = (report: Report): CancellablePromise<number> => {
+  const id = report.id
+  const req =
+    id === undefined
+      ? request<number>('POST', 'reports', {}, report)
+      : request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
+  return req.then((id) => {
+    if (report.key) {
+      deleteReportLocally(report.key)
+    }
+    return id
+  })
+}
 
-// The 2 is the version number
-// There were breaking changes to the report shape in
-// https://github.com/Pigmice2733/peregrine-backend/pull/266
-const SAVED_REPORTS = 'savedReports2'
+// The 3 is the version number
+// Increment whenever there are breaking changes to the stored data
+const SAVED_REPORTS = 'savedReports3'
 
-const getSavedReports = (): Report[] =>
+export const getSavedReports = (): OfflineReport[] =>
   JSON.parse(localStorage.getItem(SAVED_REPORTS) || '[]')
 
 export const useSavedReports = () => {
-  const [savedReports, setSavedReports] = useState<Report[]>([])
+  const [savedReports, setSavedReports] = useState<OfflineReport[]>([])
   const refreshSavedReports = () => setSavedReports(getSavedReports())
 
   useEffect(() => {
@@ -45,8 +55,26 @@ export const uploadSavedReports = async () => {
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(unsuccessfulReports))
 }
 
-export const saveReportLocally = (report: Report) => {
+/** Only used for offline reports */
+export const generateReportKey = () => Math.random().toString(36).slice(2, 10)
+
+export const saveReportLocally = (report: OfflineReport) => {
   const savedReports = getSavedReports()
-  savedReports.push(report)
+  const existingReportIndex = savedReports.findIndex(
+    (savedReport) => savedReport.key === report.key,
+  )
+  if (existingReportIndex === -1) {
+    savedReports.push(report)
+  } else {
+    savedReports[existingReportIndex] = report
+  }
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(savedReports))
+}
+export const deleteReportLocally = (reportKey: string) => {
+  const savedReports = getSavedReports()
+  const filteredReports = savedReports.filter(
+    (savedReport) => savedReport.key !== reportKey,
+  )
+
+  localStorage.setItem(SAVED_REPORTS, JSON.stringify(filteredReports))
 }

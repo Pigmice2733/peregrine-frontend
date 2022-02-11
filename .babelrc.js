@@ -1,12 +1,9 @@
 module.exports = {
   presets: [
     ['linaria-preact/babel', { evaluate: true }],
-    ['@babel/preset-typescript', { jsxPragma: 'h' }],
-    ['@babel/preset-modules', { loose: true }],
+    '@babel/preset-typescript',
   ],
   plugins: [
-    process.env.NODE_ENV === 'production' &&
-      './babel-plugin-remove-preact-debug',
     process.env.NODE_ENV !== 'production' &&
       process.env.NODE_ENV !== 'test' &&
       '@babel/plugin-transform-react-jsx-source',
@@ -18,11 +15,15 @@ module.exports = {
     [
       '@babel/transform-react-jsx',
       {
-        pragma: 'h',
+        runtime: 'automatic',
+        importSource: 'preact',
         useBuiltIns: true, // object.assign instead of _extends
       },
     ],
     '@babel/plugin-proposal-numeric-separator',
+    // Removes the import of 'preact/debug'
+    process.env.NODE_ENV === 'production' &&
+      './babel-plugin-remove-preact-debug',
     'babel-plugin-transform-inline-environment-variables',
     // This is included in preset-env but we want to manually enable it even in
     // environments that natively support template literals because "" + "" is

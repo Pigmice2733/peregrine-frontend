@@ -1,4 +1,3 @@
-import { h, JSX, Fragment } from 'preact'
 import { useJWT } from '@/jwt'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
@@ -74,7 +73,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   return (
     <Form onSubmit={onSubmit} ref={formRef}>
       {(isValid) => (
-        <Fragment>
+        <>
           <TextInput
             required
             label="Username"
@@ -94,7 +93,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Logging In' : 'Log In'}
           </Button>
-        </Fragment>
+        </>
       )}
     </Form>
   )
