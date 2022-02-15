@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { FunctionComponent } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
@@ -16,14 +17,15 @@ import Card from '@/components/card'
 
 interface Props {
   eventKey: string
+  year: number
 }
 
 const teamStyle = css`
   color: inherit;
 `
 
-const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
-  const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
+const EventAnalysis: FunctionComponent<Props> = ({ eventKey, year }) => {
+  const eventStats = usePromise(() => getEventStats(eventKey, year), [eventKey])
   const eventInfo = useEventInfo(eventKey)
 
   const now = new Date()
