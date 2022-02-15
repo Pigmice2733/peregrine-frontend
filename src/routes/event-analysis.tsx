@@ -24,6 +24,13 @@ const teamStyle = css`
   color: inherit;
 `
 
+const noTablePageStyle = css`
+  padding: 1rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+`
+
 const EventAnalysis: FunctionComponent<Props> = ({ eventKey, year }) => {
   const eventStats = usePromise(() => getEventStats(eventKey, year), [eventKey])
   const eventInfo = useEventInfo(eventKey)
@@ -39,7 +46,7 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey, year }) => {
     <Page
       name={`Analysis - ${eventInfo ? eventInfo.name : eventKey}`}
       back={`/events/${eventKey}`}
-      class={tablePageStyle}
+      class={eventNotStarted ? noTablePageStyle : tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >
       {eventNotStarted ? (
