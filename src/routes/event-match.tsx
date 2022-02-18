@@ -29,7 +29,6 @@ import { createShadow } from '@/utils/create-shadow'
 interface Props {
   eventKey: string
   matchKey: string
-  year: number
 }
 
 const tableTeamStyle = css``
@@ -97,7 +96,7 @@ const showEventResults = 'Event Results'
 type SelectedDisplay = typeof showMatchResults | typeof showEventResults
 
 // eslint-disable-next-line complexity
-const EventMatch = ({ eventKey, matchKey, year }: Props) => {
+const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
@@ -106,7 +105,11 @@ const EventMatch = ({ eventKey, matchKey, year }: Props) => {
     [eventKey, matchKey],
   )
   const schema = useSchema(event?.schemaId)
-  const teams = usePromise(() => getEventStats(eventKey, year), [eventKey])
+  const eventYear = event ? event.startDate.getFullYear() : 0
+  const teams = usePromise(() => getEventStats(eventKey, eventYear), [
+    eventKey,
+    eventYear,
+  ])
 
   const [selectedDisplay, setSelectedDisplay] = useState<SelectedDisplay>(
     showEventResults,

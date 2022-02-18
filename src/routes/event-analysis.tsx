@@ -17,7 +17,6 @@ import Card from '@/components/card'
 
 interface Props {
   eventKey: string
-  year: number
 }
 
 const teamStyle = css`
@@ -31,9 +30,14 @@ const noTablePageStyle = css`
   justify-content: center;
 `
 
-const EventAnalysis: FunctionComponent<Props> = ({ eventKey, year }) => {
-  const eventStats = usePromise(() => getEventStats(eventKey, year), [eventKey])
+const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventInfo = useEventInfo(eventKey)
+  const eventYear = eventInfo ? eventInfo.startDate.getFullYear() : 0
+  const eventStats = usePromise(() => getEventStats(eventKey, eventYear), [
+    eventKey,
+    eventYear,
+  ])
+  const eventName = eventInfo ? eventInfo.name : eventKey
 
   const now = new Date()
   const eventNotStarted = eventInfo
@@ -42,16 +46,25 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey, year }) => {
 
   const schema = useSchema(eventNotStarted ? undefined : eventInfo?.schemaId)
 
+  let teamList = ''
+  if (eventStats) {
+    for (let i = 0; i < eventStats?.length; i++) {
+      teamList += eventStats[i].team + `, `
+    }
+    teamList = teamList.slice(0, -2)
+  }
+  if (teamList === '') {
+    teamList = `This event has no teams.`
+  }
+
   return (
     <Page
-      name={`Analysis - ${eventInfo ? eventInfo.name : eventKey}`}
+      name={`Analysis - ${eventName}`}
       back={`/events/${eventKey}`}
       class={eventNotStarted ? noTablePageStyle : tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >
-      {eventNotStarted ? (
-        'This event has not happened yet. Check back after it starts!'
-      ) : eventStats ? (
+      {eventStats ? (
         schema && eventStats.length > 0 ? (
           <Card class={tablePageTableStyle}>
             <AnalysisTable
@@ -66,8 +79,20 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey, year }) => {
             />
           </Card>
         ) : (
-          'No Event Data'
+          <>
+            <div
+              class={css`
+                text-decoration-line: underline;
+              `}
+            >
+              Teams in {eventName}:
+            </div>
+            <br />
+            {teamList}
+          </>
         )
+      ) : eventNotStarted ? (
+        `This event hasn't started yet.`
       ) : (
         <Loader />
       )}
