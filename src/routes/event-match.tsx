@@ -1,4 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchDetailsCard } from '@/components/match-card'
@@ -64,9 +63,6 @@ const offlineMatchStyle = css`
   padding: 0.75rem;
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
-    grid-template-areas:
-      'topArea'
-      'leftColumn';
   }
   & > * {
     margin: 0.75rem;
@@ -119,13 +115,13 @@ const leftColumnStyle = css`
 const offlineDisplayInfo = css`
   grid-area: topArea;
   display: grid;
-  grid-gap: 1.5rem;
+  grid-template-areas:
+    'iconArea title'
+    'detail detail';
   justify-self: center;
-  max-width: 19rem;
 
   @media (max-width: 540px) {
     justify-self: stretch;
-    max-width: 600px;
   }
 `
 
@@ -200,18 +196,36 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       {match ? (
         <>
           {!isOnline && (
-            <div class={offlineDisplayInfo}>
-              <Card
+            <Card class={offlineDisplayInfo}>
+              <div
                 class={css`
-                  justify-self: center;
-                  padding: 1rem;
-                  text-align: center;
+                  grid-area: iconArea;
+                  justify-self: right;
+                  padding: 0.5rem;
                 `}
               >
-                <Icon icon={mdiCloudOffOutline} /> <b> No Connection </b> <br />
-                Analysis table, videos, and reports are only available online.
-              </Card>
-            </div>
+                <Icon icon={mdiCloudOffOutline} />
+              </div>
+              <div
+                class={css`
+                  grid-area: title;
+                  justify-self: left;
+                  font-weight: bold;
+                  padding: 0.5rem;
+                `}
+              >
+                No Connection
+              </div>
+              <div
+                class={css`
+                  grid-area: detail;
+                  padding: 0.5rem;
+                  justify-self: center;
+                `}
+              >
+                Showing limited information offline.
+              </div>
+            </Card>
           )}
           <div class={leftColumnStyle}>
             <MatchDetailsCard match={match} eventKey={eventKey} />
