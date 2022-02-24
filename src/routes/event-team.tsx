@@ -16,6 +16,17 @@ import { usePromise } from '@/utils/use-promise'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useState } from 'preact/hooks'
+import {
+  initSpring,
+  Animated,
+  Springed,
+  tweenColor,
+  tweenLength,
+  springedObject,
+  templateSpring,
+  measure,
+} from '@/spring/use'
 import { useSchema } from '@/cache/schema/use'
 import Button from '@/components/button'
 import { compareMatches } from '@/utils/compare-matches'
@@ -203,6 +214,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           <MatchDetailsCard match={nextMatch} eventKey={eventKey} link />
         </>
       )}
+      <TestComponent />
       <InfoGroupCard
         info={[
           {
@@ -252,3 +264,53 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
 }
 
 export default EventTeam
+
+const TestComponent = () => {
+  const [toggle, setToggle] = useState(false)
+  const spring = initSpring({ mass: 0.0007 })
+
+  const styles = springedObject({
+    padding: '0.5rem',
+    'border-radius': '0.2rem',
+    // transform: spring(templateSpring`translateX(${toggle ? 200 : -200}px)`),
+    'font-family': '"Dank Mono", "Fira Code", "Source Code Pro"',
+    // left: spring(templateSpring`${spring(toggle ? 10 : 100)}px`),
+    left: toggle ? 0 : '',
+    right: toggle ? '' : 0,
+    position: 'absolute',
+    transform: spring(
+      templateSpring`translateX(${measure(elSnapshot => {
+        console.log('hi', elSnapshot.offsetLeft)
+        return -elSnapshot.offsetLeft
+      })}px)`,
+    ),
+    // background: tweenColor(spring, toggle ? '#282828' : 'black'),
+    // color: tweenColor(spring, toggle ? '#b16286' : '#994cc3'),
+    // width: tweenLength(spring, toggle ? '20vw' : '100%', el => el.offsetWidth),
+    // ...(toggle
+    //   ? {
+    //       background: tweenColor(spring, '#282828'),
+    //       color: tweenColor(spring, '#b16286'),
+    //     }
+    //   : {
+    //       background: tweenColor(spring, 'black'),
+    //       color: tweenColor(spring, '#994cc3'),
+    //     }),
+  })
+
+  return (
+    <div
+      class={css`
+        width: 50vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      `}
+    >
+      <Animated.pre style={styles}>
+        {toggle ? 'hi' : 'hiya long\n\nhi again'}
+      </Animated.pre>
+      <button onClick={() => setToggle(t => !t)}>clickme</button>
+    </div>
+  )
+}

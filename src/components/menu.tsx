@@ -16,6 +16,8 @@ import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
 import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
 import { resolveUrl } from '@/utils/resolve-url'
+import { initSpring, Animated } from '@/spring/use'
+import { useState } from 'preact/hooks'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { darken, lighten, rgba } from 'polished'
@@ -94,7 +96,7 @@ const menuStyle = css`
   background: white;
   box-shadow: ${createShadow(16)};
   z-index: 16;
-  transition: inherit;
+  /* transition: inherit; */
   transition-timing-function: cubic-bezier(1, 0, 0.71, 0.88);
   display: grid;
   grid-template-rows: auto 1fr;
@@ -109,7 +111,6 @@ const menuStyle = css`
   }
 
   .${scrimHiddenClass} & {
-    transform: translateX(100%);
     box-shadow: none;
   }
 `
@@ -166,12 +167,18 @@ const SavedTeamMenuItem = ({
 export const Menu = ({ onHide, visible }: Props) => {
   const { jwt } = useJWT()
   const isAdmin = jwt?.peregrineRoles.isAdmin
+  // const spring = initSpring()
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
   const savedTeams = useSavedTeams()
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
-      <aside class={menuStyle}>
+      <aside
+        class={menuStyle}
+        style={{
+          transform: `translateX(${visible ? 0 : 100}%)`,
+        }}
+      >
         <IconButton
           aria-label="Close Menu"
           icon={mdiClose}
@@ -235,5 +242,20 @@ export const Menu = ({ onHide, visible }: Props) => {
         </nav>
       </aside>
     </Scrim>
+  )
+}
+
+const TextAnimated = () => {
+  const spring = initSpring()
+  const [counter, setCounter] = useState(0)
+  const increment = () => setCounter(c => c + 1)
+  const decrement = () => setCounter(c => c - 1)
+
+  return (
+    <div>
+      <button onClick={increment}>+</button>
+      <Animated.div>{spring(counter)}</Animated.div>
+      <button onClick={decrement}>-</button>
+    </div>
   )
 }
