@@ -37,7 +37,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
     (acc, report) => {
       if (report.comment) {
-        ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
+        acc[report.matchKey].push(report)
       }
       return acc
     },

@@ -85,7 +85,7 @@ export const ChartCard = ({
         teamMatches.sort(compareMatches).map(async (match) => ({
           matchKey: match.key,
           stats: await getMatchTeamStats(eventKey, match.key, team)
-            .then((s) => s.summary || [])
+            .then((s) => s.summary)
             .catch(() => []),
         })),
       ),
@@ -499,7 +499,6 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
 
   const recomputeScrolling = () => {
     const element = elementRef.current
-    if (!element) return
     setIsOverflowingLeft(element.scrollLeft > scrollThreshold)
     setIsOverflowingRight(
       element.scrollWidth - element.scrollLeft - element.clientWidth >

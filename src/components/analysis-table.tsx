@@ -60,11 +60,10 @@ const createStatCell = (
     title: cleanFieldName(statDescription.name),
     getCell: (row) => {
       const matchingCell = row.summary[statDescription.name]
-      if (matchingCell)
-        return {
-          ...matchingCell,
-          type: statDescription.type,
-        }
+      return {
+        ...matchingCell,
+        type: statDescription.type,
+      }
     },
     key: getFieldKey(statDescription),
     renderCell: (cell) => {

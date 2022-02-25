@@ -17,7 +17,7 @@ type Props = Merge<
 
 export const Form = (props: Props) => {
   const formRef = useRef<HTMLFormElement>()
-  const isValid = Boolean(formRef.current && formRef.current.checkValidity())
+  const isValid = Boolean(formRef.current.checkValidity())
   return (
     <form {...props} class={clsx(props.class, formStyles)} ref={formRef}>
       {props.children(isValid)}

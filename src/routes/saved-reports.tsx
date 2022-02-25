@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { FunctionComponent, h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { useSavedReports, uploadSavedReports } from '@/api/report/submit-report'
@@ -18,9 +19,9 @@ const savedReportCardStyle = css`
 const SavedReportCard: FunctionComponent<{ report: Report }> = ({ report }) => {
   const eventInfo = useEventInfo(report.eventKey)
   const matchKey = formatMatchKey(report.matchKey)
-  const formattedMatchKey = matchKey.num
+  const formattedMatchKey = matchKey?.num
     ? `${matchKey.group} Match ${matchKey.num}`
-    : matchKey.group
+    : matchKey?.group
   const eventName = eventInfo ? eventInfo.name : report.eventKey
   const teamName = formatTeamNumber(report.teamKey)
   return (

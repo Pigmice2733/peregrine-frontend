@@ -10,7 +10,6 @@ import { formatDateRange } from '@/utils/format-date-range'
 import IconButton from './icon-button'
 import { calendarPlus } from '@/icons/calendar-plus'
 import { video } from '@/icons/video'
-import Spinner from './spinner'
 import { ProcessedEventInfo } from '@/api/event-info'
 import { youtube } from '@/icons/youtube'
 import { twitch } from '@/icons/twitch'
@@ -47,70 +46,65 @@ interface Props {
   event: ProcessedEventInfo
 }
 
-export const EventInfoCard = ({ event }: Props) =>
-  event ? (
-    <InfoGroupCard
-      info={[
-        event.locationName &&
-          event.gmapsUrl && {
-            icon: mapMarker,
-            title: event.locationName,
-            href: event.gmapsUrl,
-            target: '_blank',
-            rel: 'noopener',
-            action: <Icon icon={googleMaps} />,
-          },
-        event.district && {
-          icon: infoOutline,
-          title: (
-            <span>
-              {(event as { fullDistrict: string }).fullDistrict}{' '}
-              <Chip>{event.district}</Chip>
-            </span>
-          ),
-        },
-        {
-          icon: calendar,
-          title: (
-            <span>
-              {formatDateRange(event.startDate, event.endDate)}{' '}
-              {event.week !== undefined && (
-                <Chip>{`Wk ${event.week + 1}`}</Chip>
-              )}
-            </span>
-          ),
-          action: (
-            <IconButton
-              href={gcalUrl(event)}
-              target="_blank"
-              rel="noopener"
-              icon={calendarPlus}
-            />
-          ),
-        },
-        event.webcasts.length > 0 && {
-          icon: video,
-          title: 'Live Stream' + (event.webcasts.length === 1 ? '' : 's'),
-          href: event.webcasts.length === 1 ? event.webcasts[0] : undefined,
+export const EventInfoCard = ({ event }: Props) => (
+  <InfoGroupCard
+    info={[
+      event.locationName &&
+        event.gmapsUrl && {
+          icon: mapMarker,
+          title: event.locationName,
+          href: event.gmapsUrl,
           target: '_blank',
           rel: 'noopener',
-          action:
-            event.webcasts.length === 1 ? (
-              <Icon icon={webcastIcon(event.webcasts[0])} />
-            ) : (
-              event.webcasts.map((w) => (
-                <IconButton
-                  key={w}
-                  icon={webcastIcon(w)}
-                  href={w}
-                  target="_blank"
-                  rel="noopener"
-                />
-              ))
-            ),
+          action: <Icon icon={googleMaps} />,
         },
-      ]}
-    />
-  ) : (
-    <Spinner />
-  )
+      event.district && {
+        icon: infoOutline,
+        title: (
+          <span>
+            {(event as { fullDistrict: string }).fullDistrict}{' '}
+            <Chip>{event.district}</Chip>
+          </span>
+        ),
+      },
+      {
+        icon: calendar,
+        title: (
+          <span>
+            {formatDateRange(event.startDate, event.endDate)}{' '}
+            {event.week !== undefined && <Chip>{`Wk ${event.week + 1}`}</Chip>}
+          </span>
+        ),
+        action: (
+          <IconButton
+            href={gcalUrl(event)}
+            target="_blank"
+            rel="noopener"
+            icon={calendarPlus}
+          />
+        ),
+      },
+      event.webcasts.length > 0 && {
+        icon: video,
+        title: 'Live Stream' + (event.webcasts.length === 1 ? '' : 's'),
+        href: event.webcasts.length === 1 ? event.webcasts[0] : undefined,
+        target: '_blank',
+        rel: 'noopener',
+        action:
+          event.webcasts.length === 1 ? (
+            <Icon icon={webcastIcon(event.webcasts[0])} />
+          ) : (
+            event.webcasts.map((w) => (
+              <IconButton
+                key={w}
+                icon={webcastIcon(w)}
+                href={w}
+                target="_blank"
+                rel="noopener"
+              />
+            ))
+          ),
+      },
+    ]}
+  />
+)

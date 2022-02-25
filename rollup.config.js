@@ -48,7 +48,7 @@ const chunksFile = path.join(outDir, 'chunks.json')
 
 mkdirplz(outDir)
 
-export default [
+const rollupArray = [
   {
     input: './src/index.tsx',
     output: {
@@ -208,3 +208,5 @@ export default [
     ],
   },
 ]
+
+export default rollupArray

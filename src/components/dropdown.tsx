@@ -58,7 +58,7 @@ export const Dropdown = <T extends any>({
 }: Props<T>) => {
   const optionsByGroup = options.reduce((acc, opt) => {
     const group = getGroup(opt) || ''
-    acc[group] = (acc[group] || []).concat(
+    acc[group] = acc[group].concat(
       <option value={getKey(opt)} key={getKey(opt)}>
         {getText(opt)}
       </option>,

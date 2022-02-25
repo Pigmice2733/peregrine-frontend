@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { h, Fragment } from 'preact'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
@@ -101,10 +102,20 @@ export const MatchCard = memo(({ match, eventKey, link }: MatchCardProps) => {
       href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
     >
       <div class={matchTitleStyle}>
-        {matchName.num ? <div>{matchName.group}</div> : matchName.group}
-        {matchName.num && (
-          <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+        {matchName ? (
+          matchName.num ? (
+            <div>{matchName.group}</div>
+          ) : (
+            matchName.group
+          )
+        ) : (
+          <div> {match.key} </div>
         )}
+        {matchName
+          ? matchName.num && (
+              <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+            )
+          : ''}
       </div>
       {match.time && (
         <time dateTime={match.time.toISOString()}>

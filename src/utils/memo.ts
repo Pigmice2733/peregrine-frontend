@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/ban-ts-comment */
 import { FunctionComponent, Component, h } from 'preact'
 
 /**

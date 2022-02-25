@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/ban-ts-comment */
 import { LatLong } from '../use-geo-location'
 import { distanceBetweenCoordinates } from '../distance-between-coordinates'
 
