@@ -54,21 +54,6 @@ const matchStyle = css`
   }
 `
 
-const offlineMatchStyle = css`
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-areas:
-    'topArea'
-    'leftColumn';
-  padding: 0.75rem;
-  @media (max-width: 930px) {
-    grid-template-columns: 1fr;
-  }
-  & > * {
-    margin: 0.75rem;
-  }
-`
-
 const loadedMatchStyle = css`
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -107,18 +92,20 @@ const leftColumnStyle = css`
   display: grid;
   grid-gap: 1.5rem;
   justify-self: center;
-  @media (max-width: 540px) {
+  @media (max-width: 350px) {
     justify-self: stretch;
   }
 `
 
 const offlineDisplayInfo = css`
-  grid-area: topArea;
   display: grid;
   grid-template-areas:
     'iconArea title'
     'detail detail';
-  justify-self: center;
+  justify-self: stretch;
+  align-items: center;
+  grid-gap: 0.5rem;
+  padding: 1rem;
 
   @media (max-width: 540px) {
     justify-self: stretch;
@@ -185,8 +172,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
       class={clsx(
         matchStyle,
-        match && offlineMatchStyle,
-        match && isOnline && loadedMatchStyle,
+        match && loadedMatchStyle,
         match?.videos &&
           match.videos.length > 0 &&
           isOnline &&
@@ -195,39 +181,36 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     >
       {match ? (
         <>
-          {!isOnline && (
-            <Card class={offlineDisplayInfo}>
-              <div
-                class={css`
-                  grid-area: iconArea;
-                  justify-self: right;
-                  padding: 0.5rem;
-                `}
-              >
-                <Icon icon={mdiCloudOffOutline} />
-              </div>
-              <div
-                class={css`
-                  grid-area: title;
-                  justify-self: left;
-                  font-weight: bold;
-                  padding: 0.5rem;
-                `}
-              >
-                No Connection
-              </div>
-              <div
-                class={css`
-                  grid-area: detail;
-                  padding: 0.5rem;
-                  justify-self: center;
-                `}
-              >
-                Showing limited information offline.
-              </div>
-            </Card>
-          )}
           <div class={leftColumnStyle}>
+            {!isOnline && (
+              <Card class={offlineDisplayInfo}>
+                <div
+                  class={css`
+                    grid-area: iconArea;
+                    justify-self: right;
+                  `}
+                >
+                  <Icon icon={mdiCloudOffOutline} />
+                </div>
+                <div
+                  class={css`
+                    grid-area: title;
+                    justify-self: left;
+                    font-weight: bold;
+                  `}
+                >
+                  No Connection
+                </div>
+                <div
+                  class={css`
+                    grid-area: detail;
+                    justify-self: center;
+                  `}
+                >
+                  Showing limited information offline.
+                </div>
+              </Card>
+            )}
             <MatchDetailsCard match={match} eventKey={eventKey} />
             {reports && reports.length > 0 ? (
               <MatchReports
