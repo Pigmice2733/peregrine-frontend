@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { h } from 'preact'
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
