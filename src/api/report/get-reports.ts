@@ -5,5 +5,5 @@ export const getReports = (filters: {
   event?: string
   team?: string
   match?: string
-  reporter?: number
+  reporter?: number | string
 }) => request<GetReport[]>('GET', 'reports', filters)

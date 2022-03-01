@@ -1,8 +1,8 @@
-/* eslint-disable caleb/shopify/prefer-class-properties */
+/* eslint-disable caleb/@shopify/prefer-class-properties */
 
 type OnCanceled = (cb: () => void) => void
 type Executor<T> = (
-  resolve: (value?: T | PromiseLike<T>) => void,
+  resolve: (value: T | PromiseLike<T>) => void,
   reject: (reason?: any) => void,
   onCanceled: OnCanceled,
 ) => void
@@ -59,11 +59,11 @@ class CancellablePromise<T> extends Promise<T> {
                 onfulfilled ? onfulfilled(val) : ((val as any) as TResult1),
               )
           },
-          (val) => {
+          (error) => {
             if (this.isCanceled) return
-            if (onrejected) resolve(onrejected(val))
+            if (onrejected) resolve(onrejected(error))
             // If there is no catcher, the sub-promise should reject
-            else reject(val)
+            else reject(error)
           },
         )
         // When the chained promise cancels, this one should too

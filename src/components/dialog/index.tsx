@@ -1,5 +1,4 @@
 import { useState } from 'preact/hooks'
-import { h, JSX } from 'preact'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { TextButton } from '@/components/text-button'

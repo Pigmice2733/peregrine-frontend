@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 
 const outer = css`

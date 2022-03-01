@@ -1,5 +1,5 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { FunctionComponent, h, Fragment } from 'preact'
+import { FunctionComponent } from 'preact'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
@@ -85,7 +85,7 @@ export const ChartCard = ({
         teamMatches.sort(compareMatches).map(async (match) => ({
           matchKey: match.key,
           stats: await getMatchTeamStats(eventKey, match.key, team)
-            .then((s) => s.summary || [])
+            .then((s) => s.summary)
             .catch(() => []),
         })),
       ),
@@ -351,7 +351,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
             {points[0]}
           </text>
         ) : (
-          <Fragment>
+          <>
             <line
               x1={0}
               x2={canvasWidth}
@@ -389,7 +389,7 @@ const Chart: FunctionComponent<ChartProps> = memo(
             >
               {round(Math.min(...points))}
             </text>
-          </Fragment>
+          </>
         )}
 
         {lerpedPoints.map((y, x) => (
@@ -493,7 +493,7 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
   points,
   onPointClick,
 }) => {
-  const elementRef = useRef<HTMLDivElement>()
+  const elementRef = useRef<HTMLDivElement | null>()
   const [isOverflowingLeft, setIsOverflowingLeft] = useState<boolean>(false)
   const [isOverflowingRight, setIsOverflowingRight] = useState<boolean>(false)
 

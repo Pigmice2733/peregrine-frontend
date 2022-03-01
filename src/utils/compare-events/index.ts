@@ -40,12 +40,12 @@ export const compareEvents = (now: Date, userLocation?: LatLong) => {
 
     // For two future events, they should be sorted by soonest start
     if (a.startDate > now && b.startDate > now) {
-      // @ts-ignore
+      // @ts-expect-error
       return a.startDate - b.startDate
     }
 
     // Sort by most recent end
-    // @ts-ignore
+    // @ts-expect-error
     return b.endDate - a.endDate
   }
 

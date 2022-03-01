@@ -1,4 +1,3 @@
-import { h, JSX } from 'preact'
 import { Merge, PropsOf } from '@/type-utils'
 import { css } from 'linaria'
 import clsx from 'clsx'
@@ -66,9 +65,7 @@ const TextInput = ({ label, labelClass, onInput, ...rest }: Props) => {
       {label}
       <InnerTextInput
         {...rest}
-        onInput={(e) =>
-          onInput && onInput((e.target as HTMLInputElement).value)
-        }
+        onInput={(e) => onInput?.((e.target as HTMLInputElement).value)}
       />
     </label>
   )

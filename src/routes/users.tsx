@@ -1,7 +1,6 @@
-import { h } from 'preact'
 import Page from '@/components/page'
 import { getUsers } from '@/api/user/get-users'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import Authenticated from '@/components/authenticated'
 import { useState, useEffect } from 'preact/hooks'
 import { useErrorEmitter } from '@/components/error-boundary'
@@ -86,12 +85,12 @@ const InnerUsersPage = () => {
     getUsers().then(setUsers).catch(emitError)
   }
   const realms = usePromise(() => getRealms(), [])
-  useEffect(updateUsers, [])
+  useEffect(updateUsers, [emitError])
 
   return users && realms ? (
     <UsersTable users={users} realms={realms} />
   ) : (
-    <Spinner />
+    <Loader />
   )
 }
 

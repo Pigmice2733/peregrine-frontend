@@ -1,7 +1,6 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { compareEvents } from '@/utils/compare-events'
 import { useGeoLocation } from '@/utils/use-geo-location'
 import { useEvents } from '@/cache/events/use'
@@ -43,14 +42,13 @@ const filterStyle = css`
 `
 
 const now = new Date()
-const currentYear = now.getFullYear()
 const Home = () => {
   const [location, prompt] = useGeoLocation()
   const [query, setQuery] = useState('')
   const lowerCaseQuery = query.toLowerCase()
-  const [yearVal, setYear] = useQueryState('year', currentYear)
+  const years = useYears().sort().reverse()
+  const [yearVal, setYear] = useQueryState('year', years[0])
   const year = Number(yearVal)
-  const years = useYears()
   const events = useEvents(year)
 
   return (
@@ -68,7 +66,7 @@ const Home = () => {
       </div>
 
       {events ? (
-        <Fragment>
+        <>
           <UnstyledList class={matchListStyle}>
             {events
               .filter((event) => {
@@ -100,9 +98,9 @@ const Home = () => {
               src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
             />
           </a>
-        </Fragment>
+        </>
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

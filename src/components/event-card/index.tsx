@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import Chip, { DateChip } from '@/components/chip'
 import Card from '@/components/card'
 import { css } from 'linaria'

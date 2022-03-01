@@ -1,4 +1,4 @@
-import { h, RenderableProps } from 'preact'
+import { RenderableProps } from 'preact'
 import Card from '@/components/card'
 import NumberInput from './number-input'
 import { css } from 'linaria'
@@ -7,12 +7,15 @@ import { ReportStatDescription, NumberStatDescription } from '@/api/schema'
 import { cleanFieldName } from '@/utils/clean-field-name'
 
 const fieldCardStyle = css`
-  display: grid;
-  grid-template-columns: auto auto;
+  justify-self: stretch;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0.6rem;
-  grid-gap: 0.6rem;
-  margin: 0.6rem auto;
+
+  & > :first-child {
+    margin-right: 0.6rem;
+  }
 `
 
 const nameStyle = css`
@@ -34,7 +37,7 @@ const FieldCard = <FieldType extends ReportStatDescription>({
   onChange,
   value,
 }: RenderableProps<Props<FieldType>>) => (
-  <Card as="label" class={fieldCardStyle}>
+  <Card as="label" outlined class={fieldCardStyle}>
     <div class={nameStyle}>{cleanFieldName(statDescription.name)}</div>
     {isNumberField(statDescription) ? (
       <NumberInput value={value} min={0} onChange={onChange} />
