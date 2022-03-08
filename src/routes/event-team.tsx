@@ -26,6 +26,7 @@ import { Falsy } from '@/type-utils'
 import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
+import { EventTeamInfo } from '@/api/event-team-info'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -165,9 +166,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
   const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
     compareMatches,
   )
-  const now = useCurrentTime()
-
-  const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
@@ -203,35 +201,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           <MatchDetailsCard match={nextMatch} eventKey={eventKey} link />
         </>
       )}
-      <InfoGroupCard
-        info={[
-          {
-            title: 'Rank',
-            icon: mdiSortDescending,
-            action: eventTeamInfo ? eventTeamInfo.rank : '?',
-          },
-          {
-            title: 'Ranking Score',
-            icon: mdiHistory,
-            action: eventTeamInfo?.rankingScore
-              ? round(eventTeamInfo.rankingScore)
-              : '?',
-          },
-          teamLocation && {
-            title: formatTeamLocation(teamLocation, eventKey),
-            icon: mdiMapMarker,
-            action: teamLocation.match.time && (
-              <span
-                class={css`
-                  color: #757575;
-                  font-size: 0.75rem;
-                `}
-              >
-                {formatTimeWithoutDate(teamLocation.match.time)}
-              </span>
-            ),
-          },
-        ]}
+      <EventTeamInfoCard
+        eventKey={eventKey}
+        eventTeamInfo={eventTeamInfo}
+        teamMatches={teamMatches}
       />
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
@@ -248,6 +221,51 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
         />
       )}
     </Page>
+  )
+}
+
+const EventTeamInfoCard = ({
+  eventTeamInfo,
+  teamMatches,
+  eventKey,
+}: {
+  eventTeamInfo?: EventTeamInfo
+  teamMatches?: ProcessedMatchInfo[]
+  eventKey: string
+}) => {
+  const now = useCurrentTime()
+  const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
+  return (
+    <InfoGroupCard
+      info={[
+        {
+          title: 'Rank',
+          icon: mdiSortDescending,
+          action: eventTeamInfo ? eventTeamInfo.rank : '?',
+        },
+        {
+          title: 'Ranking Score',
+          icon: mdiHistory,
+          action: eventTeamInfo?.rankingScore
+            ? round(eventTeamInfo.rankingScore)
+            : '?',
+        },
+        teamLocation && {
+          title: formatTeamLocation(teamLocation, eventKey),
+          icon: mdiMapMarker,
+          action: teamLocation.match.time && (
+            <span
+              class={css`
+                color: #757575;
+                font-size: 0.75rem;
+              `}
+            >
+              {formatTimeWithoutDate(teamLocation.match.time)}
+            </span>
+          ),
+        },
+      ]}
+    />
   )
 }
 
