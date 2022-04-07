@@ -42,14 +42,13 @@ const filterStyle = css`
 `
 
 const now = new Date()
-const currentYear = now.getFullYear()
 const Home = () => {
   const [location, prompt] = useGeoLocation()
   const [query, setQuery] = useState('')
   const lowerCaseQuery = query.toLowerCase()
-  const [yearVal, setYear] = useQueryState('year', currentYear)
-  const year = Number(yearVal)
   const years = useYears().sort().reverse()
+  const [yearVal, setYear] = useQueryState('year', years[0])
+  const year = Number(yearVal)
   const events = useEvents(year)
 
   return (

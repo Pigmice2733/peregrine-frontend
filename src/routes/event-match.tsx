@@ -23,8 +23,12 @@ import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
 import Icon from '@/components/icon'
-import { mdiPlus } from '@mdi/js'
+import { mdiCloudOffOutline, mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
+import {
+  ConnectionType,
+  useNetworkConnection,
+} from '@/utils/use-network-connection'
 
 interface Props {
   eventKey: string
@@ -38,6 +42,17 @@ const blueStyle = css``
 
 // We are using margins instead of grid-gap
 // because we don't want grid-gap to be applied to the empty spacing columns
+
+const matchStyle = css`
+  /* extra selectors for specificity */
+  a.${tableTeamStyle}.${redStyle} {
+    color: ${red};
+  }
+
+  a.${tableTeamStyle}.${blueStyle} {
+    color: ${blue};
+  }
+`
 
 const loadedMatchStyle = css`
   display: grid;
@@ -56,25 +71,7 @@ const loadedMatchStyle = css`
     margin: 0.75rem;
   }
 `
-const matchStyle = css`
-  /* extra selectors for specificity */
-  a.${tableTeamStyle}.${redStyle} {
-    color: ${red};
-  }
 
-  a.${tableTeamStyle}.${blueStyle} {
-    color: ${blue};
-  }
-`
-const leftColumnStyle = css`
-  grid-area: leftColumn;
-  display: grid;
-  grid-gap: 1.5rem;
-  justify-self: center;
-  @media (max-width: 540px) {
-    justify-self: stretch;
-  }
-`
 const matchWithVideoStyle = css`
   grid-template-columns: 1fr auto 30rem 1fr;
   align-items: start;
@@ -90,6 +87,31 @@ const matchWithVideoStyle = css`
   }
 `
 
+const leftColumnStyle = css`
+  grid-area: leftColumn;
+  display: grid;
+  grid-gap: 1.5rem;
+  justify-self: center;
+  @media (max-width: 350px) {
+    justify-self: stretch;
+  }
+`
+
+const offlineDisplayInfo = css`
+  display: grid;
+  grid-template-areas:
+    'iconArea title'
+    'detail detail';
+  justify-self: stretch;
+  align-items: center;
+  grid-gap: 0.5rem;
+  padding: 1rem;
+
+  @media (max-width: 540px) {
+    justify-self: stretch;
+  }
+`
+
 const showMatchResults = 'Match Results'
 const showEventResults = 'Event Results'
 
@@ -97,15 +119,24 @@ type SelectedDisplay = typeof showMatchResults | typeof showEventResults
 
 // eslint-disable-next-line complexity
 const EventMatch = ({ eventKey, matchKey }: Props) => {
+  // checks for no network connection
+  const netConn = useNetworkConnection()
+  const isOnline = netConn !== ConnectionType.Offline
+
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  const reports = usePromise(
-    () => getReports({ event: eventKey, match: matchKey }),
-    [eventKey, matchKey],
-  )
-  const schema = useSchema(event?.schemaId)
-  const teams = usePromise(() => getEventStats(eventKey), [eventKey])
+  const reports = usePromise(() => {
+    if (isOnline) {
+      return getReports({ event: eventKey, match: matchKey })
+    }
+  }, [eventKey, matchKey, isOnline])
+  const schema = useSchema(isOnline ? event?.schemaId : undefined)
+  const eventTeamsStats = usePromise(() => {
+    if (isOnline) {
+      return getEventStats(eventKey)
+    }
+  }, [eventKey, isOnline])
 
   const [selectedDisplay, setSelectedDisplay] = useState<SelectedDisplay>(
     showEventResults,
@@ -119,16 +150,15 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     if (matchHasBeenPlayed) setSelectedDisplay(showMatchResults)
   }, [matchHasBeenPlayed])
 
-  const teamsStats = usePromise(
-    () =>
-      match &&
-      Promise.all(
+  const teamsStats = usePromise(() => {
+    if (match && isOnline) {
+      return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
         ),
-      ),
-    [match],
-  )
+      )
+    }
+  }, [match, isOnline])
 
   return (
     // page setup
@@ -142,15 +172,47 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       }
       class={clsx(
         matchStyle,
-        match && reports && loadedMatchStyle,
-        match?.videos && match.videos.length > 0 && matchWithVideoStyle,
+        match && loadedMatchStyle,
+        match?.videos &&
+          match.videos.length > 0 &&
+          isOnline &&
+          matchWithVideoStyle,
       )}
     >
-      {match && reports ? (
+      {match ? (
         <>
           <div class={leftColumnStyle}>
+            {!isOnline && (
+              <Card class={offlineDisplayInfo}>
+                <div
+                  class={css`
+                    grid-area: iconArea;
+                    justify-self: right;
+                  `}
+                >
+                  <Icon icon={mdiCloudOffOutline} />
+                </div>
+                <div
+                  class={css`
+                    grid-area: title;
+                    justify-self: left;
+                    font-weight: bold;
+                  `}
+                >
+                  No Connection
+                </div>
+                <div
+                  class={css`
+                    grid-area: detail;
+                    justify-self: center;
+                  `}
+                >
+                  Showing limited information offline.
+                </div>
+              </Card>
+            )}
             <MatchDetailsCard match={match} eventKey={eventKey} />
-            {reports.length > 0 ? (
+            {reports && reports.length > 0 ? (
               <MatchReports
                 match={match}
                 reports={reports}
@@ -169,7 +231,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               </Card>
             )}
           </div>
-          {schema && (
+          {schema && isOnline && (
             // card including the analysis table and tabs for match/event data
             <Card
               class={css`
@@ -203,7 +265,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 eventKey={eventKey}
                 teams={
                   selectedDisplay === showEventResults
-                    ? teams?.filter((t) => matchHasTeam('frc' + t.team)(match))
+                    ? eventTeamsStats?.filter((t) =>
+                        matchHasTeam('frc' + t.team)(match),
+                      )
                     : teamsStats
                 }
                 schema={schema}
@@ -229,8 +293,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               />
             </Card>
           )}
-          {/* shows videos if the match has them */}
-          {match.videos && match.videos.length > 0 && (
+          {/* shows videos if the match has them and online */}
+          {isOnline && match.videos && match.videos.length > 0 && (
             <VideoList videos={match.videos} />
           )}
         </>
