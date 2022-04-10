@@ -4,7 +4,7 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
 import Button from '@/components/button'
-import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { NextMatchIndex } from '@/utils/next-incomplete-match'
 import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
@@ -36,6 +36,16 @@ const sectionStyle = css`
   grid-gap: 2.5rem;
 `
 
+const upcomingMatchesStyle = css`
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-areas:
+    'header'
+    'upcomingMatches'
+    'allMatches';
+  grid-gap: ${spacing};
+`
+
 const headingStyle = css`
   font-size: 1.2rem;
   justify-self: center;
@@ -51,7 +61,14 @@ const noMatchesStyle = css`
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
+  const newestIncompleteMatch = matches && NextMatchIndex(matches)
+  const newestIndex = newestIncompleteMatch?.index
+    ? newestIncompleteMatch.index
+    : -3
+  const secondLastMatch = matches?.[newestIndex - 2]
+  const lastMatch = matches?.[newestIndex - 1]
+  const nextMatch = matches?.[newestIndex + 1]
+  const secondNextMatch = matches?.[newestIndex + 2]
 
   return (
     <Page
@@ -67,27 +84,78 @@ const Event = ({ eventKey }: Props) => {
         <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
       </div>
 
-      <div class={sectionStyle}>
-        <Heading level={2} class={headingStyle}>
-          {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+      <div class={newestIncompleteMatch ? upcomingMatchesStyle : sectionStyle}>
+        <Heading
+          level={2}
+          class={
+            headingStyle +
+            css`
+              grid-area: header;
+            `
+          }
+        >
+          {newestIncompleteMatch ? 'Upcoming Matches' : 'Matches'}
         </Heading>
-        {newestIncompleteMatch && (
-          <MatchDetailsCard
-            key={newestIncompleteMatch.key}
-            match={newestIncompleteMatch}
-            eventKey={eventKey}
-            link
-          />
-        )}
-        {matches ? (
-          matches.length > 0 ? (
-            <EventMatches matches={matches} eventKey={eventKey} />
+        {secondLastMatch &&
+          lastMatch &&
+          newestIncompleteMatch &&
+          nextMatch &&
+          secondNextMatch && (
+            <div
+              class={css`
+                display: grid;
+                grid-area: upcomingMatches;
+                grid-template-columns: auto;
+                grid-gap: 1.1rem;
+              `}
+            >
+              <MatchDetailsCard
+                key={secondLastMatch.key}
+                match={secondLastMatch}
+                eventKey={eventKey}
+                link
+              />
+              <MatchDetailsCard
+                key={lastMatch.key}
+                match={lastMatch}
+                eventKey={eventKey}
+                link
+              />
+              <MatchDetailsCard
+                key={newestIncompleteMatch.key}
+                match={newestIncompleteMatch}
+                eventKey={eventKey}
+                link
+              />
+              <MatchDetailsCard
+                key={nextMatch.key}
+                match={nextMatch}
+                eventKey={eventKey}
+                link
+              />
+              <MatchDetailsCard
+                key={secondNextMatch.key}
+                match={secondNextMatch}
+                eventKey={eventKey}
+                link
+              />
+            </div>
+          )}
+        <div
+          class={css`
+            grid-area: allMatches;
+          `}
+        >
+          {matches ? (
+            matches.length > 0 ? (
+              <EventMatches matches={matches} eventKey={eventKey} />
+            ) : (
+              <p class={noMatchesStyle}>No matches yet</p>
+            )
           ) : (
-            <p class={noMatchesStyle}>No matches yet</p>
-          )
-        ) : (
-          <Loader />
-        )}
+            <Loader />
+          )}
+        </div>
       </div>
     </Page>
   )

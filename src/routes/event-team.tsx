@@ -13,7 +13,7 @@ import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
-import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { NextMatchIndex } from '@/utils/next-incomplete-match'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
@@ -167,7 +167,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     compareMatches,
   )
 
-  const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
+  const nextMatch = teamMatches && NextMatchIndex(teamMatches)
 
   const savedTeams = useSavedTeams()
   const isTeamSaved = savedTeams.some(

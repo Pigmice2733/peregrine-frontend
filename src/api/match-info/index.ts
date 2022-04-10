@@ -12,6 +12,7 @@ export interface MatchInfo {
   blueScore?: number
   // UTC date - scheduled match time
   scheduledTime?: string
+  index?: number
 }
 
 export const processMatch = (match: MatchInfo) =>
