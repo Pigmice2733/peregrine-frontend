@@ -1,5 +1,5 @@
 import { Merge } from '@/type-utils'
-import { InnerTextInput } from '../text-input'
+import { InnerTextInput } from './text-input'
 import { css } from 'linaria'
 
 type Props = Merge<
