@@ -18,7 +18,9 @@ const scoutPageStyle = css`
 `
 
 const ScoutPage = ({ eventKey, matchKey }: Props) => {
-  const [matchUrl, changeMatchUrl] = useState(`/events/${eventKey}/matches/${matchKey}`)
+  const [matchUrl, changeMatchUrl] = useState(
+    `/events/${eventKey}/matches/${matchKey}`,
+  )
 
   return (
     <Authenticated
