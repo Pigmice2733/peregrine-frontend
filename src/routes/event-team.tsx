@@ -13,7 +13,7 @@ import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
-import { NextMatchIndex } from '@/utils/next-incomplete-match'
+import { getUpcomingMatches } from '@/utils/upcoming-matches'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
@@ -167,7 +167,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     compareMatches,
   )
 
-  const nextMatch = teamMatches && NextMatchIndex(teamMatches)
+  const currentTime = useCurrentTime().getTime()
+  const upcomingMatches =
+    teamMatches && getUpcomingMatches(teamMatches, currentTime)
 
   const savedTeams = useSavedTeams()
   const isTeamSaved = savedTeams.some(
@@ -195,10 +197,17 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
-      {nextMatch && (
+      {upcomingMatches && (
         <>
-          <h2 class={sectionStyle}>Next Match</h2>
-          <MatchDetailsCard match={nextMatch} eventKey={eventKey} link />
+          <h2 class={sectionStyle}>Next Matches</h2>
+          {upcomingMatches.map((match) => (
+            <MatchDetailsCard
+              key={match.key}
+              match={match}
+              eventKey={eventKey}
+              link
+            />
+          ))}
         </>
       )}
       <EventTeamInfoCard
