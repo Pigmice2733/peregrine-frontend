@@ -25,5 +25,5 @@ export const getUpcomingMatches = (
       retArr.push(match)
     }
   }
-  return retArr.slice(0, 3)
+  return retArr.slice(3)
 }

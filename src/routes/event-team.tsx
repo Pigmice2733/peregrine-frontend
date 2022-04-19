@@ -27,6 +27,7 @@ import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
+import { Heading } from '@/components/heading'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -197,18 +198,36 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
-      {upcomingMatches && (
+      {upcomingMatches && upcomingMatches.length > 0 ? (
         <>
-          <h2 class={sectionStyle}>Next Matches</h2>
-          {upcomingMatches.map((match) => (
-            <MatchDetailsCard
-              key={match.key}
-              match={match}
-              eventKey={eventKey}
-              link
-            />
-          ))}
+          <Heading level={2}>Upcoming Matches</Heading>
+          <div
+            class={css`
+              display: grid;
+              grid-template-columns: 20rem;
+              justify-self: stretch;
+            `}
+          >
+            {upcomingMatches.map((match) => (
+              <MatchDetailsCard
+                key={match.key}
+                match={match}
+                eventKey={eventKey}
+                link
+              />
+            ))}
+          </div>
         </>
+      ) : (
+        <p
+          class={css`
+            color: gray;
+            text-align: center;
+            margin: 1rem 0 0.8rem;
+          `}
+        >
+          No Upcoming Matches
+        </p>
       )}
       <EventTeamInfoCard
         eventKey={eventKey}
