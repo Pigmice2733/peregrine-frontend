@@ -4,7 +4,7 @@ import { ReportEditor } from '@/components/report-editor'
 import { route } from '@/router'
 import { AlertType } from '@/components/alert'
 import { css } from 'linaria'
-import { useState } from 'preact/hooks'
+import { updateUrl } from '@/url-manager'
 
 interface Props {
   eventKey: string
@@ -18,9 +18,7 @@ const scoutPageStyle = css`
 `
 
 const ScoutPage = ({ eventKey, matchKey }: Props) => {
-  const [matchUrl, changeMatchUrl] = useState(
-    `/events/${eventKey}/matches/${matchKey}`,
-  )
+  const matchUrl = `/events/${eventKey}/matches/${matchKey}`
 
   return (
     <Authenticated
@@ -30,12 +28,10 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
           <ReportEditor
             initialReport={{ eventKey, matchKey }}
             onMatchSelect={(newMatchKey) => {
-              history.replaceState(
-                null,
-                '',
+              updateUrl(
                 `/events/${eventKey}/matches/${newMatchKey}/scout`,
+                true,
               )
-              changeMatchUrl(`/events/${eventKey}/matches/${newMatchKey}`)
             }}
             onSaveSuccess={(report) =>
               route(matchUrl, {
