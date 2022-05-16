@@ -116,6 +116,7 @@
       "plugin:caleb/jest"
     ],
     "rules": {
+      "caleb/jest/expect-expect": "off",
       "no-return-await": "off",
       "caleb/react/display-name": "off",
       "no-else-return": [
