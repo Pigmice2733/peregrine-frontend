@@ -1,10 +1,9 @@
 /* eslint-disable max-nested-callbacks */
-import { h } from 'preact'
 import Page from '@/components/page'
 import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import Card from '@/components/card'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { usePromise } from '@/utils/use-promise'
 import { CommentCard } from '@/components/comment-card'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
@@ -37,6 +36,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
     (acc, report) => {
       if (report.comment) {
+        // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
         ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
       }
       return acc
@@ -73,7 +73,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
               ))
           )
         ) : (
-          <Spinner />
+          <Loader />
         )}
       </Card>
     </Page>

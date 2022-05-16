@@ -1,10 +1,10 @@
-import { h, FunctionComponent } from 'preact'
+import { FunctionComponent } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
 import { getEventStats } from '@/api/stats/get-event-stats'
 import { useEventInfo } from '@/cache/event-info/use'
 import AnalysisTable from '@/components/analysis-table'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { css } from 'linaria'
 import { useSchema } from '@/cache/schema/use'
 import {
@@ -36,20 +36,24 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       wrapperClass={tablePageWrapperStyle}
     >
       {eventStats && schema ? (
-        <Card class={tablePageTableStyle}>
-          <AnalysisTable
-            eventKey={eventKey}
-            teams={eventStats}
-            schema={schema}
-            renderTeam={(team, link) => (
-              <a class={teamStyle} href={link}>
-                {team}
-              </a>
-            )}
-          />
-        </Card>
+        eventStats.length === 0 ? (
+          'No Event Data'
+        ) : (
+          <Card class={tablePageTableStyle}>
+            <AnalysisTable
+              eventKey={eventKey}
+              teams={eventStats}
+              schema={schema}
+              renderTeam={(team, link) => (
+                <a class={teamStyle} href={link}>
+                  {team}
+                </a>
+              )}
+            />
+          </Card>
+        )
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

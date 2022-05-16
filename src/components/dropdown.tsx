@@ -1,5 +1,4 @@
 import { css } from 'linaria'
-import { h, JSX } from 'preact'
 import clsx from 'clsx'
 import { createShadow } from '@/utils/create-shadow'
 import { SetRequired } from 'type-fest'
@@ -56,15 +55,18 @@ export const Dropdown = <T extends any>({
   emptyLabel = 'Select an option',
   ...props
 }: Props<T>) => {
-  const optionsByGroup = options.reduce((acc, opt) => {
-    const group = getGroup(opt) || ''
-    acc[group] = (acc[group] || []).concat(
-      <option value={getKey(opt)} key={getKey(opt)}>
-        {getText(opt)}
-      </option>,
-    )
-    return acc
-  }, {} as { [key: string]: JSX.Element[] })
+  const optionsByGroup = options.reduce<{ [key: string]: JSX.Element[] }>(
+    (acc, opt) => {
+      const group = getGroup(opt) || ''
+      acc[group] = ((acc[group] as JSX.Element[] | null) || []).concat(
+        <option value={getKey(opt)} key={getKey(opt)}>
+          {getText(opt)}
+        </option>,
+      )
+      return acc
+    },
+    {},
+  )
   return (
     // eslint-disable-next-line caleb/jsx-a11y/no-onchange
     <select

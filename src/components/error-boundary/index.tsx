@@ -1,11 +1,11 @@
-import { Component, h, RenderableProps, createContext } from 'preact'
-import Alert from '../alert'
+import { Component, RenderableProps, createContext } from 'preact'
+import Alert, { AlertType } from '../alert'
 import { css } from 'linaria'
 import { useContext } from 'preact/hooks'
+import { createAlert } from '@/router'
 
 interface State {
   caughtError?: Error
-  caughtEmittedError?: Error
 }
 
 const alertStyle = css`
@@ -28,23 +28,27 @@ export class ErrorBoundary extends Component<RenderableProps<{}>, State> {
     this.setState({ caughtError })
   }
 
-  dynamicError = (caughtEmittedError: Error) => {
-    console.error(caughtEmittedError)
-    this.setState({ caughtEmittedError })
+  dynamicError = (caughtError: Error) => {
+    console.error(caughtError)
+    createAlert({
+      type: AlertType.Error,
+      message: (
+        <details>
+          <summary>{caughtError.message}</summary>
+          <pre class={codeStyle}>{caughtError.stack}</pre>
+        </details>
+      ),
+    })
   }
 
-  render(
-    { children }: RenderableProps<{}>,
-    { caughtEmittedError, caughtError }: State,
-  ) {
-    const error = caughtEmittedError || caughtError
+  render({ children }: RenderableProps<{}>, { caughtError }: State) {
     return (
       <ErrorEmitter.Provider value={this.dynamicError}>
-        {error && (
-          <Alert class={alertStyle}>
+        {caughtError && (
+          <Alert type={AlertType.Error} class={alertStyle}>
             <details>
-              <summary>{error.message}</summary>
-              <pre class={codeStyle}>{error.stack}</pre>
+              <summary>{caughtError.message}</summary>
+              <pre class={codeStyle}>{caughtError.stack}</pre>
             </details>
           </Alert>
         )}

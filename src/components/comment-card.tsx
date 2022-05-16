@@ -1,11 +1,11 @@
-import { h } from 'preact'
 import { css } from 'linaria'
-import { GetReport } from '@/api/report'
+import { Report } from '@/api/report'
 import { usePromise } from '@/utils/use-promise'
-import { getUser } from '@/api/user/get-user'
 import Card from './card'
 import Icon from './icon'
-import { commentIcon } from '@/icons/comment'
+import { mdiMessageReplyText } from '@mdi/js'
+import { formatUserName } from '@/utils/format-user-name'
+import { getFastestUser } from '@/cache/users/get-fastest'
 
 const commentCardStyle = css`
   display: grid;
@@ -19,7 +19,7 @@ const commentCardStyle = css`
   }
 
   & > svg {
-    grid-row: 1 / 3;
+    grid-row: 1 / 2;
     color: #7e7e7e;
   }
 
@@ -29,18 +29,30 @@ const commentCardStyle = css`
   }
 `
 
-export const CommentCard = ({ report }: { report: GetReport }) => {
-  const userId = report.reporterId
+interface Props {
+  report: Report
+  showReporter?: boolean
+  linkToReport?: boolean
+}
+
+export const CommentCard = ({
+  report,
+  showReporter = true,
+  linkToReport = true,
+}: Props) => {
+  const reporterId = report.reporterId
   const reporter = usePromise(
-    () => (userId ? getUser(userId).catch(() => null) : null),
-    [userId],
+    () => (reporterId ? getFastestUser(reporterId).catch(() => null) : null),
+    [reporterId],
   )
   return (
-    <Card outlined as="section" class={commentCardStyle}>
-      <Icon icon={commentIcon} />
-      <span>
-        {reporter ? `${reporter.firstName} ${reporter.lastName}` : 'Anonymous'}
-      </span>
+    <Card
+      outlined
+      href={linkToReport ? `/reports/${report.id}` : undefined}
+      class={commentCardStyle}
+    >
+      <Icon icon={mdiMessageReplyText} />
+      {showReporter && <span>{formatUserName(reporter, reporterId)}</span>}
       <p>{report.comment}</p>
     </Card>
   )

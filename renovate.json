@@ -11,6 +11,10 @@
     {
       "depTypeList": ["dependencies"],
       "automerge": false
+    },
+    {
+      "packageNames": ["node"],
+      "enabled": false
     }
   ]
 }

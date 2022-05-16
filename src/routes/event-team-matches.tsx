@@ -1,9 +1,8 @@
 import Page from '@/components/page'
-import { h } from 'preact'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { EventMatches } from '@/components/event-matches'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { css } from 'linaria'
 
 interface Props {
@@ -33,7 +32,7 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
       {matches ? (
         <EventMatches matches={matches} eventKey={eventKey} />
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

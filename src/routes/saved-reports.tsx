@@ -1,4 +1,3 @@
-import { FunctionComponent, h, Fragment } from 'preact'
 import Page from '@/components/page'
 import { useSavedReports, uploadSavedReports } from '@/api/report/submit-report'
 import Card from '@/components/card'
@@ -7,7 +6,7 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Button from '@/components/button'
-import { Report } from '@/api/report'
+import { OfflineReport } from '@/api/report'
 
 const savedReportCardStyle = css`
   padding: 1rem;
@@ -15,7 +14,7 @@ const savedReportCardStyle = css`
   margin: 1rem;
 `
 
-const SavedReportCard: FunctionComponent<{ report: Report }> = ({ report }) => {
+const SavedReportCard = ({ report }: { report: OfflineReport }) => {
   const eventInfo = useEventInfo(report.eventKey)
   const matchKey = formatMatchKey(report.matchKey)
   const formattedMatchKey = matchKey.num
@@ -24,7 +23,7 @@ const SavedReportCard: FunctionComponent<{ report: Report }> = ({ report }) => {
   const eventName = eventInfo ? eventInfo.name : report.eventKey
   const teamName = formatTeamNumber(report.teamKey)
   return (
-    <Card class={savedReportCardStyle}>
+    <Card class={savedReportCardStyle} href={`/saved-reports/${report.key}`}>
       {`${teamName} in ${formattedMatchKey} @ ${eventName}`}
     </Card>
   )
@@ -36,13 +35,12 @@ const savedReportsPageStyle = css`
   align-items: center;
 `
 
-const SavedReportsPage: FunctionComponent = () => {
+const SavedReportsPage = () => {
   const savedReports = useSavedReports()
-
   return (
-    <Page name="Saved Reports" back="/" class={savedReportsPageStyle}>
+    <Page name="Offline Saved Reports" back="/" class={savedReportsPageStyle}>
       {savedReports.length > 0 ? (
-        <Fragment>
+        <>
           {savedReports.map((report) => (
             <SavedReportCard
               report={report}
@@ -50,7 +48,7 @@ const SavedReportsPage: FunctionComponent = () => {
             />
           ))}
           <Button onClick={uploadSavedReports}>Sync now</Button>
-        </Fragment>
+        </>
       ) : (
         <p
           class={css`

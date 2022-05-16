@@ -48,7 +48,7 @@ const chunksFile = path.join(outDir, 'chunks.json')
 
 mkdirplz(outDir)
 
-export default [
+const configs = [
   {
     input: './src/index.tsx',
     output: {
@@ -174,37 +174,32 @@ export default [
           const appleWidth = 180
           const applePad = Math.round(0.07 * appleWidth)
           await Promise.all([
-            ...[512, 192, 180, 32, 16].map(
-              async (width) =>
-                writeFileAsync(
-                  path.join(iconDir, `${width}.png`),
-                  await sharp(iconSrc)
-                    .resize(width, width, { fit: 'contain', background })
-                    .png()
-                    .toBuffer(),
-                ),
-              writeFileAsync(
-                path.join(iconDir, 'apple.png'),
-                await sharp(iconSrc)
-                  .resize(appleWidth - applePad * 2, 180 - applePad * 2, {
-                    fit: 'contain',
-                    background: appleBg,
-                  })
-                  .extend({
-                    top: applePad,
-                    bottom: applePad,
-                    right: applePad,
-                    left: applePad,
-                    background: appleBg,
-                  })
-                  .flatten({ background: appleBg })
-                  .png()
-                  .toBuffer(),
-              ),
+            ...[512, 192, 180, 32, 16].map((width) =>
+              sharp(iconSrc)
+                .resize(width, width, { fit: 'contain', background })
+                .png()
+                .toFile(path.join(iconDir, `${width}.png`)),
             ),
+            sharp(iconSrc)
+              .resize(appleWidth - applePad * 2, 180 - applePad * 2, {
+                fit: 'contain',
+                background: appleBg,
+              })
+              .extend({
+                top: applePad,
+                bottom: applePad,
+                right: applePad,
+                left: applePad,
+                background: appleBg,
+              })
+              .flatten({ background: appleBg })
+              .png()
+              .toFile(path.join(iconDir, 'apple.png')),
           ])
         },
       },
     ],
   },
 ]
+
+export default configs

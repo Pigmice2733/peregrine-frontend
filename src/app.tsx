@@ -1,7 +1,6 @@
 import 'preact/debug'
 import './style.css'
 import { Router } from './router'
-import { h, Fragment } from 'preact'
 import { DialogDisplayer } from './components/dialog'
 import routes from './routes'
 import GAnalytics from 'ganalytics'
@@ -27,14 +26,14 @@ setTimeout(uploadSavedReports, 2_000)
 setInterval(uploadSavedReports, 30_000)
 
 const App = () => (
-  <Fragment>
+  <>
     <div>
       <ErrorBoundary>
         <Router routes={routes} />
       </ErrorBoundary>
     </div>
     <DialogDisplayer />
-  </Fragment>
+  </>
 )
 
 export default App
