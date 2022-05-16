@@ -1,4 +1,3 @@
-/* eslint-disable caleb/jest/expect-expect */
 import { compareEvents, PartialEvent, EventWithLocation } from '.'
 import { LatLong } from '../use-geo-location'
 
