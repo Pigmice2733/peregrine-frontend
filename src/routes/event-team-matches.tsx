@@ -1,9 +1,8 @@
 import Page from '@/components/page'
-import { h } from 'preact'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { EventMatches } from '@/components/event-matches'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { css } from 'linaria'
 import { isData } from '@/utils/is-data'
 
@@ -34,7 +33,7 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
       {isData(matches) ? (
         <EventMatches matches={matches} eventKey={eventKey} />
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

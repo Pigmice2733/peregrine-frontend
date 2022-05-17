@@ -1,4 +1,3 @@
-import { h, Fragment } from 'preact'
 import TextInput from '@/components/text-input'
 import Card from '@/components/card'
 import Page from '@/components/page'
@@ -20,6 +19,7 @@ import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
 import { authenticate } from '@/api/authenticate'
 import { route } from '@/router'
 import { Realm } from '@/api/realm'
+import { isData } from '@/utils/is-data'
 
 const signUpStyle = css`
   padding: 1.5rem;
@@ -72,7 +72,7 @@ const SignUpForm = () => {
   return (
     <Form onSubmit={onSubmit}>
       {(isValid) => (
-        <Fragment>
+        <>
           <TextInput label="First Name" onInput={setFirstName} required />
           <TextInput label="Last Name" onInput={setLastName} required />
           <TextInput
@@ -92,10 +92,12 @@ const SignUpForm = () => {
             maxLength={maxPasswordLength}
           />
           <Dropdown<Realm>
-            value={realms.find((r) => r.id === realmId)}
+            value={
+              isData(realms) ? realms.find((r) => r.id === realmId) : undefined
+            }
             emptyLabel="Select a realm"
             class={dropdownClass}
-            options={realms}
+            options={isData(realms) ? realms : []}
             required
             onChange={(v) => setRealmId(v.id)}
             getKey={(v) => v.id}
@@ -104,7 +106,7 @@ const SignUpForm = () => {
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}
           </Button>
-        </Fragment>
+        </>
       )}
     </Form>
   )

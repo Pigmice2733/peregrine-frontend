@@ -1,7 +1,6 @@
-import { h } from 'preact'
 import Page from '@/components/page'
 import { getUsers } from '@/api/user/get-users'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import Authenticated from '@/components/authenticated'
 import { useState, useEffect } from 'preact/hooks'
 import { useErrorEmitter } from '@/components/error-boundary'
@@ -24,6 +23,7 @@ import {
   tablePageWrapperStyle,
   tablePageTableStyle,
 } from '@/utils/table-page-style'
+import { isData } from '@/utils/is-data'
 
 const userLinkStyle = css`
   display: block;
@@ -89,9 +89,9 @@ const InnerUsersPage = () => {
   useEffect(updateUsers, [emitError])
 
   return users && realms ? (
-    <UsersTable users={users} realms={realms} />
+    <UsersTable users={users} realms={isData(realms) ? realms : []} />
   ) : (
-    <Spinner />
+    <Loader />
   )
 }
 

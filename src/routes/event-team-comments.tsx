@@ -1,16 +1,16 @@
 /* eslint-disable max-nested-callbacks */
-import { h } from 'preact'
 import Page from '@/components/page'
 import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import Card from '@/components/card'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { usePromise } from '@/utils/use-promise'
 import { CommentCard } from '@/components/comment-card'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { compareMatchKeys } from '@/utils/compare-matches'
 import { GetReport } from '@/api/report'
 import { getReports } from '@/api/report/get-reports'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -34,15 +34,15 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
     team,
     eventKey,
   ])
-  const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
-    (acc, report) => {
-      if (report.comment) {
-        ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
-      }
-      return acc
-    },
-    {},
-  )
+  const commentsByMatch = isData(reports)
+    ? reports.reduce<{ [matchKey: string]: GetReport[] }>((acc, report) => {
+        if (report.comment) {
+          // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
+          ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
+        }
+        return acc
+      }, {})
+    : undefined
 
   return (
     <Page
@@ -73,7 +73,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
               ))
           )
         ) : (
-          <Spinner />
+          <Loader />
         )}
       </Card>
     </Page>

@@ -1,9 +1,13 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import InfoGroupCard from '@/components/info-group-card'
-import { sortAscending } from '@/icons/sort-ascending'
-import { history } from '@/icons/history'
-import { MatchCard } from '@/components/match-card'
+import {
+  mdiHistory,
+  mdiMapMarker,
+  mdiStarOutline,
+  mdiStar,
+  mdiSortDescending,
+} from '@mdi/js'
+import { MatchDetailsCard } from '@/components/match-card'
 import { round } from '@/utils/round'
 import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { css } from 'linaria'
@@ -18,12 +22,12 @@ import { compareMatches } from '@/utils/compare-matches'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { formatTimeWithoutDate } from '@/utils/format-time'
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { mapMarker } from '@/icons/map-marker'
 import { Falsy } from '@/type-utils'
 import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
-import { mdiStarOutline, mdiStar } from '@mdi/js'
+import { EventTeamInfo } from '@/api/event-team-info'
+import { isData } from '@/utils/is-data'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -80,10 +84,9 @@ const formatTeamLocation = (
     </a>
   )
   if (teamLocation.state === TeamState.Queueing)
-    return <Fragment>Queueing for {match}</Fragment>
-  if (teamLocation.state === TeamState.InMatch)
-    return <Fragment>In {match}</Fragment>
-  return <Fragment>Just finished {match}</Fragment>
+    return <>Queueing for {match}</>
+  if (teamLocation.state === TeamState.InMatch) return <>In {match}</>
+  return <>Just finished {match}</>
 }
 
 const guessTeamLocation = (
@@ -160,13 +163,11 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum).catch(() => undefined),
     [eventKey, teamNum],
   )
-  const schema = useSchema(eventInfo?.schemaId)
-  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
-    compareMatches,
-  )
-  const now = useCurrentTime()
-
-  const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
+  const schema = useSchema(isData(eventInfo) ? eventInfo.schemaId : undefined)
+  let teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
+  teamMatches = isData(teamMatches)
+    ? teamMatches.sort(compareMatches)
+    : undefined
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
@@ -197,40 +198,15 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       class={eventTeamStyle}
     >
       {nextMatch && (
-        <Fragment>
+        <>
           <h2 class={sectionStyle}>Next Match</h2>
-          <MatchCard match={nextMatch} eventKey={eventKey} link />
-        </Fragment>
+          <MatchDetailsCard match={nextMatch} eventKey={eventKey} link />
+        </>
       )}
-      <InfoGroupCard
-        info={[
-          {
-            title: 'Rank',
-            icon: sortAscending,
-            action: eventTeamInfo ? eventTeamInfo.rank : '?',
-          },
-          {
-            title: 'Ranking Score',
-            icon: history,
-            action: eventTeamInfo?.rankingScore
-              ? round(eventTeamInfo.rankingScore)
-              : '?',
-          },
-          teamLocation && {
-            title: formatTeamLocation(teamLocation, eventKey),
-            icon: mapMarker,
-            action: teamLocation.match.time && (
-              <span
-                class={css`
-                  color: #757575;
-                  font-size: 0.75rem;
-                `}
-              >
-                {formatTimeWithoutDate(teamLocation.match.time)}
-              </span>
-            ),
-          },
-        ]}
+      <EventTeamInfoCard
+        eventKey={eventKey}
+        eventTeamInfo={isData(eventTeamInfo) ? eventTeamInfo : undefined}
+        teamMatches={teamMatches}
       />
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
@@ -242,11 +218,56 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
         <ChartCard
           team={'frc' + teamNum}
           eventKey={eventKey}
-          schema={schema}
+          schema={isData(schema) ? schema : { id: -1, schema: [] }}
           teamMatches={teamMatches}
         />
       )}
     </Page>
+  )
+}
+
+const EventTeamInfoCard = ({
+  eventTeamInfo,
+  teamMatches,
+  eventKey,
+}: {
+  eventTeamInfo?: EventTeamInfo
+  teamMatches?: ProcessedMatchInfo[]
+  eventKey: string
+}) => {
+  const now = useCurrentTime()
+  const teamLocation = teamMatches && guessTeamLocation(teamMatches, now)
+  return (
+    <InfoGroupCard
+      info={[
+        {
+          title: 'Rank',
+          icon: mdiSortDescending,
+          action: eventTeamInfo ? eventTeamInfo.rank : '?',
+        },
+        {
+          title: 'Ranking Score',
+          icon: mdiHistory,
+          action: eventTeamInfo?.rankingScore
+            ? round(eventTeamInfo.rankingScore)
+            : '?',
+        },
+        teamLocation && {
+          title: formatTeamLocation(teamLocation, eventKey),
+          icon: mdiMapMarker,
+          action: teamLocation.match.time && (
+            <span
+              class={css`
+                color: #757575;
+                font-size: 0.75rem;
+              `}
+            >
+              {formatTimeWithoutDate(teamLocation.match.time)}
+            </span>
+          ),
+        },
+      ]}
+    />
   )
 }
 

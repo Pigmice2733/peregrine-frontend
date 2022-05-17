@@ -1,6 +1,5 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
-import { MatchCard } from '@/components/match-card'
+import { MatchDetailsCard } from '@/components/match-card'
 import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
@@ -8,7 +7,7 @@ import Button from '@/components/button'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
 import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { isData } from '@/utils/is-data'
 import { NetworkError } from '@/api/base'
@@ -65,75 +64,43 @@ const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
   const newestIncompleteMatch = isData(matches) && nextIncompleteMatch(matches)
+
   return (
     <Page
       name={isData(eventInfo) ? eventInfo.name : <code>{eventKey}</code>}
       back="/"
       class={eventInfo instanceof Error ? eventErrorStyle : eventStyle}
     >
-      {eventInfo instanceof NetworkError ? (
+      {eventInfo instanceof NetworkError && (
         <Heading level={1} class={headingStyle}>
           Could not connect to server. Please check your connection.
         </Heading>
-      ) : (
-        eventInfo instanceof Error && (
-          <Fragment>
-            <Heading level={1} class={headingStyle}>
-              This event does not exist.
-            </Heading>
-            <Button
-              href="/"
-              class={css`
-                padding: 0.5rem;
-              `}
-            >
-              Existing Events
-            </Button>
-          </Fragment>
-        )
       )}
-      {!eventInfo && <Spinner />}
-      {isData(eventInfo) && (
-        <Fragment>
-          <div class={sectionStyle}>
-            <Heading level={2} class={headingStyle}>
-              Information
-            </Heading>
-            <EventInfoCard event={eventInfo} />
-            <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
-          </div>
+      {isData(eventInfo) && <EventInfoCard event={eventInfo} />}
+      <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
 
-          <div class={sectionStyle}>
-            <Heading level={2} class={headingStyle}>
-              {newestIncompleteMatch ? 'Next Match' : 'Matches'}
-            </Heading>
-            {newestIncompleteMatch && (
-              <MatchCard
-                key={newestIncompleteMatch.key}
-                match={newestIncompleteMatch}
-                eventKey={eventKey}
-                link
-              />
-            )}
-            {isData(matches) ? (
-              matches.length > 0 ? (
-                <EventMatches matches={matches} eventKey={eventKey} />
-              ) : (
-                <p class={noMatchesStyle}>No matches yet</p>
-              )
-            ) : // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
-            matches ? (
-              matches instanceof NetworkError ? (
-                'Network error. Please check your connection.'
-              ) : (
-                matches instanceof Error && 'This Event Does Not Exist.'
-              )
-            ) : (
-              <Spinner />
-            )}
-          </div>
-        </Fragment>
-      )}
+      <div class={sectionStyle}>
+        <Heading level={2} class={headingStyle}>
+          {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+        </Heading>
+        {newestIncompleteMatch && (
+          <MatchDetailsCard
+            key={newestIncompleteMatch.key}
+            match={newestIncompleteMatch}
+            eventKey={eventKey}
+            link
+          />
+        )}
+        {isData(matches) ? (
+          matches.length > 0 ? (
+            <EventMatches matches={matches} eventKey={eventKey} />
+          ) : (
+            <p class={noMatchesStyle}>No matches yet</p>
+          )
+        ) : (
+          <Loader />
+        )}
+      </div>
     </Page>
   )
 }

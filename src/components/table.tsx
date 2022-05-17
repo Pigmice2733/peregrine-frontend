@@ -1,4 +1,4 @@
-import { h, JSX, RenderableProps } from 'preact'
+import { RenderableProps } from 'preact'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 import { lightGrey, faintGrey, pigmicePurple } from '@/colors'

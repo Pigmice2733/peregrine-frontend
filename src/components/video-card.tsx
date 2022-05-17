@@ -1,5 +1,4 @@
 import Card, { CardProps } from './card'
-import { h } from 'preact'
 import {
   useNetworkConnection,
   ConnectionType,
@@ -11,10 +10,12 @@ import Icon from './icon'
 import { mdiPlay } from '@mdi/js'
 
 const videoCardStyle = css`
-  width: 40rem;
   display: grid;
   grid-template-columns: 100%;
   grid-template-rows: 100%;
+  overflow: hidden;
+  z-index: 1;
+  position: relative;
   div& {
     background: black;
   }
@@ -47,7 +48,6 @@ export const VideoCard = ({
   const [loadVideo, setLoadVideo] = useState(false)
   useEffect(() => {
     if (connection === ConnectionType.Default) setLoadVideo(true)
-    else if (connection === ConnectionType.Offline) setLoadVideo(false)
   }, [connection])
   if (connection === ConnectionType.Offline) return null
   return (

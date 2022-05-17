@@ -1,4 +1,3 @@
-import { h, JSX, Fragment } from 'preact'
 import { Schema, StatDescription, StatType } from '@/api/schema'
 import { Stat, ProcessedTeamStats } from '@/api/stats'
 import clsx from 'clsx'
@@ -17,15 +16,16 @@ import { css } from 'linaria'
 import { createDialog } from './dialog'
 import { blue, red, grey, lightGrey, textGrey } from '@/colors'
 import Icon from './icon'
-import { settings as settingsIcon } from '@/icons/settings'
+import { mdiCog } from '@mdi/js'
 import { round } from '@/utils/round'
-import Spinner from './spinner'
+import Loader from './loader'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
 import { usePromise } from '@/utils/use-promise'
 import { getEventTeams } from '@/api/event-team-info/get-event-teams'
 import { eventTeamUrl } from '@/utils/urls/event-team'
 import { EventTeamInfo } from '@/api/event-team-info'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -59,7 +59,7 @@ const createStatCell = (
   return {
     title: cleanFieldName(statDescription.name),
     getCell: (row) => {
-      const matchingCell = row.summary[statDescription.name]
+      const matchingCell = row.summary[statDescription.name] as Stat | undefined
       if (matchingCell)
         return {
           ...matchingCell,
@@ -225,7 +225,10 @@ const AnalysisTable = ({
   const rankColumn: Column<EventTeamInfo | undefined, RowType> = {
     title: 'Rank',
     key: 'Rank',
-    getCell: (row) => rankingInfo?.find((r) => r.team === 'frc' + row.team),
+    getCell: (row) =>
+      isData(rankingInfo)
+        ? rankingInfo.find((r) => r.team === 'frc' + row.team)
+        : undefined,
     getCellValue: (cell) => cell?.rank ?? Infinity,
     renderCell: (cell) => (
       <td class={rankCellStyle}>
@@ -246,7 +249,7 @@ const AnalysisTable = ({
     ...autoFields.map(createStatCell(avgType, renderBoolean)),
     ...teleopFields.map(createStatCell(avgType, renderBoolean)),
   ]
-  if (!teams) return <Spinner />
+  if (!teams) return <Loader />
   const rows = teams.map(
     (team): Row<RowType> => ({ key: team.team, value: team }),
   )
@@ -271,11 +274,11 @@ const AnalysisTable = ({
       columns={columns}
       rows={rows}
       contextRow={
-        <Fragment>
+        <>
           <th class={topLeftCellStyle}>
             {enableSettings && (
               <button class={iconButtonStyle} onClick={showSettings}>
-                <Icon icon={settingsIcon} class={iconStyle} />
+                <Icon icon={mdiCog} class={iconStyle} />
               </button>
             )}
           </th>
@@ -294,7 +297,7 @@ const AnalysisTable = ({
           >
             <span>Teleop</span>
           </th>
-        </Fragment>
+        </>
       }
     />
   )

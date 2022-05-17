@@ -1,35 +1,40 @@
-import { h, JSX, Fragment } from 'preact'
 import Page from '@/components/page'
-import Spinner from '@/components/spinner'
-import { getUser } from '@/api/user/get-user'
+import Loader from '@/components/loader'
 import { UserInfo, Roles } from '@/api/user'
 import Card from '@/components/card'
 import { useJWT } from '@/jwt'
 import { InlineIconButton } from '@/components/icon-button'
-import { edit } from '@/icons/edit'
+import {
+  mdiPencil,
+  mdiClose,
+  mdiCheck,
+  mdiSync,
+  mdiDelete,
+  mdiAlert,
+  mdiClipboardTextMultipleOutline,
+} from '@mdi/js'
 import { css } from 'linaria'
 import TextInput, { TextInputProps } from '@/components/text-input'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import { offBlack } from '@/colors'
 import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
 import { modifyUser } from '@/api/user/modify-user'
-import { close } from '@/icons/close'
-import { check } from '@/icons/check'
-import { sync } from '@/icons/sync'
 import { getRealm } from '@/api/realm/get-realm'
 import { usePromise } from '@/utils/use-promise'
 import Toggle from '@/components/toggle'
 import { deleteUser } from '@/api/user/delete-user'
-import { deleteIcon } from '@/icons/delete'
 import { route } from '@/router'
 import { createDialog } from '@/components/dialog'
-import Alert from '@/components/alert'
+import Alert, { AlertType } from '@/components/alert'
 import Button, { buttonFontStyle } from '@/components/button'
 import Icon from '@/components/icon'
-import { alert } from '@/icons/alert'
 import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
 import clsx from 'clsx'
+import { getReports } from '@/api/report/get-reports'
+import { noop } from '@/utils/empty-promise'
+import { getFastestUser } from '@/cache/users/get-fastest'
+import { isData } from '@/utils/is-data'
 
 const RoleInfo = ({
   save,
@@ -47,7 +52,7 @@ const RoleInfo = ({
   const [isSaving, setIsSaving] = useState(false)
   const emitError = useErrorEmitter()
   return (
-    <Fragment>
+    <>
       <dt>{title}</dt>
       <dd>
         <Toggle
@@ -61,7 +66,7 @@ const RoleInfo = ({
           }}
         />
       </dd>
-    </Fragment>
+    </>
   )
 }
 
@@ -79,8 +84,7 @@ const VerifiedInfo = ({
   const emitError = useErrorEmitter()
   return (
     <Alert
-      warning={!isVerified}
-      success={isVerified}
+      type={isVerified ? AlertType.Success : AlertType.Warning}
       class={css`
         display: grid;
         grid-auto-flow: column;
@@ -89,7 +93,7 @@ const VerifiedInfo = ({
       `}
     >
       <Icon
-        icon={isVerified ? check : alert}
+        icon={isVerified ? mdiCheck : mdiAlert}
         class={css`
           width: 1.2rem;
           height: 1.2rem;
@@ -161,7 +165,7 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
           .catch(emitError)
       }}
     >
-      <Icon class={iconInButtonStyle} icon={deleteIcon} />
+      <Icon class={iconInButtonStyle} icon={mdiDelete} />
       {`Delete ${user.firstName} ${user.lastName}`}
     </Button>
   )
@@ -182,7 +186,7 @@ const SetPasswordButton = ({ user }: { user: UserInfo }) => {
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
-          <Icon class={iconInButtonStyle} icon={edit} />
+          <Icon class={iconInButtonStyle} icon={mdiPencil} />
           Set Password
         </Button>
       )}
@@ -241,11 +245,11 @@ const EditableText = ({
     <form class={editableTextStyle} onSubmit={saveNewValue}>
       <TextInput label={label} value={value} onInput={setValue} {...rest} />
       <InlineIconButton
-        icon={isSaving ? sync : check}
+        icon={isSaving ? mdiSync : mdiCheck}
         disabled={!isChanged || isSaving}
       />
       <InlineIconButton
-        icon={close}
+        icon={mdiClose}
         onClick={(e) => {
           e.preventDefault()
           closeEditor()
@@ -256,7 +260,7 @@ const EditableText = ({
     children(
       originalValue,
       editable ? (
-        <InlineIconButton icon={edit} onClick={openEditor} />
+        <InlineIconButton icon={mdiPencil} onClick={openEditor} />
       ) : undefined,
       openEditor,
     )
@@ -280,6 +284,10 @@ const profileCardStyle = css`
   grid-gap: 1rem;
   justify-items: center;
 `
+const userNameStyle = css`
+  font-size: 1.5rem;
+  margin: 0;
+`
 
 const UserProfileCard = ({
   user,
@@ -292,6 +300,7 @@ const UserProfileCard = ({
   const canEditRoles = editable && !isCurrentUser
   const updateUser = (...args: Parameters<typeof modifyUser>) =>
     modifyUser(...args).then(refetch)
+  const reports = usePromise(() => getReports({ reporter: user.id }), [user.id])
   return (
     <Card class={profileCardStyle} as="section">
       <ErrorBoundary>
@@ -305,12 +314,7 @@ const UserProfileCard = ({
           value={`${user.firstName} ${user.lastName}`}
         >
           {(value, editIcon) => (
-            <h1
-              class={css`
-                font-size: 1.5rem;
-                margin: 0;
-              `}
-            >
+            <h1 class={userNameStyle}>
               {value} {editIcon}
             </h1>
           )}
@@ -333,6 +337,16 @@ const UserProfileCard = ({
             </h2>
           )}
         </EditableText>
+        {isData(reports) && (
+          <Button flat href={`/users/${user.id}/reports`}>
+            <Icon
+              class={iconInButtonStyle}
+              icon={mdiClipboardTextMultipleOutline}
+            />
+
+            {`${reports.length} reports`}
+          </Button>
+        )}
         <VerifiedInfo user={user} refetch={refetch} editable={canEditRoles} />
         <dl
           class={css`
@@ -374,6 +388,29 @@ const UserProfileCard = ({
   )
 }
 
+const AnonymousProfileCard = ({ userId }: { userId: number }) => {
+  const reports = usePromise(() => getReports({ reporter: userId }), [userId])
+
+  return (
+    <Card class={profileCardStyle} as="section">
+      <h1 class={userNameStyle}>Anonymous</h1>
+      <Alert type={AlertType.Warning}>
+        {"You do not have access to this user's profile."}
+      </Alert>
+      {isData(reports) && (
+        <Button flat href={`/users/${userId}/reports`}>
+          <Icon
+            class={iconInButtonStyle}
+            icon={mdiClipboardTextMultipleOutline}
+          />
+
+          {`${reports.length} reports`}
+        </Button>
+      )}
+    </Card>
+  )
+}
+
 const userPageStyle = css`
   display: flex;
   flex-direction: column;
@@ -382,11 +419,16 @@ const userPageStyle = css`
 
 const InnerUserPage = ({ userId }: { userId: string }) => {
   const [user, setUser] = useState<UserInfo | null>(null)
-  const fetchUser = useCallback(() => getUser(userId).then(setUser), [userId])
-  const emitError = useErrorEmitter()
+  const [isLoading, setIsLoading] = useState(true)
+  const fetchUser = useCallback(
+    () => getFastestUser(Number(userId)).then(setUser),
+    [userId],
+  )
   useEffect(() => {
-    fetchUser().catch(emitError)
-  }, [emitError, fetchUser])
+    fetchUser()
+      .catch(noop)
+      .finally(() => setIsLoading(false))
+  }, [fetchUser])
   const { jwt } = useJWT()
   const realm = jwt?.peregrineRealm
   const roles = jwt?.peregrineRoles
@@ -397,7 +439,9 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
 
   return (
     <Page name="User" back={() => window.history.back()} class={userPageStyle}>
-      {user ? (
+      {isLoading ? (
+        <Loader />
+      ) : user ? (
         <UserProfileCard
           user={user}
           editable={canEditUser}
@@ -406,7 +450,7 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
           isSuperAdmin={isSuperAdmin || false}
         />
       ) : (
-        <Spinner />
+        <AnonymousProfileCard userId={Number(userId)} />
       )}
     </Page>
   )

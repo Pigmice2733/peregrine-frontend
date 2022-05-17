@@ -3,5 +3,4 @@
  */
 export const isData = <T extends unknown>(
   input: T,
-): input is Exclude<T, Error | undefined> =>
-  !(input instanceof Error) && input !== undefined
+): input is Exclude<T, Error | undefined> => input && !(input instanceof Error)

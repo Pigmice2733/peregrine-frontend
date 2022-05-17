@@ -1,13 +1,10 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-import { Fragment, h } from 'preact'
 import TextInput from './text-input'
 import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
-import { MatchCard } from './match-card'
-import Spinner from './spinner'
+import { MatchDetailsCard } from './match-card'
 import { useState } from 'preact/hooks'
 import { css } from 'linaria'
 import { formatMatchKey } from '@/utils/format-match-key'
-import { isData } from '@/utils/is-data'
 
 interface Props {
   matches: ProcessedMatchInfo[]
@@ -75,21 +72,17 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
     : matches.sort(compareMatchesChronologically)
 
   return (
-    <Fragment>
+    <>
       <TextInput
         labelClass={searchTextStyles}
         label="Search"
         onInput={setSearchQuery}
       />
-      {isData(matches) ? (
-        <div class={matchListStyle}>
-          {filteredMatches.map((m) => (
-            <MatchCard eventKey={eventKey} match={m} key={m.key} link />
-          ))}
-        </div>
-      ) : (
-        <Spinner />
-      )}
-    </Fragment>
+      <div class={matchListStyle}>
+        {filteredMatches.map((m) => (
+          <MatchDetailsCard eventKey={eventKey} match={m} key={m.key} link />
+        ))}
+      </div>
+    </>
   )
 }
