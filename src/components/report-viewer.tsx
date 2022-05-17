@@ -12,6 +12,7 @@ import { CommentCard } from './comment-card'
 import { css } from 'linaria'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { ProfileLink } from './profile-link'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   report: Report
@@ -66,10 +67,10 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
   const matchInfo = useMatchInfo(report.eventKey, report.matchKey)
-  const schema = useSchema(eventInfo?.schemaId)
-  const displayableFields = schema?.schema.filter(
-    (field) => field.reportReference !== undefined,
-  )
+  const schema = useSchema(isData(eventInfo) ? eventInfo.schemaId : undefined)
+  const displayableFields = isData(schema)
+    ? schema.schema.filter((field) => field.reportReference !== undefined)
+    : undefined
   const autoFields = displayableFields?.filter(
     (field) => field.period === 'auto',
   )
@@ -99,8 +100,8 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       <div>
         {matchInfo && (
           <TeamPicker
-            redAlliance={matchInfo.redAlliance}
-            blueAlliance={matchInfo.blueAlliance}
+            redAlliance={isData(matchInfo) ? matchInfo.redAlliance : []}
+            blueAlliance={isData(matchInfo) ? matchInfo.blueAlliance : []}
             value={report.teamKey}
             editable={false}
           />

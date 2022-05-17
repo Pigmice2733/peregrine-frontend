@@ -23,6 +23,7 @@ import {
   tablePageWrapperStyle,
   tablePageTableStyle,
 } from '@/utils/table-page-style'
+import { isData } from '@/utils/is-data'
 
 const userLinkStyle = css`
   display: block;
@@ -88,7 +89,7 @@ const InnerUsersPage = () => {
   useEffect(updateUsers, [emitError])
 
   return users && realms ? (
-    <UsersTable users={users} realms={realms} />
+    <UsersTable users={users} realms={isData(realms) ? realms : []} />
   ) : (
     <Loader />
   )

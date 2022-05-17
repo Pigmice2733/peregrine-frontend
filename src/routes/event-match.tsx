@@ -127,12 +127,15 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
+  const matchRedAlliance = isData(match) ? match.redAlliance : undefined
   const reports = usePromise(() => {
     if (isOnline) {
       return getReports({ event: eventKey, match: matchKey })
     }
   }, [eventKey, matchKey, isOnline])
-  const schema = useSchema(isOnline ? event?.schemaId : undefined)
+  const schema = useSchema(
+    isOnline && isData(event) ? event.schemaId : undefined,
+  )
   const eventTeamsStats = usePromise(() => {
     if (isOnline) {
       return getEventStats(eventKey)
@@ -143,8 +146,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     showEventResults,
   )
 
-  const matchHasBeenPlayed =
-    match?.blueScore !== undefined && match.redScore !== undefined
+  const matchHasBeenPlayed = isData(match)
+    ? match.blueScore !== undefined && match.redScore !== undefined
+    : undefined
 
   // When the match loads (or changes),
   useEffect(() => {
@@ -152,7 +156,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }, [matchHasBeenPlayed])
 
   const teamsStats = usePromise(() => {
-    if (match && isOnline) {
+    if (isData(match) && isOnline) {
       return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
@@ -174,7 +178,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       class={clsx(
         matchStyle,
         match && loadedMatchStyle,
-        match?.videos &&
+        isData(match) &&
+          match.videos &&
           match.videos.length > 0 &&
           isOnline &&
           matchWithVideoStyle,
@@ -212,10 +217,21 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 </div>
               </Card>
             )}
-            <MatchDetailsCard match={match} eventKey={eventKey} />
-            {reports && reports.length > 0 ? (
+            <MatchDetailsCard
+              match={
+                isData(match)
+                  ? match
+                  : { key: '', redAlliance: [], blueAlliance: [] }
+              }
+              eventKey={eventKey}
+            />
+            {isData(reports) && reports.length > 0 ? (
               <MatchReports
-                match={match}
+                match={
+                  isData(match)
+                    ? match
+                    : { key: '', redAlliance: [], blueAlliance: [] }
+                }
                 reports={reports}
                 eventKey={eventKey}
               />
@@ -227,8 +243,12 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             )}
             {matchHasBeenPlayed /* final score if the match is over */ && (
               <Card class={clsx(matchScoreStyle)}>
-                <div class={redScoreStyle}>{match.redScore}</div>
-                <div class={blueScoreStyle}>{match.blueScore}</div>
+                <div class={redScoreStyle}>
+                  {isData(match) && match.redScore}
+                </div>
+                <div class={blueScoreStyle}>
+                  {isData(match) && match.blueScore}
+                </div>
               </Card>
             )}
           </div>
@@ -266,17 +286,25 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 eventKey={eventKey}
                 teams={
                   selectedDisplay === showEventResults
-                    ? eventTeamsStats?.filter((t) =>
-                        matchHasTeam('frc' + t.team)(match),
-                      )
-                    : teamsStats
+                    ? isData(eventTeamsStats)
+                      ? eventTeamsStats.filter((t) =>
+                          matchHasTeam('frc' + t.team)(
+                            isData(match)
+                              ? match
+                              : { key: '', redAlliance: [], blueAlliance: [] },
+                          ),
+                        )
+                      : undefined
+                    : isData(teamsStats)
+                    ? teamsStats
+                    : undefined
                 }
-                schema={schema}
+                schema={isData(schema) ? schema : { id: -1, schema: [] }}
                 renderTeam={(team, link) => (
                   <a
                     class={clsx(
                       tableTeamStyle,
-                      match.redAlliance.includes('frc' + team)
+                      matchRedAlliance?.includes('frc' + team)
                         ? redStyle
                         : blueStyle,
                     )}
@@ -295,9 +323,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             </Card>
           )}
           {/* shows videos if the match has them and online */}
-          {isOnline && match.videos && match.videos.length > 0 && (
-            <VideoList videos={match.videos} />
-          )}
+          {isOnline &&
+            isData(match) &&
+            match.videos &&
+            match.videos.length > 0 && <VideoList videos={match.videos} />}
         </>
       ) : (
         <Loader />
