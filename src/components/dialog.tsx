@@ -3,7 +3,7 @@ import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { TextButton } from '@/components/text-button'
 import { pxToRem } from '@/utils/px-to-rem'
-import { Scrim, scrimHiddenClass } from '../scrim'
+import { Scrim, scrimHiddenClass } from './scrim'
 
 interface DialogOpts {
   confirm: string
