@@ -19,6 +19,7 @@ import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
 import { authenticate } from '@/api/authenticate'
 import { route } from '@/router'
 import { Realm } from '@/api/realm'
+import { isData } from '@/utils/is-data'
 
 const signUpStyle = css`
   padding: 1.5rem;
@@ -91,10 +92,12 @@ const SignUpForm = () => {
             maxLength={maxPasswordLength}
           />
           <Dropdown<Realm>
-            value={realms.find((r) => r.id === realmId)}
+            value={
+              isData(realms) ? realms.find((r) => r.id === realmId) : undefined
+            }
             emptyLabel="Select a realm"
             class={dropdownClass}
-            options={realms}
+            options={isData(realms) ? realms : []}
             required
             onChange={(v) => setRealmId(v.id)}
             getKey={(v) => v.id}

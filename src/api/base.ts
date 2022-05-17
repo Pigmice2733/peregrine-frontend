@@ -21,6 +21,10 @@ interface ErrorData {
   error: string
 }
 
+export class NetworkError extends Error {
+  name = 'NetworkError'
+}
+
 export const request = <Expected>(
   method: HTTPMethod,
   endpoint: string,
@@ -33,12 +37,17 @@ export const request = <Expected>(
 
     onCancel(() => controller.abort())
     const jwt = await getWorkingJWT()
-    const resp = await fetch(apiUrl + endpoint + qs(params), {
-      method,
-      body: JSON.stringify(body),
-      headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
-      signal,
-    })
+    let resp: Response
+    try {
+      resp = await fetch(apiUrl + endpoint + qs(params), {
+        method,
+        body: JSON.stringify(body),
+        headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
+        signal,
+      })
+    } catch (error_) {
+      throw new NetworkError(error_.message)
+    }
 
     const text = await resp.text()
 
