@@ -92,7 +92,7 @@ const undefinedMatchStyle = css`
   }
 `
 
-const loadedMatchStyle = css`
+/* const loadedMatchStyle = css`
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas:
@@ -148,7 +148,7 @@ const offlineDisplayInfo = css`
   @media (max-width: 540px) {
     justify-self: stretch;
   }
-`
+` */
 
 const showMatchResults = 'Match Results'
 const showEventResults = 'Event Results'

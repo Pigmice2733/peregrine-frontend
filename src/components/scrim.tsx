@@ -77,7 +77,7 @@ export const Scrim = ({
         if ((e.target !== firstChild && e.target !== scrim) || hasFired) return
         hasFired = true
         previouslyFocusedElement.current = document.activeElement as HTMLElement | null
-        moveFocusInside(firstChild)
+        if (firstChild) moveFocusInside(firstChild)
       }
 
       scrim.addEventListener('transitionend', transitionEndHandler)

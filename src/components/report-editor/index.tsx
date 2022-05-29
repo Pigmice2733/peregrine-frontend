@@ -242,7 +242,7 @@ export const ReportEditor = ({
           setMatchKey(match.key)
         }}
         getKey={(match) => match.key}
-        getText={(match) => formatMatchKeyShort(match.key)}
+        getText={(match) => formatMatchKeyShort(match.key) || ''}
         value={
           isData(eventMatches)
             ? eventMatches.find((match) => match.key === matchKey)
