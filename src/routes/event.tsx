@@ -20,15 +20,15 @@ const spacing = '1.5rem'
 
 const eventStyle = css`
   display: grid;
-  grid-template-columns: minmax(21rem, 23rem);
+  grid-template-columns: minmax(20rem, 25rem) 21rem;
   justify-content: center;
   align-items: start;
   grid-gap: ${spacing};
   padding: ${spacing};
   margin-top: 0.5rem;
 
-  @media (min-width: 800px) {
-    grid-template-columns: minmax(20rem, 25rem) 21rem;
+  @media (max-width: 800px) {
+    grid-template-columns: minmax(21rem, 23rem);
   }
 `
 
@@ -41,7 +41,6 @@ const sectionStyle = css`
 const headingStyle = css`
   font-size: 1.2rem;
   justify-self: center;
-  grid-gap: 1rem;
 `
 
 const noMatchesStyle = css`
@@ -52,18 +51,19 @@ const noMatchesStyle = css`
 `
 
 const eventErrorStyle = css`
+  display: grid;
   justify-content: center;
   align-items: start;
   grid-gap: ${spacing};
   padding: ${spacing};
   margin-top: 0.5rem;
-  grid-template-columns: minmax(20rem, 25rem) 21rem;
 `
 
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
   const newestIncompleteMatch = isData(matches) && nextIncompleteMatch(matches)
+  const exists = isData(eventInfo)
 
   return (
     <Page
@@ -71,36 +71,50 @@ const Event = ({ eventKey }: Props) => {
       back="/"
       class={eventInfo instanceof Error ? eventErrorStyle : eventStyle}
     >
-      {eventInfo instanceof NetworkError && (
+      {exists ? (
+        <>
+          <div class={sectionStyle}>
+            <Heading level={2} class={headingStyle}>
+              {' '}
+              Information{' '}
+            </Heading>
+            {isData(eventInfo) && <EventInfoCard event={eventInfo} />}
+
+            <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+          </div>
+
+          <div class={sectionStyle}>
+            <Heading level={2} class={headingStyle}>
+              {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+            </Heading>
+            {newestIncompleteMatch && (
+              <MatchDetailsCard
+                key={newestIncompleteMatch.key}
+                match={newestIncompleteMatch}
+                eventKey={eventKey}
+                link
+              />
+            )}
+            {isData(matches) ? (
+              matches.length > 0 ? (
+                <EventMatches matches={matches} eventKey={eventKey} />
+              ) : (
+                <p class={noMatchesStyle}>No matches yet</p>
+              )
+            ) : (
+              <Loader />
+            )}
+          </div>
+        </>
+      ) : eventInfo instanceof NetworkError ? (
         <Heading level={1} class={headingStyle}>
           Could not connect to server. Please check your connection.
         </Heading>
-      )}
-      {isData(eventInfo) && <EventInfoCard event={eventInfo} />}
-      <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
-
-      <div class={sectionStyle}>
-        <Heading level={2} class={headingStyle}>
-          {newestIncompleteMatch ? 'Next Match' : 'Matches'}
+      ) : (
+        <Heading level={1} class={headingStyle}>
+          This event doesn&rsquo;t exist. Press the back button to return home.
         </Heading>
-        {newestIncompleteMatch && (
-          <MatchDetailsCard
-            key={newestIncompleteMatch.key}
-            match={newestIncompleteMatch}
-            eventKey={eventKey}
-            link
-          />
-        )}
-        {isData(matches) ? (
-          matches.length > 0 ? (
-            <EventMatches matches={matches} eventKey={eventKey} />
-          ) : (
-            <p class={noMatchesStyle}>No matches yet</p>
-          )
-        ) : (
-          <Loader />
-        )}
-      </div>
+      )}
     </Page>
   )
 }
