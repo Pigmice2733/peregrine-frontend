@@ -1,11 +1,10 @@
 import { css } from 'linaria'
 import { greenOnPurple, redOnPurple, focusRing } from '@/colors'
-import { FunctionComponent, JSX, h } from 'preact'
+import { FunctionComponent, JSX } from 'preact'
 import { Merge } from 'type-fest'
 import clsx from 'clsx'
 import Icon from './icon'
-import { checkBold } from '@/icons/check-bold'
-import { xBold } from '@/icons/x-bold'
+import { mdiCheckBold, mdiCloseThick } from '@mdi/js'
 
 const trueStyle = css`
   background: ${greenOnPurple};
@@ -28,7 +27,7 @@ export const BooleanDisplay: FunctionComponent<
         props.class,
       )}
     >
-      <Icon icon={value ? checkBold : xBold} />
+      <Icon icon={value ? mdiCheckBold : mdiCloseThick} />
     </El>
   )
 }

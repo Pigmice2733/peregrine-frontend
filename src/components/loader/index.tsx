@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 import { useEffect, useState } from 'preact/hooks'
 
@@ -81,7 +80,7 @@ const spinnerStyle = css`
   }
 `
 
-const Spinner = () => {
+const Loader = () => {
   const [isShown, setIsShown] = useState(false)
   // delay showing until 100ms
   // prevents spinner from showing when loading is < 100ms
@@ -93,4 +92,4 @@ const Spinner = () => {
   return isShown ? <div class={spinnerStyle} /> : null
 }
 
-export default Spinner
+export default Loader

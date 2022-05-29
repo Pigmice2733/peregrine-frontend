@@ -1,7 +1,6 @@
-import { h, Fragment } from 'preact'
 import Page from '@/components/page'
 import EventCard from '@/components/event-card'
-import Spinner from '@/components/spinner'
+import Loader from '@/components/loader'
 import { compareEvents } from '@/utils/compare-events'
 import { useGeoLocation } from '@/utils/use-geo-location'
 import { useEvents } from '@/cache/events/use'
@@ -14,6 +13,7 @@ import { UnstyledList } from '@/components/unstyled-list'
 import { useYears } from '@/utils/use-years'
 import IconButton from '@/components/icon-button'
 import { mdiCrosshairsGps } from '@mdi/js'
+import { isData } from '@/utils/is-data'
 
 const homeStyle = css`
   display: grid;
@@ -43,14 +43,14 @@ const filterStyle = css`
 `
 
 const now = new Date()
-const currentYear = now.getFullYear()
 const Home = () => {
   const [location, prompt] = useGeoLocation()
   const [query, setQuery] = useState('')
   const lowerCaseQuery = query.toLowerCase()
-  const [yearVal, setYear] = useQueryState('year', currentYear)
+  let years = useYears()
+  years = isData(years) ? years.sort().reverse() : []
+  const [yearVal, setYear] = useQueryState('year', years[0])
   const year = Number(yearVal)
-  const years = useYears()
   const events = useEvents(year)
 
   return (
@@ -67,8 +67,8 @@ const Home = () => {
         )}
       </div>
 
-      {events ? (
-        <Fragment>
+      {isData(events) ? (
+        <>
           <UnstyledList class={matchListStyle}>
             {events
               .filter((event) => {
@@ -100,9 +100,9 @@ const Home = () => {
               src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
             />
           </a>
-        </Fragment>
+        </>
       ) : (
-        <Spinner />
+        <Loader />
       )}
     </Page>
   )

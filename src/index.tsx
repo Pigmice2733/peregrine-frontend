@@ -1,10 +1,10 @@
 /* eslint-disable caleb/@typescript-eslint/ban-ts-comment */
 import App from '@/app'
 import { cleanupTokens } from '@/jwt'
-import { render, h } from 'preact'
+import { render } from 'preact'
 
 if (process.env.NODE_ENV === 'development') {
-  // @ts-ignore
+  // @ts-expect-error
   if (module.hot) module.hot.accept()
 
   while (document.body.lastChild) {

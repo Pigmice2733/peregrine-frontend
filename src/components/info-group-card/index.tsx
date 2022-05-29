@@ -1,4 +1,3 @@
-import { h, JSX } from 'preact'
 import Icon from '@/components/icon'
 import { Falsy, Merge, PropsOf } from '@/type-utils'
 import Card from '@/components/card'

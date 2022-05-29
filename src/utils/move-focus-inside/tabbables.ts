@@ -2,7 +2,7 @@
 
 // Commented out things we don't use (at least yet) to save bytes
 
-const moveFocusInsideTabbables = [
+const tabbables = [
   'button:enabled:not([readonly])',
   'select:enabled:not([readonly])',
   'textarea:enabled:not([readonly])',
@@ -20,4 +20,4 @@ const moveFocusInsideTabbables = [
   // '[autofocus]',
 ]
 
-export default moveFocusInsideTabbables
+export default tabbables

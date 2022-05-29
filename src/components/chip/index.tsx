@@ -1,4 +1,3 @@
-import { h } from 'preact'
 import { css } from 'linaria'
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {

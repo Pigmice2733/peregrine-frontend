@@ -12,6 +12,7 @@ type GraphableField = {
 
 export interface Report {
   id?: number
+  key?: string
   eventKey: string
   matchKey: string
   teamKey: string
@@ -20,13 +21,15 @@ export interface Report {
    * Doesn't exist if the reporter account has been deleted.
    * Admins can set this to a different userid than themself
    */
-  reporterId?: number
+  reporterId?: number | null
   data: Field[]
   comment: string
 }
 
 /** Getting reports from the server results in this interface */
 export type GetReport = SetRequired<Report, 'data' | 'comment' | 'id'>
+
+export type OfflineReport = SetRequired<Report, 'data' | 'comment' | 'key'>
 
 interface EventKey {
   // 2018orwil

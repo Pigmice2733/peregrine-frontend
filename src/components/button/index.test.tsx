@@ -1,6 +1,5 @@
 import Button from '.'
 import { render, fireEvent } from '@calebeby/preact-testing-library'
-import { h } from 'preact'
 
 test('button', () => {
   const clickHandler = jest.fn()

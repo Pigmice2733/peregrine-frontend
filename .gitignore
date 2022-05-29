@@ -2,6 +2,7 @@
 /dist
 /.cache
 /.vscode
+/.idea
 /coverage
 /.linaria-cache
 *.css.json

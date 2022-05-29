@@ -1,4 +1,4 @@
-import { h, VNode } from 'preact'
+import { VNode } from 'preact'
 import clsx from 'clsx'
 import { css } from 'linaria'
 import { tint } from 'polished'
