@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchDetailsCard } from '@/components/match-card'
@@ -25,7 +26,7 @@ import Icon from '@/components/icon'
 import { NetworkError } from '@/api/base'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
-import { mdiCloudOffOutline, mdiPlus } from '@mdi/js'
+import { mdiAlert, mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
 import {
   ConnectionType,
@@ -253,7 +254,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       /* if the match doesn't exist */
       <Page back={`/events/${eventKey}`} name={pageName} class={matchStyle}>
         <Card class={undefinedMatchStyle}>
-          <Icon icon={alert} />
+          <Icon icon={mdiAlert} />
           <div
             class={css`
               font-size: 2rem;
@@ -278,14 +279,14 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
         Scout Match
       </Button>
-      <MatchCard match={match} eventKey={eventKey} />
+      <MatchDetailsCard match={match} eventKey={eventKey} />
       {matchHasBeenPlayed && (
         <Card class={matchScoreStyle}>
           <div class={redScoreStyle}>{match.redScore}</div>
           <div class={blueScoreStyle}>{match.blueScore}</div>
         </Card>
       )}
-      {schema && (
+      {schema ? (
         <Card
           class={css`
             overflow-y: hidden;
@@ -331,43 +332,41 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
               >
                 {team}
               </a>
-            )} />
-            <MatchDetailsCard
+            )}
+          />
+          <MatchDetailsCard
+            match={
+              isData(match)
+                ? match
+                : { key: '', redAlliance: [], blueAlliance: [] }
+            }
+            eventKey={eventKey}
+          />
+          {isData(reports) && reports.length > 0 ? (
+            <MatchReports
               match={
                 isData(match)
                   ? match
                   : { key: '', redAlliance: [], blueAlliance: [] }
               }
+              reports={reports}
               eventKey={eventKey}
-            >
-            {isData(reports) && reports.length > 0 ? (
-              <MatchReports
-                match={
-                  isData(match)
-                    ? match
-                    : { key: '', redAlliance: [], blueAlliance: [] }
-                }
-                reports={reports}
-                eventKey={eventKey}
-              />
-            ) : (
-              // button to create a report
-              <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
-                Scout Match
-              </Button>
-            )}
-            {matchHasBeenPlayed /* final score if the match is over */ && (
-              <Card class={clsx(matchScoreStyle)}>
-                <div class={redScoreStyle}>
-                  {isData(match) && match.redScore}
-                </div>
-                <div class={blueScoreStyle}>
-                  {isData(match) && match.blueScore}
-                </div>
-              </Card>
-            )}
-          </div>
-          {schema && isOnline && (
+            />
+          ) : (
+            // button to create a report
+            <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+              Scout Match
+            </Button>
+          )}
+          {matchHasBeenPlayed /* final score if the match is over */ && (
+            <Card class={clsx(matchScoreStyle)}>
+              <div class={redScoreStyle}>{isData(match) && match.redScore}</div>
+              <div class={blueScoreStyle}>
+                {isData(match) && match.blueScore}
+              </div>
+            </Card>
+          )}
+          {isOnline && (
             // card including the analysis table and tabs for match/event data
             <Card
               class={css`

@@ -1,10 +1,10 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
-import clsx from 'clsx'
 
 interface MatchCardProps {
   match: {
@@ -83,7 +83,7 @@ const blueStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className }: MatchCardProps) => {
+  ({ match, eventKey, link }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
     const createTeamLinks = (teams: string[]) =>
