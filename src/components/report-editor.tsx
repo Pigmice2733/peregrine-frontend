@@ -1,3 +1,4 @@
+/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
 import { css } from 'linaria'
 import { StatDescription, ReportStatDescription } from '@/api/schema'
 import { useState, useMemo, useEffect } from 'preact/hooks'
@@ -172,12 +173,15 @@ export const ReportEditor = ({
       .catch(async (error: { error?: string; id?: number }) => {
         if (error.error === 'conflicts' && error.id !== undefined) {
           const conflictingId = error.id
-          const shouldOverride = await createDialog({
-            confirm: `Override Report ${conflictingId}`,
-            dismiss: 'Cancel',
-            description: `There is already a report with the same reporter, team, and match.`,
-            title: `This report conflicts with report ${conflictingId}`,
-          })
+          const shouldOverride =
+            error.id === report.id
+              ? true
+              : await createDialog({
+                  confirm: `Override Report ${conflictingId}`,
+                  dismiss: 'Cancel',
+                  description: `There is already a report with the same reporter, team, and match.`,
+                  title: `This report conflicts with report ${conflictingId}`,
+                })
           if (shouldOverride) {
             await request<null>(
               'PUT',

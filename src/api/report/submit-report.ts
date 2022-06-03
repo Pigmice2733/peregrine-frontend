@@ -1,24 +1,23 @@
 import { request } from '../base'
 import { Report, OfflineReport } from '.'
 import { useEffect, useState } from 'preact/hooks'
-import { CancellablePromise } from '@/utils/cancellable-promise'
+// import { CancellablePromise } from '@/utils/cancellable-promise'
 
 /**
  * Uploads a report via PUT or POST, depending on if the report already has an ID
  * @returns a promise that resolves to the new report's ID
  */
-export const uploadReport = (report: Report): CancellablePromise<number> => {
+export const uploadReport = async (report: Report): Promise<number> => {
   const id = report.id
   const req =
     id === undefined
       ? request<number>('POST', 'reports', {}, report)
       : request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
-  return req.then((id) => {
+  return req.then((id) => { 
     if (report.key) {
-      deleteReportLocally(report.key)
-    }
-    return id
-  })
+    deleteReportLocally(report.key)
+  }
+  return id})
 }
 
 // The 3 is the version number
