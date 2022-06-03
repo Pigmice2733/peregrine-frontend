@@ -13,11 +13,12 @@ export const uploadReport = async (report: Report): Promise<number> => {
     id === undefined
       ? request<number>('POST', 'reports', {}, report)
       : request<null>('PUT', `reports/${id}`, {}, report).then(() => id)
-  return req.then((id) => { 
+  return req.then((id) => {
     if (report.key) {
-    deleteReportLocally(report.key)
-  }
-  return id})
+      deleteReportLocally(report.key)
+    }
+    return id
+  })
 }
 
 // The 3 is the version number
