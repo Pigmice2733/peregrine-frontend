@@ -4,6 +4,7 @@ import { ReportEditor } from '@/components/report-editor'
 import { route } from '@/router'
 import { AlertType } from '@/components/alert'
 import { css } from 'linaria'
+import { updateUrl } from '@/url-manager'
 
 interface Props {
   eventKey: string
@@ -26,13 +27,12 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
         <Page name="Scout" back={matchUrl} class={scoutPageStyle}>
           <ReportEditor
             initialReport={{ eventKey, matchKey }}
-            onMatchSelect={(newMatchKey) =>
-              history.replaceState(
-                null,
-                '',
+            onMatchSelect={(newMatchKey) => {
+              updateUrl(
                 `/events/${eventKey}/matches/${newMatchKey}/scout`,
+                true,
               )
-            }
+            }}
             onSaveSuccess={(report) =>
               route(matchUrl, {
                 type: AlertType.Success,
