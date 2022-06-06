@@ -5,7 +5,8 @@ import { formatTeamNumber } from '@/utils/format-team-number'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
-import preact from 'preact'
+// eslint-disable-next-line no-restricted-imports
+import { Fragment } from 'preact'
 
 interface MatchCardProps {
   match: {
@@ -90,7 +91,8 @@ export const MatchDetailsCard = memo(
     const createTeamLinks = (teams: string[]) =>
       teams.flatMap((t: string, i) => {
         const num = formatTeamNumber(t)
-        const El = link ? preact.Fragment : 'a'
+        console.log(<> words </>)
+        const El = link ? Fragment : 'a'
         return [
           i ? ' ' : null,
           <El key={num} href={`/events/${eventKey}/teams/${num}`}>
