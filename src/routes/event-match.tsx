@@ -254,15 +254,23 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       /* if the match doesn't exist */
       <Page back={`/events/${eventKey}`} name={pageName} class={matchStyle}>
         <Card class={undefinedMatchStyle}>
-          <Icon icon={mdiAlert} />
           <div
             class={css`
-              font-size: 2rem;
-              text-align: center;
+              display: grid;
+              grid-gap: 0 1rem;
+              align-items: center;
+              grid-template-columns: 1fr auto;
             `}
-            /* display text to show that the match doesn't exist */
           >
-            {matchUndefinedStatement}
+            <Icon icon={mdiAlert} />
+            {/* display text to show that the match doesn't exist */}
+            <div
+              class={css`
+                font-size: 18pt;
+              `}
+            >
+              {matchUndefinedStatement}
+            </div>
           </div>
           <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
         </Card>
