@@ -23,7 +23,6 @@ import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 import { isData } from '@/utils/is-data'
 import Icon from '@/components/icon'
-import { NetworkError } from '@/api/base'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
 import { mdiAlert, mdiCloudOffOutline, mdiPlus } from '@mdi/js'
@@ -209,7 +208,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     if (matchHasBeenPlayed) setSelectedDisplay(showMatchResults)
   }, [matchHasBeenPlayed])
 
-  let teamsStats = usePromise(() => {
+  const teamsStats = usePromise(() => {
     if (isData(match) && isOnline) {
       return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
@@ -220,18 +219,22 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }, [match])
 
   // check if the match is unloadable due to an error
-  let statsErrorType = 'non-existent'
+  /* let statsErrorType = 'non-existent'
   if (teamsStats instanceof NetworkError) {
     statsErrorType = 'network'
     teamsStats = undefined
   } else if (teamsStats instanceof Error) {
     statsErrorType = 'other'
     teamsStats = undefined
-  }
+  } */
 
   // define what to put in the card if the match data can't be loaded
   let matchUndefinedStatement = ''
-  switch (statsErrorType) {
+  matchUndefinedStatement =
+    m === null
+      ? 'This match does not exist.'
+      : m.group + (m.num ? ' ' + m.num : '') + ' does not exist.'
+  /* switch (statsErrorType) {
     case 'non-existent':
       matchUndefinedStatement =
         m === null
@@ -255,7 +258,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       break
     default:
       matchUndefinedStatement = 'This match cannot be found.'
-  }
+  } */
 
   if (!isData(match)) {
     return (
@@ -292,7 +295,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       name={pageName}
       class={clsx(
         loadedMatchStyle,
-        match.videos && match.videos.length > 0
+        match.videos && match.videos.length > 0 && isOnline
           ? matchWithVideoStyle
           : noVideosStyle,
       )}
