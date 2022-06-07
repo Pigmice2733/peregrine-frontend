@@ -2,7 +2,7 @@
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchDetailsCard } from '@/components/match-card'
-import Loader from '@/components/loader'
+// import Loader from '@/components/loader'
 import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
 import { getEventStats } from '@/api/stats/get-event-stats'
@@ -26,7 +26,7 @@ import Icon from '@/components/icon'
 import { NetworkError } from '@/api/base'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
-import { mdiAlert, mdiPlus } from '@mdi/js'
+import { mdiAlert, mdiCloudOffOutline, mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
 import {
   ConnectionType,
@@ -92,30 +92,38 @@ const undefinedMatchStyle = css`
   }
 `
 
-/* const loadedMatchStyle = css`
+const loadedMatchStyle = css`
   display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: 0.75rem;
+  grid-gap: 1rem;
+
+  & > * {
+    margin: 0.75rem;
+  }
+`
+
+const noVideosStyle = css`
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas:
     '. leftColumn .'
     'analysisTable analysisTable analysisTable';
-  padding: 0.75rem;
+
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       'leftColumn'
       'analysisTable';
   }
-  & > * {
-    margin: 0.75rem;
-  }
 `
 
 const matchWithVideoStyle = css`
   grid-template-columns: 1fr auto 30rem 1fr;
-  align-items: start;
   grid-template-areas:
     '. leftColumn rightColumn .'
     'analysisTable analysisTable analysisTable analysisTable';
+
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -148,7 +156,7 @@ const offlineDisplayInfo = css`
   @media (max-width: 540px) {
     justify-self: stretch;
   }
-` */
+`
 
 const showMatchResults = 'Match Results'
 const showEventResults = 'Event Results'
@@ -164,8 +172,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  const teams = usePromise(() => getEventStats(eventKey), [eventKey])
-  const matchRedAlliance = isData(match) ? match.redAlliance : undefined
+  /* const teams = usePromise(() => getEventStats(eventKey), [eventKey])
+  const matchRedAlliance = isData(match) ? match.redAlliance : undefined */
   const reports = usePromise(() => {
     if (isOnline) {
       return getReports({ event: eventKey, match: matchKey })
@@ -282,22 +290,67 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     <Page /* show match data if the match exists */
       back={`/events/${eventKey}`}
       name={pageName}
-      class={matchStyle}
-    >
-      <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
-        Scout Match
-      </Button>
-      <MatchDetailsCard match={match} eventKey={eventKey} />
-      {matchHasBeenPlayed && (
-        <Card class={matchScoreStyle}>
-          <div class={redScoreStyle}>{match.redScore}</div>
-          <div class={blueScoreStyle}>{match.blueScore}</div>
-        </Card>
+      class={clsx(
+        loadedMatchStyle,
+        match.videos && match.videos.length > 0
+          ? matchWithVideoStyle
+          : noVideosStyle,
       )}
-      {schema ? (
+    >
+      <div class={leftColumnStyle}>
+        {!isOnline && (
+          <Card class={offlineDisplayInfo}>
+            <div
+              class={css`
+                grid-area: iconArea;
+                justify-self: right;
+              `}
+            >
+              <Icon icon={mdiCloudOffOutline} />
+            </div>
+            <div
+              class={css`
+                grid-area: title;
+                justify-self: left;
+                font-weight: bold;
+              `}
+            >
+              No Connection
+            </div>
+            <div
+              class={css`
+                grid-area: detail;
+                justify-self: center;
+              `}
+            >
+              Showing limited information offline.
+            </div>
+          </Card>
+        )}
+        <MatchDetailsCard match={match} eventKey={eventKey} />
+        {reports && reports.length > 0 ? (
+          <MatchReports match={match} reports={reports} eventKey={eventKey} />
+        ) : (
+          // button to create a report
+          <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+            Scout Match
+          </Button>
+        )}
+        {matchHasBeenPlayed /* final score if the match is over */ && (
+          <Card class={clsx(matchScoreStyle)}>
+            <div class={redScoreStyle}>{match.redScore}</div>
+            <div class={blueScoreStyle}>{match.blueScore}</div>
+          </Card>
+        )}
+      </div>
+      {schema && isOnline && (
+        // card including the analysis table and tabs for match/event data
         <Card
           class={css`
-            overflow-y: hidden;
+            overflow-x: auto;
+            grid-area: analysisTable;
+            max-width: 100%;
+            justify-self: center;
           `}
         >
           <div class={displayModeSelectorStyle}>
@@ -321,8 +374,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           <AnalysisTable
             eventKey={eventKey}
             teams={
-              isData(teams) && selectedDisplay === showEventResults
-                ? teams.filter((t: { team: string }) =>
+              selectedDisplay === showEventResults
+                ? eventTeamsStats?.filter((t) =>
+                    // eslint-disable-next-line caleb/@typescript-eslint/restrict-plus-operands
                     matchHasTeam('frc' + t.team)(match),
                   )
                 : teamsStats
@@ -341,121 +395,19 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 {team}
               </a>
             )}
-          />
-          <MatchDetailsCard
-            match={
-              isData(match)
-                ? match
-                : { key: '', redAlliance: [], blueAlliance: [] }
+            renderBoolean={
+              selectedDisplay === showMatchResults
+                ? (cell) => <BooleanDisplay value={cell.avg === 1} />
+                : undefined
             }
-            eventKey={eventKey}
+            enableSettings={selectedDisplay !== showMatchResults}
           />
-          {isData(reports) && reports.length > 0 ? (
-            <MatchReports
-              match={
-                isData(match)
-                  ? match
-                  : { key: '', redAlliance: [], blueAlliance: [] }
-              }
-              reports={reports}
-              eventKey={eventKey}
-            />
-          ) : (
-            // button to create a report
-            <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
-              Scout Match
-            </Button>
-          )}
-          {matchHasBeenPlayed /* final score if the match is over */ && (
-            <Card class={clsx(matchScoreStyle)}>
-              <div class={redScoreStyle}>{isData(match) && match.redScore}</div>
-              <div class={blueScoreStyle}>
-                {isData(match) && match.blueScore}
-              </div>
-            </Card>
-          )}
-          {isOnline && (
-            // card including the analysis table and tabs for match/event data
-            <Card
-              class={css`
-                overflow-x: auto;
-                grid-area: analysisTable;
-                max-width: 100%;
-                justify-self: center;
-              `}
-            >
-              <div class={displayModeSelectorStyle}>
-                <button
-                  class={clsx(
-                    selectedDisplay === showMatchResults &&
-                      activeDisplayModeStyle,
-                  )}
-                  onClick={() => setSelectedDisplay(showMatchResults)}
-                >
-                  {showMatchResults}
-                </button>
-                <button
-                  class={clsx(
-                    selectedDisplay === showEventResults &&
-                      activeDisplayModeStyle,
-                  )}
-                  onClick={() => setSelectedDisplay(showEventResults)}
-                >
-                  {showEventResults}
-                </button>
-              </div>
-              <AnalysisTable
-                eventKey={eventKey}
-                teams={
-                  selectedDisplay === showEventResults
-                    ? isData(eventTeamsStats)
-                      ? eventTeamsStats.filter((t) =>
-                          matchHasTeam('frc' + t.team)(
-                            isData(match)
-                              ? match
-                              : { key: '', redAlliance: [], blueAlliance: [] },
-                          ),
-                        )
-                      : undefined
-                    : isData(teamsStats)
-                    ? teamsStats
-                    : undefined
-                }
-                schema={isData(schema) ? schema : { id: -1, schema: [] }}
-                renderTeam={(team, link) => (
-                  <a
-                    class={clsx(
-                      tableTeamStyle,
-                      matchRedAlliance?.includes('frc' + team)
-                        ? redStyle
-                        : blueStyle,
-                    )}
-                    href={link}
-                  >
-                    {team}
-                  </a>
-                )}
-                renderBoolean={
-                  selectedDisplay === showMatchResults
-                    ? (cell) => <BooleanDisplay value={cell.avg === 1} />
-                    : undefined
-                }
-                enableSettings={selectedDisplay !== showMatchResults}
-              />
-            </Card>
-          )}
-          {/* shows videos if the match has them and online */}
-          {isOnline &&
-            isData(match) &&
-            match.videos &&
-            match.videos.length > 0 && <VideoList videos={match.videos} />}
         </Card>
-      ) : (
-        <Loader />
       )}
-      {match.videos?.map((v) => (
-        <VideoCard key={v} url={cleanYoutubeUrl(v)} />
-      ))}
+      {/* shows videos if the match has them and online */}
+      {isOnline && match.videos && match.videos.length > 0 && (
+        <VideoList videos={match.videos} />
+      )}
     </Page>
   )
 }
