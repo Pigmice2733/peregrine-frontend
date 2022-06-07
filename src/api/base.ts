@@ -45,8 +45,8 @@ export const request = <Expected>(
         headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
         signal,
       })
-    } catch (error_) {
-      throw new NetworkError(error_.message)
+    } catch (e) {
+      throw new NetworkError(e.message)
     }
 
     const text = await resp.text()

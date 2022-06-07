@@ -1,12 +1,10 @@
-/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTime } from '@/utils/format-time'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
-// eslint-disable-next-line no-restricted-imports
-import { Fragment } from 'preact'
+import clsx from 'clsx'
 
 interface MatchCardProps {
   match: {
@@ -85,41 +83,33 @@ const blueStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
     const createTeamLinks = (teams: string[]) =>
       teams.flatMap((t: string, i) => {
         const num = formatTeamNumber(t)
-        console.log(<> words </>)
-        const El = link ? Fragment : 'a'
         return [
           i ? ' ' : null,
-          <El key={num} href={`/events/${eventKey}/teams/${num}`}>
-            {num}
-          </El>,
+          link ? (
+            num
+          ) : (
+            <a key={num} href={`/events/${eventKey}/teams/${num}`}>
+              {num}
+            </a>
+          ),
         ]
       })
     return (
       <Card
-        class={matchCardStyle}
+        class={clsx(matchCardStyle, className)}
         href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
       >
         <div class={matchTitleStyle}>
-          {matchName ? (
-            matchName.num ? (
-              <div>{matchName.group}</div>
-            ) : (
-              matchName.group
-            )
-          ) : (
-            <div> {match.key} </div>
+          {matchName.num ? <div>{matchName.group}</div> : matchName.group}
+          {matchName.num && (
+            <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
-          {matchName
-            ? matchName.num && (
-                <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
-              )
-            : ''}
         </div>
         {match.time && (
           <time dateTime={match.time.toISOString()}>
