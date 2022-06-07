@@ -10,7 +10,6 @@ import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { compareMatchKeys } from '@/utils/compare-matches'
 import { GetReport } from '@/api/report'
 import { getReports } from '@/api/report/get-reports'
-import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -34,14 +33,16 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
     team,
     eventKey,
   ])
-  const commentsByMatch =
-    isData(reports) &&
-    reports.reduce<{ [matchKey: string]: GetReport[] }>((acc, report) => {
+  const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
+    (acc, report) => {
       if (report.comment) {
-        acc[report.matchKey].push(report)
+        // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
+        ;(acc[report.matchKey] || (acc[report.matchKey] = [])).push(report)
       }
       return acc
-    }, {})
+    },
+    {},
+  )
 
   return (
     <Page

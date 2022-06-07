@@ -171,16 +171,12 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  /* const teams = usePromise(() => getEventStats(eventKey), [eventKey])
-  const matchRedAlliance = isData(match) ? match.redAlliance : undefined */
   const reports = usePromise(() => {
     if (isOnline) {
       return getReports({ event: eventKey, match: matchKey })
     }
   }, [eventKey, matchKey, isOnline])
-  const schema = useSchema(
-    isOnline && isData(event) ? event.schemaId : undefined,
-  )
+  const schema = useSchema(isOnline ? event?.schemaId : undefined)
   const eventTeamsStats = usePromise(() => {
     if (isOnline) {
       return getEventStats(eventKey)
@@ -209,7 +205,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }, [matchHasBeenPlayed])
 
   const teamsStats = usePromise(() => {
-    if (isData(match) && isOnline) {
+    if (match && isOnline) {
       return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),

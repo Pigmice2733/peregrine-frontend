@@ -34,7 +34,6 @@ import clsx from 'clsx'
 import { getReports } from '@/api/report/get-reports'
 import { noop } from '@/utils/empty-promise'
 import { getFastestUser } from '@/cache/users/get-fastest'
-import { isData } from '@/utils/is-data'
 
 const RoleInfo = ({
   save,
@@ -337,7 +336,7 @@ const UserProfileCard = ({
             </h2>
           )}
         </EditableText>
-        {isData(reports) && (
+        {reports && (
           <Button flat href={`/users/${user.id}/reports`}>
             <Icon
               class={iconInButtonStyle}
@@ -397,7 +396,7 @@ const AnonymousProfileCard = ({ userId }: { userId: number }) => {
       <Alert type={AlertType.Warning}>
         {"You do not have access to this user's profile."}
       </Alert>
-      {isData(reports) && (
+      {reports && (
         <Button flat href={`/users/${userId}/reports`}>
           <Icon
             class={iconInButtonStyle}
