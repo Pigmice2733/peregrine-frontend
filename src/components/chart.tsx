@@ -504,14 +504,12 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
 
   const recomputeScrolling = () => {
     const element = elementRef.current
-    // eslint-disable-next-line caleb/@typescript-eslint/no-unnecessary-condition
-    if (element) {
-      setIsOverflowingLeft(element.scrollLeft > scrollThreshold)
-      setIsOverflowingRight(
-        element.scrollWidth - element.scrollLeft - element.clientWidth >
-          scrollThreshold,
-      )
-    }
+    if (!element) return
+    setIsOverflowingLeft(element.scrollLeft > scrollThreshold)
+    setIsOverflowingRight(
+      element.scrollWidth - element.scrollLeft - element.clientWidth >
+        scrollThreshold,
+    )
   }
 
   useEffect(recomputeScrolling, [])
