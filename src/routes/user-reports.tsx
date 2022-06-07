@@ -9,7 +9,6 @@ import { GetReport } from '@/api/report'
 import { useEventInfo } from '@/cache/event-info/use'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import { getFastestUser } from '@/cache/users/get-fastest'
-import { isData } from '@/utils/is-data'
 
 interface Props {
   userId: string
@@ -37,15 +36,12 @@ const UserReports = ({ userId }: Props) => {
   return (
     <Page
       name={`${
-        isData(user)
-          ? // eslint-disable-next-line caleb/@typescript-eslint/prefer-optional-chain
-            `${user && user.firstName} ${user && user.lastName}`
-          : `User ${userId}`
+        user ? `${user.firstName} ${user.lastName}` : `User ${userId}`
       }: Reports`}
       back={`/users/${userId}`}
       class={userReportsStyle}
     >
-      {isData(reports) ? (
+      {reports ? (
         reports.map((report) => {
           return <ReportCard key={report.id} report={report} />
         })
