@@ -31,6 +31,7 @@ import {
   ConnectionType,
   useNetworkConnection,
 } from '@/utils/use-network-connection'
+import { NetworkError, ServerError } from '@/api/base'
 
 interface Props {
   eventKey: string
@@ -176,7 +177,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       return getReports({ event: eventKey, match: matchKey })
     }
   }, [eventKey, matchKey, isOnline])
-  const schema = useSchema(isOnline ? event?.schemaId : undefined)
+  const schema = useSchema(
+    isOnline && isData(event) ? event.schemaId : undefined,
+  )
   const eventTeamsStats = usePromise(() => {
     if (isOnline) {
       return getEventStats(eventKey)
@@ -194,10 +197,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
 
   // displayed name of the tab, defining here to avoid repeated code
   const pageName =
-    (m === null
-      ? matchKey + ' - '
-      : m.group + (m.num ? ' Match ' + m.num : '') + ' - ') +
-    (event ? event.name : eventKey)
+    m.group +
+    (m.num ? ' Match ' + m.num : '') +
+    ' - ' +
+    (isData(event) ? event.name : eventKey)
 
   // When the match loads (or changes),
   useEffect(() => {
@@ -205,7 +208,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }, [matchHasBeenPlayed])
 
   const teamsStats = usePromise(() => {
-    if (match && isOnline) {
+    if (isData(match) && isOnline) {
       return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
@@ -214,47 +217,23 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     }
   }, [match])
 
-  // check if the match is unloadable due to an error
-  /* let statsErrorType = 'non-existent'
-  if (teamsStats instanceof NetworkError) {
-    statsErrorType = 'network'
-    teamsStats = undefined
-  } else if (teamsStats instanceof Error) {
-    statsErrorType = 'other'
-    teamsStats = undefined
-  } */
-
   // define what to put in the card if the match data can't be loaded
-  let matchUndefinedStatement = ''
-  matchUndefinedStatement =
-    m === null
-      ? 'This match does not exist.'
-      : m.group + (m.num ? ' ' + m.num : '') + ' does not exist.'
-  /* switch (statsErrorType) {
-    case 'non-existent':
-      matchUndefinedStatement =
-        m === null
-          ? 'This match does not exist.'
-          : m.group + (m.num ? ' ' + m.num : '') + ' does not exist.'
-      break
-    case 'network':
-      matchUndefinedStatement =
-        m === null
-          ? 'Unable to load match.'
-          : 'Unable to load ' + m.group + (m.num ? ' ' + m.num : '') + '.'
-      break
-    case 'other':
-      matchUndefinedStatement =
-        m === null
-          ? 'There was an error loading the match.'
-          : 'There was an error loading ' +
-            m.group +
-            (m.num ? ' ' + m.num : '') +
-            '.'
-      break
-    default:
-      matchUndefinedStatement = 'This match cannot be found.'
-  } */
+  const matchUndefinedStatement = (
+    matchKey: typeof m,
+    match: Error | undefined,
+  ) => {
+    const matchName = matchKey.group + (matchKey.num ? ' ' + matchKey.num : '')
+    if (match instanceof Error) {
+      if (match instanceof ServerError) {
+        return matchName + `raised a server error: ${match.message}.`
+      }
+      if (match instanceof NetworkError) {
+        return matchName + `raised a network error: ${match.message}.`
+      }
+      return matchName + `raised an error: ${match.message}.`
+    }
+    return matchName + 'could not be found.'
+  }
 
   if (!isData(match)) {
     return (
@@ -276,7 +255,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 font-size: 18pt;
               `}
             >
-              {matchUndefinedStatement}
+              {matchUndefinedStatement(m, match)}
             </div>
           </div>
           <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
@@ -327,7 +306,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           </Card>
         )}
         <MatchDetailsCard match={match} eventKey={eventKey} />
-        {reports && reports.length > 0 ? (
+        {isData(reports) && reports.length > 0 ? (
           <MatchReports match={match} reports={reports} eventKey={eventKey} />
         ) : (
           // button to create a report
@@ -374,13 +353,17 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             eventKey={eventKey}
             teams={
               selectedDisplay === showEventResults
-                ? eventTeamsStats?.filter((t) =>
-                    // eslint-disable-next-line caleb/@typescript-eslint/restrict-plus-operands
-                    matchHasTeam('frc' + t.team)(match),
-                  )
-                : teamsStats
+                ? isData(eventTeamsStats)
+                  ? eventTeamsStats.filter((t: { team: string }) =>
+                      // eslint-disable-next-line caleb/@typescript-eslint/restrict-plus-operands
+                      matchHasTeam('frc' + t.team)(match),
+                    )
+                  : undefined
+                : isData(teamsStats)
+                ? teamsStats
+                : undefined
             }
-            schema={schema}
+            schema={isData(schema) ? schema : { id: 0, schema: [] }}
             renderTeam={(team, link) => (
               <a
                 class={clsx(
