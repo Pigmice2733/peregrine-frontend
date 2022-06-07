@@ -25,6 +25,15 @@ export class NetworkError extends Error {
   name = 'NetworkError'
 }
 
+export class ServerError extends Error {
+  name = 'ServerError'
+  statusCode: number
+  constructor(message: string, code: number) {
+    super(message)
+    this.statusCode = code
+  }
+}
+
 export const request = <Expected>(
   method: HTTPMethod,
   endpoint: string,
@@ -62,12 +71,11 @@ export const request = <Expected>(
     if (resp.status === 401) removeAccessToken()
 
     if (typeof parsed === 'string') {
-      // eslint-disable-next-line caleb/unicorn/prefer-type-error
-      throw new Error(parsed)
+      throw new ServerError(
+        `${resp.status} from server: ${parsed}`,
+        resp.status,
+      )
     }
 
-    const error = new Error((parsed as ErrorData).error)
-    Object.assign(error, parsed)
-
-    throw error
+    throw new ServerError((parsed as ErrorData).error, resp.status)
   })

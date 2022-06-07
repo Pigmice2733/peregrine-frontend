@@ -26,7 +26,7 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
   /* eslint-disable caleb/react-hooks/rules-of-hooks, caleb/react-hooks/exhaustive-deps */
   const resultingFunction: ResultingFunction = (...args: any[]) => {
     const [networkData, setNetworkData] = useState<
-      DataType | undefined | NetworkError | Error
+      DataType | undefined | Error
     >(undefined)
     const [cacheData, setCacheData] = useState<DataType | undefined>(undefined)
 
@@ -51,7 +51,10 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
       return () => p.cancel()
     }, args)
 
-    if (networkData && !(networkData instanceof NetworkError)) {
+    if (networkData) {
+      if (networkData instanceof NetworkError && cacheData) {
+        return cacheData
+      }
       return networkData
     }
     return cacheData
