@@ -17,9 +17,9 @@ const savedReportCardStyle = css`
 const SavedReportCard = ({ report }: { report: OfflineReport }) => {
   const eventInfo = useEventInfo(report.eventKey)
   const matchKey = formatMatchKey(report.matchKey)
-  const formattedMatchKey = matchKey?.num
+  const formattedMatchKey = matchKey.num
     ? `${matchKey.group} Match ${matchKey.num}`
-    : matchKey?.group
+    : matchKey.group
   const eventName = eventInfo ? eventInfo.name : report.eventKey
   const teamName = formatTeamNumber(report.teamKey)
   return (

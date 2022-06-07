@@ -1,4 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/ban-ts-comment */
 import { fastestPromise } from '.'
 
 type PromiseResolver<T> = (value: T | PromiseLike<T>) => void

@@ -32,7 +32,6 @@ import { createAlert } from '@/router'
 import { AlertType } from './alert'
 import Loader from './loader'
 import Card from './card'
-import { isData } from '@/utils/is-data'
 
 const reportEditorStyle = css`
   padding: 1.5rem 2rem;
@@ -235,12 +234,8 @@ export const ReportEditor = ({
           setMatchKey(match.key)
         }}
         getKey={(match) => match.key}
-        getText={(match) => formatMatchKeyShort(match.key) || ''}
-        value={
-          isData(eventMatches)
-            ? eventMatches.find((match) => match.key === matchKey)
-            : undefined
-        }
+        getText={(match) => formatMatchKeyShort(match.key)}
+        value={eventMatches.find((match) => match.key === matchKey)}
       />
       <TeamPicker
         onChange={setTeam}

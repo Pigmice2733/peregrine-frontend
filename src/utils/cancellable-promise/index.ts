@@ -102,7 +102,7 @@ interface CancellablePromiseConstructor extends PromiseConstructor {
   ): CancellablePromise<T>
 
   resolve: {
-    <T>(value?: T | PromiseLike<T> | undefined): CancellablePromise<T>
+    <T>(value: T | PromiseLike<T>): CancellablePromise<T>
     (): CancellablePromise<void>
   }
 

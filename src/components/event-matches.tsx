@@ -1,4 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import { ProcessedMatchInfo } from '@/api/match-info'
 import TextInput from './text-input'
 import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
@@ -37,12 +36,12 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
     if (
       s === m.key ||
       'qm' + s === m.key ||
-      s === formatMatchKey(m.key)?.group.toLowerCase()
+      s === formatMatchKey(m.key).group.toLowerCase()
     )
       return QueryRank.MatchExact
     if (
       m.key.includes(s) ||
-      formatMatchKey(m.key)?.group.toLowerCase().includes(s)
+      formatMatchKey(m.key).group.toLowerCase().includes(s)
     )
       return QueryRank.MatchLoose
     // If all of the query is digits

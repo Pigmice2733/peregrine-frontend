@@ -5,7 +5,7 @@ export const formatMatchKey = (key: string) => {
   const matchType = matchNames[getMatchType(key)]
   // determines the number of the match (at the end of the key)
   const matchNum = /(\d+)$/.exec(key)
-  if (!matchNum) return null // return null if can't identify match type or number
+  if (!matchNum || matchType === '') return { group: key.toUpperCase() } // return null if can't identify match type or number
   // group of playoff matches, if applicable
   const groupNum = /(\d+)m\d+$/.exec(key)
   // determine whether there is a group and return the object

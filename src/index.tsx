@@ -1,4 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/ban-ts-comment */
 import App from '@/app'
 import { cleanupTokens } from '@/jwt'
 import { render } from 'preact'

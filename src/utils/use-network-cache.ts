@@ -15,11 +15,11 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
   cacheGetter: (...args: ArgsType) => Promise<DataType>,
 ) => {
   interface ResultingFunction {
-    (...args: ArgsType): DataType | undefined
+    (...args: ArgsType): DataType | undefined | NetworkError | Error
     (
       ...args: {
         // Pass the first parameter as `undefined` to skip fetching
-        [K in keyof ArgsType]: ArgsType[K] | undefined
+        [K in keyof ArgsType]: ArgsType[K] | undefined | NetworkError | Error
       }
     ): DataType | undefined
   }
@@ -51,7 +51,7 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
       return () => p.cancel()
     }, args)
 
-    if (networkData && !(networkData instanceof Error)) {
+    if (networkData && !(networkData instanceof NetworkError)) {
       return networkData
     }
     return cacheData
