@@ -71,25 +71,12 @@ const matchStyle = css`
 
 const undefinedMatchStyle = css`
   display: grid;
-  max-width: 100%;
+  max-width: 40rem;
   grid-template-columns: 100%;
   padding: 1.5rem;
-  grid-gap: 1.5rem;
+  grid-gap: 1rem;
   justify-items: center;
-
-  & > * {
-    max-width: 100%;
-    overflow-x: auto;
-  }
-
-  /* extra selectors for specificity */
-  a.${tableTeamStyle}.${redStyle} {
-    color: ${red};
-  }
-
-  a.${tableTeamStyle}.${blueStyle} {
-    color: ${blue};
-  }
+  overflow-x: auto;
 `
 
 const loadedMatchStyle = css`
@@ -225,14 +212,14 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     const matchName = matchKey.group + (matchKey.num ? ' ' + matchKey.num : '')
     if (match instanceof Error) {
       if (match instanceof ServerError) {
-        return matchName + `raised a server error: ${match.message}.`
+        return matchName + ` raised a server error.`
       }
       if (match instanceof NetworkError) {
-        return matchName + `raised a network error: ${match.message}.`
+        return matchName + ` raised a network error.`
       }
-      return matchName + `raised an error: ${match.message}.`
+      return matchName + ` raised an error.`
     }
-    return matchName + 'could not be found.'
+    return matchName + ' could not be found.'
   }
 
   if (!isData(match)) {
@@ -253,9 +240,13 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
             <div
               class={css`
                 font-size: 18pt;
+                overflow-wrap: normal;
+                text-align: center;
               `}
             >
               {matchUndefinedStatement(m, match)}
+              <br />
+              {match?.message}
             </div>
           </div>
           <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
