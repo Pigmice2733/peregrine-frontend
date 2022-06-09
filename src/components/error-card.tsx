@@ -13,7 +13,7 @@ interface Props {
 
 const cardStyle = css`
   display: grid;
-  max-width: 40rem;
+  max-width: 30rem;
   grid-template-columns: 100%;
   padding: 1.5rem;
   grid-gap: 1rem;
@@ -39,7 +39,7 @@ const ErrorCard = ({
       <Icon icon={mdiAlert} />
       <div
         class={css`
-          font-size: 18pt;
+          font-size: 16pt;
           font-family: monospace, sans-serif;
           overflow-wrap: normal;
           text-align: center;
