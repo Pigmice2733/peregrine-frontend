@@ -11,6 +11,7 @@ import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { isData } from '@/utils/is-data'
 import { NetworkError } from '@/api/base'
+import ErrorCard from '@/components/error-card'
 
 interface Props {
   eventKey: string
@@ -106,14 +107,21 @@ const Event = ({ eventKey }: Props) => {
             )}
           </div>
         </>
-      ) : eventInfo instanceof NetworkError ? (
-        <Heading level={1} class={headingStyle}>
-          Could not connect to server. Please check your connection.
-        </Heading>
       ) : (
-        <Heading level={1} class={headingStyle}>
-          This event doesn&rsquo;t exist. Press the back button to return home.
-        </Heading>
+        <ErrorCard
+          errorText={
+            eventInfo instanceof NetworkError
+              ? 'Could not connect to server.'
+              : "This event doesn't exist."
+          }
+          errorText2={
+            eventInfo instanceof NetworkError
+              ? 'Please check your connection.'
+              : undefined
+          }
+          buttonReference="/"
+          buttonText="Return to Existing Events"
+        />
       )}
     </Page>
   )
