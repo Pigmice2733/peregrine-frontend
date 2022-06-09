@@ -21,6 +21,19 @@ interface ErrorData {
   error: string
 }
 
+export class NetworkError extends Error {
+  name = 'NetworkError'
+}
+
+export class ServerError extends Error {
+  name = 'ServerError'
+  statusCode: number
+  constructor(message: string, code: number) {
+    super(message)
+    this.statusCode = code
+  }
+}
+
 export const request = <Expected>(
   method: HTTPMethod,
   endpoint: string,
@@ -33,12 +46,17 @@ export const request = <Expected>(
 
     onCancel(() => controller.abort())
     const jwt = await getWorkingJWT()
-    const resp = await fetch(apiUrl + endpoint + qs(params), {
-      method,
-      body: JSON.stringify(body),
-      headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
-      signal,
-    })
+    let resp: Response
+    try {
+      resp = await fetch(apiUrl + endpoint + qs(params), {
+        method,
+        body: JSON.stringify(body),
+        headers: jwt ? { Authorization: `Bearer ${jwt.raw}` } : {},
+        signal,
+      })
+    } catch (e) {
+      throw new NetworkError(e.message)
+    }
 
     const text = await resp.text()
 
@@ -53,12 +71,11 @@ export const request = <Expected>(
     if (resp.status === 401) removeAccessToken()
 
     if (typeof parsed === 'string') {
-      // eslint-disable-next-line caleb/unicorn/prefer-type-error
-      throw new Error(parsed)
+      throw new ServerError(
+        `${resp.status} from server: ${parsed}`,
+        resp.status,
+      )
     }
 
-    const error = new Error((parsed as ErrorData).error)
-    Object.assign(error, parsed)
-
-    throw error
+    throw new ServerError((parsed as ErrorData).error, resp.status)
   })

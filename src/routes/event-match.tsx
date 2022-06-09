@@ -1,7 +1,8 @@
+/* eslint-disable caleb/@typescript-eslint/no-unnecessary-condition */
 import Page from '@/components/page'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { MatchDetailsCard } from '@/components/match-card'
-import Loader from '@/components/loader'
+// import Loader from '@/components/loader'
 import Button from '@/components/button'
 import AnalysisTable from '@/components/analysis-table'
 import { getEventStats } from '@/api/stats/get-event-stats'
@@ -20,15 +21,17 @@ import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
 import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
+import { isData } from '@/utils/is-data'
+import Icon from '@/components/icon'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
-import Icon from '@/components/icon'
-import { mdiCloudOffOutline, mdiPlus } from '@mdi/js'
+import { mdiAlert, mdiCloudOffOutline, mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
 import {
   ConnectionType,
   useNetworkConnection,
 } from '@/utils/use-network-connection'
+import { NetworkError, ServerError } from '@/api/base'
 
 interface Props {
   eventKey: string
@@ -44,6 +47,18 @@ const blueStyle = css``
 // because we don't want grid-gap to be applied to the empty spacing columns
 
 const matchStyle = css`
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: 100%;
+  padding: 1.5rem;
+  grid-gap: 1.5rem;
+  justify-items: center;
+
+  & > * {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
   /* extra selectors for specificity */
   a.${tableTeamStyle}.${redStyle} {
     color: ${red};
@@ -54,30 +69,48 @@ const matchStyle = css`
   }
 `
 
+const undefinedMatchStyle = css`
+  display: grid;
+  max-width: 40rem;
+  grid-template-columns: 100%;
+  padding: 1.5rem;
+  grid-gap: 1rem;
+  justify-items: center;
+  overflow-x: auto;
+`
+
 const loadedMatchStyle = css`
   display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: 0.75rem;
+  grid-gap: 1rem;
+
+  & > * {
+    margin: 0.75rem;
+  }
+`
+
+const noVideosStyle = css`
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas:
     '. leftColumn .'
     'analysisTable analysisTable analysisTable';
-  padding: 0.75rem;
+
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       'leftColumn'
       'analysisTable';
   }
-  & > * {
-    margin: 0.75rem;
-  }
 `
 
 const matchWithVideoStyle = css`
   grid-template-columns: 1fr auto 30rem 1fr;
-  align-items: start;
   grid-template-areas:
     '. leftColumn rightColumn .'
     'analysisTable analysisTable analysisTable analysisTable';
+
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -131,7 +164,9 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       return getReports({ event: eventKey, match: matchKey })
     }
   }, [eventKey, matchKey, isOnline])
-  const schema = useSchema(isOnline ? event?.schemaId : undefined)
+  const schema = useSchema(
+    isOnline && isData(event) ? event.schemaId : undefined,
+  )
   const eventTeamsStats = usePromise(() => {
     if (isOnline) {
       return getEventStats(eventKey)
@@ -143,7 +178,16 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   )
 
   const matchHasBeenPlayed =
-    match?.blueScore !== undefined && match.redScore !== undefined
+    isData(match) &&
+    match.blueScore !== undefined &&
+    match.redScore !== undefined
+
+  // displayed name of the tab, defining here to avoid repeated code
+  const pageName =
+    m.group +
+    (m.num ? ' Match ' + m.num : '') +
+    ' - ' +
+    (isData(event) ? event.name : eventKey)
 
   // When the match loads (or changes),
   useEffect(() => {
@@ -151,155 +195,191 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }, [matchHasBeenPlayed])
 
   const teamsStats = usePromise(() => {
-    if (match && isOnline) {
+    if (isData(match) && isOnline) {
       return Promise.all(
         [...match.redAlliance, ...match.blueAlliance].map((t) =>
           getMatchTeamStats(eventKey, match.key, t).then(processTeamStats),
         ),
       )
     }
-  }, [match, isOnline])
+  }, [match])
+
+  // define what to put in the card if the match data can't be loaded
+  const matchUndefinedStatement = (
+    matchKey: typeof m,
+    match: Error | undefined,
+  ) => {
+    const matchName = matchKey.group + (matchKey.num ? ' ' + matchKey.num : '')
+    if (match instanceof Error) {
+      if (match instanceof ServerError) {
+        return matchName + ` raised a server error.`
+      }
+      if (match instanceof NetworkError) {
+        return matchName + ` raised a network error.`
+      }
+      return matchName + ` raised an error.`
+    }
+    return matchName + ' could not be found.'
+  }
+
+  if (!isData(match)) {
+    return (
+      /* if the match doesn't exist */
+      <Page back={`/events/${eventKey}`} name={pageName} class={matchStyle}>
+        <Card class={undefinedMatchStyle}>
+          <div
+            class={css`
+              display: grid;
+              grid-gap: 0 1rem;
+              align-items: center;
+              grid-template-columns: 1fr auto;
+            `}
+          >
+            <Icon icon={mdiAlert} />
+            {/* display text to show that the match doesn't exist */}
+            <div
+              class={css`
+                font-size: 18pt;
+                overflow-wrap: normal;
+                text-align: center;
+              `}
+            >
+              {matchUndefinedStatement(m, match)}
+              <br />
+              {match?.message}
+            </div>
+          </div>
+          <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
+        </Card>
+      </Page>
+    )
+  }
 
   return (
-    // page setup
-    <Page
+    <Page /* show match data if the match exists */
       back={`/events/${eventKey}`}
-      name={
-        m.group +
-        (m.num ? ' Match ' + m.num : '') +
-        ' - ' +
-        (event ? event.name : eventKey)
-      }
+      name={pageName}
       class={clsx(
-        matchStyle,
-        match && loadedMatchStyle,
-        match?.videos &&
-          match.videos.length > 0 &&
-          isOnline &&
-          matchWithVideoStyle,
+        loadedMatchStyle,
+        match.videos && match.videos.length > 0 && isOnline
+          ? matchWithVideoStyle
+          : noVideosStyle,
       )}
     >
-      {match ? (
-        <>
-          <div class={leftColumnStyle}>
-            {!isOnline && (
-              <Card class={offlineDisplayInfo}>
-                <div
-                  class={css`
-                    grid-area: iconArea;
-                    justify-self: right;
-                  `}
-                >
-                  <Icon icon={mdiCloudOffOutline} />
-                </div>
-                <div
-                  class={css`
-                    grid-area: title;
-                    justify-self: left;
-                    font-weight: bold;
-                  `}
-                >
-                  No Connection
-                </div>
-                <div
-                  class={css`
-                    grid-area: detail;
-                    justify-self: center;
-                  `}
-                >
-                  Showing limited information offline.
-                </div>
-              </Card>
-            )}
-            <MatchDetailsCard match={match} eventKey={eventKey} />
-            {reports && reports.length > 0 ? (
-              <MatchReports
-                match={match}
-                reports={reports}
-                eventKey={eventKey}
-              />
-            ) : (
-              // button to create a report
-              <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
-                Scout Match
-              </Button>
-            )}
-            {matchHasBeenPlayed /* final score if the match is over */ && (
-              <Card class={clsx(matchScoreStyle)}>
-                <div class={redScoreStyle}>{match.redScore}</div>
-                <div class={blueScoreStyle}>{match.blueScore}</div>
-              </Card>
-            )}
-          </div>
-          {schema && isOnline && (
-            // card including the analysis table and tabs for match/event data
-            <Card
+      <div class={leftColumnStyle}>
+        {!isOnline && (
+          <Card class={offlineDisplayInfo}>
+            <div
               class={css`
-                overflow-x: auto;
-                grid-area: analysisTable;
-                max-width: 100%;
+                grid-area: iconArea;
+                justify-self: right;
+              `}
+            >
+              <Icon icon={mdiCloudOffOutline} />
+            </div>
+            <div
+              class={css`
+                grid-area: title;
+                justify-self: left;
+                font-weight: bold;
+              `}
+            >
+              No Connection
+            </div>
+            <div
+              class={css`
+                grid-area: detail;
                 justify-self: center;
               `}
             >
-              <div class={displayModeSelectorStyle}>
-                <button
-                  class={clsx(
-                    selectedDisplay === showMatchResults &&
-                      activeDisplayModeStyle,
-                  )}
-                  onClick={() => setSelectedDisplay(showMatchResults)}
-                >
-                  {showMatchResults}
-                </button>
-                <button
-                  class={clsx(
-                    selectedDisplay === showEventResults &&
-                      activeDisplayModeStyle,
-                  )}
-                  onClick={() => setSelectedDisplay(showEventResults)}
-                >
-                  {showEventResults}
-                </button>
-              </div>
-              <AnalysisTable
-                eventKey={eventKey}
-                teams={
-                  selectedDisplay === showEventResults
-                    ? eventTeamsStats?.filter((t) =>
-                        matchHasTeam('frc' + t.team)(match),
-                      )
-                    : teamsStats
-                }
-                schema={schema}
-                renderTeam={(team, link) => (
-                  <a
-                    class={clsx(
-                      tableTeamStyle,
-                      match.redAlliance.includes('frc' + team)
-                        ? redStyle
-                        : blueStyle,
-                    )}
-                    href={link}
-                  >
-                    {team}
-                  </a>
+              Showing limited information offline.
+            </div>
+          </Card>
+        )}
+        <MatchDetailsCard match={match} eventKey={eventKey} />
+        {isData(reports) && reports.length > 0 ? (
+          <MatchReports match={match} reports={reports} eventKey={eventKey} />
+        ) : (
+          // button to create a report
+          <Button href={`/events/${eventKey}/matches/${matchKey}/scout`}>
+            Scout Match
+          </Button>
+        )}
+        {matchHasBeenPlayed /* final score if the match is over */ && (
+          <Card class={clsx(matchScoreStyle)}>
+            <div class={redScoreStyle}>{match.redScore}</div>
+            <div class={blueScoreStyle}>{match.blueScore}</div>
+          </Card>
+        )}
+      </div>
+      {schema && isOnline && (
+        // card including the analysis table and tabs for match/event data
+        <Card
+          class={css`
+            overflow-x: auto;
+            grid-area: analysisTable;
+            max-width: 100%;
+            justify-self: center;
+          `}
+        >
+          <div class={displayModeSelectorStyle}>
+            <button
+              class={clsx(
+                selectedDisplay === showMatchResults && activeDisplayModeStyle,
+              )}
+              onClick={() => setSelectedDisplay(showMatchResults)}
+            >
+              {showMatchResults}
+            </button>
+            <button
+              class={clsx(
+                selectedDisplay === showEventResults && activeDisplayModeStyle,
+              )}
+              onClick={() => setSelectedDisplay(showEventResults)}
+            >
+              {showEventResults}
+            </button>
+          </div>
+          <AnalysisTable
+            eventKey={eventKey}
+            teams={
+              selectedDisplay === showEventResults
+                ? isData(eventTeamsStats)
+                  ? eventTeamsStats.filter((t: { team: string }) =>
+                      // eslint-disable-next-line caleb/@typescript-eslint/restrict-plus-operands
+                      matchHasTeam('frc' + t.team)(match),
+                    )
+                  : undefined
+                : isData(teamsStats)
+                ? teamsStats
+                : undefined
+            }
+            schema={isData(schema) ? schema : { id: 0, schema: [] }}
+            renderTeam={(team, link) => (
+              <a
+                class={clsx(
+                  tableTeamStyle,
+                  match.redAlliance.includes('frc' + team)
+                    ? redStyle
+                    : blueStyle,
                 )}
-                renderBoolean={
-                  selectedDisplay === showMatchResults
-                    ? (cell) => <BooleanDisplay value={cell.avg === 1} />
-                    : undefined
-                }
-                enableSettings={selectedDisplay !== showMatchResults}
-              />
-            </Card>
-          )}
-          {/* shows videos if the match has them and online */}
-          {isOnline && match.videos && match.videos.length > 0 && (
-            <VideoList videos={match.videos} />
-          )}
-        </>
-      ) : (
-        <Loader />
+                href={link}
+              >
+                {team}
+              </a>
+            )}
+            renderBoolean={
+              selectedDisplay === showMatchResults
+                ? (cell) => <BooleanDisplay value={cell.avg === 1} />
+                : undefined
+            }
+            enableSettings={selectedDisplay !== showMatchResults}
+          />
+        </Card>
+      )}
+      {/* shows videos if the match has them and online */}
+      {isOnline && match.videos && match.videos.length > 0 && (
+        <VideoList videos={match.videos} />
       )}
     </Page>
   )
