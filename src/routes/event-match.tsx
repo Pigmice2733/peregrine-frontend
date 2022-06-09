@@ -25,13 +25,14 @@ import { isData } from '@/utils/is-data'
 import Icon from '@/components/icon'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
-import { mdiAlert, mdiCloudOffOutline, mdiPlus } from '@mdi/js'
+import { mdiCloudOffOutline, mdiPlus } from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
 import {
   ConnectionType,
   useNetworkConnection,
 } from '@/utils/use-network-connection'
 import { NetworkError, ServerError } from '@/api/base'
+import ErrorCard from '@/components/error-card'
 
 interface Props {
   eventKey: string
@@ -67,16 +68,6 @@ const matchStyle = css`
   a.${tableTeamStyle}.${blueStyle} {
     color: ${blue};
   }
-`
-
-const undefinedMatchStyle = css`
-  display: grid;
-  max-width: 40rem;
-  grid-template-columns: 100%;
-  padding: 1.5rem;
-  grid-gap: 1rem;
-  justify-items: center;
-  overflow-x: auto;
 `
 
 const loadedMatchStyle = css`
@@ -226,31 +217,12 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     return (
       /* if the match doesn't exist */
       <Page back={`/events/${eventKey}`} name={pageName} class={matchStyle}>
-        <Card class={undefinedMatchStyle}>
-          <div
-            class={css`
-              display: grid;
-              grid-gap: 0 1rem;
-              align-items: center;
-              grid-template-columns: 1fr auto;
-            `}
-          >
-            <Icon icon={mdiAlert} />
-            {/* display text to show that the match doesn't exist */}
-            <div
-              class={css`
-                font-size: 18pt;
-                overflow-wrap: normal;
-                text-align: center;
-              `}
-            >
-              {matchUndefinedStatement(m, match)}
-              <br />
-              {match?.message}
-            </div>
-          </div>
-          <Button href={`/events/${eventKey}`}> Return to Event Page</Button>
-        </Card>
+        <ErrorCard
+          errorText={matchUndefinedStatement(m, match)}
+          errorText2={match?.message}
+          buttonText="Return to Event Page"
+          buttonReference={`/events/${eventKey}`}
+        />
       </Page>
     )
   }
