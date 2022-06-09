@@ -8,7 +8,7 @@ import { css } from 'linaria'
 import { mdiClose } from '@mdi/js'
 import Icon from './components/icon'
 import { createShadow } from './utils/create-shadow'
-import errorPage from './routes/404-error'
+import ErrorCard from './components/error-card'
 
 type AnyComponent = ComponentType<any> | ((props: any) => VNode<any> | null)
 
@@ -119,7 +119,17 @@ export const Router = ({ routes }: { routes: Route[] }) => {
         .catch(() => location.reload())
   }, [matchingRoute, matchingRouteObj, path])
 
-  if (matchingFullRoute === null) return errorPage
+  if (matchingFullRoute === null)
+    return (
+      <ErrorCard
+        errorText={'The requested URL was not found.'}
+        errorText2={
+          'Use the back button to return to the previous page, or the button below to go to the home page.'
+        }
+        buttonText={'return to home page'}
+        buttonReference={'/'}
+      />
+    )
 
   if (ResolvedComponent) {
     return (
