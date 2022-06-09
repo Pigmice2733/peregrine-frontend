@@ -6,7 +6,6 @@ import Icon from './icon'
 import { mdiMessageReplyText } from '@mdi/js'
 import { formatUserName } from '@/utils/format-user-name'
 import { getFastestUser } from '@/cache/users/get-fastest'
-import { isData } from '@/utils/is-data'
 
 const commentCardStyle = css`
   display: grid;
@@ -53,11 +52,7 @@ export const CommentCard = ({
       class={commentCardStyle}
     >
       <Icon icon={mdiMessageReplyText} />
-      {showReporter && (
-        <span>
-          {formatUserName(isData(reporter) ? reporter : undefined, reporterId)}
-        </span>
-      )}
+      {showReporter && <span>{formatUserName(reporter, reporterId)}</span>}
       <p>{report.comment}</p>
     </Card>
   )

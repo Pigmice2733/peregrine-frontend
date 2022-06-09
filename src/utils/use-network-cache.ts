@@ -15,18 +15,18 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
   cacheGetter: (...args: ArgsType) => Promise<DataType>,
 ) => {
   interface ResultingFunction {
-    (...args: ArgsType): DataType | undefined | NetworkError | Error
+    (...args: ArgsType): DataType | undefined | Error
     (
       ...args: {
         // Pass the first parameter as `undefined` to skip fetching
         [K in keyof ArgsType]: ArgsType[K] | undefined
       }
-    ): DataType | undefined | NetworkError | Error
+    ): DataType | undefined | Error
   }
   /* eslint-disable caleb/react-hooks/rules-of-hooks, caleb/react-hooks/exhaustive-deps */
   const resultingFunction: ResultingFunction = (...args: any[]) => {
     const [networkData, setNetworkData] = useState<
-      DataType | undefined | NetworkError | Error
+      DataType | undefined | Error
     >(undefined)
     const [cacheData, setCacheData] = useState<DataType | undefined>(undefined)
 
@@ -51,7 +51,10 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
       return () => p.cancel()
     }, args)
 
-    if (networkData && !(networkData instanceof NetworkError)) {
+    if (networkData) {
+      if (networkData instanceof NetworkError && cacheData) {
+        return cacheData
+      }
       return networkData
     }
     if (!cacheData) {

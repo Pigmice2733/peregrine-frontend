@@ -25,7 +25,6 @@ import { usePromise } from '@/utils/use-promise'
 import { getEventTeams } from '@/api/event-team-info/get-event-teams'
 import { eventTeamUrl } from '@/utils/urls/event-team'
 import { EventTeamInfo } from '@/api/event-team-info'
-import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -225,10 +224,7 @@ const AnalysisTable = ({
   const rankColumn: Column<EventTeamInfo | undefined, RowType> = {
     title: 'Rank',
     key: 'Rank',
-    getCell: (row) =>
-      isData(rankingInfo)
-        ? rankingInfo.find((r) => r.team === 'frc' + row.team)
-        : undefined,
+    getCell: (row) => rankingInfo?.find((r) => r.team === 'frc' + row.team),
     getCellValue: (cell) => cell?.rank ?? Infinity,
     renderCell: (cell) => (
       <td class={rankCellStyle}>

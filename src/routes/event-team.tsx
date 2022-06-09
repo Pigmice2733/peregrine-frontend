@@ -27,7 +27,6 @@ import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
-import { isData } from '@/utils/is-data'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -163,11 +162,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum).catch(() => undefined),
     [eventKey, teamNum],
   )
-  const schema = useSchema(isData(eventInfo) ? eventInfo.schemaId : undefined)
-  let teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
-  teamMatches = isData(teamMatches)
-    ? teamMatches.sort(compareMatches)
-    : undefined
+  const schema = useSchema(eventInfo?.schemaId)
+  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
+    compareMatches,
+  )
 
   const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
 
@@ -205,7 +203,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       )}
       <EventTeamInfoCard
         eventKey={eventKey}
-        eventTeamInfo={isData(eventTeamInfo) ? eventTeamInfo : undefined}
+        eventTeamInfo={eventTeamInfo}
         teamMatches={teamMatches}
       />
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
@@ -218,7 +216,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
         <ChartCard
           team={'frc' + teamNum}
           eventKey={eventKey}
-          schema={isData(schema) ? schema : { id: -1, schema: [] }}
+          schema={schema}
           teamMatches={teamMatches}
         />
       )}
