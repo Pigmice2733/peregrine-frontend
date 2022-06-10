@@ -210,6 +210,12 @@ export const ReportEditor = ({
     }
   }
   const handleDelete = async (e: Event) => {
+    const confirmDelete = await createDialog({
+      confirm: 'Delete Report',
+      dismiss: 'Cancel',
+      description: '',
+      title: 'Confirm Delete',
+    })
     e.preventDefault()
     if (initialReport.key) {
       deleteReportLocally(initialReport.key)
