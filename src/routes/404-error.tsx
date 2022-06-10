@@ -18,7 +18,7 @@ const errorPage = (
         font-size: 48pt;
         font-weight: bold;
         margin: 1rem;
-        font-family: monospace, sans-serif;
+        font-family: sans-serif;
       `}
     >
       404
