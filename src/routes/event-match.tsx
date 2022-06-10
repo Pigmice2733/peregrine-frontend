@@ -152,7 +152,6 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
-  const matchRedAlliance = isData(match) ? match.redAlliance : []
   const reports = usePromise(() => {
     if (isOnline) {
       return getReports({ event: eventKey, match: matchKey })
