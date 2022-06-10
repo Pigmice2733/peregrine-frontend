@@ -5,6 +5,7 @@ import { css } from 'linaria'
 import { mdiAccountCircle } from '@mdi/js'
 import { pigmicePurple } from '@/colors'
 import { getFastestUser } from '@/cache/users/get-fastest'
+import { isData } from '@/utils/is-data'
 
 export const ProfileLink = ({
   reporterId,
@@ -26,7 +27,7 @@ export const ProfileLink = ({
       class={reporterStyle}
     >
       <Icon icon={mdiAccountCircle} />
-      {formatUserName(reporter, reporterId)}
+      {formatUserName(isData(reporter) ? reporter : undefined, reporterId)}
     </El>
   )
 }

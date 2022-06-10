@@ -24,6 +24,7 @@ import { cleanFieldName } from '@/utils/clean-field-name'
 import { getFieldKey } from '@/utils/get-field-key'
 import { getReports } from '@/api/report/get-reports'
 import { GetReport } from '@/api/report'
+import { isData } from '@/utils/is-data'
 
 const commentsDisplayStyle = css`
   grid-column: 1 / -1;
@@ -106,7 +107,7 @@ export const ChartCard = ({
     return matchesAutoFieldName || matchesTeleopFieldName
   })?.name
 
-  const matchesWithSelectedStat = (matchesStats || [])
+  const matchesWithSelectedStat = (isData(matchesStats) ? matchesStats : [])
     .map(({ matchKey, stats }) => {
       const matchingStat = stats.find((f) => f.name === fullFieldName)
       if (matchingStat) return { matchKey, matchingStat }
@@ -190,7 +191,11 @@ export const ChartCard = ({
         </div>
         {selectedMatchKey && (
           <CommentsDisplay
-            reports={allReports.filter((r) => r.matchKey === selectedMatchKey)}
+            reports={
+              isData(allReports)
+                ? allReports.filter((r) => r.matchKey === selectedMatchKey)
+                : []
+            }
           />
         )}
       </div>

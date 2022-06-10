@@ -9,6 +9,7 @@ import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -51,7 +52,9 @@ const noMatchesStyle = css`
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
+  const newestIncompleteMatch = isData(matches)
+    ? nextIncompleteMatch(matches)
+    : undefined
 
   return (
     <Page
@@ -63,7 +66,7 @@ const Event = ({ eventKey }: Props) => {
         <Heading level={2} class={headingStyle}>
           Information
         </Heading>
-        {eventInfo && <EventInfoCard event={eventInfo} />}
+        {isData(eventInfo) && <EventInfoCard event={eventInfo} />}
         <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
       </div>
 
@@ -79,7 +82,7 @@ const Event = ({ eventKey }: Props) => {
             link
           />
         )}
-        {matches ? (
+        {isData(matches) ? (
           matches.length > 0 ? (
             <EventMatches matches={matches} eventKey={eventKey} />
           ) : (

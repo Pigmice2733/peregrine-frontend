@@ -12,6 +12,7 @@ import { CommentCard } from './comment-card'
 import { css } from 'linaria'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { ProfileLink } from './profile-link'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   report: Report
@@ -66,14 +67,14 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
   const matchInfo = useMatchInfo(report.eventKey, report.matchKey)
-  const schema = useSchema(eventInfo?.schemaId)
-  const displayableFields = schema?.schema.filter(
-    (field) => field.reportReference !== undefined,
-  )
-  const autoFields = displayableFields?.filter(
+  const schema = useSchema(isData(eventInfo) ? eventInfo.schemaId : -1)
+  const displayableFields = isData(schema)
+    ? schema.schema.filter((field) => field.reportReference !== undefined)
+    : []
+  const autoFields = displayableFields.filter(
     (field) => field.period === 'auto',
   )
-  const teleopFields = displayableFields?.filter(
+  const teleopFields = displayableFields.filter(
     (field) => field.period === 'teleop',
   )
   return (
@@ -97,7 +98,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
 
       {/* teams in match */}
       <div>
-        {matchInfo && (
+        {isData(matchInfo) && (
           <TeamPicker
             redAlliance={matchInfo.redAlliance}
             blueAlliance={matchInfo.blueAlliance}
@@ -110,11 +111,11 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
       <div class={fieldValuesStyle}>
         {/* scores for each match detail */}
         <h3>Auto</h3>
-        {autoFields?.map((field) => (
+        {autoFields.map((field) => (
           <ReportFieldViewer field={field} report={report} key={field.name} />
         ))}
         <h3>Teleop</h3>
-        {teleopFields?.map((field) => (
+        {teleopFields.map((field) => (
           <ReportFieldViewer field={field} report={report} key={field.name} />
         ))}
       </div>

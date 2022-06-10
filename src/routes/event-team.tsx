@@ -27,6 +27,7 @@ import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
+import { isData } from '@/utils/is-data'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -162,12 +163,13 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum).catch(() => undefined),
     [eventKey, teamNum],
   )
-  const schema = useSchema(eventInfo?.schemaId)
-  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
-    compareMatches,
-  )
+  const schema = useSchema(isData(eventInfo) ? eventInfo.schemaId : -1)
+  const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)
+  const sortedTeamMatches = isData(teamMatches)
+    ? teamMatches.sort(compareMatches)
+    : undefined
 
-  const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
+  const nextMatch = sortedTeamMatches && nextIncompleteMatch(sortedTeamMatches)
 
   const savedTeams = useSavedTeams()
   const isTeamSaved = savedTeams.some(
@@ -179,7 +181,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       name={
         <span class={pageHeadingStyle}>
           <span class={teamHeadingSpanStyle}>{`${teamNum} @ ${
-            eventInfo ? eventInfo.name : eventKey
+            isData(eventInfo) ? eventInfo.name : eventKey
           }`}</span>
           <IconButton
             icon={isTeamSaved ? mdiStar : mdiStarOutline}
@@ -203,8 +205,8 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       )}
       <EventTeamInfoCard
         eventKey={eventKey}
-        eventTeamInfo={eventTeamInfo}
-        teamMatches={teamMatches}
+        eventTeamInfo={isData(eventTeamInfo) ? eventTeamInfo : undefined}
+        teamMatches={sortedTeamMatches}
       />
       <Button href={`/events/${eventKey}/teams/${teamNum}/comments`}>
         View all comments
@@ -212,12 +214,12 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       <Button href={`/events/${eventKey}/teams/${teamNum}/matches`}>
         View Matches
       </Button>
-      {teamMatches && schema && (
+      {sortedTeamMatches && isData(schema) && (
         <ChartCard
           team={'frc' + teamNum}
           eventKey={eventKey}
           schema={schema}
-          teamMatches={teamMatches}
+          teamMatches={sortedTeamMatches}
         />
       )}
     </Page>

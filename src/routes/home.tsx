@@ -13,6 +13,7 @@ import { UnstyledList } from '@/components/unstyled-list'
 import { useYears } from '@/utils/use-years'
 import IconButton from '@/components/icon-button'
 import { mdiCrosshairsGps } from '@mdi/js'
+import { isData } from '@/utils/is-data'
 
 const homeStyle = css`
   display: grid;
@@ -46,7 +47,8 @@ const Home = () => {
   const [location, prompt] = useGeoLocation()
   const [query, setQuery] = useState('')
   const lowerCaseQuery = query.toLowerCase()
-  const years = useYears().sort().reverse()
+  const getYears = useYears()
+  const years = isData(getYears) ? getYears.sort().reverse() : []
   const [yearVal, setYear] = useQueryState('year', years[0])
   const year = Number(yearVal)
   const events = useEvents(year)
@@ -65,7 +67,7 @@ const Home = () => {
         )}
       </div>
 
-      {events ? (
+      {isData(events) ? (
         <>
           <UnstyledList class={matchListStyle}>
             {events
