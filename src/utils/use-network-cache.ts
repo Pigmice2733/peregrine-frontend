@@ -57,6 +57,9 @@ export const useNetworkCache = <DataType, ArgsType extends any[]>(
       }
       return networkData
     }
+    if (!cacheData) {
+      return networkData
+    }
     return cacheData
   }
   return resultingFunction
