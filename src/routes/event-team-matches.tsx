@@ -4,6 +4,7 @@ import { useEventMatches } from '@/cache/event-matches/use'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { css } from 'linaria'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -29,7 +30,7 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
       back={`/events/${eventKey}/teams/${teamNum}`}
       class={eventTeamMatchesStyle}
     >
-      {matches ? (
+      {isData(matches) ? (
         <EventMatches matches={matches} eventKey={eventKey} />
       ) : (
         <Loader />

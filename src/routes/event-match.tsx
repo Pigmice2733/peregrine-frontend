@@ -15,8 +15,8 @@ import { useSchema } from '@/cache/schema/use'
 import { useState, useEffect } from 'preact/hooks'
 import Card from '@/components/card'
 import { red, blue, faintGrey, pigmicePurple } from '@/colors'
-import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
-import { processTeamStats } from '@/api/stats'
+/* import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
+import { processTeamStats } from '@/api/stats' */
 import { BooleanDisplay } from '@/components/boolean-display'
 import { matchHasTeam } from '@/utils/match-has-team'
 import { VideoCard } from '@/components/video-card'
@@ -31,6 +31,8 @@ import {
   ConnectionType,
   useNetworkConnection,
 } from '@/utils/use-network-connection'
+import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
+import { processTeamStats } from '@/api/stats'
 import { NetworkError, ServerError } from '@/api/base'
 import ErrorCard from '@/components/error-card'
 
@@ -150,6 +152,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
+  const matchRedAlliance = isData(match) ? match.redAlliance : []
   const reports = usePromise(() => {
     if (isOnline) {
       return getReports({ event: eventKey, match: matchKey })
@@ -353,6 +356,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       {isOnline && match.videos && match.videos.length > 0 && (
         <VideoList videos={match.videos} />
       )}
+      {isData(match) &&
+        match.videos?.map((v) => (
+          <VideoCard key={v} url={cleanYoutubeUrl(v)} />
+        ))}
     </Page>
   )
 }
