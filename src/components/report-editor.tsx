@@ -26,13 +26,11 @@ import { mdiAccountCircle } from '@mdi/js'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { matchHasTeam } from '@/utils/match-has-team'
-import { request } from '@/api/base'
 import { createDialog } from './dialog'
-import { createAlert } from '@/router'
-import { AlertType } from './alert'
 import Loader from './loader'
 import Card from './card'
 import { isData } from '@/utils/is-data'
+import { getReports } from '@/api/report/get-reports'
 
 const reportEditorStyle = css`
   padding: 1.5rem 2rem;
@@ -169,52 +167,47 @@ export const ReportEditor = ({
   }
   const report = getReportIfValid()
 
-  const submit = (e: Event) => {
+  const submit = async (e: Event) => {
     e.preventDefault()
     if (!report) return
     setIsSaving(true)
-    uploadReport(report)
-      .then((id) => {
-        onSaveSuccess({ ...report, id })
-      })
-      .catch(async (error: { error?: string; id?: number }) => {
-        if (error.error === 'conflicts' && error.id !== undefined) {
-          const conflictingId = error.id
-          const shouldOverride = await createDialog({
-            confirm: `Override Report ${conflictingId}`,
-            dismiss: 'Cancel',
-            description: `There is already a report with the same reporter, team, and match.`,
-            title: `This report conflicts with report ${conflictingId}`,
-          })
-          if (shouldOverride) {
-            await request<null>(
-              'PUT',
-              `reports/${report.id}`,
-              { replace: true },
-              report,
-            )
-            createAlert({
-              type: AlertType.Success,
-              message: `Report ${conflictingId} was overridden`,
-            })
-            onSaveSuccess(report as GetReport)
-          }
-          if (report.key) {
-            deleteReportLocally(report.key)
-            onDelete?.()
-          }
-        } else {
+    const matchReports = await getReports({
+      event: report.eventKey,
+      match: report.matchKey,
+    })
+    let shouldOverride = true
+    for (const conflictReport of matchReports) {
+      if (
+        conflictReport.id !== report.id &&
+        conflictReport.teamKey === report.teamKey &&
+        conflictReport.reporterId === report.reporterId
+      ) {
+        const conflictingId = conflictReport.id
+        shouldOverride = await createDialog({
+          confirm: `Override Report ${conflictingId}`,
+          dismiss: 'Cancel',
+          description: `There is already a report with the same reporter, team, and match.`,
+          title: `This report conflicts with report ${conflictingId}.`,
+        })
+      }
+    }
+    if (shouldOverride) {
+      uploadReport(report)
+        .then((id) => {
+          onSaveSuccess({ ...report, id })
+        })
+        .catch(() => {
           const reportWithKey = {
             ...report,
             key: initialReport.key || generateReportKey(),
           }
           saveReportLocally(reportWithKey)
           if (onSaveLocally) onSaveLocally(reportWithKey)
-        }
-      })
-      .finally(() => {
-        setIsSaving(false)
-      })
+        })
+        .finally(() => {
+          setIsSaving(false)
+        })
+    }
   }
   const handleDelete = async (e: Event) => {
     e.preventDefault()
