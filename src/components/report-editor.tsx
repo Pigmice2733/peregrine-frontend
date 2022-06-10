@@ -216,18 +216,20 @@ export const ReportEditor = ({
       description: '',
       title: 'Confirm Delete',
     })
-    e.preventDefault()
-    if (initialReport.key) {
-      deleteReportLocally(initialReport.key)
-    } else {
-      const reportId = initialReport.id
-      if (reportId !== undefined) {
-        setIsDeleting(true)
-        await deleteReport(reportId)
-        setIsDeleting(false)
+    if (confirmDelete) {
+      e.preventDefault()
+      if (initialReport.key) {
+        deleteReportLocally(initialReport.key)
+      } else {
+        const reportId = initialReport.id
+        if (reportId !== undefined) {
+          setIsDeleting(true)
+          await deleteReport(reportId)
+          setIsDeleting(false)
+        }
       }
+      onDelete?.()
     }
-    onDelete?.()
   }
   const reportAlreadyExists =
     initialReport.key !== undefined || initialReport.id !== undefined
