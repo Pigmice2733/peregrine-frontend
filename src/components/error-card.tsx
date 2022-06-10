@@ -13,7 +13,7 @@ interface Props {
 
 const cardStyle = css`
   display: grid;
-  max-width: 40rem;
+  max-width: 27.5rem;
   grid-template-columns: 100%;
   padding: 1.5rem;
   grid-gap: 1rem;
@@ -40,7 +40,7 @@ const ErrorCard = ({
       <div
         class={css`
           font-size: 18pt;
-          font-family: monospace, sans-serif;
+          font-family: sans-serif;
           overflow-wrap: normal;
           text-align: center;
         `}
@@ -49,7 +49,7 @@ const ErrorCard = ({
         {errorText2 && (
           <>
             <br />
-            <code> {errorText2} </code>
+            {errorText2}
           </>
         )}
       </div>

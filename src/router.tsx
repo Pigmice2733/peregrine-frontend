@@ -8,6 +8,7 @@ import { css } from 'linaria'
 import { mdiClose } from '@mdi/js'
 import Icon from './components/icon'
 import { createShadow } from './utils/create-shadow'
+import errorPage from './routes/404-error'
 
 type AnyComponent = ComponentType<any> | ((props: any) => VNode<any> | null)
 
@@ -118,7 +119,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
         .catch(() => location.reload())
   }, [matchingRoute, matchingRouteObj, path])
 
-  if (matchingFullRoute === null) return <h1>404</h1>
+  if (matchingFullRoute === null) return errorPage
 
   if (ResolvedComponent) {
     return (
