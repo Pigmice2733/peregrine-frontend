@@ -204,10 +204,8 @@ export const ReportEditor = ({
           saveReportLocally(reportWithKey)
           if (onSaveLocally) onSaveLocally(reportWithKey)
         })
-        .finally(() => {
-          setIsSaving(false)
-        })
     }
+    setIsSaving(false)
   }
   const handleDelete = async (e: Event) => {
     const confirmDelete = await createDialog({
