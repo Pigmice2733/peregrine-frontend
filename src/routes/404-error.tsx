@@ -8,12 +8,21 @@ const errorPage = (
       max-width: 100%;
       grid-template-columns: 100%;
       grid-template-rows: 1fr auto;
-      padding: 1.5rem;
+      padding: 1rem;
       grid-gap: 0rem;
       justify-items: center;
     `}
   >
-    <h1 style={`font-size: 36pt; font-weight: bold;`}>404</h1>
+    <h1
+      class={css`
+        font-size: 48pt;
+        font-weight: bold;
+        margin: 1rem;
+        font-family: monospace, sans-serif;
+      `}
+    >
+      404
+    </h1>
     <ErrorCard
       errorText={'The requested URL was not found.'}
       errorText2={'Use the button below to go to the home page.'}
