@@ -76,8 +76,7 @@ const Event = ({ eventKey }: Props) => {
         <>
           <div class={sectionStyle}>
             <Heading level={2} class={headingStyle}>
-              {' '}
-              Information{' '}
+              Information
             </Heading>
             {isData(eventInfo) && <EventInfoCard event={eventInfo} />}
 
@@ -120,7 +119,7 @@ const Event = ({ eventKey }: Props) => {
               : undefined
           }
           buttonReference="/"
-          buttonText="Return to Existing Events"
+          buttonText="Return to home page"
         />
       )}
     </Page>
