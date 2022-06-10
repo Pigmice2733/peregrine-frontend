@@ -39,7 +39,7 @@ const ErrorCard = ({
       <Icon icon={mdiAlert} />
       <div
         class={css`
-          font-size: 16pt;
+          font-size: 18pt;
           font-family: monospace, sans-serif;
           overflow-wrap: normal;
           text-align: center;
