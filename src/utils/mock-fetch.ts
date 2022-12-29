@@ -7,7 +7,7 @@ interface URLMap {
   [url: string]: any
 }
 
-const createHandler = (urls: URLMap): typeof window.fetch => async (
+const createHandler = (urls: URLMap) => async (
   req: RequestInfo,
   // eslint-disable-next-line caleb/@typescript-eslint/require-await
 ) => {
@@ -31,5 +31,5 @@ const createHandler = (urls: URLMap): typeof window.fetch => async (
 }
 
 export const mockFetch = (urls: URLMap) => {
-  jest.spyOn(window, 'fetch').mockImplementation(createHandler(urls))
+  jest.spyOn(window, 'fetch').mockImplementation(createHandler(urls) as any)
 }
