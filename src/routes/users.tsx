@@ -1,10 +1,10 @@
-import Page from '@/components/page'
-import { getUsers } from '@/api/user/get-users'
-import Loader from '@/components/loader'
-import Authenticated from '@/components/authenticated'
+import Page from 'src/components/page'
+import { getUsers } from 'src/api/user/get-users'
+import Loader from 'src/components/loader'
+import Authenticated from 'src/components/authenticated'
 import { useState, useEffect } from 'preact/hooks'
-import { useErrorEmitter } from '@/components/error-boundary'
-import { UserInfo } from '@/api/user'
+import { useErrorEmitter } from 'src/components/error-boundary'
+import { UserInfo } from 'src/api/user'
 import {
   Table,
   Row,
@@ -12,17 +12,17 @@ import {
   createTextColumn,
   createNumberColumn,
   createBooleanColumn,
-} from '@/components/table'
-import Card from '@/components/card'
-import { css } from 'linaria'
-import { getRealms } from '@/api/realm/get-realms'
-import { Realm } from '@/api/realm'
-import { usePromise } from '@/utils/use-promise'
+} from 'src/components/table'
+import Card from 'src/components/card'
+import { css } from '@linaria/core'
+import { getRealms } from 'src/api/realm/get-realms'
+import { Realm } from 'src/api/realm'
+import { usePromise } from 'src/utils/use-promise'
 import {
   tablePageStyle,
   tablePageWrapperStyle,
   tablePageTableStyle,
-} from '@/utils/table-page-style'
+} from 'src/utils/table-page-style'
 
 const userLinkStyle = css`
   display: block;

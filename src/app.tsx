@@ -1,15 +1,14 @@
-import 'preact/debug'
 import './style.css'
 import { Router } from './router'
 import { DialogDisplayer } from './components/dialog'
 import routes from './routes'
-import GAnalytics from 'ganalytics'
-import { requestIdleCallback } from '@/utils/request-idle-callback'
-import { uploadSavedReports } from './api/report/submit-report'
+// import GAnalytics from 'ganalytics'
+// import { requestIdleCallback } from 'src/utils/request-idle-callback'
+// import { uploadSavedReports } from './api/report/submit-report'
 import { ErrorBoundary } from './components/error-boundary'
-import { addUrlListener } from './url-manager'
+// import { addUrlListener } from './url-manager'
 
-if (process.env.NODE_ENV === 'production') {
+/* if (process.env.NODE_ENV === 'production') {
   const ga = GAnalytics('UA-144107080-1', {}, true)
   addUrlListener(() =>
     requestIdleCallback(() => {
@@ -24,6 +23,7 @@ if (process.env.NODE_ENV === 'production') {
 
 setTimeout(uploadSavedReports, 2_000)
 setInterval(uploadSavedReports, 30_000)
+*/
 
 const App = () => (
   <>

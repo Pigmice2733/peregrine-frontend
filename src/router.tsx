@@ -1,10 +1,10 @@
 import { ComponentType, VNode } from 'preact'
 import { useState, useEffect, useMemo, useLayoutEffect } from 'preact/hooks'
 import { parse, match, exec } from 'matchit'
-import Loader from '@/components/loader'
+import Loader from 'src/components/loader'
 import { updateUrl, useUrl } from './url-manager'
-import Alert, { AlertType } from '@/components/alert'
-import { css } from 'linaria'
+import Alert, { AlertType } from 'src/components/alert'
+import { css } from '@linaria/core'
 import { mdiClose } from '@mdi/js'
 import Icon from './components/icon'
 import { createShadow } from './utils/create-shadow'
@@ -115,7 +115,10 @@ export const Router = ({ routes }: { routes: Route[] }) => {
           setResolvedComponent(() => comp.default)
           setRouteProps(exec(path, matchingRoute))
         })
-        .catch(() => location.reload())
+        .catch((error) => {
+          console.log(error)
+          // location.reload()
+        })
   }, [matchingRoute, matchingRouteObj, path])
 
   if (matchingFullRoute === null) return <h1>404</h1>

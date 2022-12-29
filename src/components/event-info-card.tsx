@@ -10,9 +10,9 @@ import {
 } from '@mdi/js'
 import Icon from './icon'
 import Chip from './chip'
-import { formatDateRange } from '@/utils/format-date-range'
+import { formatDateRange } from 'src/utils/format-date-range'
 import IconButton from './icon-button'
-import { ProcessedEventInfo } from '@/api/event-info'
+import { ProcessedEventInfo } from 'src/api/event-info'
 
 const gcalDate = (date: Date, dateOffset = 0) => {
   return (

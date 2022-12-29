@@ -1,5 +1,5 @@
 import { Val as URLVal } from 'qss'
-import { useQueryParam, updateQueryParam } from '@/url-manager'
+import { useQueryParam, updateQueryParam } from 'src/url-manager'
 
 export const useQueryState = <DefaultVal extends URLVal = undefined>(
   name: string,

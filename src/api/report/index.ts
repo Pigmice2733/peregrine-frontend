@@ -1,4 +1,4 @@
-import { SetRequired } from '@/type-utils'
+import { SetRequired } from 'src/type-utils'
 
 export interface Field {
   name: string

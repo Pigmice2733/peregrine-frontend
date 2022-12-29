@@ -1,5 +1,5 @@
 import { transaction } from '..'
-import { Schema } from '@/api/schema'
+import { Schema } from 'src/api/schema'
 
 export const getCachedSchema = (id: number) =>
   transaction('schemas', (schemaStore) => {

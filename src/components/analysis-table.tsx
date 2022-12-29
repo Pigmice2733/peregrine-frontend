@@ -1,5 +1,5 @@
-import { Schema, StatDescription, StatType } from '@/api/schema'
-import { Stat, ProcessedTeamStats } from '@/api/stats'
+import { Schema, StatDescription, StatType } from 'src/api/schema'
+import { Stat, ProcessedTeamStats } from 'src/api/stats'
 import clsx from 'clsx'
 import {
   Table,
@@ -8,23 +8,23 @@ import {
   SortOrder,
   borderRightOnly,
   contextRowHeight,
-} from '@/components/table'
-import { formatPercent } from '@/utils/format-percent'
+} from 'src/components/table'
+import { formatPercent } from 'src/utils/format-percent'
 import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { createDialog } from './dialog'
-import { blue, red, grey, lightGrey, textGrey } from '@/colors'
+import { blue, red, grey, lightGrey, textGrey } from 'src/colors'
 import Icon from './icon'
 import { mdiCog } from '@mdi/js'
-import { round } from '@/utils/round'
+import { round } from 'src/utils/round'
 import Loader from './loader'
-import { cleanFieldName } from '@/utils/clean-field-name'
-import { getFieldKey } from '@/utils/get-field-key'
-import { usePromise } from '@/utils/use-promise'
-import { getEventTeams } from '@/api/event-team-info/get-event-teams'
-import { eventTeamUrl } from '@/utils/urls/event-team'
-import { EventTeamInfo } from '@/api/event-team-info'
+import { cleanFieldName } from 'src/utils/clean-field-name'
+import { getFieldKey } from 'src/utils/get-field-key'
+import { usePromise } from 'src/utils/use-promise'
+import { getEventTeams } from 'src/api/event-team-info/get-event-teams'
+import { eventTeamUrl } from 'src/utils/urls/event-team'
+import { EventTeamInfo } from 'src/api/event-team-info'
 
 interface Props {
   eventKey: string

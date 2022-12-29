@@ -1,5 +1,5 @@
-import { css } from 'linaria'
-import { pigmicePurple } from '@/colors'
+import { css } from '@linaria/core'
+import { pigmicePurple } from 'src/colors'
 import clsx from 'clsx'
 
 type level = 1 | 2 | 3 | 4 | 5 | 6

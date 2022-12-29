@@ -1,10 +1,10 @@
-import { ProcessedMatchInfo } from '@/api/match-info'
+import { ProcessedMatchInfo } from 'src/api/match-info'
 import TextInput from './text-input'
-import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
+import { compareMatches as compareMatchesChronologically } from 'src/utils/compare-matches'
 import { MatchDetailsCard } from './match-card'
 import { useState } from 'preact/hooks'
-import { css } from 'linaria'
-import { formatMatchKey } from '@/utils/format-match-key'
+import { css } from '@linaria/core'
+import { formatMatchKey } from 'src/utils/format-match-key'
 
 interface Props {
   matches: ProcessedMatchInfo[]

@@ -1,6 +1,6 @@
 import { ComponentChildren } from 'preact'
-import { css } from 'linaria'
-import { Merge } from '@/type-utils'
+import { css } from '@linaria/core'
+import { Merge } from 'src/type-utils'
 import { useRef } from 'preact/hooks'
 import clsx from 'clsx'
 

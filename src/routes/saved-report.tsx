@@ -1,11 +1,11 @@
-import { getSavedReports } from '@/api/report/submit-report'
+import { getSavedReports } from 'src/api/report/submit-report'
 import { ReportPage } from './report'
-import Page from '@/components/page'
-import { css } from 'linaria'
-import { route, createAlert } from '@/router'
+import Page from 'src/components/page'
+import { css } from '@linaria/core'
+import { route, createAlert } from 'src/router'
 import { useState, useEffect } from 'preact/hooks'
-import { Report } from '@/api/report'
-import { AlertType } from '@/components/alert'
+import { Report } from 'src/api/report'
+import { AlertType } from 'src/components/alert'
 
 const missingReportStyle = css`
   padding: 2rem;

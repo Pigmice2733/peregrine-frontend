@@ -1,10 +1,10 @@
-import Page from '@/components/page'
-import Authenticated from '@/components/authenticated'
-import { ReportEditor } from '@/components/report-editor'
-import { route } from '@/router'
-import { AlertType } from '@/components/alert'
-import { css } from 'linaria'
-import { updateUrl } from '@/url-manager'
+import Page from 'src/components/page'
+import Authenticated from 'src/components/authenticated'
+import { ReportEditor } from 'src/components/report-editor'
+import { route } from 'src/router'
+import { AlertType } from 'src/components/alert'
+import { css } from '@linaria/core'
+import { updateUrl } from 'src/url-manager'
 
 interface Props {
   eventKey: string

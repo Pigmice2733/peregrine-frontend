@@ -1,8 +1,8 @@
 import { request } from '../base'
 import { UserInfo } from '.'
-import { requestIdleCallback } from '@/utils/request-idle-callback'
-import { transaction } from '@/cache'
-import { idbPromise } from '@/utils/idb-promise'
+import { requestIdleCallback } from 'src/utils/request-idle-callback'
+import { transaction } from 'src/cache'
+import { idbPromise } from 'src/utils/idb-promise'
 
 const updateCachedUsers = (users: UserInfo[]) =>
   transaction(

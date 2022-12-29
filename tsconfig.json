@@ -11,14 +11,14 @@
     "allowJs": true,
     "checkJs": true,
     "moduleResolution": "node",
-    "module": "commonjs",
-    "target": "ESNext",
+    "module": "ES2022",
+    "target": "ES2022",
     "sourceMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "src/*": ["./src/*"]
     },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true

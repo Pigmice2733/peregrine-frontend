@@ -1,7 +1,7 @@
 import { request } from '../base'
 import { Schema } from '.'
-import { transaction } from '@/cache'
-import { requestIdleCallback } from '@/utils/request-idle-callback'
+import { transaction } from 'src/cache'
+import { requestIdleCallback } from 'src/utils/request-idle-callback'
 
 const updateCachedSchema = (id: number, schema: Schema) =>
   transaction(

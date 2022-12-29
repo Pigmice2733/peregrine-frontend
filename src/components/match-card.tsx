@@ -1,9 +1,9 @@
-import { formatMatchKey } from '@/utils/format-match-key'
-import { formatTime } from '@/utils/format-time'
-import { formatTeamNumber } from '@/utils/format-team-number'
-import Card from '@/components/card'
-import { css } from 'linaria'
-import { memo } from '@/utils/memo'
+import { formatMatchKey } from 'src/utils/format-match-key'
+import { formatTime } from 'src/utils/format-time'
+import { formatTeamNumber } from 'src/utils/format-team-number'
+import Card from 'src/components/card'
+import { css } from '@linaria/core'
+import { memo } from 'src/utils/memo'
 import clsx from 'clsx'
 
 interface MatchCardProps {

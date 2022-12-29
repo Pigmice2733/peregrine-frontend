@@ -1,7 +1,7 @@
-import { apiUrl } from '@/api/api-url'
-import { removeAccessToken, getWorkingJWT } from '@/jwt'
-import { HTTPMethod } from '@/utils/http-method'
-import { CancellablePromise } from '@/utils/cancellable-promise'
+import { apiUrl } from 'src/api/api-url'
+import { removeAccessToken, getWorkingJWT } from 'src/jwt'
+import { HTTPMethod } from 'src/utils/http-method'
+import { CancellablePromise } from 'src/utils/cancellable-promise'
 
 type QueryParams =
   | { [key: string]: string | number | undefined | boolean }

@@ -1,7 +1,7 @@
-import Icon from '@/components/icon'
-import { Falsy, Merge, PropsOf } from '@/type-utils'
-import Card from '@/components/card'
-import { css } from 'linaria'
+import Icon from 'src/components/icon'
+import { Falsy, Merge, PropsOf } from 'src/type-utils'
+import Card from 'src/components/card'
+import { css } from '@linaria/core'
 import clsx from 'clsx'
 
 const infoCardStyle = css`

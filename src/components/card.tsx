@@ -1,9 +1,9 @@
 import { VNode } from 'preact'
-import { PropsOf, ElementName } from '@/type-utils'
+import { PropsOf, ElementName } from 'src/type-utils'
 import clsx from 'clsx'
-import { css } from 'linaria'
-import { createShadow } from '@/utils/create-shadow'
-import { pxToRem } from '@/utils/px-to-rem'
+import { css } from '@linaria/core'
+import { createShadow } from 'src/utils/create-shadow'
+import { pxToRem } from 'src/utils/px-to-rem'
 
 const cardStyle = css`
   border-radius: ${pxToRem(4)};

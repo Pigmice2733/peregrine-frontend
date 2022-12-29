@@ -1,7 +1,7 @@
 import { RenderableProps } from 'preact'
 import { useState } from 'preact/hooks'
-import { css } from 'linaria'
-import { lightGrey, faintGrey, pigmicePurple } from '@/colors'
+import { css } from '@linaria/core'
+import { lightGrey, faintGrey, pigmicePurple } from 'src/colors'
 import clsx from 'clsx'
 import { BooleanDisplay } from './boolean-display'
 

@@ -1,24 +1,24 @@
-import TextInput from '@/components/text-input'
-import Card from '@/components/card'
-import Page from '@/components/page'
-import { createUser } from '@/api/user/create-user'
-import Button from '@/components/button'
+import TextInput from 'src/components/text-input'
+import Card from 'src/components/card'
+import Page from 'src/components/page'
+import { createUser } from 'src/api/user/create-user'
+import Button from 'src/components/button'
 import {
   minUsernameLength,
   maxUsernameLength,
   minPasswordLength,
   maxPasswordLength,
-} from '@/constants'
+} from 'src/constants'
 import { useState } from 'preact/hooks'
-import { css } from 'linaria'
-import { Form } from '@/components/form'
-import { Dropdown } from '@/components/dropdown'
-import { getRealms } from '@/api/realm/get-realms'
-import { usePromise } from '@/utils/use-promise'
-import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
-import { authenticate } from '@/api/authenticate'
-import { route } from '@/router'
-import { Realm } from '@/api/realm'
+import { css } from '@linaria/core'
+import { Form } from 'src/components/form'
+import { Dropdown } from 'src/components/dropdown'
+import { getRealms } from 'src/api/realm/get-realms'
+import { usePromise } from 'src/utils/use-promise'
+import { ErrorBoundary, useErrorEmitter } from 'src/components/error-boundary'
+import { authenticate } from 'src/api/authenticate'
+import { route } from 'src/router'
+import { Realm } from 'src/api/realm'
 
 const signUpStyle = css`
   padding: 1.5rem;

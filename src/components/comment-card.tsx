@@ -1,11 +1,11 @@
-import { css } from 'linaria'
-import { Report } from '@/api/report'
-import { usePromise } from '@/utils/use-promise'
+import { css } from '@linaria/core'
+import { Report } from 'src/api/report'
+import { usePromise } from 'src/utils/use-promise'
 import Card from './card'
 import Icon from './icon'
 import { mdiMessageReplyText } from '@mdi/js'
-import { formatUserName } from '@/utils/format-user-name'
-import { getFastestUser } from '@/cache/users/get-fastest'
+import { formatUserName } from 'src/utils/format-user-name'
+import { getFastestUser } from 'src/cache/users/get-fastest'
 
 const commentCardStyle = css`
   display: grid;

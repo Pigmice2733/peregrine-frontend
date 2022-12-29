@@ -1,5 +1,5 @@
-import { Roles } from '@/api/user'
-import { apiUrl } from '@/api/api-url'
+import { Roles } from 'src/api/user'
+import { apiUrl } from 'src/api/api-url'
 import { useState, useEffect } from 'preact/hooks'
 import { clearIndexedDB } from './cache'
 

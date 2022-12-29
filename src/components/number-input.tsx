@@ -1,6 +1,6 @@
-import { Merge } from '@/type-utils'
+import { Merge } from 'src/type-utils'
 import { InnerTextInput } from './text-input'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 
 type Props = Merge<
   JSX.HTMLAttributes,

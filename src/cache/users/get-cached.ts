@@ -1,6 +1,6 @@
 import { transaction } from '..'
-import { preventUndefinedResolve } from '@/utils/prevent-undefined-resolve'
-import { UserInfo } from '@/api/user'
+import { preventUndefinedResolve } from 'src/utils/prevent-undefined-resolve'
+import { UserInfo } from 'src/api/user'
 
 export const getCachedUser = (userId: number) =>
   transaction<UserInfo | undefined>('users', (userStore) =>

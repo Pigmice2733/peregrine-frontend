@@ -2,9 +2,9 @@ import Card, { CardProps } from './card'
 import {
   useNetworkConnection,
   ConnectionType,
-} from '@/utils/use-network-connection'
+} from 'src/utils/use-network-connection'
 import clsx from 'clsx'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useState, useEffect } from 'preact/hooks'
 import Icon from './icon'
 import { mdiPlay } from '@mdi/js'

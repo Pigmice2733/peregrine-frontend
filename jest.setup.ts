@@ -2,7 +2,7 @@ import { cleanup } from '@calebeby/preact-testing-library'
 import fetch, { Response, Headers } from 'node-fetch'
 import '@testing-library/jest-dom/extend-expect'
 import 'fake-indexeddb/auto'
-import { removeAccessToken, removeRefreshToken } from '@/jwt'
+import { removeAccessToken, removeRefreshToken } from 'src/jwt'
 
 window.fetch = (fetch as unknown) as typeof window['fetch']
 ;(window as any).Response = Response

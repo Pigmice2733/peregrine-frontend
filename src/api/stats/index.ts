@@ -1,4 +1,4 @@
-import { formatTeamNumber } from '@/utils/format-team-number'
+import { formatTeamNumber } from 'src/utils/format-team-number'
 
 export interface Stat {
   name: string

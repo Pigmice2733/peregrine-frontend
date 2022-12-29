@@ -1,8 +1,8 @@
 import { request } from '../base'
 import { EventInfo, processEvent, ProcessedEventInfo } from '.'
-import { transaction } from '@/cache'
-import { requestIdleCallback } from '@/utils/request-idle-callback'
-import { idbPromise } from '@/utils/idb-promise'
+import { transaction } from 'src/cache'
+import { requestIdleCallback } from 'src/utils/request-idle-callback'
+import { idbPromise } from 'src/utils/idb-promise'
 
 const updateCachedEvents = (events: ProcessedEventInfo[], year?: number) =>
   transaction(
