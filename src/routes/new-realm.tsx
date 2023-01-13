@@ -1,44 +1,3 @@
-import TextInput from '@/components/text-input'
-import Card from '@/components/card'
-import Page from '@/components/page'
-import { createUser } from '@/api/user/create-user'
-import Button from '@/components/button'
-import {
-  minUsernameLength,
-  maxUsernameLength,
-  minPasswordLength,
-  maxPasswordLength,
-} from '@/constants'
-import { useState } from 'preact/hooks'
-import { css } from 'linaria'
-import { Form } from '@/components/form'
-import { Dropdown } from '@/components/dropdown'
-import { getRealms } from '@/api/realm/get-realms'
-import { usePromise } from '@/utils/use-promise'
-import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
-import { authenticate } from '@/api/authenticate'
-import { route } from '@/router'
-import { Realm } from '@/api/realm'
-
-const signUpStyle = css`
-  padding: 1.5rem;
-`
-
-const cardStyle = css`
-  padding: 1.5rem 2rem;
-  width: 20rem;
-  margin-left: auto;
-  margin-right: auto;
-  & > * {
-    margin-left: 0;
-    margin-right: 0;
-  }
-`
-
-const dropdownClass = css`
-  padding: 0.4rem;
-`
-
 const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [firstName, setFirstName] = useState('')
@@ -100,9 +59,6 @@ const SignUpForm = () => {
             getKey={(v) => v.id}
             getText={(v) => v.name}
           />
-          <div>
-            <Button disabled={isLoading || !isValid} href={'/newrealm'}>New Realm</Button>
-          </div>
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}
           </Button>
