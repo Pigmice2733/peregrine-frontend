@@ -39,11 +39,10 @@ const leaderboardListStyle = css`
   padding: 0.8rem;
 `
 
-const currentYear = new Date().getFullYear()
 const LeaderboardList = () => {
-  const [yearVal, setYear] = useQueryState('year', currentYear)
+  const years = useYears().sort().reverse()
+  const [yearVal, setYear] = useQueryState('year', years[0])
   const year = Number(yearVal)
-  const years = useYears()
   const leaderboard = usePromise(async () => {
     const leaderboard = await getLeaderboard(year)
     return Promise.all(
