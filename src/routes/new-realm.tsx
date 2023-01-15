@@ -34,7 +34,7 @@ const SignUpForm = () => {
   const onSubmit = (e: Event) => {
     e.preventDefault()
     setIsLoading(true)
-    createRealm({ name: realmName, shareReports: false})
+    createRealm({ name: realmName, shareReports: false })
       .then(() => route('/login'))
       .catch(emitError)
       .finally(() => setIsLoading(false))
