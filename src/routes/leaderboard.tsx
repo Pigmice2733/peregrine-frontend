@@ -19,11 +19,13 @@ const leaderboardCardTitleStyle = css`
 
 const LeaderboardCard = ({
   user,
+  href,
 }: {
   user: UserInfo & { reports: number }
+  href: string
 }) => {
   return (
-    <Card>
+    <Card href={href}>
       <h1 class={leaderboardCardTitleStyle}>
         {user.firstName} {user.lastName} - {user.reports}
       </h1>
@@ -59,7 +61,7 @@ const LeaderboardList = () => {
     <div class={leaderboardListStyle}>
       <Dropdown options={years} onChange={setYear} value={year} />
       {leaderboard?.map((user) => (
-        <LeaderboardCard key={user.id} user={user} />
+        <LeaderboardCard key={user.id} user={user} href={`/users/${user.id}/reports`}/>
       )) || <Loader />}
     </div>
   )
