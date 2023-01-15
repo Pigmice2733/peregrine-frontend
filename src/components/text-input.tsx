@@ -22,7 +22,7 @@ const innerClass = css`
     outline: none;
   }
 
-  &${'.' + hasFocusedClass}:invalid {
+  &${clsx('.', hasFocusedClass)}:invalid {
     border-bottom-color: red;
     box-shadow: none;
   }
