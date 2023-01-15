@@ -61,7 +61,11 @@ const LeaderboardList = () => {
     <div class={leaderboardListStyle}>
       <Dropdown options={years} onChange={setYear} value={year} />
       {leaderboard?.map((user) => (
-        <LeaderboardCard key={user.id} user={user} href={`/users/${user.id}/reports`}/>
+        <LeaderboardCard
+          key={user.id}
+          user={user}
+          href={`/users/${user.id}/reports`}
+        />
       )) || <Loader />}
     </div>
   )
