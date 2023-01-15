@@ -101,6 +101,7 @@ const SignUpForm = () => {
             getText={(v) => v.name}
           />
           <div>
+            Don&apos;t see your team? Ask a captain or mentor to make a realm.
             <Button disabled={isLoading || !isValid} href={'/newrealm'}>New Realm</Button>
           </div>
           <Button disabled={isLoading || !isValid}>

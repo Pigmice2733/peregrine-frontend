@@ -1,28 +1,41 @@
+import { createRealm } from '@/api/realm/create-realm'
+import Button from '@/components/button'
+import Card from '@/components/card'
+import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
+import { Form } from '@/components/form'
+import Page from '@/components/page'
+import TextInput from '@/components/text-input'
+import { maxRealmNameLength } from '@/constants'
+import { route } from '@/router'
+import { css } from 'linaria'
+import { useState } from 'preact/hooks'
+
+const contentStyle = css`
+  padding: 1.5rem;
+`
+
+const cardStyle = css`
+  padding: 1.5rem 2rem;
+  width: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+  & > * {
+    margin-left: 0;
+    margin-right: 0;
+  }
+`
+
 const SignUpForm = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [realmId, setRealmId] = useState<number | undefined>(undefined)
-  const realms = usePromise(getRealms) || []
+  const [realmName, setRealmName] = useState('')
+  // const realms = usePromise(getRealms) || []
   const emitError = useErrorEmitter()
 
   const onSubmit = (e: Event) => {
     e.preventDefault()
-    if (realmId === undefined) return
     setIsLoading(true)
-    createUser({
-      username,
-      password,
-      firstName,
-      lastName,
-      realmId,
-      roles: { isAdmin: false, isVerified: false, isSuperAdmin: false },
-      stars: [],
-    })
-      .then(() => authenticate(username, password))
-      .then(() => route('/'))
+    createRealm({ name: realmName, shareReports: false})
+      .then(() => route('/login'))
       .catch(emitError)
       .finally(() => setIsLoading(false))
   }
@@ -31,36 +44,15 @@ const SignUpForm = () => {
     <Form onSubmit={onSubmit}>
       {(isValid) => (
         <>
-          <TextInput label="First Name" onInput={setFirstName} required />
-          <TextInput label="Last Name" onInput={setLastName} required />
           <TextInput
-            label="Username"
+            label="Realm Name"
+            type="realmName"
             required
-            onInput={setUsername}
-            minLength={minUsernameLength}
-            maxLength={maxUsernameLength}
-          />
-          <TextInput
-            name="password"
-            label="Password"
-            type="password"
-            required
-            onInput={setPassword}
-            minLength={minPasswordLength}
-            maxLength={maxPasswordLength}
-          />
-          <Dropdown<Realm>
-            value={realms.find((r) => r.id === realmId)}
-            emptyLabel="Select a realm"
-            class={dropdownClass}
-            options={realms}
-            required
-            onChange={(v) => setRealmId(v.id)}
-            getKey={(v) => v.id}
-            getText={(v) => v.name}
+            onInput={setRealmName}
+            maxLength={maxRealmNameLength}
           />
           <Button disabled={isLoading || !isValid}>
-            {isLoading ? 'Signing Up' : 'Sign Up'}
+            {isLoading ? 'Creating Realm' : 'Create New Realm'}
           </Button>
         </>
       )}
@@ -68,9 +60,9 @@ const SignUpForm = () => {
   )
 }
 
-const SignUp = () => (
-  <Page name="Sign Up" back={() => window.history.back()}>
-    <div class={signUpStyle}>
+const NewRealm = () => (
+  <Page name="Create New Realm" back={() => window.history.back()}>
+    <div class={contentStyle}>
       <Card class={cardStyle}>
         <ErrorBoundary>
           <SignUpForm />
@@ -80,4 +72,4 @@ const SignUp = () => (
   </Page>
 )
 
-export default SignUp
+export default NewRealm
