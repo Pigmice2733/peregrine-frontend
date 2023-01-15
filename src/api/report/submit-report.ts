@@ -2,6 +2,8 @@ import { request } from '../base'
 import { Report, OfflineReport } from '.'
 import { useEffect, useState } from 'preact/hooks'
 import { CancellablePromise } from '@/utils/cancellable-promise'
+import { createAlert } from '@/router'
+import { AlertType } from '@/components/alert'
 
 /**
  * Uploads a report via PUT or POST, depending on if the report already has an ID
@@ -53,6 +55,12 @@ export const uploadSavedReports = async () => {
     [] as Report[] | Promise<Report[]>,
   )
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(unsuccessfulReports))
+
+  const uploadedReports = savedReports.length - unsuccessfulReports.length
+  createAlert({
+    type: AlertType.Success,
+    message: `${uploadedReports} reports were uploaded!`,
+  })
 }
 
 /** Only used for offline reports */
