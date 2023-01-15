@@ -1,4 +1,5 @@
 import { createRealm } from '@/api/realm/create-realm'
+import { AlertType } from '@/components/alert'
 import Button from '@/components/button'
 import Card from '@/components/card'
 import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
@@ -35,7 +36,10 @@ const SignUpForm = () => {
     e.preventDefault()
     setIsLoading(true)
     createRealm({ name: realmName, shareReports: false })
-      .then(() => route('/login'))
+      .then(() => route('/login', {
+        type: AlertType.Success,
+        message: "Realm was created!",
+      }))
       .catch(emitError)
       .finally(() => setIsLoading(false))
   }
