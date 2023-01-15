@@ -142,7 +142,7 @@
           ]
         }
       ],
-      "no-warning-comments":"warn"
+      "no-warning-comments": "warn"
     }
   },
   "jest": {
