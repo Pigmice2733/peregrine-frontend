@@ -36,10 +36,12 @@ const SignUpForm = () => {
     e.preventDefault()
     setIsLoading(true)
     createRealm({ name: realmName, shareReports: false })
-      .then(() => route('/login', {
-        type: AlertType.Success,
-        message: "Realm was created!",
-      }))
+      .then(() =>
+        route('/login', {
+          type: AlertType.Success,
+          message: 'Realm was created!',
+        }),
+      )
       .catch(emitError)
       .finally(() => setIsLoading(false))
   }
