@@ -109,7 +109,7 @@ const TeamPicker = ({
   editable = true,
 }: Props) => (
   <div class={clsx(teamPickerStyle, editable && editableTeamPickerStyle)}>
-    <div class={allianceStyle + ' ' + redStyle}>
+    <div class={clsx(allianceStyle, redStyle)}>
       {redAlliance.map((t) => (
         <Item
           key={t}
@@ -120,7 +120,7 @@ const TeamPicker = ({
         />
       ))}
     </div>
-    <div class={allianceStyle + ' ' + blueStyle}>
+    <div class={clsx(allianceStyle, blueStyle)}>
       {blueAlliance.map((t) => (
         <Item
           key={t}
