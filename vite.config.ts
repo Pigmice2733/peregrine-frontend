@@ -6,6 +6,9 @@ import path from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 2733,
+  },
   plugins: [
     linaria({
       include: ['**/*.{js,jsx,ts,tsx}'],
