@@ -52,13 +52,12 @@ type Props = Merge<
   JSX.HTMLAttributes,
   {
     name: ComponentChildren
-    back: string | (() => void) | false
     class?: string
     wrapperClass?: string
   }
 >
 
-const Header = ({ back, name }: Omit<Props, 'class'>) => {
+const Header = ({ name }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen)
@@ -67,13 +66,11 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
   return (
     <>
       <header class={headerStyle}>
-        {back && (
-          <IconButton
-            icon={mdiArrowLeft}
-            aria-label="Back"
-            {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
-          />
-        )}
+        <IconButton
+          icon={mdiArrowLeft}
+          aria-label="Back"
+          onClick={() => window.history.back()}
+        />
         <h1 class={headerText}>{name}</h1>
         <IconButton
           icon={mdiMenu}
@@ -91,13 +88,12 @@ const Page = ({
   class: className,
   wrapperClass,
   name,
-  back,
   ...rest
 }: RenderableProps<Props>) => {
   return (
     <ErrorBoundary>
       <div class={clsx(wrapperClass)} {...rest}>
-        <Header name={name} back={back} />
+        <Header name={name} />
         <main class={clsx(className)}>{children}</main>
       </div>
     </ErrorBoundary>

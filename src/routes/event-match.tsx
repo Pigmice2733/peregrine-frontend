@@ -163,7 +163,6 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   return (
     // page setup
     <Page
-      back={() => window.history.back()}
       name={
         m.group +
         (m.num ? ' Match ' + m.num : '') +
