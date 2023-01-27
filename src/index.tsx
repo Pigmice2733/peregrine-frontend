@@ -18,6 +18,6 @@ cleanupTokens()
 
 render(<App />, el)
 
-// if ('serviceWorker' in navigator && process.env.ROLLUP === 'true') {
-//   navigator.serviceWorker.register('/sw.js')
-// }
+if ('serviceWorker' in navigator && import.meta.env.MODE === 'production') {
+  navigator.serviceWorker.register('/sw.js')
+}

@@ -17,24 +17,21 @@ const urlInWhitelist = (whitelist: string[], url: string) =>
 
 const setupCache = async () => {
   const cache = await cachePromise
-  const cacheItems: string[] = [...chunks, root, '/style.css']
+  const cacheItems: string[] = [...chunks, root]
   await cache.addAll(cacheItems)
   ;(await cache.keys()).forEach((req) => {
     if (!urlInWhitelist(cacheItems, req.url)) cache.delete(req)
   })
 }
 
-self.addEventListener('install', function (event) {
-  event.waitUntil(setupCache())
-  // If there is not an existing service worker installed
-  // And the browser supports skipWaiting, call skipWaiting
-  if (!self.registration.installing) {
-    self.skipWaiting()
-  }
+self.addEventListener('install', async () => {
+  await setupCache()
+  await self.skipWaiting()
 })
 
 // When the new SW activates, delete any old caches
-self.addEventListener('activate', () => {
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim())
   caches.keys().then((cacheKeys) =>
     cacheKeys.forEach((cacheKey) => {
       if (cacheKey !== chunksCacheKey && cacheKey !== fontsCacheKey) {
@@ -61,6 +58,7 @@ const handleFontsRequest = async (request: Request) => {
 }
 
 self.addEventListener('fetch', function (event) {
+  console.log('handle request', event.request)
   const { request } = event
   const { url } = request
   if (request.mode === 'navigate') {
