@@ -1,3 +1,4 @@
+/* eslint-disable caleb/import/no-unresolved */
 import linaria from 'linaria-preact/rollup'
 import node from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
