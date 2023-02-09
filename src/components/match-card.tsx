@@ -63,11 +63,13 @@ const allianceStyle = css`
   grid-column: 4;
   align-self: stretch;
   margin-left: 0.3rem;
+  margin-right: 0.3rem;
   padding: 0.35rem 0.8rem;
   text-align: center;
   text-align-last: justify;
   color: white;
   font-weight: bold;
+  align-content: center;
 
   & > * {
     color: white;
