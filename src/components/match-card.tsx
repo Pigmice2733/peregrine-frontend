@@ -5,6 +5,7 @@ import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
 import clsx from 'clsx'
+import { useEventInfo } from '@/cache/event-info/use'
 
 interface MatchCardProps {
   match: {
@@ -23,7 +24,7 @@ const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
   display: grid;
-  grid-template-columns: auto auto 10rem;
+  grid-template-columns: auto auto auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
@@ -56,9 +57,14 @@ const matchNumStyle = css`
   color: var(--grey-text);
 `
 
+const eventLinkStyle = css`
+  grid-column: 2;
+  font-weight: bold;
+`
+
 const allianceStyle = css`
   white-space: nowrap;
-  grid-column: 3;
+  grid-column: 4;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
@@ -106,10 +112,14 @@ export const MatchDetailsCard = memo(
         href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
       >
         <div class={matchTitleStyle}>
-          {matchName.num ? <div>{matchName.group}</div> : matchName.group}
+          {(matchName.num ? <div>{matchName.group}</div> : matchName.group)}
           {matchName.num && (
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
+        </div>
+        <div class={eventLinkStyle}>
+          at 
+          <a href={`/events/${eventKey}`}>{useEventInfo(eventKey)?.name}</a>
         </div>
         {match.time && (
           <time dateTime={match.time.toISOString()}>

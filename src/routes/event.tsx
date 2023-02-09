@@ -56,7 +56,6 @@ const Event = ({ eventKey }: Props) => {
   return (
     <Page
       name={eventInfo?.name || <code>{eventKey}</code>}
-      back="/"
       class={eventStyle}
     >
       <div class={sectionStyle}>
