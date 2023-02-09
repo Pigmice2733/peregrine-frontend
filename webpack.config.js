@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const postcssConfig = require('./postcss.config')
+// eslint-disable-next-line caleb/node/no-missing-require
 const WebpackBar = require('webpackbar')
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
 require('dotenv').config()
