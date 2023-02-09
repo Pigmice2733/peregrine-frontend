@@ -210,7 +210,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 </div>
               </Card>
             )}
-            <MatchDetailsCard match={match} eventKey={eventKey} />
+            <MatchDetailsCard
+              match={match}
+              eventKey={eventKey}
+              eventPage={false}
+            />
             {reports && reports.length > 0 ? (
               <MatchReports
                 match={match}

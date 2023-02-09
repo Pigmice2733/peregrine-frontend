@@ -18,6 +18,7 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
+  eventPage: boolean
 }
 
 const matchCardStyle = css`
@@ -57,11 +58,6 @@ const matchNumStyle = css`
   color: var(--grey-text);
 `
 
-const eventLinkStyle = css`
-  grid-column: 2;
-  font-weight: bold;
-`
-
 const allianceStyle = css`
   white-space: nowrap;
   grid-column: 4;
@@ -89,8 +85,9 @@ const blueStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className, eventPage }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
+    const eventName = useEventInfo(eventKey)?.name
 
     const createTeamLinks = (teams: string[]) =>
       teams.flatMap((t: string, i) => {
@@ -112,14 +109,16 @@ export const MatchDetailsCard = memo(
         href={link ? `/events/${eventKey}/matches/${match.key}` : undefined}
       >
         <div class={matchTitleStyle}>
-          {(matchName.num ? <div>{matchName.group}</div> : matchName.group)}
+          {matchName.num ? <div>{matchName.group}</div> : matchName.group}
           {matchName.num && (
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
-        </div>
-        <div class={eventLinkStyle}>
-          at 
-          <a href={`/events/${eventKey}`}>{useEventInfo(eventKey)?.name}</a>
+          {!eventPage && (
+            <div>
+              {' '}
+              at <a href={`/events/${eventKey}`}>{eventName}</a>{' '}
+            </div>
+          )}
         </div>
         {match.time && (
           <time dateTime={match.time.toISOString()}>

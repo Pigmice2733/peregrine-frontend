@@ -80,7 +80,13 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       />
       <div class={matchListStyle}>
         {filteredMatches.map((m) => (
-          <MatchDetailsCard eventKey={eventKey} match={m} key={m.key} link />
+          <MatchDetailsCard
+            eventKey={eventKey}
+            match={m}
+            key={m.key}
+            link
+            eventPage
+          />
         ))}
       </div>
     </>
