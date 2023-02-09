@@ -57,10 +57,15 @@ export const uploadSavedReports = async () => {
   localStorage.setItem(SAVED_REPORTS, JSON.stringify(unsuccessfulReports))
 
   const uploadedReports = savedReports.length - unsuccessfulReports.length
-  if (uploadedReports !== 0) {
+  if (uploadedReports > 1) {
     createAlert({
       type: AlertType.Success,
       message: `${uploadedReports} reports were uploaded!`,
+    })
+  } else if (uploadedReports === 1) {
+    createAlert({
+      type: AlertType.Success,
+      message: `1 report was uploaded!`,
     })
   }
 }
