@@ -52,12 +52,13 @@ type Props = Merge<
   JSX.HTMLAttributes,
   {
     name: ComponentChildren
+    homepage?: boolean
     class?: string
     wrapperClass?: string
   }
 >
 
-const Header = ({ name }: Omit<Props, 'class'>) => {
+const Header = ({ name, homepage }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen)
@@ -66,11 +67,13 @@ const Header = ({ name }: Omit<Props, 'class'>) => {
   return (
     <>
       <header class={headerStyle}>
-        <IconButton
-          icon={mdiArrowLeft}
-          aria-label="Back"
-          onClick={() => window.history.back()}
-        />
+        {homepage && (
+          <IconButton
+            icon={mdiArrowLeft}
+            aria-label="Back"
+            onClick={() => window.history.back()}
+          />
+        )}
         <h1 class={headerText}>{name}</h1>
         <IconButton
           icon={mdiMenu}
