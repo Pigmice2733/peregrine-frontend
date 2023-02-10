@@ -18,15 +18,14 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
-  eventPage: boolean
+  matchPage?: boolean
 }
 
 const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
-  align-content: center;
   display: grid;
-  grid-template-columns: auto auto auto 10rem;
+  grid-template-columns: auto auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
@@ -59,6 +58,12 @@ const matchNumStyle = css`
   color: var(--grey-text);
 `
 
+const eventNameStyle = css`
+  font-weight: bold;
+  grid-row: 1;
+  margin: 0.3rem;
+`
+
 const allianceStyle = css`
   white-space: nowrap;
   grid-column: 4;
@@ -85,7 +90,7 @@ const blueStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className, eventPage }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className, matchPage }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
     const eventName = useEventInfo(eventKey)?.name
 
@@ -113,18 +118,20 @@ export const MatchDetailsCard = memo(
           {matchName.num && (
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
-          {!eventPage && (
-            <div>
+        </div>
+        <div>
+          {matchPage && (
+            <div class={eventNameStyle}>
               {' '}
               at <a href={`/events/${eventKey}`}>{eventName}</a>{' '}
             </div>
           )}
+          {match.time && (
+            <time dateTime={match.time.toISOString()}>
+              {formatTime(match.time)}
+            </time>
+          )}
         </div>
-        {match.time && (
-          <time dateTime={match.time.toISOString()}>
-            {formatTime(match.time)}
-          </time>
-        )}
         <div class={`${redStyle} ${allianceStyle}`}>
           {createTeamLinks(match.redAlliance)}
         </div>

@@ -437,7 +437,7 @@ const InnerUserPage = ({ userId }: { userId: string }) => {
   const canEditUser = isCurrentUser || isSuperAdmin || isAdminInSameRealm
 
   return (
-    <Page name="User" back={() => window.history.back()} class={userPageStyle}>
+    <Page name="User" class={userPageStyle}>
       {isLoading ? (
         <Loader />
       ) : user ? (

@@ -192,7 +192,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           />
         </span>
       }
-      back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
       {nextMatch && (

@@ -100,7 +100,6 @@ const UsersPage = () => {
       render={() => (
         <Page
           name="Users"
-          back="/"
           class={tablePageStyle}
           wrapperClass={tablePageWrapperStyle}
         >

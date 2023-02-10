@@ -70,7 +70,7 @@ const Leaderboard = () => {
   return (
     <Authenticated
       render={() => (
-        <Page name="Leaderboard" back="/">
+        <Page name="Leaderboard">
           <LeaderboardList />
         </Page>
       )}

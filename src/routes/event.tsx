@@ -71,7 +71,6 @@ const Event = ({ eventKey }: Props) => {
           <MatchDetailsCard
             match={newestIncompleteMatch}
             eventKey={eventKey}
-            eventPage
             link
           />
         )}

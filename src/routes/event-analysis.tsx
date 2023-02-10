@@ -31,7 +31,6 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   return (
     <Page
       name={`Analysis - ${eventInfo ? eventInfo.name : eventKey}`}
-      back={`/events/${eventKey}`}
       class={tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >

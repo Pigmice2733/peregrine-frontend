@@ -26,7 +26,6 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
   return (
     <Page
       name={`Matches: ${teamNum} @ ${eventName}`}
-      back={`/events/${eventKey}/teams/${teamNum}`}
       class={eventTeamMatchesStyle}
     >
       {matches ? (

@@ -21,11 +21,7 @@ const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
 
   if (!report) {
     return (
-      <Page
-        back="/saved-reports"
-        name="Offline Report"
-        class={missingReportStyle}
-      >
+      <Page name="Offline Report" class={missingReportStyle}>
         This Report Does Not Exist.
       </Page>
     )

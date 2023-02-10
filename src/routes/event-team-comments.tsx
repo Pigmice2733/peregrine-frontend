@@ -47,7 +47,6 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   return (
     <Page
       name={`Comments: ${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
-      back={`/events/${eventKey}/teams/${teamNum}`}
       class={commentsPageStyle}
     >
       <Card class={matchListStyle}>
