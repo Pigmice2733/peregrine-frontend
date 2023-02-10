@@ -62,12 +62,13 @@ const matchNumStyle = css`
 const eventAndTimeStyle = css`
   grid-row: 1 / span 2;
   grid-column: 2;
+  white-space: nowrap;
+  margin: 0.3rem 0.3rem;
 `
 
 const eventNameStyle = css`
   font-weight: bold;
   grid-row: 1;
-  white-space: nowrap;
   text-align: center;
   align-self: center;
 `
@@ -75,7 +76,8 @@ const eventNameStyle = css`
 const dateTimeStyle = css`
   align-self: center;
   grid-row: 2;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--grey-text);
 `
 
 const allianceStyle = css`
