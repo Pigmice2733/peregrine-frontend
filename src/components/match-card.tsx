@@ -42,6 +42,7 @@ const matchCardStyle = css`
 const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
+  grid-column: 1;
   white-space: nowrap;
   margin: 0.3rem 0.6rem;
   & > * {
@@ -58,6 +59,11 @@ const matchNumStyle = css`
   color: var(--grey-text);
 `
 
+const eventAndTimeStyle = css`
+  grid-row: 1 / span 2;
+  grid-column: 2;
+`
+
 const eventNameStyle = css`
   font-weight: bold;
   grid-row: 1;
@@ -69,6 +75,7 @@ const eventNameStyle = css`
 const dateTimeStyle = css`
   align-self: center;
   grid-row: 2;
+  font-size: 0.8rem;
 `
 
 const allianceStyle = css`
@@ -126,11 +133,7 @@ export const MatchDetailsCard = memo(
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
         </div>
-        <div
-          class={css`
-            grid-row: 1 / span 2;
-          `}
-        >
+        <div class={eventAndTimeStyle}>
           {matchPage && (
             <div class={eventNameStyle}>
               {' '}

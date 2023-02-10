@@ -67,7 +67,7 @@ const Header = ({ name, homepage }: Omit<Props, 'class'>) => {
   return (
     <>
       <header class={headerStyle}>
-        {homepage && (
+        {!homepage && (
           <IconButton
             icon={mdiArrowLeft}
             aria-label="Back"
