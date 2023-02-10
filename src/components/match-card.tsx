@@ -64,6 +64,7 @@ const eventAndTimeStyle = css`
   grid-column: 2;
   white-space: nowrap;
   margin: 0.3rem 0.3rem;
+  align-items: center;
 `
 
 const eventNameStyle = css`
