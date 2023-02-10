@@ -61,12 +61,13 @@ const matchNumStyle = css`
 const eventNameStyle = css`
   font-weight: bold;
   grid-row: 1;
-  margin: 0.3rem;
+  white-space: nowrap;
+  text-align: center;
 `
 
 const allianceStyle = css`
   white-space: nowrap;
-  grid-column: 4;
+  grid-column: 3;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
@@ -127,7 +128,12 @@ export const MatchDetailsCard = memo(
             </div>
           )}
           {match.time && (
-            <time dateTime={match.time.toISOString()}>
+            <time
+              dateTime={match.time.toISOString()}
+              class={css`
+                grid-row: 2;
+              `}
+            >
               {formatTime(match.time)}
             </time>
           )}
