@@ -13,6 +13,7 @@ import {
   tablePageTableStyle,
 } from '@/utils/table-page-style'
 import Card from '@/components/card'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   eventKey: string
@@ -26,7 +27,7 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
 
-  const schema = useSchema(eventInfo?.schemaId)
+  const schema = useSchema(isData(eventInfo) ? eventInfo.schemaId : -1)
 
   return (
     <Page
@@ -35,7 +36,7 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       class={tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >
-      {eventStats && schema ? (
+      {isData(eventStats) && isData(schema) ? (
         eventStats.length === 0 ? (
           'No Event Data'
         ) : (

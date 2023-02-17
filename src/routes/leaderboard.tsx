@@ -10,6 +10,7 @@ import { useYears } from '@/utils/use-years'
 import { Dropdown } from '@/components/dropdown'
 import { getFastestUser } from '@/cache/users/get-fastest'
 import { UserInfo } from '@/api/user'
+import { isData } from '@/utils/is-data'
 
 const leaderboardCardTitleStyle = css`
   font-weight: 500;
@@ -58,10 +59,16 @@ const LeaderboardList = () => {
 
   return (
     <div class={leaderboardListStyle}>
-      <Dropdown options={years} onChange={setYear} value={year} />
-      {leaderboard?.map((user) => (
-        <LeaderboardCard key={user.id} user={user} />
-      )) || <Loader />}
+      <Dropdown
+        options={isData(years) ? years : []}
+        onChange={setYear}
+        value={year}
+      />
+      {isData(leaderboard) ? (
+        leaderboard.map((user) => <LeaderboardCard key={user.id} user={user} />)
+      ) : (
+        <Loader />
+      )}
     </div>
   )
 }

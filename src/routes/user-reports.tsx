@@ -9,6 +9,7 @@ import { GetReport } from '@/api/report'
 import { useEventInfo } from '@/cache/event-info/use'
 import { formatTeamNumber } from '@/utils/format-team-number'
 import { getFastestUser } from '@/cache/users/get-fastest'
+import { isData } from '@/utils/is-data'
 
 interface Props {
   userId: string
@@ -30,18 +31,29 @@ const UserReports = ({ userId }: Props) => {
   console.log(userId)
   const reports = usePromise(() => getReports({ reporter: userId }), [userId])
   const user = usePromise(
-    () => getFastestUser(Number(userId)).catch(() => {}),
+    () =>
+      getFastestUser(Number(userId)).catch(() => {
+        return {
+          username: '',
+          firstName: '',
+          lastName: '',
+          realmId: 0,
+          roles: { isSuperAdmin: false, isAdmin: false, isVerified: false },
+          stars: [],
+          id: 0,
+        }
+      }),
     [userId],
   )
   return (
     <Page
       name={`${
-        user ? `${user.firstName} ${user.lastName}` : `User ${userId}`
+        isData(user) ? `${user.firstName} ${user.lastName}` : `User ${userId}`
       }: Reports`}
       back={`/users/${userId}`}
       class={userReportsStyle}
     >
-      {reports ? (
+      {isData(reports) ? (
         reports.map((report) => {
           return <ReportCard key={report.id} report={report} />
         })

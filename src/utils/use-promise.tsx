@@ -7,11 +7,16 @@ export const usePromise = <T extends any>(
   dependencies: any[] = [promiseCreator],
 ) => {
   const emitError = useErrorEmitter()
-  const [val, setVal] = useState<T | undefined>(undefined)
+  const [val, setVal] = useState<T | undefined | Error>(undefined)
   useEffect(() => {
     const cbResult = promiseCreator()
     if (!(cbResult instanceof Promise)) return setVal(cbResult)
-    cbResult.then((v) => setVal(v)).catch(emitError)
+    cbResult
+      .then((v) => setVal(v))
+      .catch((error) => {
+        if (error instanceof Error) setVal(error)
+        else emitError(error)
+      })
     return () => {
       if (cbResult instanceof CancellablePromise) cbResult.cancel()
       setVal(undefined)

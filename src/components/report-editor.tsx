@@ -32,6 +32,7 @@ import { createAlert } from '@/router'
 import { AlertType } from './alert'
 import Loader from './loader'
 import Card from './card'
+import { isData } from '@/utils/is-data'
 
 const reportEditorStyle = css`
   padding: 1.5rem 2rem;
@@ -71,6 +72,7 @@ const userDropdownStyle = css`
   align-items: center;
 `
 
+// eslint-disable-next-line complexity
 export const ReportEditor = ({
   initialReport,
   onMatchSelect,
@@ -84,10 +86,16 @@ export const ReportEditor = ({
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
   const [matchKey, setMatchKey] = useState(initialReport.matchKey)
   const [comment, setComment] = useState(initialReport.comment || '')
-  const schemaId = useEventInfo(eventKey)?.schemaId
-  const schema = useSchema(schemaId)?.schema
+
+  const eventInfo = useEventInfo(eventKey)
+  const schemaId = isData(eventInfo) ? eventInfo.schemaId : undefined
+  const findSchema = useSchema(schemaId)
+  const schema = isData(findSchema) ? findSchema.schema : undefined
   const eventMatches = useEventMatches(eventKey)
-  const match = eventMatches?.find((match) => matchKey === match.key)
+  const match = isData(eventMatches)
+    ? eventMatches.find((match) => matchKey === match.key)
+    : undefined
+
   const { jwt } = useJWT()
   const isAdmin = jwt?.peregrineRoles.isAdmin
   const users = usePromise(() => getUsers(), [])
@@ -228,14 +236,20 @@ export const ReportEditor = ({
   return eventMatches && match && visibleFields ? (
     <Card as="form" class={reportEditorStyle} onSubmit={submit}>
       <Dropdown
-        options={eventMatches}
+        options={isData(eventMatches) ? eventMatches : []}
         onChange={(match) => {
           onMatchSelect?.(match.key)
           setMatchKey(match.key)
         }}
         getKey={(match) => match.key}
         getText={(match) => formatMatchKeyShort(match.key)}
-        value={eventMatches.find((match) => match.key === matchKey)}
+        value={
+          isData(eventMatches)
+            ? eventMatches.find(
+                (match: { key: string }) => match.key === matchKey,
+              )
+            : undefined
+        }
       />
       <TeamPicker
         onChange={setTeam}
@@ -271,9 +285,16 @@ export const ReportEditor = ({
         <div class={userDropdownStyle}>
           <Icon icon={mdiAccountCircle} />
           <Dropdown
-            options={users.sort((a, b) =>
-              a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : -1,
-            )}
+            options={
+              isData(users)
+                ? users.sort(
+                    (a: { firstName: string }, b: { firstName: string }) =>
+                      a.firstName.toLowerCase() > b.firstName.toLowerCase()
+                        ? 1
+                        : -1,
+                  )
+                : []
+            }
             onChange={(user) => {
               setReporterId(user.id)
               setRealmId(user.realmId)
@@ -281,10 +302,19 @@ export const ReportEditor = ({
             getKey={(user) => user.id}
             getText={(user) => `${user.firstName} ${user.lastName}`}
             getGroup={(user) =>
-              realms?.find((realm) => realm.id === user.realmId)?.name ||
-              String(user.realmId)
+              (isData(realms)
+                ? realms.find((realm: { id: any }) => realm.id === user.realmId)
+                : undefined
+              )?.name || String(user.realmId)
             }
-            value={users.find((user) => user.id === reporterId)}
+            value={
+              isData(users)
+                ? users.find(
+                    (user: { id: number | null | undefined }) =>
+                      user.id === reporterId,
+                  )
+                : undefined
+            }
           />
         </div>
       )}
