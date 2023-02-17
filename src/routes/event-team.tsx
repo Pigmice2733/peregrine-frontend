@@ -29,11 +29,11 @@ import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
 import { Heading } from '@/components/heading'
 
-const sectionStyle = css`
+/* const sectionStyle = css`
   font-weight: normal;
   text-align: center;
   font-size: 1.2rem;
-`
+` */
 
 interface Props {
   eventKey: string
