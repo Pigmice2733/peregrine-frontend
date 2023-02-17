@@ -9,7 +9,7 @@ import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
-import { useCurrentTime } from '@/utils/use-current-time'
+// import { useCurrentTime } from '@/utils/use-current-time'
 import clsx from 'clsx'
 
 interface Props {
@@ -54,7 +54,8 @@ const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
 
-  const currentTime = useCurrentTime().getTime()
+  // const currentTime = useCurrentTime().getTime()
+  const currentTime = 1671386400000
   const upcomingMatches = matches
     ? getUpcomingMatches(matches, currentTime)
     : []
