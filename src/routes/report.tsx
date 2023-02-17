@@ -1,5 +1,4 @@
 import Page from '@/components/page'
-import { ReportEditor } from '@/components/report-editor'
 import { ReportViewer } from '@/components/report-viewer'
 import Card from '@/components/card'
 import { css } from 'linaria'
@@ -7,9 +6,8 @@ import { getReport } from '@/api/report/get-report'
 import Loader from '@/components/loader'
 import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
-import { route, createAlert } from '@/router'
-import { Report, OfflineReport } from '@/api/report'
-import { AlertType } from '@/components/alert'
+import { route } from '@/router'
+import { Report } from '@/api/report'
 
 const reportPageStyle = css`
   display: flex;
@@ -25,20 +23,7 @@ const reportViewerCardStyle = css`
   max-width: 30rem;
 `
 
-export const ReportPage = ({
-  report,
-  onSaveSuccess,
-  onSaveLocally,
-  onDelete,
-  back,
-}: {
-  report: Report
-  onSaveSuccess: (report: Report) => void
-  onSaveLocally: (report: OfflineReport) => void
-  onDelete: () => void
-  back: string | (() => void)
-}) => {
-  const [isEditing, setIsEditing] = useState(false)
+const ReportPage = ({ report }: { report: Report }) => {
   const { jwt } = useJWT()
   const canEdit =
     jwt &&
@@ -46,33 +31,16 @@ export const ReportPage = ({
       (jwt.peregrineRoles.isAdmin && report.realmId === jwt.peregrineRealm) ||
       jwt.peregrineRoles.isSuperAdmin)
   return (
-    <Page
-      name={isEditing ? 'Edit Report' : 'Report'}
-      back={isEditing ? () => setIsEditing(false) : back}
-      class={reportPageStyle}
-    >
-      {isEditing ? (
-        <ReportEditor
-          initialReport={report}
-          onSaveSuccess={(report) => {
-            onSaveSuccess(report)
-            setIsEditing(false)
-          }}
-          onSaveLocally={(report) => {
-            onSaveLocally(report)
-            setIsEditing(false)
-          }}
-          onDelete={onDelete}
+    <Page name="Report" class={reportPageStyle}>
+      {/* shows the report */}
+      <Card class={reportViewerCardStyle}>
+        <ReportViewer
+          report={report}
+          onEditClick={
+            canEdit ? () => route(`/report/${report.id}/edit`) : undefined
+          }
         />
-      ) : (
-        // shows the report
-        <Card class={reportViewerCardStyle}>
-          <ReportViewer
-            report={report}
-            onEditClick={canEdit ? () => setIsEditing(true) : undefined}
-          />
-        </Card>
-      )}
+      </Card>
     </Page>
   )
 }
@@ -87,29 +55,7 @@ const ReportRoute = ({ reportId }: { reportId: number }) => {
   }, [reportId])
   return report ? (
     // shows a page from cache or from network
-    <ReportPage
-      report={report}
-      onSaveSuccess={(report) => {
-        setReport(report)
-        createAlert({
-          type: AlertType.Success,
-          message: 'Report was updated!',
-        })
-      }}
-      onSaveLocally={(report) =>
-        route(`/saved-reports/${report.key}`, {
-          type: AlertType.Success,
-          message: 'Report was saved locally!',
-        })
-      }
-      onDelete={() =>
-        route(`/events/${report.eventKey}/matches/${report.matchKey}`, {
-          type: AlertType.Success,
-          message: 'Report was successfully deleted!',
-        })
-      }
-      back={() => window.history.back()}
-    />
+    <ReportPage report={report} />
   ) : (
     // loading page if it hasn't been loaded from cache/network
     <Loader />
