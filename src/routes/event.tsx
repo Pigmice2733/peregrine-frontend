@@ -55,14 +55,16 @@ const Event = ({ eventKey }: Props) => {
   const eventInfo = useEventInfo(eventKey)
 
   // const currentTime = useCurrentTime().getTime()
-  const currentTime = 1671303600000
+  const date = new Date(1671303600)
+  const currentTime = date.getTime()
   const upcomingMatches = matches
     ? getUpcomingMatches(matches, currentTime)
     : []
 
   return (
     <Page
-      name={eventInfo?.name || <code>{eventKey}</code>}
+      // name={eventInfo?.name || <code>{eventKey}</code>}
+      name={date.toDateString() + ' ' + date.toTimeString()}
       back="/"
       class={eventStyle}
     >
