@@ -199,108 +199,108 @@ export const ReportEditor = ({
         })
       setIsSaving(false)
     }
-    const handleDelete = async (e: Event) => {
-      const confirmDelete = await createDialog({
-        confirm: 'Delete Report',
-        dismiss: 'Cancel',
-        description: '',
-        title: 'Confirm Delete',
-      })
-      if (confirmDelete) {
-        e.preventDefault()
-        if (initialReport.key) {
-          deleteReportLocally(initialReport.key)
-        } else {
-          const reportId = initialReport.id
-          if (reportId !== undefined) {
-            setIsDeleting(true)
-            await deleteReport(reportId)
-            setIsDeleting(false)
-          }
-        }
-        onDelete?.()
-      }
-    }
-    const reportAlreadyExists =
-      initialReport.key !== undefined || initialReport.id !== undefined
-
-    return eventMatches && match && visibleFields ? (
-      <Card as="form" class={reportEditorStyle} onSubmit={submit}>
-        <Dropdown
-          options={eventMatches}
-          onChange={(match) => {
-            onMatchSelect?.(match.key)
-            setMatchKey(match.key)
-          }}
-          getKey={(match) => match.key}
-          getText={(match) => formatMatchKeyShort(match.key)}
-          value={eventMatches.find((match) => match.key === matchKey)}
-        />
-        <TeamPicker
-          onChange={setTeam}
-          blueAlliance={match.blueAlliance}
-          redAlliance={match.redAlliance}
-          value={team}
-        />
-        <h2>Auto</h2>
-        {visibleFields.filter(isAuto).map((stat) => (
-          <FieldCard
-            key={`auto + ${stat.reportReference}`}
-            statDescription={stat}
-            value={getReportFieldValue(stat)}
-            onChange={updateReportField(stat.reportReference)}
-          />
-        ))}
-        <h2>Teleop</h2>
-        {visibleFields.filter(isTeleop).map((stat) => (
-          <FieldCard
-            key={`teleop + ${stat.reportReference}`}
-            statDescription={stat}
-            value={getReportFieldValue(stat)}
-            onChange={updateReportField(stat.reportReference)}
-          />
-        ))}
-        <TextInput
-          labelClass={commentStyles}
-          label="Comments"
-          onInput={setComment}
-          value={comment}
-        />
-        {reportAlreadyExists && isAdmin && users && (
-          <div class={userDropdownStyle}>
-            <Icon icon={mdiAccountCircle} />
-            <Dropdown
-              options={users.sort((a, b) =>
-                a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : -1,
-              )}
-              onChange={(user) => {
-                setReporterId(user.id)
-                setRealmId(user.realmId)
-              }}
-              getKey={(user) => user.id}
-              getText={(user) => `${user.firstName} ${user.lastName}`}
-              getGroup={(user) =>
-                realms?.find((realm) => realm.id === user.realmId)?.name ||
-                String(user.realmId)
-              }
-              value={users.find((user) => user.id === reporterId)}
-            />
-          </div>
-        )}
-        <Button disabled={isSaving || isDeleting || !report}>
-          {isSaving ? 'Saving Report' : 'Save Report'}
-        </Button>
-        {reportAlreadyExists && (
-          <Button
-            disabled={isSaving || isDeleting || !report}
-            onClick={handleDelete}
-          >
-            {isDeleting ? 'Deleting Report' : 'Delete Report'}
-          </Button>
-        )}
-      </Card>
-    ) : (
-      <Loader />
-    )
   }
+  const handleDelete = async (e: Event) => {
+    const confirmDelete = await createDialog({
+      confirm: 'Delete Report',
+      dismiss: 'Cancel',
+      description: '',
+      title: 'Confirm Delete',
+    })
+    if (confirmDelete) {
+      e.preventDefault()
+      if (initialReport.key) {
+        deleteReportLocally(initialReport.key)
+      } else {
+        const reportId = initialReport.id
+        if (reportId !== undefined) {
+          setIsDeleting(true)
+          await deleteReport(reportId)
+          setIsDeleting(false)
+        }
+      }
+      onDelete?.()
+    }
+  }
+  const reportAlreadyExists =
+    initialReport.key !== undefined || initialReport.id !== undefined
+
+  return eventMatches && match && visibleFields ? (
+    <Card as="form" class={reportEditorStyle} onSubmit={submit}>
+      <Dropdown
+        options={eventMatches}
+        onChange={(match) => {
+          onMatchSelect?.(match.key)
+          setMatchKey(match.key)
+        }}
+        getKey={(match) => match.key}
+        getText={(match) => formatMatchKeyShort(match.key)}
+        value={eventMatches.find((match) => match.key === matchKey)}
+      />
+      <TeamPicker
+        onChange={setTeam}
+        blueAlliance={match.blueAlliance}
+        redAlliance={match.redAlliance}
+        value={team}
+      />
+      <h2>Auto</h2>
+      {visibleFields.filter(isAuto).map((stat) => (
+        <FieldCard
+          key={`auto + ${stat.reportReference}`}
+          statDescription={stat}
+          value={getReportFieldValue(stat)}
+          onChange={updateReportField(stat.reportReference)}
+        />
+      ))}
+      <h2>Teleop</h2>
+      {visibleFields.filter(isTeleop).map((stat) => (
+        <FieldCard
+          key={`teleop + ${stat.reportReference}`}
+          statDescription={stat}
+          value={getReportFieldValue(stat)}
+          onChange={updateReportField(stat.reportReference)}
+        />
+      ))}
+      <TextInput
+        labelClass={commentStyles}
+        label="Comments"
+        onInput={setComment}
+        value={comment}
+      />
+      {reportAlreadyExists && isAdmin && users && (
+        <div class={userDropdownStyle}>
+          <Icon icon={mdiAccountCircle} />
+          <Dropdown
+            options={users.sort((a, b) =>
+              a.firstName.toLowerCase() > b.firstName.toLowerCase() ? 1 : -1,
+            )}
+            onChange={(user) => {
+              setReporterId(user.id)
+              setRealmId(user.realmId)
+            }}
+            getKey={(user) => user.id}
+            getText={(user) => `${user.firstName} ${user.lastName}`}
+            getGroup={(user) =>
+              realms?.find((realm) => realm.id === user.realmId)?.name ||
+              String(user.realmId)
+            }
+            value={users.find((user) => user.id === reporterId)}
+          />
+        </div>
+      )}
+      <Button disabled={isSaving || isDeleting || !report}>
+        {isSaving ? 'Saving Report' : 'Save Report'}
+      </Button>
+      {reportAlreadyExists && (
+        <Button
+          disabled={isSaving || isDeleting || !report}
+          onClick={handleDelete}
+        >
+          {isDeleting ? 'Deleting Report' : 'Delete Report'}
+        </Button>
+      )}
+    </Card>
+  ) : (
+    <Loader />
+  )
 }
