@@ -13,11 +13,11 @@ export const getUpcomingMatches = (
     if (!prev) return match
     return compareMatches(prev, match) > 0 ? match : prev
   }, null) */
-  let retArr = []
+  const retArr = []
   for (const match of matches) {
-    if (match.redScore) {
+    /* if (match.redScore) {
       retArr = []
-    } else if (
+    } else */ if (
       match.time &&
       match.time.getTime() < currentTime + 1000 * 60 * 90 &&
       match.time.getTime() > currentTime - 1000 * 60 * 45
