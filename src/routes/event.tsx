@@ -55,7 +55,7 @@ const Event = ({ eventKey }: Props) => {
   const eventInfo = useEventInfo(eventKey)
 
   // const currentTime = useCurrentTime().getTime()
-  const date = new Date(1671303600)
+  const date = new Date(2022, 12, 17, 11)
   const currentTime = date.getTime()
   const upcomingMatches = matches
     ? getUpcomingMatches(matches, currentTime)
