@@ -9,7 +9,7 @@ import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
-// import { useCurrentTime } from '@/utils/use-current-time'
+import { useCurrentTime } from '@/utils/use-current-time'
 import clsx from 'clsx'
 
 interface Props {
@@ -54,17 +54,17 @@ const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
 
-  // const currentTime = useCurrentTime().getTime()
-  const date = new Date(2022, 2, 25, 15)
-  const currentTime = date.getTime()
+  const currentTime = useCurrentTime().getTime()
+  // const date = new Date(2022, 2, 25, 15)
+  // const currentTime = date.getTime()
+  // These lines were used for testing. This was the most obvious way to manually set a date.
   const upcomingMatches = matches
     ? getUpcomingMatches(matches, currentTime)
     : []
 
   return (
     <Page
-      // name={eventInfo?.name || <code>{eventKey}</code>}
-      name={date.toDateString() + ' ' + date.toTimeString()}
+      name={eventInfo?.name || <code>{eventKey}</code>}
       back="/"
       class={eventStyle}
     >
