@@ -19,11 +19,11 @@ export const getUpcomingMatches = (
       retArr = []
     } else */ if (
       match.time &&
-      match.time.getTime() < currentTime + 1000 * 60 * 90 &&
-      match.time.getTime() > currentTime - 1000 * 60 * 45
+      match.time.getTime() < currentTime + 1000 * 60 * 5 &&
+      match.time.getTime() > currentTime - 1000 * 60 * 1
     ) {
       retArr.push(match)
     }
   }
-  return retArr.slice(3)
+  return retArr
 }
