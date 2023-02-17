@@ -162,6 +162,7 @@ export const ReportEditor = ({
   // eslint-disable-next-line complexity
   const submit = async (e: Event) => {
     e.preventDefault()
+    if (isDeleting) return
     if (!report) return
     setIsSaving(true)
     const matchReports = await getReports({
@@ -201,6 +202,7 @@ export const ReportEditor = ({
     }
   }
   const handleDelete = async (e: Event) => {
+    setIsDeleting(true)
     const confirmDelete = await createDialog({
       confirm: 'Delete Report',
       dismiss: 'Cancel',
@@ -214,13 +216,12 @@ export const ReportEditor = ({
       } else {
         const reportId = initialReport.id
         if (reportId !== undefined) {
-          setIsDeleting(true)
           await deleteReport(reportId)
-          setIsDeleting(false)
         }
       }
       onDelete?.()
     }
+    setIsDeleting(false)
   }
   const reportAlreadyExists =
     initialReport.key !== undefined || initialReport.id !== undefined
