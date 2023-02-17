@@ -55,7 +55,7 @@ const Event = ({ eventKey }: Props) => {
   const eventInfo = useEventInfo(eventKey)
 
   // const currentTime = useCurrentTime().getTime()
-  const currentTime = 1671386400000
+  const currentTime = 1671303600000
   const upcomingMatches = matches
     ? getUpcomingMatches(matches, currentTime)
     : []
