@@ -141,7 +141,8 @@
             }
           ]
         }
-      ]
+      ],
+      "no-warning-comments": "off"
     }
   },
   "jest": {

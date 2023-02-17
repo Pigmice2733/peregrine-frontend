@@ -202,7 +202,7 @@ export const ReportEditor = ({
             key: initialReport.key || generateReportKey(),
           }
           saveReportLocally(reportWithKey)
-          if (onSaveLocally) onSaveLocally(reportWithKey)
+          onSaveLocally?.(reportWithKey)
         }
       })
       .finally(() => {
