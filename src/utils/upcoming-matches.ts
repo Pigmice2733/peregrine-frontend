@@ -19,8 +19,8 @@ export const getUpcomingMatches = (
       retArr = []
     } else */ if (
       match.time &&
-      match.time.getTime() < currentTime + 1000 * 60 * 5 &&
-      match.time.getTime() > currentTime - 1000 * 60 * 1
+      match.time.getTime() < currentTime + 1000 * 60 * 15 &&
+      match.time.getTime() > currentTime - 1000 * 60 * 4
     ) {
       retArr.push(match)
     }
