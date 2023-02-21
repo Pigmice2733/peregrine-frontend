@@ -1,7 +1,7 @@
 import { ComponentChildren } from 'preact'
 import { css } from 'linaria'
 import { Merge } from '@/type-utils'
-import { useRef } from 'preact/hooks'
+import { MutableRef, useRef } from 'preact/hooks'
 import clsx from 'clsx'
 
 const formStyle = css`
@@ -16,8 +16,10 @@ type Props = Merge<
 >
 
 export const Form = (props: Props) => {
-  const formRef = useRef<HTMLFormElement | null>()
-  const isValid = Boolean(formRef.current?.checkValidity())
+  const formRef = useRef<HTMLFormElement | null>() as
+    | MutableRef<HTMLFormElement>
+    | undefined
+  const isValid = Boolean(formRef?.current.checkValidity())
   return (
     <form {...props} class={clsx(props.class, formStyle)} ref={formRef}>
       {props.children(isValid)}

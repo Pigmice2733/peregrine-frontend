@@ -35,14 +35,21 @@ const cardStyle = css`
   }
 `
 
+const realmElementsStyle = css`
+  display: grid;
+  grid-template-columns: 100%;
+  grid-gap: 0.5rem;
+`
+
 const dropdownClass = css`
-  padding: 0.4rem 0.4rem 0.1rem;
+  padding: 0.4rem;
 `
 
 const textStyle = css`
   font-size: 1rem;
   font-weight: bold;
   color: var(--off-black);
+  align: center;
 `
 
 const SignUpForm = () => {
@@ -96,23 +103,25 @@ const SignUpForm = () => {
             minLength={minPasswordLength}
             maxLength={maxPasswordLength}
           />
-          <Dropdown<Realm>
-            value={realms.find((r) => r.id === realmId)}
-            emptyLabel="Select a realm"
-            class={dropdownClass}
-            options={realms}
-            required
-            onChange={(v) => setRealmId(v.id)}
-            getKey={(v) => v.id}
-            getText={(v) => v.name}
-          />
-          <div class={textStyle}>
-            Don&apos;t see your team? Ask a captain or mentor to make a new
-            realm.{' '}
+          <div class={realmElementsStyle}>
+            <Dropdown<Realm>
+              value={realms.find((r) => r.id === realmId)}
+              emptyLabel="Select a realm"
+              class={dropdownClass}
+              options={realms}
+              required
+              onChange={(v) => setRealmId(v.id)}
+              getKey={(v) => v.id}
+              getText={(v) => v.name}
+            />
+            <div class={textStyle}>
+              Don&apos;t see your team? Ask a captain or mentor to make a new
+              realm.{' '}
+            </div>
+            <Button disabled={isLoading} href={'/newrealm'}>
+              New Realm
+            </Button>
           </div>
-          <Button disabled={isLoading} href={'/newrealm'}>
-            New Realm
-          </Button>
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}
           </Button>
