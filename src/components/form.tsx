@@ -16,12 +16,16 @@ type Props = Merge<
 >
 
 export const Form = (props: Props) => {
-  const formRef = useRef<HTMLFormElement | null>() as
-    | MutableRef<HTMLFormElement>
-    | undefined
-  const isValid = Boolean(formRef?.current.checkValidity())
+  const formRef = useRef<HTMLFormElement | null>()
+  const isValid = Boolean(formRef.current?.checkValidity())
   return (
-    <form {...props} class={clsx(props.class, formStyle)} ref={formRef}>
+    <form
+      {...props}
+      class={clsx(props.class, formStyle)}
+      ref={
+        formRef.current ? (formRef as MutableRef<HTMLFormElement>) : undefined
+      }
+    >
       {props.children(isValid)}
     </form>
   )

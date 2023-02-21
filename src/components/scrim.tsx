@@ -103,7 +103,7 @@ export const Scrim = ({
       role="none"
       class={clsx(props.class, scrimStyle, visible || scrimHiddenClass)}
       onClick={(e) => {
-        if (props.onClick) props.onClick.call(e.currentTarget, e)
+        if (props.onClick) props.onClick.call(e.currentTarget as never, e)
         // make sure click is from _this_ element, not a descendant
         if (e.target === scrimEl.current) onClickOutside()
       }}

@@ -35,7 +35,7 @@ export const InnerTextInput = (props: PropsOf<'input'>) => {
       {...props}
       onBlur={(e) => {
         setHasFocused(true)
-        if (props.onBlur) props.onBlur.call(e.currentTarget, e)
+        if (props.onBlur) props.onBlur.call(e.currentTarget as never, e)
       }}
       class={clsx(props.class, hasFocused && hasFocusedClass, innerClass)}
     />
