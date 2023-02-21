@@ -36,7 +36,14 @@ const cardStyle = css`
 `
 
 const dropdownClass = css`
-  padding: 0.4rem;
+  padding: 0.4rem 0.4rem 0.1rem 0.4rem;
+`
+
+const textStyle = css`
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--off-black);
+  padding-bottom: 0.1rem;
 `
 
 const SignUpForm = () => {
@@ -100,12 +107,13 @@ const SignUpForm = () => {
             getKey={(v) => v.id}
             getText={(v) => v.name}
           />
-          <div>
-            Don&apos;t see your team? Ask a captain or mentor to make a realm.
-            <Button disabled={isLoading || !isValid} href={'/newrealm'}>
-              New Realm
-            </Button>
+          <div class={textStyle}>
+            Don&apos;t see your team? Ask a captain or mentor to make a new
+            realm.{' '}
           </div>
+          <Button disabled={isLoading} href={'/newrealm'}>
+            New Realm
+          </Button>
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}
           </Button>

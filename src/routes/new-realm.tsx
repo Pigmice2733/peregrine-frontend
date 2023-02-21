@@ -26,7 +26,7 @@ const cardStyle = css`
   }
 `
 
-const SignUpForm = () => {
+const CreateRealmForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [realmName, setRealmName] = useState('')
   // const realms = usePromise(getRealms) || []
@@ -71,7 +71,7 @@ const NewRealm = () => (
     <div class={contentStyle}>
       <Card class={cardStyle}>
         <ErrorBoundary>
-          <SignUpForm />
+          <CreateRealmForm />
         </ErrorBoundary>
       </Card>
     </div>
