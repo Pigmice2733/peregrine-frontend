@@ -36,14 +36,13 @@ const cardStyle = css`
 `
 
 const dropdownClass = css`
-  padding: 0.4rem 0.4rem 0.1rem 0.4rem;
+  padding: 0.4rem 0.4rem 0.1rem;
 `
 
 const textStyle = css`
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: bold;
   color: var(--off-black);
-  padding-bottom: 0.1rem;
 `
 
 const SignUpForm = () => {
