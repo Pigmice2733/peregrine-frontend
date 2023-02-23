@@ -1,6 +1,6 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
 import { FunctionComponent } from 'preact'
-import { useState, useEffect, useRef, Ref } from 'preact/hooks'
+import { useState, useEffect, useRef } from 'preact/hooks'
 import { usePromise } from '@/utils/use-promise'
 import { compareMatches } from '@/utils/compare-matches'
 import Card from './card'
@@ -519,9 +519,7 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
     >
       <div
         class={innerBooleanChartWrapperStyle}
-        ref={
-          elementRef.current ? (elementRef as Ref<HTMLDivElement>) : undefined
-        }
+        ref={elementRef}
         onScroll={recomputeScrolling}
       >
         <div class={innerBooleanChartStyle}>
