@@ -49,7 +49,7 @@ const textStyle = css`
   font-size: 0.7rem;
   font-weight: bold;
   color: var(--off-black);
-  align: center;
+  text-align: center;
 `
 
 const SignUpForm = () => {
