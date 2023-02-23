@@ -46,7 +46,7 @@ const dropdownClass = css`
 `
 
 const textStyle = css`
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   font-weight: bold;
   color: var(--off-black);
   text-align: center;
