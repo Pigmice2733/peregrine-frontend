@@ -5,7 +5,7 @@ import { authenticate } from '@/api/authenticate'
 import Page from '../page'
 import Button from '../button'
 import { css } from 'linaria'
-import { useState, useRef, MutableRef } from 'preact/hooks'
+import { useState, useRef } from 'preact/hooks'
 import { Roles } from '@/api/user'
 import {
   minUsernameLength,
@@ -71,12 +71,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   }
 
   return (
-    <Form
-      onSubmit={onSubmit}
-      ref={
-        formRef.current ? (formRef as MutableRef<HTMLFormElement>) : undefined
-      }
-    >
+    <Form onSubmit={onSubmit} ref={formRef}>
       {(isValid) => (
         <>
           <TextInput
