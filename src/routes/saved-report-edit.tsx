@@ -1,5 +1,5 @@
 import { Report, OfflineReport } from '@/api/report'
-import { getReport } from '@/api/report/get-report'
+import { getSavedReports } from '@/api/report/submit-report'
 import { AlertType } from '@/components/alert'
 import Loader from '@/components/loader'
 import Page from '@/components/page'
@@ -41,15 +41,12 @@ const ReportEditPage = ({
   )
 }
 
-const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
+const ReportEditorRoute = ({ reportId: reportKey }: { reportId: string }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
 
   useEffect(() => {
-    setReport(undefined)
-    getReport(reportId).then((report) => {
-      setReport(report)
-    })
-  }, [reportId])
+    setReport(getSavedReports().find((report) => reportKey === report.key))
+  }, [reportKey])
 
   return report ? (
     // shows a page from cache or from network
@@ -59,7 +56,7 @@ const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
         setReport(report)
         route(`/reports/${report.id}`, {
           type: AlertType.Success,
-          message: 'Report was updated.',
+          message: 'Report was uploaded.',
         })
       }}
       onSaveLocally={(report) =>
@@ -71,7 +68,7 @@ const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
       onDelete={() =>
         route(`/events/${report.eventKey}/matches/${report.matchKey}`, {
           type: AlertType.Success,
-          message: 'Report was successfully deleted.',
+          message: 'Report was deleted locally.',
         })
       }
     />
