@@ -41,7 +41,7 @@ const ReportPage = ({ report }: { report: Report }) => {
         <ReportViewer
           report={report}
           onEditClick={
-            canEdit ? () => route(`/report/${report.key}/edit`) : undefined
+            canEdit ? () => route(`/reports/${report.key}/edit`) : undefined
           }
         />
       </Card>

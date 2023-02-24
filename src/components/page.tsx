@@ -91,12 +91,13 @@ const Page = ({
   class: className,
   wrapperClass,
   name,
+  homepage,
   ...rest
 }: RenderableProps<Props>) => {
   return (
     <ErrorBoundary>
       <div class={clsx(wrapperClass)} {...rest}>
-        <Header name={name} />
+        <Header name={name} homepage={homepage} />
         <main class={clsx(className)}>{children}</main>
       </div>
     </ErrorBoundary>
