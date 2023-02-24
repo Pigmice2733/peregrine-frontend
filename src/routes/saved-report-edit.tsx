@@ -41,7 +41,7 @@ const ReportEditPage = ({
   )
 }
 
-const ReportEditorRoute = ({ reportId: reportKey }: { reportId: string }) => {
+const LocalReportEditorRoute = (reportKey: string) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
 
   useEffect(() => {
@@ -78,4 +78,4 @@ const ReportEditorRoute = ({ reportId: reportKey }: { reportId: string }) => {
   )
 }
 
-export default ReportEditorRoute
+export default LocalReportEditorRoute

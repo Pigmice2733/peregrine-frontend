@@ -51,7 +51,7 @@ const ReportPage = ({ report }: { report: Report }) => {
   )
 }
 
-const SavedReportsPage = ({ reportKey }: { reportKey: string }) => {
+const SavedReportsPage = (reportKey: string) => {
   const [report, setReport] = useState<undefined | Report>(undefined)
 
   useEffect(() => {
