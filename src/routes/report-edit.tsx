@@ -41,12 +41,11 @@ const ReportEditPage = ({
   )
 }
 
-const ReportEditorRoute = ({ reportId }: { reportId: any }) => {
+const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
 
   useEffect(() => {
     setReport(undefined)
-
     getReport(reportId).then((report) => {
       setReport(report)
     })
