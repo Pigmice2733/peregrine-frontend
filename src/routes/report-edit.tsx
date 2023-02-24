@@ -1,5 +1,6 @@
 import { Report, OfflineReport } from '@/api/report'
 import { getReport } from '@/api/report/get-report'
+import { getSavedReports } from '@/api/report/submit-report'
 import { AlertType } from '@/components/alert'
 import Loader from '@/components/loader'
 import Page from '@/components/page'
@@ -14,7 +15,7 @@ const reportPageStyle = css`
   justify-content: center;
 `
 
-const ReportPage = ({
+const ReportEditPage = ({
   report,
   onSaveSuccess,
   onSaveLocally,
@@ -41,23 +42,32 @@ const ReportPage = ({
   )
 }
 
-const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
+const ReportEditorRoute = ({ reportId }: { reportId: any }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
+  const [isLocalReport, setIsLocalReport] = useState<boolean>(false)
+
   useEffect(() => {
     setReport(undefined)
-    getReport(reportId).then((report) => {
-      setReport(report)
-    })
+    if (typeof reportId === 'number') {
+      getReport(reportId).then((report) => {
+        setReport(report)
+      })
+    } else if (reportId instanceof String) {
+      setReport(getSavedReports().find((report) => reportId === report.key))
+      setIsLocalReport(true)
+    }
   }, [reportId])
   return report ? (
     // shows a page from cache or from network
-    <ReportPage
+    <ReportEditPage
       report={report}
       onSaveSuccess={(report) => {
         setReport(report)
         route(`/report/${report.id}`, {
           type: AlertType.Success,
-          message: 'Report was updated!',
+          message: isLocalReport
+            ? 'Report was updated!'
+            : 'Report was uploaded!',
         })
       }}
       onSaveLocally={(report) =>
@@ -69,7 +79,9 @@ const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
       onDelete={() =>
         route(`/events/${report.eventKey}/matches/${report.matchKey}`, {
           type: AlertType.Success,
-          message: 'Report was successfully deleted!',
+          message:
+            'Report was successfully deleted' +
+            (isLocalReport ? '!' : 'locally!'),
         })
       }
     />
