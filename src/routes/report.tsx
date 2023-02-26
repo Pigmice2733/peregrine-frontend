@@ -45,7 +45,7 @@ const ReportPage = ({ report }: { report: Report }) => {
   )
 }
 
-const ReportRoute = (reportId: number) => {
+const ReportRoute = ({ reportId }: { reportId: number }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
   useEffect(() => {
     setReport(undefined)

@@ -41,7 +41,7 @@ const ReportEditPage = ({
   )
 }
 
-const LocalReportEditorRoute = (reportKey: string) => {
+const LocalReportEditorRoute = ({ reportKey }: { reportKey: string }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
 
   useEffect(() => {
