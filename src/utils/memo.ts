@@ -18,7 +18,7 @@ function shallowDiffers(
  * changed. This was previously known as `React.pure`.
  * @param areValuesEqual Custom equality function
  */
-export function memo<Props>(
+export function memo<Props extends {}>(
   c: FunctionComponent<Props>,
   areValuesEqual?: (prev: object, next: object) => boolean,
 ) {
@@ -41,7 +41,7 @@ export function memo<Props>(
 
   function Memoed(this: Component<Props>, props: Props) {
     this.shouldComponentUpdate = shouldUpdate
-    return jsx(c, props)
+    return jsx<Props>(c, props)
   }
   Memoed.displayName = 'Memo(' + (c.displayName || c.name) + ')'
   Memoed._forwarded = true
