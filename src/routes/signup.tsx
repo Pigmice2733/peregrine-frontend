@@ -54,6 +54,13 @@ const SignUpForm = () => {
     e.preventDefault()
     if (realmId === undefined) return
     setIsLoading(true)
+    /* let er = false
+    for (const i of username) {
+      if (!"abcdefghijklmnopqrstuvwxyz1234567890".includes(i)) {
+        er = true
+      }
+    }
+    if (er) return */
     createUser({
       username,
       password,
