@@ -32,8 +32,8 @@ import Authenticated from '@/components/authenticated'
 import { minPasswordLength, maxPasswordLength } from '@/constants'
 import clsx from 'clsx'
 import { getReports } from '@/api/report/get-reports'
-import { noop } from '@/utils/empty-promise'
-import { getFastestUser } from '@/cache/users/get-fastest'
+// import { noop } from '@/utils/empty-promise'
+import { findUserDetails } from '@/cache/users/find-user'
 
 const RoleInfo = ({
   save,
@@ -75,7 +75,7 @@ const VerifiedInfo = ({
   editable,
 }: {
   user: UserInfo
-  refetch: () => Promise<unknown>
+  refetch: () => void
   editable: boolean
 }) => {
   const [isSaving, setIsSaving] = useState(false)
@@ -177,7 +177,7 @@ const SetPasswordButton = ({
 }: {
   user: UserInfo
   self: boolean
-  refetch: () => Promise<void>
+  refetch: () => void
 }) => {
   const emitError = useErrorEmitter()
   const alertOnSaveAdmin = async () => {
@@ -226,7 +226,7 @@ interface EditableTextProps {
   editable?: boolean
   label: string
   value: string
-  refetch: () => Promise<void>
+  refetch: () => void
 }
 
 const editableTextStyle = css`
@@ -295,7 +295,7 @@ const EditableText = ({
 interface UserProfileProps {
   user: UserInfo
   editable?: boolean
-  refetch: () => Promise<void>
+  refetch: () => void
   isCurrentUser: boolean
   isSuperAdmin: boolean
 }
@@ -469,14 +469,16 @@ const userPageStyle = css`
 const InnerUserPage = ({ userId }: { userId: string }) => {
   const [user, setUser] = useState<UserInfo | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const fetchUser = useCallback(
-    () => getFastestUser(Number(userId)).then(setUser),
-    [userId],
-  )
+  const fetchUser = useCallback(() => {
+    const user = findUserDetails(Number(userId))
+    if (user) {
+      setUser(user)
+    }
+  }, [userId])
   useEffect(() => {
     fetchUser()
-      .catch(noop)
-      .finally(() => setIsLoading(false))
+    // .catch(noop)
+    setIsLoading(false)
   }, [fetchUser])
   const { jwt } = useJWT()
   const realm = jwt?.peregrineRealm
