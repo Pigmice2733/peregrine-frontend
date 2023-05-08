@@ -173,9 +173,11 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
 const SetPasswordButton = ({
   user,
   self,
+  refetch,
 }: {
   user: UserInfo
   self: boolean
+  refetch: () => Promise<void>
 }) => {
   const emitError = useErrorEmitter()
   const alertOnSaveAdmin = async () => {
@@ -202,6 +204,7 @@ const SetPasswordButton = ({
           modifyUser(user.id, { password }).catch(emitError)
         }
       }}
+      refetch={refetch}
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
@@ -223,6 +226,7 @@ interface EditableTextProps {
   editable?: boolean
   label: string
   value: string
+  refetch: () => Promise<void>
 }
 
 const editableTextStyle = css`
@@ -238,6 +242,7 @@ const EditableText = ({
   label,
   editable,
   value: originalValue,
+  refetch,
   ...rest
 }: EditableTextProps & TextInputProps) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -248,6 +253,7 @@ const EditableText = ({
   const closeEditor = () => {
     setIsEditing(false)
     setIsSaving(false)
+    refetch()
   }
   const openEditor = () => {
     setIsEditing(true)
@@ -289,7 +295,7 @@ const EditableText = ({
 interface UserProfileProps {
   user: UserInfo
   editable?: boolean
-  refetch: () => Promise<unknown>
+  refetch: () => Promise<void>
   isCurrentUser: boolean
   isSuperAdmin: boolean
 }
@@ -343,6 +349,7 @@ const UserProfileCard = ({
             }
           }}
           value={`${user.firstName} ${user.lastName}`}
+          refetch={refetch}
         >
           {(value, editIcon) => (
             <h1 class={userNameStyle}>
@@ -359,6 +366,7 @@ const UserProfileCard = ({
             }
           }}
           value={user.username}
+          refetch={refetch}
         >
           {(value, editIcon) => (
             <h2
@@ -417,7 +425,13 @@ const UserProfileCard = ({
           />
         </dl>
         {editable && !isCurrentUser && <DeleteUserButton user={user} />}
-        {editable && <SetPasswordButton user={user} self={isCurrentUser} />}
+        {editable && (
+          <SetPasswordButton
+            user={user}
+            self={isCurrentUser}
+            refetch={refetch}
+          />
+        )}
       </ErrorBoundary>
     </Card>
   )
