@@ -1,5 +1,4 @@
 /* eslint-disable max-nested-callbacks */
-/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
 
 import Page from '@/components/page'
 import { css } from 'linaria'
@@ -47,8 +46,10 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   return (
     <Page
       name={
-        `Comments: ${teamNum} @ ` +
-        <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
+        <>
+          {`Comments: ${teamNum} @ `}
+          <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
+        </>
       }
       class={commentsPageStyle}
     >

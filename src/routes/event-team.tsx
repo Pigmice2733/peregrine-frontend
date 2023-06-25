@@ -1,5 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
-
 import Page from '@/components/page'
 import InfoGroupCard from '@/components/info-group-card'
 import {
@@ -181,8 +179,8 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       name={
         <span class={pageHeadingStyle}>
           <span class={teamHeadingSpanStyle}>
-            {`${teamNum} @ ` +
-            <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>}
+            {`${teamNum} @ `}
+            <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
           </span>
           <IconButton
             icon={isTeamSaved ? mdiStar : mdiStarOutline}

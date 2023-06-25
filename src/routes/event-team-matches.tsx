@@ -1,5 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
-
 import Page from '@/components/page'
 import { useEventInfo } from '@/cache/event-info/use'
 import { useEventMatches } from '@/cache/event-matches/use'
@@ -28,8 +26,10 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
   return (
     <Page
       name={
-        `Matches: ${teamNum} @ ` +
-        <a href={`/events/${eventKey}`}> {eventName} </a>
+        <>
+          {`Matches: ${teamNum} @ `}
+          <a href={`/events/${eventKey}`}> {eventName} </a>
+        </>
       }
       class={eventTeamMatchesStyle}
     >
