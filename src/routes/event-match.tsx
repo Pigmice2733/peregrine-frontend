@@ -164,10 +164,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     // page setup
     <Page
       name={
+        // eslint-disable-next-line caleb/@typescript-eslint/restrict-plus-operands
         m.group +
         (m.num ? ' Match ' + m.num : '') +
         ' - ' +
-        <a href={`/events/${eventKey}`}> {(event ? event.name : eventKey)} </a>
+        <a href={`/events/${eventKey}`}> {event ? event.name : eventKey} </a>
       }
       class={clsx(
         matchStyle,

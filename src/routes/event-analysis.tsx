@@ -1,3 +1,5 @@
+/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
+
 import { FunctionComponent } from 'preact'
 import Page from '@/components/page'
 import { usePromise } from '@/utils/use-promise'
@@ -30,7 +32,10 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
 
   return (
     <Page
-      name={'Analysis - ' + <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>}
+      name={
+        'Analysis - ' +
+        <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
+      }
       class={tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >
