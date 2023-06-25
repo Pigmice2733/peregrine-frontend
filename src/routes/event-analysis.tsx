@@ -13,6 +13,7 @@ import {
   tablePageTableStyle,
 } from '@/utils/table-page-style'
 import Card from '@/components/card'
+import { greenOnPurple } from '@/colors'
 
 interface Props {
   eventKey: string
@@ -22,9 +23,18 @@ const teamStyle = css`
   color: inherit;
 `
 
+const headerLinkStyle = css`
+  color: white;
+
+  &:hover {
+    color: ${greenOnPurple};
+  }
+`
+
 const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
+  const eventName = eventInfo?.name || eventKey
 
   const schema = useSchema(eventInfo?.schemaId)
 
@@ -33,7 +43,10 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       name={
         <>
           {'Analysis - '}
-          <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
+          <a href={`/events/${eventKey}`} class={headerLinkStyle}>
+            {' '}
+            {eventName}{' '}
+          </a>
         </>
       }
       class={tablePageStyle}

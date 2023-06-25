@@ -10,6 +10,8 @@ import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { compareMatchKeys } from '@/utils/compare-matches'
 import { GetReport } from '@/api/report'
 import { getReports } from '@/api/report/get-reports'
+import { useEventInfo } from '@/cache/event-info/use'
+import { greenOnPurple } from '@/colors'
 
 interface Props {
   eventKey: string
@@ -26,12 +28,24 @@ const matchListStyle = css`
   grid-gap: 2rem;
 `
 
+const headerLinkStyle = css`
+  color: white;
+
+  &:hover {
+    color: ${greenOnPurple};
+  }
+`
+
 const EventTeamComments = ({ eventKey, teamNum }: Props) => {
   const team = 'frc' + teamNum
   const reports = usePromise(() => getReports({ team, event: eventKey }), [
     team,
     eventKey,
   ])
+
+  const eventInfo = useEventInfo(eventKey)
+  const eventName = eventInfo?.name || eventKey
+
   const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
     (acc, report) => {
       if (report.comment) {
@@ -48,7 +62,10 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
       name={
         <>
           {`Comments: ${teamNum} @ `}
-          <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
+          <a href={`/events/${eventKey}`} class={headerLinkStyle}>
+            {' '}
+            {eventName}{' '}
+          </a>
         </>
       }
       class={commentsPageStyle}
