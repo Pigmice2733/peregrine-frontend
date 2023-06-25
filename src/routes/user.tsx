@@ -172,16 +172,16 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
 
 const SetPasswordButton = ({
   user,
-  self,
+  isCurrentUser,
   refetch,
 }: {
   user: UserInfo
-  self: boolean
+  isCurrentUser: boolean
   refetch: () => Promise<void>
 }) => {
   const emitError = useErrorEmitter()
   const alertOnSaveAdmin = async () => {
-    if (self) return
+    if (isCurrentUser) return
     const confirmation = await createDialog({
       title: 'Confirm Edit',
       description: 'Are you sure you want to make this change?',
@@ -428,7 +428,7 @@ const UserProfileCard = ({
         {editable && (
           <SetPasswordButton
             user={user}
-            self={isCurrentUser}
+            isCurrentUser={isCurrentUser}
             refetch={refetch}
           />
         )}
