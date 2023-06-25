@@ -167,7 +167,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
         m.group +
         (m.num ? ' Match ' + m.num : '') +
         ' - ' +
-        (event ? event.name : eventKey)
+        <a href={`/events/${eventKey}`}> {(event ? event.name : eventKey)} </a>
       }
       class={clsx(
         matchStyle,
@@ -210,7 +210,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 </div>
               </Card>
             )}
-            <MatchDetailsCard match={match} eventKey={eventKey} matchPage />
+            <MatchDetailsCard match={match} eventKey={eventKey} />
             {reports && reports.length > 0 ? (
               <MatchReports
                 match={match}

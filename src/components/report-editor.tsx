@@ -1,4 +1,3 @@
-/* eslint-disable caleb/@typescript-eslint/restrict-plus-operands */
 import { css } from 'linaria'
 import { StatDescription, ReportStatDescription } from '@/api/schema'
 import { useState, useMemo, useEffect } from 'preact/hooks'

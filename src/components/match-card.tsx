@@ -5,7 +5,6 @@ import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
 import clsx from 'clsx'
-import { useEventInfo } from '@/cache/event-info/use'
 
 interface MatchCardProps {
   match: {
@@ -18,7 +17,6 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
-  matchPage?: boolean
 }
 
 const matchCardStyle = css`
@@ -59,19 +57,12 @@ const matchNumStyle = css`
   color: var(--grey-text);
 `
 
-const eventAndTimeStyle = css`
+const timeStyle = css`
   grid-row: 1 / span 2;
   grid-column: 2;
   white-space: nowrap;
   margin: 0.3rem 0.3rem;
   align-items: center;
-`
-
-const eventNameStyle = css`
-  font-weight: bold;
-  grid-row: 1;
-  text-align: center;
-  align-self: center;
 `
 
 const dateTimeStyle = css`
@@ -107,9 +98,8 @@ const blueStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className, matchPage }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
-    const eventName = useEventInfo(eventKey)?.name
 
     const createTeamLinks = (teams: string[]) =>
       teams.flatMap((t: string, i) => {
@@ -136,13 +126,7 @@ export const MatchDetailsCard = memo(
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
         </div>
-        <div class={eventAndTimeStyle}>
-          {matchPage && (
-            <div class={eventNameStyle}>
-              {' '}
-              at <a href={`/events/${eventKey}`}>{eventName}</a>{' '}
-            </div>
-          )}
+        <div class={timeStyle}>
           {match.time && (
             <time dateTime={match.time.toISOString()} class={dateTimeStyle}>
               {formatTime(match.time)}

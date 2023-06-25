@@ -178,9 +178,8 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     <Page
       name={
         <span class={pageHeadingStyle}>
-          <span class={teamHeadingSpanStyle}>{`${teamNum} @ ${
-            eventInfo ? eventInfo.name : eventKey
-          }`}</span>
+          <span class={teamHeadingSpanStyle}>{`${teamNum} @ ` + <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>
+          }</span>
           <IconButton
             icon={isTeamSaved ? mdiStar : mdiStarOutline}
             onClick={() =>

@@ -1,6 +1,5 @@
 /* eslint-disable max-nested-callbacks */
 import Page from '@/components/page'
-import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import Card from '@/components/card'
 import Loader from '@/components/loader'
@@ -27,7 +26,6 @@ const matchListStyle = css`
 `
 
 const EventTeamComments = ({ eventKey, teamNum }: Props) => {
-  const eventInfo = useEventInfo(eventKey)
   const team = 'frc' + teamNum
   const reports = usePromise(() => getReports({ team, event: eventKey }), [
     team,
@@ -46,7 +44,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
 
   return (
     <Page
-      name={`Comments: ${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
+      name={`Comments: ${teamNum} @ ` + <a href={`/events/${eventKey}`}> event ? event.name : eventKey </a>}
       class={commentsPageStyle}
     >
       <Card class={matchListStyle}>

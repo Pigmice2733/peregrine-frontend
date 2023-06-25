@@ -142,7 +142,8 @@
           ]
         }
       ],
-      "no-warning-comments": "off"
+      "no-warning-comments": "off",
+      "caleb/@typescript-eslint/restrict-plus-operands": "warn"
     }
   },
   "jest": {
