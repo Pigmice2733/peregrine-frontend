@@ -4,7 +4,13 @@ import { css } from 'linaria'
 const pageStyle = css`
   text-align: center;
   display: grid;
-  grid-template-columns: 1fr minmax(60%, 50rem) 1fr;
+  grid-template-columns: 1fr minmax(60%, 61rem) 1fr;
+  padding: 0 1rem;
+`
+
+const headerStyle = css`
+  grid-column: 2;
+  margin-bottom: 0rem;
 `
 
 const informationStyle = css`
@@ -13,7 +19,7 @@ const informationStyle = css`
 `
 
 const sourceStyle = css`
-  padding: 3rem 2rem 0 2rem;
+  padding: 1rem 2rem 0 2rem;
   font-family: monospace;
   grid-column: 2;
 `
@@ -34,7 +40,7 @@ const sourceText = css`
 const AboutPage = () => {
   return (
     <Page name="About" back="/" class={pageStyle}>
-      <h1>Welcome to Peregrine!</h1>
+      <h1 class={headerStyle}>Welcome to Peregrine!</h1>
       <div class={informationStyle}>
         <p>
           <span class={boldText}>
@@ -69,8 +75,12 @@ const AboutPage = () => {
         </p>
         <p>
           If you have any questions about getting your team onboarded to
-          Peregrine or using the app, please reach out to the Pigmice
-          team&rsquo;s Peregrine lead, Alex Vennebush, at alexv@pigmice.com.
+          Peregrine or using the app,{' '}
+          <span class={boldText}>
+            please reach out to the Pigmice team&rsquo;s Peregrine lead, Alex
+            Vennebush
+          </span>
+          , at alexv@pigmice.com.
         </p>
       </div>
       <div class={sourceStyle}>
