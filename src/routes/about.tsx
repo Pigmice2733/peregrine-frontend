@@ -3,16 +3,19 @@ import { css } from 'linaria'
 
 const pageStyle = css`
   text-align: center;
+  display: grid;
+  grid-template-columns: 1fr minmax(60%, 50rem) 1fr;
 `
 
 const informationStyle = css`
-  padding: 0 2rem;
   font-size: 22px;
+  grid-column: 2;
 `
 
 const sourceStyle = css`
   padding: 3rem 2rem 0 2rem;
   font-family: monospace;
+  grid-column: 2;
 `
 
 const boldText = css`
@@ -55,7 +58,7 @@ const AboutPage = () => {
         </p>
         <p>
           <span class={boldText}>
-            It&rsqou;s really easy to get started with Peregrine.
+            It&rsquo;s really easy to get started with Peregrine.
           </span>{' '}
           Have a team captain or coach send an email to{' '}
           <a href="mailto:alexv@pigmice.com">alexv@pigmice.com</a> and a member
@@ -63,6 +66,11 @@ const AboutPage = () => {
           They will also connect you to a Slack channel where your team can ask
           questions and give you some tips on setting up your team with
           Peregrine.
+        </p>
+        <p>
+          If you have any questions about getting your team onboarded to
+          Peregrine or using the app, please reach out to the Pigmice
+          team&rsquo;s Peregrine lead, Alex Vennebush, at alexv@pigmice.com.
         </p>
       </div>
       <div class={sourceStyle}>
@@ -79,6 +87,7 @@ const AboutPage = () => {
             backend (Go connected to SQL){' '}
           </a>
         </p>
+        <p class={sourceText}>current version: public release 1.0.0</p>
       </div>
     </Page>
   )
