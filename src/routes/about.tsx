@@ -44,12 +44,14 @@ const AboutPage = () => {
       <div class={informationStyle}>
         <p>
           <span class={boldText}>
-            Peregrine is a scouting app for FRC competitions.
+            Peregrine is a completely free, open-source scouting app for FRC
+            competitions.
           </span>{' '}
           The frontend is written in TypeScript and the backend is written in
-          Go. Peregrine was developed by students on team 2733 Pigmice in 2017
-          and redesigned in the autumn of 2018. Peregrine has been used by 15
-          teams and counting to simplify scouting at FRC competitions.
+          Go. Peregrine was originally built by students on team 2733 Pigmice in
+          2017 and redesigned in the autumn of 2018. Development is ongoing to
+          make the website better than ever. Peregrine has been used by 15 teams
+          and counting to simplify scouting at FRC competitions.
         </p>
         <p>
           <span class={boldText}>
@@ -60,7 +62,8 @@ const AboutPage = () => {
           where team members can compare individual statistics or overall
           performance between teams and has pages for each team at each event
           and the matches each team will play in, easily allowing pit crews to
-          know when they&rsquo;re up next.
+          know when they&rsquo;re up next. All event data and some match scoring
+          data is pulled from The Blue Alliance.
         </p>
         <p>
           <span class={boldText}>
