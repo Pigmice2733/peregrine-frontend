@@ -13,7 +13,6 @@ import {
   tablePageTableStyle,
 } from '@/utils/table-page-style'
 import Card from '@/components/card'
-import { greenOnPurple } from '@/colors'
 
 interface Props {
   eventKey: string
@@ -21,14 +20,6 @@ interface Props {
 
 const teamStyle = css`
   color: inherit;
-`
-
-const headerLinkStyle = css`
-  color: white;
-
-  &:hover {
-    color: ${greenOnPurple};
-  }
 `
 
 const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
@@ -43,10 +34,7 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       name={
         <>
           {'Analysis - '}
-          <a href={`/events/${eventKey}`} class={headerLinkStyle}>
-            {' '}
-            {eventName}{' '}
-          </a>
+          <a href={`/events/${eventKey}`}> {eventName} </a>
         </>
       }
       class={tablePageStyle}

@@ -27,7 +27,6 @@ import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
-import { greenOnPurple } from '@/colors'
 
 const sectionStyle = css`
   font-weight: normal;
@@ -157,14 +156,6 @@ const teamHeadingSpanStyle = css`
   margin-right: 0.3rem;
 `
 
-const headerLinkStyle = css`
-  color: white;
-
-  &:hover {
-    color: ${greenOnPurple};
-  }
-`
-
 const EventTeam = ({ eventKey, teamNum }: Props) => {
   const eventInfo = useEventInfo(eventKey)
   const eventTeamInfo = usePromise(
@@ -191,10 +182,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
         <span class={pageHeadingStyle}>
           <span class={teamHeadingSpanStyle}>
             {`${teamNum} @ `}
-            <a href={`/events/${eventKey}`} class={headerLinkStyle}>
-              {' '}
-              {eventName}{' '}
-            </a>
+            <a href={`/events/${eventKey}`}> {eventName} </a>
           </span>
           <IconButton
             icon={isTeamSaved ? mdiStar : mdiStarOutline}
