@@ -60,13 +60,13 @@ type Props = Merge<
   JSX.HTMLAttributes,
   {
     name: ComponentChildren
-    homepage?: boolean
+    showBackButton?: boolean
     class?: string
     wrapperClass?: string
   }
 >
 
-const Header = ({ name, homepage }: Omit<Props, 'class'>) => {
+const Header = ({ name, showBackButton }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen)
@@ -75,7 +75,7 @@ const Header = ({ name, homepage }: Omit<Props, 'class'>) => {
   return (
     <>
       <header class={headerStyle}>
-        {!homepage && (
+        {(showBackButton || showBackButton === undefined) && (
           <IconButton
             icon={mdiArrowLeft}
             aria-label="Back"
@@ -99,13 +99,13 @@ const Page = ({
   class: className,
   wrapperClass,
   name,
-  homepage,
+  showBackButton,
   ...rest
 }: RenderableProps<Props>) => {
   return (
     <ErrorBoundary>
       <div class={clsx(wrapperClass)} {...rest}>
-        <Header name={name} homepage={homepage} />
+        <Header name={name} showBackButton={showBackButton} />
         <main class={clsx(className)}>{children}</main>
       </div>
     </ErrorBoundary>

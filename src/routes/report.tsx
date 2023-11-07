@@ -6,7 +6,6 @@ import { getReport } from '@/api/report/get-report'
 import Loader from '@/components/loader'
 import { useState, useEffect } from 'preact/hooks'
 import { useJWT } from '@/jwt'
-import { route } from '@/router'
 import { Report } from '@/api/report'
 
 const reportPageStyle = css`
@@ -32,13 +31,10 @@ const ReportPage = ({ report }: { report: Report }) => {
       jwt.peregrineRoles.isSuperAdmin)
   return (
     <Page name="Report" class={reportPageStyle}>
-      {/* shows the report */}
       <Card class={reportViewerCardStyle}>
         <ReportViewer
           report={report}
-          onEditClick={
-            canEdit ? () => route(`/reports/${report.id}/edit`) : undefined
-          }
+          reportEditorLink={canEdit ? `/reports/${report.id}/edit` : undefined}
         />
       </Card>
     </Page>

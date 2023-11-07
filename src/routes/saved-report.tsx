@@ -1,7 +1,6 @@
 import { getSavedReports } from '@/api/report/submit-report'
 import Page from '@/components/page'
 import { css } from 'linaria'
-import { route } from '@/router'
 import { useState, useEffect } from 'preact/hooks'
 import { Report } from '@/api/report'
 import Card from '@/components/card'
@@ -40,10 +39,8 @@ const ReportPage = ({ report }: { report: Report }) => {
       <Card class={reportViewerCardStyle}>
         <ReportViewer
           report={report}
-          onEditClick={
-            canEdit
-              ? () => route(`/saved-reports/${report.key}/edit`)
-              : undefined
+          reportEditorLink={
+            canEdit ? `/saved-reports/${report.key}/edit` : undefined
           }
         />
       </Card>

@@ -29,12 +29,8 @@ const ReportEditPage = ({
     <Page name="Edit Report" class={reportPageStyle}>
       <ReportEditor
         initialReport={report}
-        onSaveSuccess={(report) => {
-          onSaveSuccess(report)
-        }}
-        onSaveLocally={(report) => {
-          onSaveLocally(report)
-        }}
+        onSaveSuccess={onSaveSuccess}
+        onSaveLocally={onSaveLocally}
         onDelete={onDelete}
       />
     </Page>
