@@ -40,7 +40,6 @@ const matchCardStyle = css`
 const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
-  grid-column: 1;
   white-space: nowrap;
   margin: 0.3rem 0.6rem;
   & > * {
@@ -57,21 +56,6 @@ const matchNumStyle = css`
   color: var(--grey-text);
 `
 
-const timeStyle = css`
-  grid-row: 1 / span 2;
-  grid-column: 2;
-  white-space: nowrap;
-  margin: 0.3rem 0.3rem;
-  align-items: center;
-`
-
-const dateTimeStyle = css`
-  align-self: center;
-  grid-row: 2;
-  font-size: 0.85rem;
-  color: var(--grey-text);
-`
-
 const allianceStyle = css`
   white-space: nowrap;
   grid-column: 3;
@@ -79,6 +63,7 @@ const allianceStyle = css`
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
   text-align: center;
+  text-align-last: justify;
   color: white;
   font-weight: bold;
 
@@ -126,13 +111,11 @@ export const MatchDetailsCard = memo(
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
         </div>
-        <div class={timeStyle}>
-          {match.time && (
-            <time dateTime={match.time.toISOString()} class={dateTimeStyle}>
-              {formatTime(match.time)}
-            </time>
-          )}
-        </div>
+        {match.time && (
+          <time dateTime={match.time.toISOString()}>
+            {formatTime(match.time)}
+          </time>
+        )}
         <div class={`${redStyle} ${allianceStyle}`}>
           {createTeamLinks(match.redAlliance)}
         </div>
