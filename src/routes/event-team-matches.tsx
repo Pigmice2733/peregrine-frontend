@@ -4,7 +4,6 @@ import { useEventMatches } from '@/cache/event-matches/use'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { css } from 'linaria'
-import { greenOnPurple } from '@/colors'
 
 interface Props {
   eventKey: string
@@ -20,14 +19,6 @@ const eventTeamMatchesStyle = css`
   grid-gap: 1rem;
 `
 
-const headerLinkStyle = css`
-  color: white;
-
-  &:hover {
-    color: ${greenOnPurple};
-  }
-`
-
 const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
   const event = useEventInfo(eventKey)
   const eventName = event?.name || eventKey
@@ -37,10 +28,7 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
       name={
         <>
           {`Matches: ${teamNum} @ `}
-          <a href={`/events/${eventKey}`} class={headerLinkStyle}>
-            {' '}
-            {eventName}{' '}
-          </a>
+          <a href={`/events/${eventKey}`}> {eventName} </a>
         </>
       }
       class={eventTeamMatchesStyle}

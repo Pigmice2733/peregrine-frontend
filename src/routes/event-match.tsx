@@ -13,7 +13,7 @@ import { useMatchInfo } from '@/cache/match-info/use'
 import { useSchema } from '@/cache/schema/use'
 import { useState, useEffect } from 'preact/hooks'
 import Card from '@/components/card'
-import { red, blue, faintGrey, pigmicePurple, greenOnPurple } from '@/colors'
+import { red, blue, faintGrey, pigmicePurple } from '@/colors'
 import { getMatchTeamStats } from '@/api/stats/get-match-team-stats'
 import { processTeamStats } from '@/api/stats'
 import { BooleanDisplay } from '@/components/boolean-display'
@@ -112,14 +112,6 @@ const offlineDisplayInfo = css`
   }
 `
 
-const headerLinkStyle = css`
-  color: white;
-
-  &:hover {
-    color: ${greenOnPurple};
-  }
-`
-
 const showMatchResults = 'Match Results'
 const showEventResults = 'Event Results'
 
@@ -174,10 +166,7 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       name={
         <>
           {m.group + (m.num ? ' Match ' + m.num : '') + ' - '}
-          <a href={`/events/${eventKey}`} class={headerLinkStyle}>
-            {' '}
-            {event ? event.name : eventKey}{' '}
-          </a>
+          <a href={`/events/${eventKey}`}> {event ? event.name : eventKey} </a>
         </>
       }
       class={clsx(

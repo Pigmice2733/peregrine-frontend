@@ -2,7 +2,7 @@ import { RenderableProps, ComponentChildren } from 'preact'
 import { ErrorBoundary } from './error-boundary'
 import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
-import { pigmicePurple } from '@/colors'
+import { greenOnPurple, pigmicePurple } from '@/colors'
 import IconButton, { iconButtonClass } from './icon-button'
 import { mdiArrowLeft, mdiMenu } from '@mdi/js'
 import clsx from 'clsx'
@@ -46,6 +46,14 @@ const headerText = css`
   flex-shrink: 1;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  & a {
+    color: white;
+
+    &:hover {
+      color: ${greenOnPurple};
+    }
+  }
 `
 
 type Props = Merge<

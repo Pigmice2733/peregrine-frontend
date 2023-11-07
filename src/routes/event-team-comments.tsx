@@ -11,7 +11,6 @@ import { compareMatchKeys } from '@/utils/compare-matches'
 import { GetReport } from '@/api/report'
 import { getReports } from '@/api/report/get-reports'
 import { useEventInfo } from '@/cache/event-info/use'
-import { greenOnPurple } from '@/colors'
 
 interface Props {
   eventKey: string
@@ -26,14 +25,6 @@ const matchListStyle = css`
   padding: 1.2rem;
   display: grid;
   grid-gap: 2rem;
-`
-
-const headerLinkStyle = css`
-  color: white;
-
-  &:hover {
-    color: ${greenOnPurple};
-  }
 `
 
 const EventTeamComments = ({ eventKey, teamNum }: Props) => {
@@ -62,10 +53,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
       name={
         <>
           {`Comments: ${teamNum} @ `}
-          <a href={`/events/${eventKey}`} class={headerLinkStyle}>
-            {' '}
-            {eventName}{' '}
-          </a>
+          <a href={`/events/${eventKey}`}> {eventName} </a>
         </>
       }
       class={commentsPageStyle}
