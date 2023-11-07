@@ -51,7 +51,7 @@ const headerText = css`
     color: white;
 
     &:hover {
-      color: ${greenOnPurple};
+      text-decoration-color: ${greenOnPurple};
     }
   }
 `
