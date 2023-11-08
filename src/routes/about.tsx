@@ -10,7 +10,8 @@ const pageStyle = css`
 `
 
 const headerStyle = css`
-  margin-bottom: 0rem;
+  margin-bottom: 0;
+  margin-top: 1em;
 `
 
 const informationStyle = css`
@@ -18,7 +19,7 @@ const informationStyle = css`
 `
 
 const sourceStyle = css`
-  padding: 1rem 2rem 0 2rem;
+  padding: 1rem 0;
   font-family: monospace;
 
   & h3 {
