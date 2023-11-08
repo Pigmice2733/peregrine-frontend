@@ -4,12 +4,9 @@ import { css } from 'linaria'
 const pageStyle = css`
   text-align: center;
   padding: 0 1rem;
-
-  & section {
-    margin: auto;
-    width: auto;
-    min-width: 60%;
-  }
+  margin: auto;
+  max-width: 50rem;
+  min-width: 70%;
 `
 
 const headerStyle = css`
@@ -23,6 +20,10 @@ const informationStyle = css`
 const sourceStyle = css`
   padding: 1rem 2rem 0 2rem;
   font-family: monospace;
+
+  & h3 {
+    margin: 0.3rem;
+  }
 
   & p {
     margin: 0.2rem;
@@ -90,7 +91,7 @@ const AboutPage = () => {
             backend (Go connected to SQL){' '}
           </a>
         </p>
-        <p>current version: public release 1.0.0</p>
+        <p>current version: are we doing versioning?</p>
       </section>
     </Page>
   )
