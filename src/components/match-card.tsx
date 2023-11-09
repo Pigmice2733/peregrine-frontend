@@ -5,6 +5,8 @@ import Card from '@/components/card'
 import { css } from 'linaria'
 import { memo } from '@/utils/memo'
 import clsx from 'clsx'
+import IconButton from './icon-button'
+import { mdiPencil } from '@mdi/js'
 
 interface MatchCardProps {
   match: {
@@ -17,6 +19,7 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
+  isAdmin?: boolean
 }
 
 const matchCardStyle = css`
@@ -83,7 +86,7 @@ const blueStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className, isAdmin }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
     const createTeamLinks = (teams: string[]) =>
@@ -109,6 +112,12 @@ export const MatchDetailsCard = memo(
           {matchName.num ? <div>{matchName.group}</div> : matchName.group}
           {matchName.num && (
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+          )}
+          {isAdmin && (
+            <IconButton
+              icon={mdiPencil}
+              href={`/events/${eventKey}/match-editor`}
+            />
           )}
         </div>
         {match.time && (
