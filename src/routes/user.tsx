@@ -170,6 +170,17 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
   )
 }
 
+const alertOnSaveAdmin = async (selfEdit: boolean, user: UserInfo) => {
+  if (selfEdit) return true
+  const confirmation = await createDialog({
+    title: 'Confirm Edit',
+    description: `This is not your own profile. Are you sure you want to edit ${user.firstName} ${user.lastName}'s profile?`,
+    confirm: 'Confirm',
+    dismiss: 'Cancel',
+  })
+  return confirmation
+}
+
 const SetPasswordButton = ({
   user,
   isCurrentUser,
@@ -180,16 +191,6 @@ const SetPasswordButton = ({
   refetch: () => Promise<void>
 }) => {
   const emitError = useErrorEmitter()
-  const alertOnSaveAdmin = async () => {
-    if (isCurrentUser) return
-    const confirmation = await createDialog({
-      title: 'Confirm Edit',
-      description: 'Are you sure you want to make this change?',
-      confirm: 'Confirm',
-      dismiss: 'Cancel',
-    })
-    return confirmation
-  }
   return (
     <EditableText
       name="password"
@@ -200,7 +201,7 @@ const SetPasswordButton = ({
       maxLength={maxPasswordLength}
       value={''}
       save={async (password) => {
-        if (await alertOnSaveAdmin()) {
+        if (await alertOnSaveAdmin(isCurrentUser, user)) {
           modifyUser(user.id, { password }).catch(emitError)
         }
       }}
@@ -326,16 +327,6 @@ const UserProfileCard = ({
   const updateUser = (...args: Parameters<typeof modifyUser>) =>
     modifyUser(...args).then(refetch)
   const reports = usePromise(() => getReports({ reporter: user.id }), [user.id])
-  const alertOnSaveAdmin = async () => {
-    if (isCurrentUser) return
-    const confirmation = await createDialog({
-      title: 'Confirm Edit',
-      description: 'Are you sure you want to make this change?',
-      confirm: 'Confirm',
-      dismiss: 'Cancel',
-    })
-    return confirmation
-  }
   return (
     <Card class={profileCardStyle} as="section">
       <ErrorBoundary>
@@ -344,7 +335,7 @@ const UserProfileCard = ({
           label="Name"
           save={async (newText) => {
             const [firstName, lastName] = newText.split(/\s+/)
-            if (await alertOnSaveAdmin()) {
+            if (await alertOnSaveAdmin(isCurrentUser, user)) {
               return updateUser(user.id, { firstName, lastName })
             }
           }}
@@ -361,7 +352,7 @@ const UserProfileCard = ({
           editable={editable}
           label="Username"
           save={async (username) => {
-            if (await alertOnSaveAdmin()) {
+            if (await alertOnSaveAdmin(isCurrentUser, user)) {
               updateUser(user.id, { username })
             }
           }}
