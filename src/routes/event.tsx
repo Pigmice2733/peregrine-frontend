@@ -55,9 +55,6 @@ const Event = ({ eventKey }: Props) => {
   const eventInfo = useEventInfo(eventKey)
 
   const currentTime = useCurrentTime().getTime()
-  // const date = new Date(2022, 2, 25, 15)
-  // const currentTime = date.getTime()
-  // These lines were used for testing. This was the most obvious way to manually set a date.
   const upcomingMatches = matches
     ? getUpcomingMatches(matches, currentTime)
     : []

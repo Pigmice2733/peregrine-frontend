@@ -29,12 +29,6 @@ import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
 import { Heading } from '@/components/heading'
 
-/* const sectionStyle = css`
-  font-weight: normal;
-  text-align: center;
-  font-size: 1.2rem;
-` */
-
 interface Props {
   eventKey: string
   teamNum: string
@@ -61,8 +55,6 @@ const queueDuration = 20 * minute
 const isCurrent = (now: Date) => (match: ProcessedMatchInfo): boolean => {
   const matchStartTime = match.time
   if (!matchStartTime) return false
-  // match starts at 3:04
-  // match is current till 3:11 (+7m)
   const matchEndTime = new Date(matchStartTime.getTime() + matchCycleDuration)
   return matchStartTime < now && now < matchEndTime
 }
@@ -109,9 +101,6 @@ const guessTeamLocation = (
     if (!m.time) return false
 
     const matchStartTime = m.time.getTime()
-    // match starts at 3:04
-    // match queueing starts at 2:39
-    // verify that 2:39 < now < 3:04
     const matchQueueStartTime = matchStartTime - queueDuration
     return matchQueueStartTime < currentTime && currentTime < matchStartTime
   })
@@ -122,9 +111,6 @@ const guessTeamLocation = (
     if (!m.time) return false
     const matchStartTime = m.time.getTime()
     const matchEndTime = matchStartTime + matchCycleDuration
-    // match started at 3:04
-    // match ended at 3:11 (+7m)
-    // verify that 3:11 < now < 3:21 (+10m)
     return (
       matchEndTime < currentTime &&
       currentTime < matchEndTime + afterMatchDuration
