@@ -184,7 +184,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
-      {upcomingMatches && upcomingMatches.length > 0 ? (
+      {upcomingMatches && upcomingMatches.length > 0 && (
         <>
           <Heading level={2}>Upcoming Matches</Heading>
           <div
@@ -192,6 +192,7 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
               display: grid;
               grid-template-columns: 20rem;
               justify-self: stretch;
+              margin-top: ${spacing};
             `}
           >
             {upcomingMatches.map((match) => (
@@ -204,16 +205,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
             ))}
           </div>
         </>
-      ) : (
-        <p
-          class={css`
-            color: gray;
-            text-align: center;
-            margin: 1rem 0 0.8rem;
-          `}
-        >
-          No Upcoming Matches
-        </p>
       )}
       <EventTeamInfoCard
         eventKey={eventKey}

@@ -1,19 +1,16 @@
 import { ProcessedMatchInfo } from '@/api/match-info'
-// import { useCurrentTime } from './use-current-time'
 
+const ONE_DAY = 24 * 60 * 60 * 1000
+
+/** Return the first three matches of the given set that haven't finished yet (no scores posted)
+ * and are less than one day past their expected start times. */
 export const getUpcomingMatches = (
   matches: ProcessedMatchInfo[],
   currentTime: number,
-) => {
-  const retArr = []
-  for (const match of matches) {
-    if (
-      match.time &&
-      match.time.getTime() < currentTime + 1000 * 60 * 15 &&
-      match.time.getTime() > currentTime - 1000 * 60 * 4
-    ) {
-      retArr.push(match)
-    }
-  }
-  return retArr
-}
+) =>
+  matches
+    .filter((match) => match.redScore === undefined)
+    .filter(
+      (match) => match.time && match.time.getTime() > currentTime - ONE_DAY,
+    )
+    .slice(0, 3)
