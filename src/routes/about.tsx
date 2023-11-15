@@ -5,8 +5,7 @@ const pageStyle = css`
   text-align: center;
   padding: 0 1rem;
   margin: auto;
-  max-width: 50rem;
-  min-width: 70%;
+  max-width: 45rem;
 `
 
 const headerStyle = css`
