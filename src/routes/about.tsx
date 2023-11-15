@@ -20,7 +20,6 @@ const informationStyle = css`
 
 const sourceStyle = css`
   padding: 1rem 0;
-  font-family: monospace;
 
   & h3 {
     margin: 0.3rem;
@@ -83,16 +82,15 @@ const AboutPage = () => {
         <p>
           {' '}
           <a href="https://github.com/Pigmice2733/peregrine-frontend">
-            frontend (TypeScript with the React and Babel plugins){' '}
+            frontend (TypeScript and Preact){' '}
           </a>
         </p>
         <p>
           {' '}
           <a href="https://github.com/Pigmice2733/peregrine-backend">
-            backend (Go connected to SQL){' '}
+            backend (Go with Postgres){' '}
           </a>
         </p>
-        <p>current version: are we doing versioning?</p>
       </section>
     </Page>
   )
