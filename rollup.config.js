@@ -13,8 +13,9 @@ import { writeFile, readFile } from 'fs'
 import * as path from 'path'
 import cpy from 'cpy'
 import templite from 'templite'
-import sharp from 'sharp'
 import mkdirplz from 'mkdirplz'
+import { generateIcons } from './generate-icons.mjs'
+
 const postcssPlugins = require('./postcss.config').plugins
 require('dotenv').config()
 const babelConfig = require('./.babelrc')
@@ -167,36 +168,7 @@ const configs = [
       {
         name: 'write-icons',
         async writeBundle() {
-          const iconSrc = await readFileAsync('./src/logo.png')
-          const iconDir = path.join(outDir, 'icons')
-          await mkdirplz(iconDir)
-          const background = 'transparent'
-          const appleBg = '#800080'
-          const appleWidth = 180
-          const applePad = Math.round(0.07 * appleWidth)
-          await Promise.all([
-            ...[512, 192, 180, 32, 16].map((width) =>
-              sharp(iconSrc)
-                .resize(width, width, { fit: 'contain', background })
-                .png()
-                .toFile(path.join(iconDir, `${width}.png`)),
-            ),
-            sharp(iconSrc)
-              .resize(appleWidth - applePad * 2, 180 - applePad * 2, {
-                fit: 'contain',
-                background: appleBg,
-              })
-              .extend({
-                top: applePad,
-                bottom: applePad,
-                right: applePad,
-                left: applePad,
-                background: appleBg,
-              })
-              .flatten({ background: appleBg })
-              .png()
-              .toFile(path.join(iconDir, 'apple.png')),
-          ])
+          generateIcons(outDir)
         },
       },
     ],
