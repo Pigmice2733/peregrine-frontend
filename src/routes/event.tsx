@@ -4,11 +4,13 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
 import Button from '@/components/button'
-import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { getUpcomingMatches } from '@/utils/upcoming-matches'
 import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useCurrentTime } from '@/utils/use-current-time'
+import clsx from 'clsx'
 
 interface Props {
   eventKey: string
@@ -32,8 +34,8 @@ const eventStyle = css`
 
 const sectionStyle = css`
   display: grid;
-  grid-template-columns: auto;
-  grid-gap: 2.5rem;
+  grid-template-columns: 1fr;
+  grid-gap: ${spacing};
 `
 
 const headingStyle = css`
@@ -51,7 +53,11 @@ const noMatchesStyle = css`
 const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
-  const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
+
+  const currentTime = useCurrentTime().getTime()
+  const upcomingMatches = matches
+    ? getUpcomingMatches(matches, currentTime)
+    : []
 
   return (
     <Page
@@ -68,16 +74,43 @@ const Event = ({ eventKey }: Props) => {
       </div>
 
       <div class={sectionStyle}>
-        <Heading level={2} class={headingStyle}>
-          {newestIncompleteMatch ? 'Next Match' : 'Matches'}
-        </Heading>
-        {newestIncompleteMatch && (
-          <MatchDetailsCard
-            key={newestIncompleteMatch.key}
-            match={newestIncompleteMatch}
-            eventKey={eventKey}
-            link
-          />
+        {upcomingMatches.length > 0 ? (
+          <>
+            <Heading level={2} class={headingStyle}>
+              Upcoming Matches
+            </Heading>
+            <div
+              class={css`
+                display: grid;
+                grid-template-columns: auto;
+                grid-gap: 1.1rem;
+              `}
+            >
+              {upcomingMatches.map((match) => (
+                <MatchDetailsCard
+                  key={match.key}
+                  match={match}
+                  eventKey={eventKey}
+                  link
+                />
+              ))}
+            </div>
+            <Heading
+              level={2}
+              class={clsx(
+                headingStyle,
+                css`
+                  margin-top: ${spacing};
+                `,
+              )}
+            >
+              All Matches
+            </Heading>
+          </>
+        ) : (
+          <Heading level={2} class={headingStyle}>
+            Matches
+          </Heading>
         )}
         {matches ? (
           matches.length > 0 ? (

@@ -13,7 +13,7 @@ import { getEventTeamInfo } from '@/api/event-team-info/get-event-team-info'
 import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { usePromise } from '@/utils/use-promise'
-import { nextIncompleteMatch } from '@/utils/next-incomplete-match'
+import { getUpcomingMatches } from '@/utils/upcoming-matches'
 import { ChartCard } from '@/components/chart'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { useSchema } from '@/cache/schema/use'
@@ -27,12 +27,7 @@ import { useCurrentTime } from '@/utils/use-current-time'
 import { saveTeam, useSavedTeams, removeTeam } from '@/api/save-teams'
 import IconButton from '@/components/icon-button'
 import { EventTeamInfo } from '@/api/event-team-info'
-
-const sectionStyle = css`
-  font-weight: normal;
-  text-align: center;
-  font-size: 1.2rem;
-`
+import { Heading } from '@/components/heading'
 
 interface Props {
   eventKey: string
@@ -60,8 +55,6 @@ const queueDuration = 20 * minute
 const isCurrent = (now: Date) => (match: ProcessedMatchInfo): boolean => {
   const matchStartTime = match.time
   if (!matchStartTime) return false
-  // match starts at 3:04
-  // match is current till 3:11 (+7m)
   const matchEndTime = new Date(matchStartTime.getTime() + matchCycleDuration)
   return matchStartTime < now && now < matchEndTime
 }
@@ -108,9 +101,6 @@ const guessTeamLocation = (
     if (!m.time) return false
 
     const matchStartTime = m.time.getTime()
-    // match starts at 3:04
-    // match queueing starts at 2:39
-    // verify that 2:39 < now < 3:04
     const matchQueueStartTime = matchStartTime - queueDuration
     return matchQueueStartTime < currentTime && currentTime < matchStartTime
   })
@@ -121,9 +111,6 @@ const guessTeamLocation = (
     if (!m.time) return false
     const matchStartTime = m.time.getTime()
     const matchEndTime = matchStartTime + matchCycleDuration
-    // match started at 3:04
-    // match ended at 3:11 (+7m)
-    // verify that 3:11 < now < 3:21 (+10m)
     return (
       matchEndTime < currentTime &&
       currentTime < matchEndTime + afterMatchDuration
@@ -167,7 +154,9 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     compareMatches,
   )
 
-  const nextMatch = teamMatches && nextIncompleteMatch(teamMatches)
+  const currentTime = useCurrentTime().getTime()
+  const upcomingMatches =
+    teamMatches && getUpcomingMatches(teamMatches, currentTime)
 
   const savedTeams = useSavedTeams()
   const isTeamSaved = savedTeams.some(
@@ -195,10 +184,26 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
       back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
-      {nextMatch && (
+      {upcomingMatches && upcomingMatches.length > 0 && (
         <>
-          <h2 class={sectionStyle}>Next Match</h2>
-          <MatchDetailsCard match={nextMatch} eventKey={eventKey} link />
+          <Heading level={2}>Upcoming Matches</Heading>
+          <div
+            class={css`
+              display: grid;
+              grid-template-columns: 20rem;
+              justify-self: stretch;
+              margin-top: ${spacing};
+            `}
+          >
+            {upcomingMatches.map((match) => (
+              <MatchDetailsCard
+                key={match.key}
+                match={match}
+                eventKey={eventKey}
+                link
+              />
+            ))}
+          </div>
         </>
       )}
       <EventTeamInfoCard
