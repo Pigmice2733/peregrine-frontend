@@ -170,8 +170,8 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
   )
 }
 
-const alertOnSaveAdmin = async (selfEdit: boolean, user: UserInfo) => {
-  if (selfEdit) return true
+const alertOnSaveAdmin = async (isCurrentUser: boolean, user: UserInfo) => {
+  if (isCurrentUser) return true
   const confirmation = await createDialog({
     title: 'Confirm Edit',
     description: `This is not your own profile. Are you sure you want to edit ${user.firstName} ${user.lastName}'s profile?`,
@@ -184,11 +184,9 @@ const alertOnSaveAdmin = async (selfEdit: boolean, user: UserInfo) => {
 const SetPasswordButton = ({
   user,
   isCurrentUser,
-  refetch,
 }: {
   user: UserInfo
   isCurrentUser: boolean
-  refetch: () => Promise<void>
 }) => {
   const emitError = useErrorEmitter()
   return (
@@ -205,7 +203,6 @@ const SetPasswordButton = ({
           modifyUser(user.id, { password }).catch(emitError)
         }
       }}
-      refetch={refetch}
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
@@ -227,7 +224,6 @@ interface EditableTextProps {
   editable?: boolean
   label: string
   value: string
-  refetch: () => Promise<void>
 }
 
 const editableTextStyle = css`
@@ -243,7 +239,6 @@ const EditableText = ({
   label,
   editable,
   value: originalValue,
-  refetch,
   ...rest
 }: EditableTextProps & TextInputProps) => {
   const [isEditing, setIsEditing] = useState(false)
@@ -254,7 +249,6 @@ const EditableText = ({
   const closeEditor = () => {
     setIsEditing(false)
     setIsSaving(false)
-    refetch()
   }
   const openEditor = () => {
     setIsEditing(true)
@@ -296,7 +290,7 @@ const EditableText = ({
 interface UserProfileProps {
   user: UserInfo
   editable?: boolean
-  refetch: () => Promise<void>
+  refetch: () => Promise<unknown>
   isCurrentUser: boolean
   isSuperAdmin: boolean
 }
@@ -340,7 +334,6 @@ const UserProfileCard = ({
             }
           }}
           value={`${user.firstName} ${user.lastName}`}
-          refetch={refetch}
         >
           {(value, editIcon) => (
             <h1 class={userNameStyle}>
@@ -357,7 +350,6 @@ const UserProfileCard = ({
             }
           }}
           value={user.username}
-          refetch={refetch}
         >
           {(value, editIcon) => (
             <h2
@@ -417,11 +409,7 @@ const UserProfileCard = ({
         </dl>
         {editable && !isCurrentUser && <DeleteUserButton user={user} />}
         {editable && (
-          <SetPasswordButton
-            user={user}
-            isCurrentUser={isCurrentUser}
-            refetch={refetch}
-          />
+          <SetPasswordButton user={user} isCurrentUser={isCurrentUser} />
         )}
       </ErrorBoundary>
     </Card>
