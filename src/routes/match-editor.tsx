@@ -6,7 +6,7 @@ import { Form } from '@/components/form'
 import Page from '@/components/page'
 import TextInput from '@/components/text-input'
 import { route } from '@/router'
-import { getTimeFromParts } from '@/utils/use-time-from-parts'
+import { getTimeFromParts } from '@/utils/get-time-from-parts'
 import { css } from 'linaria'
 import { useState } from 'preact/hooks'
 
@@ -36,7 +36,7 @@ const EditorForm = ({ eventKey }: { eventKey: string }) => {
     createEventMatch(eventKey, {
       redAlliance: teamList.slice(0, 3),
       blueAlliance: teamList.slice(3, 6),
-      time: getTimeFromParts(day, time, eventKey),
+      time: getTimeFromParts(day, time),
       key: `qm${matchNumber}`,
     })
       .then(() => route(`/events/${eventKey}`))
@@ -67,7 +67,7 @@ const EditorForm = ({ eventKey }: { eventKey: string }) => {
             }}
           />
           <Button disabled={isLoading || !isValid}>
-            {isLoading ? 'Creating Match' : 'Create Match'}
+            {isLoading ? 'Saving Match Information' : 'Save Match'}
           </Button>
         </>
       )}
@@ -75,8 +75,11 @@ const EditorForm = ({ eventKey }: { eventKey: string }) => {
   )
 }
 
-const MatchCreator = ({ eventKey }: { eventKey: string }) => (
-  <Page name="Create Match" back={`/events/${eventKey}`}>
+const MatchEditor = ({ eventKey }: { eventKey: string }) => (
+  <Page
+    name={need ? 'Create Match' : 'Edit Match'}
+    back={`/events/${eventKey}`}
+  >
     <Card class={cardStyle}>
       <ErrorBoundary>
         <EditorForm eventKey={eventKey} />
@@ -85,4 +88,4 @@ const MatchCreator = ({ eventKey }: { eventKey: string }) => (
   </Page>
 )
 
-export default MatchCreator
+export default MatchEditor

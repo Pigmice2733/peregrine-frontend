@@ -20,10 +20,6 @@ const routes = [
     component: () => import('./routes/scout'),
   },
   {
-    path: '/events/:eventKey/match-creator',
-    component: () => import('./routes/match-creator'),
-  },
-  {
     path: '/events/:eventKey/match-editor',
     component: () => import('./routes/match-editor'),
   },
