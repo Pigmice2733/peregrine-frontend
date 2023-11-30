@@ -22,13 +22,7 @@ const cardStyle = css`
   }
 `
 
-const EditorForm = ({
-  eventKey,
-  matchKey,
-}: {
-  eventKey: string
-  matchKey: string
-}) => {
+const CreatorForm = ({ eventKey }: { eventKey: string }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [matchNumber, setMatchNumber] = useState('')
   const [day, setDay] = useState('')
@@ -45,7 +39,7 @@ const EditorForm = ({
       time: getTimeFromParts(day, time),
       key: `qm${matchNumber}`,
     })
-      .then(() => route(`/events/${eventKey}/matches/${matchKey}`))
+      .then(() => route(`/events/${eventKey}/matches/qm${matchNumber}`))
       .catch(emitError)
       .finally(() => setIsLoading(false))
   }
@@ -81,20 +75,14 @@ const EditorForm = ({
   )
 }
 
-const MatchEditor = ({
-  eventKey,
-  matchKey,
-}: {
-  eventKey: string
-  matchKey: string
-}) => (
-  <Page name={'Edit Match'} back={`/events/${eventKey}/events/${matchKey}`}>
+const MatchCreator = ({ eventKey }: { eventKey: string }) => (
+  <Page name={'Create Match'} back={`/events/${eventKey}`}>
     <Card class={cardStyle}>
       <ErrorBoundary>
-        <EditorForm eventKey={eventKey} matchKey={matchKey} />
+        <CreatorForm eventKey={eventKey} />
       </ErrorBoundary>
     </Card>
   </Page>
 )
 
-export default MatchEditor
+export default MatchCreator

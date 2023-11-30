@@ -20,7 +20,11 @@ const routes = [
     component: () => import('./routes/scout'),
   },
   {
-    path: '/events/:eventKey/match-editor',
+    path: '/events/:eventKey/match-creator',
+    component: () => import('./routes/match-creator'),
+  },
+  {
+    path: '/events/:eventKey/matches/:matchKey/editor',
     component: () => import('./routes/match-editor'),
   },
   {

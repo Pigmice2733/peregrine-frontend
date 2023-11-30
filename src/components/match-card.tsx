@@ -116,7 +116,7 @@ export const MatchDetailsCard = memo(
           {isAdmin && (
             <IconButton
               icon={mdiPencil}
-              href={`/events/${eventKey}/match-editor`}
+              href={`/events/${eventKey}/matches/${match.key}/editor`}
             />
           )}
         </div>
