@@ -52,7 +52,6 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
           <TextInput label="Date (in mm/dd format)" required onInput={setDay} />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
-            required
             onInput={setTime}
           />
           <TextInput

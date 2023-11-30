@@ -1,4 +1,5 @@
-import { createEventMatch } from '@/api/match-info/create-event-match'
+import { updateEventMatch } from '@/api/match-info/update-event-match'
+import { useMatchInfo } from '@/cache/match-info/use'
 import Button from '@/components/button'
 import Card from '@/components/card'
 import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
@@ -30,20 +31,41 @@ const EditorForm = ({
   matchKey: string
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [matchNumber, setMatchNumber] = useState('')
   const [day, setDay] = useState('')
   const [time, setTime] = useState('')
   const [teamList, setTeamList] = useState([''])
   const emitError = useErrorEmitter()
+  const match = useMatchInfo(eventKey, matchKey)
+  const matchDate = match?.time || new Date(Date.now())
+
+  const formatDate = () => {
+    const monthNumber = matchDate.getMonth() + 1
+    const dayNumber = matchDate.getDate()
+    const month =
+      monthNumber < 10 ? '0' + String(monthNumber) : String(monthNumber)
+    const day = dayNumber < 10 ? '0' + String(dayNumber) : String(dayNumber)
+    return month + '/' + day
+  }
+  const formatTime = () => {
+    const hourNumber = matchDate.getHours()
+    const minuteNumber = matchDate.getMinutes()
+    const hours =
+      hourNumber < 10 ? '0' + String(hourNumber) : String(hourNumber)
+    const minutes =
+      minuteNumber < 10 ? '0' + String(minuteNumber) : String(minuteNumber)
+    return hours + ':' + minutes
+  }
 
   const onSubmit = (e: Event) => {
     e.preventDefault()
     setIsLoading(true)
-    createEventMatch(eventKey, {
+    updateEventMatch(eventKey, {
       redAlliance: teamList.slice(0, 3),
       blueAlliance: teamList.slice(3, 6),
       time: getTimeFromParts(day, time),
-      key: `qm${matchNumber}`,
+      key: matchKey,
+      videos: match?.videos,
+      scheduledTime: match?.scheduledTime?.toISOString(),
     })
       .then(() => route(`/events/${eventKey}/matches/${matchKey}`))
       .catch(emitError)
@@ -54,12 +76,17 @@ const EditorForm = ({
     <Form onSubmit={onSubmit}>
       {(isValid) => (
         <>
-          <TextInput label="Match Number" onInput={setMatchNumber} required />
-          <TextInput label="Date (in mm/dd format)" required onInput={setDay} />
+          <TextInput
+            label="Date (in mm/dd format)"
+            required
+            onInput={setDay}
+            value={formatDate()}
+          />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
             required
             onInput={setTime}
+            value={formatTime()}
           />
           <TextInput
             label="Teams (separate numbers with commas, red alliance first)"
@@ -71,7 +98,10 @@ const EditorForm = ({
               }
               setTeamList(teams)
             }}
+            value={need}
           />
+          <TextInput label="Red alliance score" />
+          <TextInput label="Blue alliance score" />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Saving Match Information' : 'Save Match'}
           </Button>
