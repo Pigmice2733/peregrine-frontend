@@ -27,6 +27,8 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
   const [matchNumber, setMatchNumber] = useState('')
   const [day, setDay] = useState('')
   const [time, setTime] = useState('')
+  const [redScore, setRedScore] = useState(0)
+  const [blueScore, setBlueScore] = useState(0)
   const [teamList, setTeamList] = useState([''])
   const emitError = useErrorEmitter()
 
@@ -37,6 +39,8 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
       redAlliance: teamList.slice(0, 3),
       blueAlliance: teamList.slice(3, 6),
       time: getTimeFromParts(day, time),
+      redScore,
+      blueScore,
       key: `qm${matchNumber}`,
     })
       .then(() => route(`/events/${eventKey}/matches/qm${matchNumber}`))
@@ -49,7 +53,10 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
       {(isValid) => (
         <>
           <TextInput label="Match Number" onInput={setMatchNumber} required />
-          <TextInput label="Date (in mm/dd format)" required onInput={setDay} />
+          <TextInput
+            label="Date (in mm/dd format) or leave blank for today"
+            onInput={setDay}
+          />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
             onInput={setTime}
@@ -64,6 +71,14 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
               }
               setTeamList(teams)
             }}
+          />
+          <TextInput
+            label="Red Alliance Score"
+            onInput={(input) => setRedScore(Number.parseInt(input))}
+          />
+          <TextInput
+            label="Blue Alliance Score"
+            onInput={(input) => setBlueScore(Number.parseInt(input))}
           />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Saving Match Information' : 'Save Match'}

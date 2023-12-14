@@ -7,7 +7,11 @@ import { Form } from '@/components/form'
 import Page from '@/components/page'
 import TextInput from '@/components/text-input'
 import { route } from '@/router'
-import { getTimeFromParts } from '@/utils/get-time-from-parts'
+import {
+  getTimeFromParts,
+  formatDate,
+  formatTime,
+} from '@/utils/get-time-from-parts'
 import { css } from 'linaria'
 import { useState } from 'preact/hooks'
 
@@ -34,26 +38,21 @@ const EditorForm = ({
   const [day, setDay] = useState('')
   const [time, setTime] = useState('')
   const [teamList, setTeamList] = useState([''])
+  const [redScore, setRedScore] = useState(0)
+  const [blueScore, setBlueScore] = useState(0)
   const emitError = useErrorEmitter()
   const match = useMatchInfo(eventKey, matchKey)
   const matchDate = match?.time || new Date(Date.now())
 
-  const formatDate = () => {
-    const monthNumber = matchDate.getMonth() + 1
-    const dayNumber = matchDate.getDate()
-    const month =
-      monthNumber < 10 ? '0' + String(monthNumber) : String(monthNumber)
-    const day = dayNumber < 10 ? '0' + String(dayNumber) : String(dayNumber)
-    return month + '/' + day
-  }
-  const formatTime = () => {
-    const hourNumber = matchDate.getHours()
-    const minuteNumber = matchDate.getMinutes()
-    const hours =
-      hourNumber < 10 ? '0' + String(hourNumber) : String(hourNumber)
-    const minutes =
-      minuteNumber < 10 ? '0' + String(minuteNumber) : String(minuteNumber)
-    return hours + ':' + minutes
+  const formatTeams = () => {
+    let output = ''
+    match?.redAlliance.forEach((team) => {
+      output += team.slice(3) + ', '
+    })
+    match?.blueAlliance.forEach((team) => {
+      output += team.slice(3) + ', '
+    })
+    return output.slice(0, -2)
   }
 
   const onSubmit = (e: Event) => {
@@ -64,6 +63,8 @@ const EditorForm = ({
       blueAlliance: teamList.slice(3, 6),
       time: getTimeFromParts(day, time),
       key: matchKey,
+      redScore,
+      blueScore,
       videos: match?.videos,
       scheduledTime: match?.scheduledTime?.toISOString(),
     })
@@ -77,16 +78,14 @@ const EditorForm = ({
       {(isValid) => (
         <>
           <TextInput
-            label="Date (in mm/dd format)"
-            required
+            label="Date (in mm/dd format) or leave blank for current date"
             onInput={setDay}
-            value={formatDate()}
+            value={formatDate(matchDate)}
           />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
-            required
             onInput={setTime}
-            value={formatTime()}
+            value={formatTime(matchDate)}
           />
           <TextInput
             label="Teams (separate numbers with commas, red alliance first)"
@@ -98,10 +97,18 @@ const EditorForm = ({
               }
               setTeamList(teams)
             }}
-            value={need}
+            value={formatTeams()}
           />
-          <TextInput label="Red alliance score" />
-          <TextInput label="Blue alliance score" />
+          <TextInput
+            label="Red Alliance Score"
+            onInput={(input) => setRedScore(Number.parseInt(input))}
+            value={match?.redScore || 0}
+          />
+          <TextInput
+            label="Blue Alliance Score"
+            onInput={(input) => setBlueScore(Number.parseInt(input))}
+            value={match?.blueScore || 0}
+          />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Saving Match Information' : 'Save Match'}
           </Button>
