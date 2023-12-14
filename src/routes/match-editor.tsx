@@ -125,7 +125,7 @@ const MatchEditor = ({
   eventKey: string
   matchKey: string
 }) => (
-  <Page name={'Edit Match'} back={`/events/${eventKey}/events/${matchKey}`}>
+  <Page name={'Edit Match'} back={`/events/${eventKey}/matches/${matchKey}`}>
     <Card class={cardStyle}>
       <ErrorBoundary>
         <EditorForm eventKey={eventKey} matchKey={matchKey} />

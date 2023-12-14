@@ -45,6 +45,9 @@ const matchTitleStyle = css`
   grid-row: span 2;
   white-space: nowrap;
   margin: 0.3rem 0.6rem;
+  display: flex;
+  align-items: center;
+
   & > * {
     margin: 0.3rem 0;
   }
@@ -85,6 +88,11 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
+const pencilIconStyle = css`
+  width: 1rem;
+  aspect-ratio: 1;
+`
+
 export const MatchDetailsCard = memo(
   ({ match, eventKey, link, class: className, isAdmin }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
@@ -117,6 +125,7 @@ export const MatchDetailsCard = memo(
             <IconButton
               icon={mdiPencil}
               href={`/events/${eventKey}/matches/${match.key}/editor`}
+              class={pencilIconStyle}
             />
           )}
         </div>
