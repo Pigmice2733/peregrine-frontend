@@ -170,7 +170,24 @@ const DeleteUserButton = ({ user }: { user: UserInfo }) => {
   )
 }
 
-const SetPasswordButton = ({ user }: { user: UserInfo }) => {
+const alertOnSaveAdmin = async (isCurrentUser: boolean, user: UserInfo) => {
+  if (isCurrentUser) return true
+  const confirmation = await createDialog({
+    title: 'Confirm Edit',
+    description: `This is not your own profile. Are you sure you want to edit ${user.firstName} ${user.lastName}'s profile?`,
+    confirm: 'Confirm',
+    dismiss: 'Cancel',
+  })
+  return confirmation
+}
+
+const SetPasswordButton = ({
+  user,
+  isCurrentUser,
+}: {
+  user: UserInfo
+  isCurrentUser: boolean
+}) => {
   const emitError = useErrorEmitter()
   return (
     <EditableText
@@ -181,7 +198,11 @@ const SetPasswordButton = ({ user }: { user: UserInfo }) => {
       minLength={minPasswordLength}
       maxLength={maxPasswordLength}
       value={''}
-      save={(password) => modifyUser(user.id, { password }).catch(emitError)}
+      save={async (password) => {
+        if (await alertOnSaveAdmin(isCurrentUser, user)) {
+          modifyUser(user.id, { password }).catch(emitError)
+        }
+      }}
     >
       {(_password, _icon, startEditing) => (
         <Button flat onClick={startEditing}>
@@ -306,9 +327,11 @@ const UserProfileCard = ({
         <EditableText
           editable={editable}
           label="Name"
-          save={(newText) => {
+          save={async (newText) => {
             const [firstName, lastName] = newText.split(/\s+/)
-            return updateUser(user.id, { firstName, lastName })
+            if (await alertOnSaveAdmin(isCurrentUser, user)) {
+              return updateUser(user.id, { firstName, lastName })
+            }
           }}
           value={`${user.firstName} ${user.lastName}`}
         >
@@ -321,7 +344,11 @@ const UserProfileCard = ({
         <EditableText
           editable={editable}
           label="Username"
-          save={(username) => updateUser(user.id, { username })}
+          save={async (username) => {
+            if (await alertOnSaveAdmin(isCurrentUser, user)) {
+              updateUser(user.id, { username })
+            }
+          }}
           value={user.username}
         >
           {(value, editIcon) => (
@@ -381,7 +408,9 @@ const UserProfileCard = ({
           />
         </dl>
         {editable && !isCurrentUser && <DeleteUserButton user={user} />}
-        {editable && <SetPasswordButton user={user} />}
+        {editable && (
+          <SetPasswordButton user={user} isCurrentUser={isCurrentUser} />
+        )}
       </ErrorBoundary>
     </Card>
   )
