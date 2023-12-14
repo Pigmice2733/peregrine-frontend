@@ -8,9 +8,4 @@ export const updateEventMatch = (
     time: string
   },
 ) =>
-  request<null>(
-    'PATCH',
-    `events/${eventKey}/matches`,
-    { key: match.key },
-    match,
-  )
+  request<null>('PATCH', `events/${eventKey}/matches/${match.key}`, {}, match)

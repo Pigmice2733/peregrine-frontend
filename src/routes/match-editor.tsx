@@ -88,7 +88,7 @@ const EditorForm = ({
             value={formatTime(matchDate)}
           />
           <TextInput
-            label="Teams (separate numbers with commas, red alliance first)"
+            label="Teams (separate numbers with commas and spaces, red alliance first)"
             required
             onInput={(input) => {
               const teams = input.split(', ')
