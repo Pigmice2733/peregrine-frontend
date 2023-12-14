@@ -19,7 +19,7 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
-  isAdmin: boolean
+  isAdmin?: boolean
 }
 
 const matchCardStyle = css`

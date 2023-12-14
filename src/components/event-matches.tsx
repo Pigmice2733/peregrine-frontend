@@ -9,7 +9,7 @@ import { formatMatchKey } from '@/utils/format-match-key'
 interface Props {
   matches: ProcessedMatchInfo[]
   eventKey: string
-  isAdmin: boolean
+  isAdmin?: boolean
 }
 
 const searchTextStyles = css`
