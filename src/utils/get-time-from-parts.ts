@@ -10,15 +10,16 @@ export const formatTime = (date: Date) => {
 export const formatDate = (date: Date) => {
   const monthNumber = date.getMonth()
   const dayNumber = date.getDate()
-  const month = monthNumber < 10 ? '0' + String(monthNumber) : String(monthNumber)
-  const day =
-    dayNumber < 10 ? '0' + String(dayNumber) : String(dayNumber)
+  const month =
+    monthNumber < 10 ? '0' + String(monthNumber) : String(monthNumber)
+  const day = dayNumber < 10 ? '0' + String(dayNumber) : String(dayNumber)
   return month + '/' + day
 }
 
 export const getTimeFromParts = (date: string, time?: string) => {
   const now = new Date(Date.now())
-  if ((date && date.length !== 5) || (time && time.length !== 5)) return now.toISOString()
+  if ((date && date.length !== 5) || (time && time.length !== 5))
+    return now.toISOString()
   if (!time) time = formatTime(now)
   if (!date) date = formatDate(now)
 
