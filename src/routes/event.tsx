@@ -86,12 +86,16 @@ const Event = ({ eventKey }: Props) => {
             match={newestIncompleteMatch}
             eventKey={eventKey}
             link
-            isAdmin
+            isAdmin={isAdmin || false}
           />
         )}
         {matches ? (
           matches.length > 0 ? (
-            <EventMatches matches={matches} eventKey={eventKey} />
+            <EventMatches
+              matches={matches}
+              eventKey={eventKey}
+              isAdmin={isAdmin || false}
+            />
           ) : (
             <p class={noMatchesStyle}>No matches yet</p>
           )

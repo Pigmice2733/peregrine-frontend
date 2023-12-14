@@ -9,6 +9,7 @@ import { formatMatchKey } from '@/utils/format-match-key'
 interface Props {
   matches: ProcessedMatchInfo[]
   eventKey: string
+  isAdmin: boolean
 }
 
 const searchTextStyles = css`
@@ -28,7 +29,7 @@ const enum QueryRank {
   MatchExact,
 }
 
-export const EventMatches = ({ matches, eventKey }: Props) => {
+export const EventMatches = ({ matches, eventKey, isAdmin }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>('')
   const s = searchQuery.trim().toLowerCase()
 
@@ -80,7 +81,13 @@ export const EventMatches = ({ matches, eventKey }: Props) => {
       />
       <div class={matchListStyle}>
         {filteredMatches.map((m) => (
-          <MatchDetailsCard eventKey={eventKey} match={m} key={m.key} link />
+          <MatchDetailsCard
+            eventKey={eventKey}
+            match={m}
+            key={m.key}
+            link
+            isAdmin={isAdmin}
+          />
         ))}
       </div>
     </>
