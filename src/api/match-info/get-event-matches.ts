@@ -1,12 +1,12 @@
 import { request } from '../base'
 import { processMatch, MatchInfo, ProcessedMatchInfo } from '.'
-import { createMatchDbKey } from 'src/utils/create-match-db-key'
-import { transaction } from 'src/cache'
-import { requestIdleCallback } from 'src/utils/request-idle-callback'
-import { getAllCachedEventMatches } from 'src/cache/event-matches/get-cached'
-import { idbPromise } from 'src/utils/idb-promise'
-import { matchHasTeam } from 'src/utils/match-has-team'
-import { compareMatches } from 'src/utils/compare-matches'
+import { createMatchDbKey } from '@/utils/create-match-db-key'
+import { transaction } from '@/cache'
+import { requestIdleCallback } from '@/utils/request-idle-callback'
+import { getAllCachedEventMatches } from '@/cache/event-matches/get-cached'
+import { idbPromise } from '@/utils/idb-promise'
+import { matchHasTeam } from '@/utils/match-has-team'
+import { compareMatches } from '@/utils/compare-matches'
 
 const updateCachedEventMatches = (
   eventKey: string,

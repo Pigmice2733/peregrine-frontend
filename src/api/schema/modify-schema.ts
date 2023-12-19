@@ -1,5 +1,5 @@
 import { request } from '../base'
-import { JSONPatch } from 'src/type-utils'
+import { JSONPatch } from '@/type-utils'
 
 // Admins can patch schemas for any event in their realms, or for FRC events if
 // their realm's data is private.

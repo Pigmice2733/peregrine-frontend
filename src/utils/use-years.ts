@@ -1,6 +1,6 @@
 import { usePromise } from './use-promise'
-import { getYears } from 'src/api/get-years'
-import { getCachedEvents } from 'src/cache/events/get-cached'
+import { getYears } from '@/api/get-years'
+import { getCachedEvents } from '@/cache/events/get-cached'
 
 export const useYears = () => {
   const cachedEventsFromAllYears = usePromise(getCachedEvents)

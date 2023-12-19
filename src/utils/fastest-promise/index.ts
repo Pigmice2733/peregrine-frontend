@@ -1,4 +1,4 @@
-import { CancellablePromise } from 'src/utils/cancellable-promise'
+import { CancellablePromise } from '@/utils/cancellable-promise'
 
 /**
  * Like Promise.race, but it only rejects if both promises reject

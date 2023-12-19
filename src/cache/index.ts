@@ -1,4 +1,4 @@
-import { idbPromise } from 'src/utils/idb-promise'
+import { idbPromise } from '@/utils/idb-promise'
 
 const DB_NAME = 'CACHE'
 const DB_VERSION = 5

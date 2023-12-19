@@ -1,7 +1,7 @@
 import { request } from '../base'
 import { Report, OfflineReport } from '.'
 import { useEffect, useState } from 'preact/hooks'
-import { CancellablePromise } from 'src/utils/cancellable-promise'
+import { CancellablePromise } from '@/utils/cancellable-promise'
 
 /**
  * Uploads a report via PUT or POST, depending on if the report already has an ID

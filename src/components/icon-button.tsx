@@ -1,9 +1,9 @@
 import { VNode } from 'preact'
-import { PropsOf } from 'src/type-utils'
-import Icon from 'src/components/icon'
+import { PropsOf } from '@/type-utils'
+import Icon from '@/components/icon'
 import { css } from '@linaria/core'
 import clsx from 'clsx'
-import { grey } from 'src/colors'
+import { grey } from '@/colors'
 
 const iconButtonStyle = css`
   cursor: pointer;

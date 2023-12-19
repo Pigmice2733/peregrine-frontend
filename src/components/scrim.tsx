@@ -2,9 +2,9 @@ import { css } from '@linaria/core'
 import { rgba } from 'polished'
 import clsx from 'clsx'
 import { useRef, useEffect } from 'preact/hooks'
-import { moveFocusInside } from 'src/utils/move-focus-inside'
-import { getScrollbarWidth } from 'src/utils/get-scrollbar-width'
-import { PropsOf } from 'src/type-utils'
+import { moveFocusInside } from '@/utils/move-focus-inside'
+import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
+import { PropsOf } from '@/type-utils'
 
 // Scrim is a partially transparent dark full-screen backdrop used to focus the
 // user's attention

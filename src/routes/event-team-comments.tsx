@@ -1,15 +1,15 @@
 /* eslint-disable max-nested-callbacks */
-import Page from 'src/components/page'
-import { useEventInfo } from 'src/cache/event-info/use'
+import Page from '@/components/page'
+import { useEventInfo } from '@/cache/event-info/use'
 import { css } from '@linaria/core'
-import Card from 'src/components/card'
-import Loader from 'src/components/loader'
-import { usePromise } from 'src/utils/use-promise'
-import { CommentCard } from 'src/components/comment-card'
-import { formatMatchKeyShort } from 'src/utils/format-match-key-short'
-import { compareMatchKeys } from 'src/utils/compare-matches'
-import { GetReport } from 'src/api/report'
-import { getReports } from 'src/api/report/get-reports'
+import Card from '@/components/card'
+import Loader from '@/components/loader'
+import { usePromise } from '@/utils/use-promise'
+import { CommentCard } from '@/components/comment-card'
+import { formatMatchKeyShort } from '@/utils/format-match-key-short'
+import { compareMatchKeys } from '@/utils/compare-matches'
+import { GetReport } from '@/api/report'
+import { getReports } from '@/api/report/get-reports'
 
 interface Props {
   eventKey: string

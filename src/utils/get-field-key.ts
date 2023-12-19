@@ -1,5 +1,5 @@
 import { cleanFieldName } from './clean-field-name'
-import { StatDescription } from 'src/api/schema'
+import { StatDescription } from '@/api/schema'
 
 export const getFieldKey = (
   statDescription: Pick<StatDescription, 'name' | 'period'>,

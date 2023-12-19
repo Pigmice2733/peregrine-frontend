@@ -2,8 +2,8 @@ import { VNode } from 'preact'
 import clsx from 'clsx'
 import { css } from '@linaria/core'
 import { tint } from 'polished'
-import { pigmicePurple } from 'src/colors'
-import { PropsOf } from 'src/type-utils'
+import { pigmicePurple } from '@/colors'
+import { PropsOf } from '@/type-utils'
 
 export const buttonFontStyle = css`
   text-transform: uppercase;

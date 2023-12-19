@@ -1,6 +1,6 @@
-import Authenticated from 'src/components/authenticated'
+import Authenticated from '@/components/authenticated'
 import { decode } from 'qss'
-import { route } from 'src/router'
+import { route } from '@/router'
 
 const goBack = () => {
   route(decode(window.location.search.slice(1)).from || '/')

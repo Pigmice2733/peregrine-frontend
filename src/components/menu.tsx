@@ -1,6 +1,6 @@
-import { pigmicePurple } from 'src/colors'
-import Icon from 'src/components/icon'
-import { Scrim, scrimHiddenClass } from 'src/components/scrim'
+import { pigmicePurple } from '@/colors'
+import Icon from '@/components/icon'
+import { Scrim, scrimHiddenClass } from '@/components/scrim'
 import {
   mdiAccountCircle,
   mdiClose,
@@ -12,18 +12,18 @@ import {
   mdiLogoutVariant,
   mdiCloudUpload,
 } from '@mdi/js'
-import { logout, useJWT } from 'src/jwt'
-import { createShadow } from 'src/utils/create-shadow'
-import { getScrollbarWidth } from 'src/utils/get-scrollbar-width'
-import { resolveUrl } from 'src/utils/resolve-url'
+import { logout, useJWT } from '@/jwt'
+import { createShadow } from '@/utils/create-shadow'
+import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
+import { resolveUrl } from '@/utils/resolve-url'
 import clsx from 'clsx'
 import { css } from '@linaria/core'
 import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren } from 'preact'
 import IconButton from './icon-button'
-import { useSavedReports } from 'src/api/report/submit-report'
-import { useSavedTeams } from 'src/api/save-teams'
-import { useEventInfo } from 'src/cache/event-info/use'
+import { useSavedReports } from '@/api/report/submit-report'
+import { useSavedTeams } from '@/api/save-teams'
+import { useEventInfo } from '@/cache/event-info/use'
 
 const spacing = '0.3rem'
 

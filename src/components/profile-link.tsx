@@ -1,10 +1,10 @@
-import { usePromise } from 'src/utils/use-promise'
-import { formatUserName } from 'src/utils/format-user-name'
+import { usePromise } from '@/utils/use-promise'
+import { formatUserName } from '@/utils/format-user-name'
 import Icon from './icon'
 import { css } from '@linaria/core'
 import { mdiAccountCircle } from '@mdi/js'
-import { pigmicePurple } from 'src/colors'
-import { getFastestUser } from 'src/cache/users/get-fastest'
+import { pigmicePurple } from '@/colors'
+import { getFastestUser } from '@/cache/users/get-fastest'
 
 export const ProfileLink = ({
   reporterId,

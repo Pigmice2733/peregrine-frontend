@@ -1,18 +1,18 @@
 import { FunctionComponent } from 'preact'
-import Page from 'src/components/page'
-import { usePromise } from 'src/utils/use-promise'
-import { getEventStats } from 'src/api/stats/get-event-stats'
-import { useEventInfo } from 'src/cache/event-info/use'
-import AnalysisTable from 'src/components/analysis-table'
-import Loader from 'src/components/loader'
+import Page from '@/components/page'
+import { usePromise } from '@/utils/use-promise'
+import { getEventStats } from '@/api/stats/get-event-stats'
+import { useEventInfo } from '@/cache/event-info/use'
+import AnalysisTable from '@/components/analysis-table'
+import Loader from '@/components/loader'
 import { css } from '@linaria/core'
-import { useSchema } from 'src/cache/schema/use'
+import { useSchema } from '@/cache/schema/use'
 import {
   tablePageStyle,
   tablePageWrapperStyle,
   tablePageTableStyle,
-} from 'src/utils/table-page-style'
-import Card from 'src/components/card'
+} from '@/utils/table-page-style'
+import Card from '@/components/card'
 
 interface Props {
   eventKey: string

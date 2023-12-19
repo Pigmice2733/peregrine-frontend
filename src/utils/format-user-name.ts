@@ -1,4 +1,4 @@
-import { UserInfo } from 'src/api/user'
+import { UserInfo } from '@/api/user'
 
 export const formatUserName = (
   user: UserInfo | undefined | null,

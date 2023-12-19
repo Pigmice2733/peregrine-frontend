@@ -1,19 +1,19 @@
-import { useJWT } from 'src/jwt'
-import TextInput from 'src/components/text-input'
-import Card from 'src/components/card'
-import { authenticate } from 'src/api/authenticate'
+import { useJWT } from '@/jwt'
+import TextInput from '@/components/text-input'
+import Card from '@/components/card'
+import { authenticate } from '@/api/authenticate'
 import Page from '../page'
 import Button from '../button'
 import { css } from '@linaria/core'
 import { useState, useRef } from 'preact/hooks'
-import { Roles } from 'src/api/user'
+import { Roles } from '@/api/user'
 import {
   minUsernameLength,
   maxUsernameLength,
   minPasswordLength,
   maxPasswordLength,
-} from 'src/constants'
-import { Form } from 'src/components/form'
+} from '@/constants'
+import { Form } from '@/components/form'
 import { ErrorBoundary, useErrorEmitter } from '../error-boundary'
 
 const loginStyle = css`

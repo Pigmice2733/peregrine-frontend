@@ -2,7 +2,7 @@ import Card, { CardProps } from './card'
 import {
   useNetworkConnection,
   ConnectionType,
-} from 'src/utils/use-network-connection'
+} from '@/utils/use-network-connection'
 import clsx from 'clsx'
 import { css } from '@linaria/core'
 import { useState, useEffect } from 'preact/hooks'

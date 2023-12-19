@@ -4,7 +4,7 @@ sh: prettier --write <%- filepath %>.tsx
 ---
 
 import { h } from 'preact'
-import Page from 'src/components/page'
+import Page from '@/components/page'
 
 interface Props {
 <% props.forEach(prop => { _%>

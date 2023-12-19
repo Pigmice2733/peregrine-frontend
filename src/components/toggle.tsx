@@ -1,7 +1,7 @@
 import { css } from '@linaria/core'
-import { lightGrey, pigmicePurple, grey } from 'src/colors'
+import { lightGrey, pigmicePurple, grey } from '@/colors'
 import { tint, shade, transparentize } from 'polished'
-import { createShadow } from 'src/utils/create-shadow'
+import { createShadow } from '@/utils/create-shadow'
 
 const trackCenterCenter = 1
 const trackHeight = 0.9

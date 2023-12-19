@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { css } from '@linaria/core'
-import { offBlack } from 'src/colors'
+import { offBlack } from '@/colors'
 import { Merge } from 'type-fest'
 
 const alertStyle = css`

@@ -1,4 +1,4 @@
-import { Merge, PropsOf } from 'src/type-utils'
+import { Merge, PropsOf } from '@/type-utils'
 import { css } from '@linaria/core'
 import clsx from 'clsx'
 import { useState } from 'preact/hooks'

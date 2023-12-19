@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'preact/hooks'
-import { useErrorEmitter } from 'src/components/error-boundary'
-import { CancellablePromise } from 'src/utils/cancellable-promise'
+import { useErrorEmitter } from '@/components/error-boundary'
+import { CancellablePromise } from '@/utils/cancellable-promise'
 
 export const usePromise = <T extends any>(
   promiseCreator: () => Promise<T> | T,

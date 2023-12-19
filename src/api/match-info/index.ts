@@ -1,4 +1,4 @@
-import { parseDateProps } from 'src/utils/parse-date-props'
+import { parseDateProps } from '@/utils/parse-date-props'
 
 export interface MatchInfo {
   redAlliance: string[]

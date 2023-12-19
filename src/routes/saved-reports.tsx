@@ -1,15 +1,12 @@
-import Page from 'src/components/page'
-import {
-  useSavedReports,
-  uploadSavedReports,
-} from 'src/api/report/submit-report'
-import Card from 'src/components/card'
+import Page from '@/components/page'
+import { useSavedReports, uploadSavedReports } from '@/api/report/submit-report'
+import Card from '@/components/card'
 import { css } from '@linaria/core'
-import { useEventInfo } from 'src/cache/event-info/use'
-import { formatMatchKey } from 'src/utils/format-match-key'
-import { formatTeamNumber } from 'src/utils/format-team-number'
-import Button from 'src/components/button'
-import { OfflineReport } from 'src/api/report'
+import { useEventInfo } from '@/cache/event-info/use'
+import { formatMatchKey } from '@/utils/format-match-key'
+import { formatTeamNumber } from '@/utils/format-team-number'
+import Button from '@/components/button'
+import { OfflineReport } from '@/api/report'
 
 const savedReportCardStyle = css`
   padding: 1rem;

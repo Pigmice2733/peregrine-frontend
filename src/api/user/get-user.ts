@@ -1,7 +1,7 @@
 import { request } from '../base'
 import { UserInfo } from '.'
-import { requestIdleCallback } from 'src/utils/request-idle-callback'
-import { transaction } from 'src/cache'
+import { requestIdleCallback } from '@/utils/request-idle-callback'
+import { transaction } from '@/cache'
 
 const updateCachedUser = (user: UserInfo) =>
   transaction(

@@ -1,5 +1,5 @@
 import { request } from './base'
-import { setAccessToken, setRefreshToken } from 'src/jwt'
+import { setAccessToken, setRefreshToken } from '@/jwt'
 
 export const authenticate = (username: string, password: string) =>
   request<{ refreshToken: string; accessToken: string }>(

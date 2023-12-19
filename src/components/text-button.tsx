@@ -1,7 +1,7 @@
 import { css } from '@linaria/core'
 import clsx from 'clsx'
-import { PropsOf } from 'src/type-utils'
-import { pxToRem } from 'src/utils/px-to-rem'
+import { PropsOf } from '@/type-utils'
+import { pxToRem } from '@/utils/px-to-rem'
 import { rgba, darken } from 'polished'
 
 const style = css`

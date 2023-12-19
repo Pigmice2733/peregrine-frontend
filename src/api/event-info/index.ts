@@ -1,4 +1,4 @@
-import { Merge } from 'src/type-utils'
+import { Merge } from '@/type-utils'
 
 export interface EventInfo {
   webcasts: string[]

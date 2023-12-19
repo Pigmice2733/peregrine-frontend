@@ -1,6 +1,6 @@
 import { css } from '@linaria/core'
 import clsx from 'clsx'
-import { PropsOf } from 'src/type-utils'
+import { PropsOf } from '@/type-utils'
 
 const style = css`
   padding: 0;

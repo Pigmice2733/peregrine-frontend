@@ -1,6 +1,6 @@
 import { transaction } from '..'
-import { ProcessedEventInfo } from 'src/api/event-info'
-import { preventEmptyArrResolve } from 'src/utils/prevent-empty-arr-resolve'
+import { ProcessedEventInfo } from '@/api/event-info'
+import { preventEmptyArrResolve } from '@/utils/prevent-empty-arr-resolve'
 
 export const getCachedEvents = (year?: number) =>
   transaction<ProcessedEventInfo[]>('events', (eventStore) =>

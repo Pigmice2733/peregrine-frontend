@@ -1,4 +1,4 @@
-import { ProcessedMatchInfo } from 'src/api/match-info'
+import { ProcessedMatchInfo } from '@/api/match-info'
 import { compareMatches } from './compare-matches'
 
 export const nextIncompleteMatch = (matches: ProcessedMatchInfo[]) =>
