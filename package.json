@@ -101,7 +101,8 @@
             }
           ]
         }
-      ]
+      ],
+      "no-warning-comments": "off"
     }
   },
   "prettier": {
