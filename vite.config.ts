@@ -129,7 +129,7 @@ export default vite.defineConfig({
     outDir,
     rollupOptions: {
       output: {
-        experimentalMinChunkSize: 5_000,
+        experimentalMinChunkSize: 10_000,
       },
       preserveEntrySignatures: false,
       treeshake: {
