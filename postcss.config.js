@@ -21,14 +21,6 @@ const config = {
         'custom-properties': false,
       },
     },
-    'postcss-font-magician': {
-      variants: {
-        'Roboto Condensed': { 400: [] },
-        Roboto: { 400: [], 700: [], 500: [] },
-      },
-      foundries: ['google'],
-      display: 'swap',
-    },
     'postcss-color-mod-function': {},
   },
 }
