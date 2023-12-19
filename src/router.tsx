@@ -115,10 +115,7 @@ export const Router = ({ routes }: { routes: Route[] }) => {
           setResolvedComponent(() => comp.default)
           setRouteProps(exec(path, matchingRoute))
         })
-        .catch((error) => {
-          console.log(error)
-          // location.reload()
-        })
+        .catch(() => location.reload())
   }, [matchingRoute, matchingRouteObj, path])
 
   if (matchingFullRoute === null) return <h1>404</h1>
