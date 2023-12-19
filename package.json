@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": "Pigmice2733/peregrine-frontend",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "check-lint": "eslint --format=pretty --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}{on,}\"",
