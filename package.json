@@ -8,9 +8,9 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "check-lint": "eslint --format=pretty --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore \"**/*.{j,t}s{x,}{on,}\"",
+    "check-lint": "eslint --format=pretty --ignore-path .gitignore --ext .js,.ts,.tsx . && prettier --list-different --ignore-path .gitignore .",
     "eslint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx .",
-    "lint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore \"**/*.{j,t}s{x,}{on,}\"",
+    "lint": "eslint --format=pretty --ignore-path .gitignore --fix --ext .js,.ts,.tsx . && prettier --write --ignore-path .gitignore .",
     "new-route": "hygen route new",
     "rollup-watch": "rollup -c rollup.config.js --watch",
     "start": "vite",
