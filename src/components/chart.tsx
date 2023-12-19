@@ -506,7 +506,7 @@ const BooleanChart: FunctionComponent<ChartProps> = ({
   points,
   onPointClick,
 }) => {
-  const elementRef = useRef<HTMLDivElement | null>()
+  const elementRef = useRef<HTMLDivElement>(null)
   const [isOverflowingLeft, setIsOverflowingLeft] = useState<boolean>(false)
   const [isOverflowingRight, setIsOverflowingRight] = useState<boolean>(false)
 

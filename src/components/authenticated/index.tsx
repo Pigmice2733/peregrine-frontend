@@ -45,7 +45,7 @@ interface Props {
 }
 
 const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
-  const formRef = useRef<HTMLFormElement>()
+  const formRef = useRef<HTMLFormElement>(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
