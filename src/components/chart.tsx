@@ -313,8 +313,21 @@ const Chart: FunctionComponent<ChartProps> = memo(
         height="1"
       >
         <linearGradient id={gradientId} x1={0} x2={0} y1={0} y2={1}>
-          <stop offset={0} stop-color={lighten(0.05, baseColor)} />
-          <stop offset={1} stop-color={baseColor} />
+          {/* stop-color is defined in CSS instead of in an attribute
+              so that linaria can compute the lightened color at build-time
+              and so that polished is not included at runtime. */}
+          <stop
+            offset={0}
+            class={css`
+              stop-color: ${lighten(0.05, baseColor)};
+            `}
+          />
+          <stop
+            offset={1}
+            class={css`
+              stop-color: ${baseColor};
+            `}
+          />
         </linearGradient>
 
         <clipPath id={outerClipId}>
