@@ -93,6 +93,9 @@ export default vite.defineConfig({
   server: {
     port: 2733,
   },
+  preview: {
+    port: 2733,
+  },
   plugins: [
     preact(),
     // for Linaria (CSS in JS)
