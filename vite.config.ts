@@ -172,28 +172,3 @@ export default vite.defineConfig({
     },
   },
 })
-
-// const fixedLinaria = (): vite.Plugin => {
-//   const originalLinaria = linaria({
-//     include: ['src/**/*.{js,jsx,ts,tsx}'],
-//     babelOptions: {
-//       configFile: false,
-//       presets: ['@babel/preset-typescript'],
-//       plugins: [
-//         [
-//           'module-resolver',
-//           {
-//             root: ['./src'],
-//             alias: {
-//               '^src/(.*)': './src/\\1',
-//             },
-//           },
-//         ],
-//       ],
-//     },
-//   })
-//   return {
-//     ...originalLinaria,
-//     enforce: 'pre',
-//   }
-// }
