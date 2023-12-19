@@ -1,7 +1,7 @@
 import { VNode } from 'preact'
 import { PropsOf, ElementName } from '@/type-utils'
 import clsx from 'clsx'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { pxToRem } from '@/utils/px-to-rem'
 

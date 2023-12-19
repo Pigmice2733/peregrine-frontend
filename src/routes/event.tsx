@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { MatchDetailsCard } from '@/components/match-card'
 import { useEventInfo } from '@/cache/event-info/use'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { EventInfoCard } from '@/components/event-info-card'
 import Button from '@/components/button'
 import { nextIncompleteMatch } from '@/utils/next-incomplete-match'

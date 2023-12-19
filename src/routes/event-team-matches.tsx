@@ -3,7 +3,7 @@ import { useEventInfo } from '@/cache/event-info/use'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 
 interface Props {
   eventKey: string

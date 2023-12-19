@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { createShadow } from '@/utils/create-shadow'
 import { TextButton } from '@/components/text-button'
 import { pxToRem } from '@/utils/px-to-rem'

@@ -1,4 +1,4 @@
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { rgba } from 'polished'
 import clsx from 'clsx'
 import { useRef, useEffect } from 'preact/hooks'

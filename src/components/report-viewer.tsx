@@ -9,7 +9,7 @@ import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import TeamPicker from './team-picker'
 import { useMatchInfo } from '@/cache/match-info/use'
 import { CommentCard } from './comment-card'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { cleanFieldName } from '@/utils/clean-field-name'
 import { ProfileLink } from './profile-link'
 

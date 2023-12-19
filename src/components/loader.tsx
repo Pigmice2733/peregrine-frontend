@@ -1,4 +1,4 @@
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { useEffect, useState } from 'preact/hooks'
 
 const spinnerStyle = css`

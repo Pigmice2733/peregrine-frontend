@@ -1,4 +1,4 @@
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 
 const outer = css`
   border-radius: 0.3rem;

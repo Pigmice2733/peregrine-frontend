@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { useSavedReports, uploadSavedReports } from '@/api/report/submit-report'
 import Card from '@/components/card'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { useEventInfo } from '@/cache/event-info/use'
 import { formatMatchKey } from '@/utils/format-match-key'
 import { formatTeamNumber } from '@/utils/format-team-number'

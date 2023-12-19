@@ -5,7 +5,7 @@ import { getEventStats } from '@/api/stats/get-event-stats'
 import { useEventInfo } from '@/cache/event-info/use'
 import AnalysisTable from '@/components/analysis-table'
 import Loader from '@/components/loader'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { useSchema } from '@/cache/schema/use'
 import {
   tablePageStyle,

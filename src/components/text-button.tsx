@@ -1,4 +1,4 @@
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import clsx from 'clsx'
 import { PropsOf } from '@/type-utils'
 import { pxToRem } from '@/utils/px-to-rem'

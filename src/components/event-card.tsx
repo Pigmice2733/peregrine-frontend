@@ -1,6 +1,6 @@
 import Chip, { DateChip } from '@/components/chip'
 import Card from '@/components/card'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 
 type Props = {
   event: {

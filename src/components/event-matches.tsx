@@ -3,7 +3,7 @@ import TextInput from './text-input'
 import { compareMatches as compareMatchesChronologically } from '@/utils/compare-matches'
 import { MatchDetailsCard } from './match-card'
 import { useState } from 'preact/hooks'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { formatMatchKey } from '@/utils/format-match-key'
 
 interface Props {

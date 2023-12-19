@@ -1,7 +1,7 @@
 /* eslint-disable max-nested-callbacks */
 import Page from '@/components/page'
 import { useEventInfo } from '@/cache/event-info/use'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import Card from '@/components/card'
 import Loader from '@/components/loader'
 import { usePromise } from '@/utils/use-promise'

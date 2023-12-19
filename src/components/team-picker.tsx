@@ -1,5 +1,5 @@
 import { formatTeamNumber } from '@/utils/format-team-number'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import clsx from 'clsx'
 
 interface Props {

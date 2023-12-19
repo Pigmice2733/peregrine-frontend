@@ -13,7 +13,7 @@ import {
   mdiAlert,
   mdiClipboardTextMultipleOutline,
 } from '@mdi/js'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import TextInput, { TextInputProps } from '@/components/text-input'
 import { useState, useEffect, useCallback } from 'preact/hooks'
 import { offBlack } from '@/colors'

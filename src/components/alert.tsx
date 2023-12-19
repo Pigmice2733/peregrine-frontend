@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { css } from '@linaria/core'
+import { css } from 'linaria'
 import { offBlack } from '@/colors'
 import { Merge } from 'type-fest'
 
