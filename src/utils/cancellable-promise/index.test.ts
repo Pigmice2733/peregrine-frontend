@@ -1,6 +1,6 @@
 import { CancellablePromise } from '.'
 
-const nextTick = () => new Promise<void>((r) => setTimeout(r, 0))
+const nextTick = () => new Promise<void>((resolve) => setTimeout(resolve, 0))
 
 describe('behaves like a normal promise', () => {
   it('only resolves once', async () => {
