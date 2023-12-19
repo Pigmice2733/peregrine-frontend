@@ -4,7 +4,7 @@ import Card from '@/components/card'
 import { authenticate } from '@/api/authenticate'
 import Page from '../page'
 import Button from '../button'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useState, useRef } from 'preact/hooks'
 import { Roles } from '@/api/user'
 import {

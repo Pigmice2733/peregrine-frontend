@@ -32,12 +32,15 @@
     "qss": "2.0.3"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "7.23.3",
     "@calebeby/preact-testing-library": "0.0.4",
+    "@linaria/core": "6.0.0",
     "@preact/preset-vite": "2.7.0",
     "@testing-library/jest-dom": "5.14.1",
     "@types/jest": "26.0.24",
     "@types/node-fetch": "2.5.12",
     "@types/sharp": "0.29.2",
+    "@wyw-in-js/vite": "0.2.2",
     "babel-jest": "26.6.3",
     "babel-preset-vite": "1.1.1",
     "clsx": "1.1.1",
@@ -60,6 +63,7 @@
     "postcss-preset-env": "9.3.0",
     "prettier": "2.2.1",
     "prompts": "1.2.1",
+    "rollup": "4.9.1",
     "sharp": "0.29.2",
     "templite": "1.2.0",
     "type-fest": "0.21.3",

@@ -1,6 +1,6 @@
 import * as vite from 'vite'
 import preact from '@preact/preset-vite'
-import linaria from '@linaria/vite'
+import wyw from '@wyw-in-js/vite'
 import path from 'node:path'
 import templite from 'templite'
 import * as fs from 'fs/promises'
@@ -55,17 +55,6 @@ const writeIconsPlugin = () => ({
   },
 })
 
-const writeManifestPlugin = () => ({
-  name: 'write-manifest',
-  async writeBundle() {
-    const manifestSrc = await fs.readFile('./src/manifest.json', 'utf8')
-    await fs.writeFile(
-      path.join(outDir, 'manifest.json'),
-      JSON.stringify(JSON.parse(manifestSrc)),
-    )
-  },
-})
-
 let chunks: string[] | undefined
 
 // Separate rollup config for compiling the service worker
@@ -106,14 +95,31 @@ export default vite.defineConfig({
   },
   plugins: [
     preact(),
-    linaria({
-      include: ['**/*.{js,jsx,ts,tsx}'],
-    }),
+    // for Linaria (CSS in JS)
+    {
+      ...wyw({
+        include: ['**/*.{ts,tsx}'],
+        babelOptions: {
+          presets: ['@babel/preset-typescript'],
+          plugins: [
+            [
+              '@babel/transform-react-jsx',
+              {
+                runtime: 'automatic',
+                importSource: 'preact',
+                useBuiltIns: true, // object.assign instead of _extends
+              },
+            ],
+          ],
+        },
+      }),
+      enforce: 'pre', // This needs to run before preact/prefresh injects code that Linaria/WYW-in-js can't run in node
+    },
     htmlPlugin(),
   ],
   resolve: {
     alias: {
-      src: path.resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   build: {
@@ -158,9 +164,33 @@ export default vite.defineConfig({
             })
           },
         },
-        writeManifestPlugin(),
         writeIconsPlugin(),
       ],
     },
   },
 })
+
+// const fixedLinaria = (): vite.Plugin => {
+//   const originalLinaria = linaria({
+//     include: ['src/**/*.{js,jsx,ts,tsx}'],
+//     babelOptions: {
+//       configFile: false,
+//       presets: ['@babel/preset-typescript'],
+//       plugins: [
+//         [
+//           'module-resolver',
+//           {
+//             root: ['./src'],
+//             alias: {
+//               '^src/(.*)': './src/\\1',
+//             },
+//           },
+//         ],
+//       ],
+//     },
+//   })
+//   return {
+//     ...originalLinaria,
+//     enforce: 'pre',
+//   }
+// }
