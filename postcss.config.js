@@ -1,7 +1,3 @@
-const { createHash } = require('crypto')
-
-const prod = process.env.NODE_ENV === 'production'
-
 const variables = {
   '--pigmice-purple': '#800080',
   '--light-grey': '#E8E8E8',
@@ -13,7 +9,7 @@ const variables = {
   '--focus-ring': '#0044ff40',
 }
 
-module.exports = {
+const config = {
   modules: true,
   plugins: {
     'postcss-nesting': {},
@@ -36,3 +32,4 @@ module.exports = {
     'postcss-color-mod-function': {},
   },
 }
+export default config
