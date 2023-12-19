@@ -18,7 +18,7 @@
     "noUnusedParameters": true,
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"]
+      "@/*": ["./src/*"]
     },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
