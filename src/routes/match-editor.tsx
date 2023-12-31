@@ -1,4 +1,4 @@
-import { updateEventMatch } from '@/api/match-info/update-event-match'
+import { createEventMatch } from '@/api/match-info/create-event-match'
 import { useMatchInfo } from '@/cache/match-info/use'
 import Button from '@/components/button'
 import Card from '@/components/card'
@@ -58,7 +58,7 @@ const EditorForm = ({
   const onSubmit = (e: Event) => {
     e.preventDefault()
     setIsLoading(true)
-    updateEventMatch(eventKey, {
+    createEventMatch(eventKey, {
       redAlliance: teamList.slice(0, 3),
       blueAlliance: teamList.slice(3, 6),
       time: getTimeFromParts(day, time),
