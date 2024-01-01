@@ -35,16 +35,17 @@ const EditorForm = ({
   matchKey: string
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [day, setDay] = useState('')
-  const [time, setTime] = useState('')
-  const [teamList, setTeamList] = useState([''])
-  const [redScore, setRedScore] = useState(0)
-  const [blueScore, setBlueScore] = useState(0)
   const emitError = useErrorEmitter()
   const match = useMatchInfo(eventKey, matchKey)
   const matchDate = match?.time || new Date(Date.now())
-  setDay(formatDate(matchDate))
-  setTime(formatTime(matchDate))
+
+  const [day, setDay] = useState(formatDate(matchDate))
+  const [time, setTime] = useState(formatTime(matchDate))
+  const [teamList, setTeamList] = useState(
+    match?.redAlliance.concat(match.blueAlliance) || [''],
+  )
+  const [redScore, setRedScore] = useState(match?.redScore || 0)
+  const [blueScore, setBlueScore] = useState(match?.blueScore || 0)
 
   const formatTeams = () => {
     let output = ''

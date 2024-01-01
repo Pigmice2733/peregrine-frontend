@@ -6,7 +6,11 @@ import { Form } from '@/components/form'
 import Page from '@/components/page'
 import TextInput from '@/components/text-input'
 import { route } from '@/router'
-import { getTimeFromParts } from '@/utils/get-time-from-parts'
+import {
+  formatDate,
+  formatTime,
+  getTimeFromParts,
+} from '@/utils/get-time-from-parts'
 import { css } from 'linaria'
 import { useState } from 'preact/hooks'
 
@@ -56,10 +60,12 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
           <TextInput
             label="Date (in mm/dd format) or leave blank for today"
             onInput={setDay}
+            placeholder={formatDate(new Date(Date.now()))}
           />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
             onInput={setTime}
+            placeholder={formatTime(new Date(Date.now()))}
           />
           <TextInput
             label="Teams (separate numbers with commas, red alliance first)"
@@ -71,14 +77,17 @@ const CreatorForm = ({ eventKey }: { eventKey: string }) => {
               }
               setTeamList(teams)
             }}
+            placeholder="Red1, Red2, Red3, Blue1, Blue2, Blue3"
           />
           <TextInput
             label="Red Alliance Score"
             onInput={(input) => setRedScore(Number.parseInt(input))}
+            placeholder="0"
           />
           <TextInput
             label="Blue Alliance Score"
             onInput={(input) => setBlueScore(Number.parseInt(input))}
+            placeholder="0"
           />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Saving Match Information' : 'Save Match'}
