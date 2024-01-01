@@ -89,7 +89,6 @@ const EditorForm = ({
           />
           <TextInput
             label="Teams (separate numbers with commas and spaces, red alliance first)"
-            required
             onInput={(input) => {
               const teams = input.split(', ')
               for (let i = 0; i < teams.length; i++) {
