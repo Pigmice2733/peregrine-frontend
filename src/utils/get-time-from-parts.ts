@@ -8,7 +8,7 @@ export const formatTime = (date: Date) => {
 }
 
 export const formatDate = (date: Date) => {
-  const monthNumber = date.getMonth()
+  const monthNumber = date.getMonth() + 1
   const dayNumber = date.getDate()
   const month =
     monthNumber < 10 ? '0' + String(monthNumber) : String(monthNumber)
@@ -18,7 +18,7 @@ export const formatDate = (date: Date) => {
 
 export const getTimeFromParts = (date: string, time?: string) => {
   const now = new Date(Date.now())
-  if ((date && date.length !== 5) || (time && time.length !== 5))
+  if ((date && date.length > 5) || (time && time.length !== 5))
     return now.toISOString()
   if (!time) time = formatTime(now)
   if (!date) date = formatDate(now)
@@ -27,6 +27,6 @@ export const getTimeFromParts = (date: string, time?: string) => {
   const day = Number.parseInt(date.slice(3, 5))
   const hour = Number.parseInt(time.slice(0, 2))
   const minute = Number.parseInt(time.slice(3, 5))
-  const inputDate = new Date(now.getFullYear(), month, day, hour, minute)
+  const inputDate = new Date(now.getFullYear(), month - 1, day, hour, minute)
   return inputDate.toISOString()
 }

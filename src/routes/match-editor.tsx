@@ -80,12 +80,12 @@ const EditorForm = ({
           <TextInput
             label="Date (in mm/dd format) or leave blank for current date"
             onInput={setDay}
-            value={formatDate(matchDate)}
+            placeholder={formatDate(matchDate)}
           />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
             onInput={setTime}
-            value={formatTime(matchDate)}
+            placeholder={formatTime(matchDate)}
           />
           <TextInput
             label="Teams (separate numbers with commas and spaces, red alliance first)"
@@ -97,17 +97,17 @@ const EditorForm = ({
               }
               setTeamList(teams)
             }}
-            value={formatTeams()}
+            placeholder={formatTeams()}
           />
           <TextInput
             label="Red Alliance Score"
             onInput={(input) => setRedScore(Number.parseInt(input))}
-            value={match?.redScore || 0}
+            placeholder={match?.redScore?.toString() || '0'}
           />
           <TextInput
             label="Blue Alliance Score"
             onInput={(input) => setBlueScore(Number.parseInt(input))}
-            value={match?.blueScore || 0}
+            placeholder={match?.blueScore?.toString() || '0'}
           />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Saving Match Information' : 'Save Match'}
