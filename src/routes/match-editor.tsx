@@ -43,6 +43,8 @@ const EditorForm = ({
   const emitError = useErrorEmitter()
   const match = useMatchInfo(eventKey, matchKey)
   const matchDate = match?.time || new Date(Date.now())
+  setDay(formatDate(matchDate))
+  setTime(formatTime(matchDate))
 
   const formatTeams = () => {
     let output = ''
@@ -80,12 +82,12 @@ const EditorForm = ({
           <TextInput
             label="Date (in mm/dd format) or leave blank for current date"
             onInput={setDay}
-            placeholder={formatDate(matchDate)}
+            placeholder={day}
           />
           <TextInput
             label="Time (in hh:mm format) or leave blank for current time"
             onInput={setTime}
-            placeholder={formatTime(matchDate)}
+            placeholder={time}
           />
           <TextInput
             label="Teams (separate numbers with commas and spaces, red alliance first)"
