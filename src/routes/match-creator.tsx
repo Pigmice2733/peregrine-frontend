@@ -11,7 +11,7 @@ import {
   formatTime,
   getTimeFromParts,
 } from '@/utils/get-time-from-parts'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useState } from 'preact/hooks'
 
 const cardStyle = css`

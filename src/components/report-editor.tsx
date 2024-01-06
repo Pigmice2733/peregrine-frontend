@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { StatDescription, ReportStatDescription } from '@/api/schema'
 import { useState, useMemo, useEffect } from 'preact/hooks'
 import {
