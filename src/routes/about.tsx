@@ -1,5 +1,5 @@
 import Page from '@/components/page'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 
 const pageStyle = css`
   text-align: center;

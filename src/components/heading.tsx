@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { pigmicePurple } from '@/colors'
 import clsx from 'clsx'
 

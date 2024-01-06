@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 
 export const tablePageStyle = css`
   padding: 1rem;
