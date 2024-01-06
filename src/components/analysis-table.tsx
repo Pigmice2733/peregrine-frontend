@@ -12,7 +12,7 @@ import {
 import { formatPercent } from '@/utils/format-percent'
 import { useState } from 'preact/hooks'
 import { Dropdown } from './dropdown'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { createDialog } from './dialog'
 import { blue, red, grey, lightGrey, textGrey } from '@/colors'
 import Icon from './icon'

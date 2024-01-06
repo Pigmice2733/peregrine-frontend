@@ -1,7 +1,3 @@
-const { createHash } = require('crypto')
-
-const prod = process.env.NODE_ENV === 'production'
-
 const variables = {
   '--pigmice-purple': '#800080',
   '--light-grey': '#E8E8E8',
@@ -13,43 +9,19 @@ const variables = {
   '--focus-ring': '#0044ff40',
 }
 
-module.exports = {
+const config = {
   modules: true,
   plugins: {
     'postcss-nesting': {},
     'postcss-css-variables': { variables },
     'postcss-calc': {},
-    'postcss-modules': {
-      generateScopedName: (local, path) => {
-        // ignore linaria classes
-        if (
-          /\.[jt]sx?_[\da-z]*\.css/.test(path) ||
-          /\.linaria\.css$/.test(path)
-        ) {
-          return local
-        }
-        const h = createHash('sha256')
-          .update(prod ? local + path : path)
-          .digest('hex')
-          .slice(0, 4)
-        // we must start with an underscore, otherwise it might start with a number
-        return prod ? '_' + h : `${local}-${h}`
-      },
-    },
     'postcss-preset-env': {
       stage: 3,
       features: {
         'custom-properties': false,
       },
     },
-    'postcss-font-magician': {
-      variants: {
-        'Roboto Condensed': { 400: [] },
-        Roboto: { 400: [], 700: [], 500: [] },
-      },
-      foundries: ['google'],
-      display: 'swap',
-    },
     'postcss-color-mod-function': {},
   },
 }
+export default config

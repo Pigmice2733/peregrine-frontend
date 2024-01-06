@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { Report } from '@/api/report'
 import { usePromise } from '@/utils/use-promise'
 import Card from './card'

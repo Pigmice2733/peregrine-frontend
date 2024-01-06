@@ -10,7 +10,7 @@ import TextInput from '@/components/text-input'
 import { maxRealmNameLength } from '@/constants'
 import { createAlert, route } from '@/router'
 import { usePromise } from '@/utils/use-promise'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useState } from 'preact/hooks'
 
 const contentStyle = css`

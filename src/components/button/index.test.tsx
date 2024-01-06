@@ -1,8 +1,8 @@
 import Button from '.'
-import { render, fireEvent } from '@calebeby/preact-testing-library'
+import { render, fireEvent } from '@testing-library/preact'
 
 test('button', () => {
-  const clickHandler = jest.fn()
+  const clickHandler = vi.fn()
   const { container } = render(<Button onClick={clickHandler}>Hello</Button>)
   const button = container.firstElementChild as HTMLElement
   expect(clickHandler).not.toHaveBeenCalled()
@@ -10,7 +10,7 @@ test('button', () => {
   expect(clickHandler).toHaveBeenCalledTimes(1)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <button
-      class="buttonStyle_br386bu buttonFontStyle_b1uioams"
+      class="mocked-css-1 mocked-css-0"
     >
       Hello
     </button>
@@ -25,7 +25,7 @@ test('renders an `a` element for `href`', () => {
   )
   expect(container.firstChild).toMatchInlineSnapshot(`
     <a
-      class="buttonStyle_br386bu caleb buttonFontStyle_b1uioams"
+      class="mocked-css-1 caleb mocked-css-0"
       href="google.com"
     >
       Googlez
