@@ -5,7 +5,7 @@ import Loader from '@/components/loader'
 import Page from '@/components/page'
 import { ReportEditor } from '@/components/report-editor'
 import { route } from '@/router'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useEffect, useState } from 'preact/hooks'
 
 const reportPageStyle = css`

@@ -1,7 +1,7 @@
 import Page from '@/components/page'
 import { ReportViewer } from '@/components/report-viewer'
 import Card from '@/components/card'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { getReport } from '@/api/report/get-report'
 import Loader from '@/components/loader'
 import { useState, useEffect } from 'preact/hooks'

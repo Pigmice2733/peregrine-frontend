@@ -1,6 +1,6 @@
 import { CancellablePromise } from '.'
 
-const nextTick = () => Promise.resolve()
+const nextTick = () => new Promise<void>((resolve) => setTimeout(resolve, 0))
 
 describe('behaves like a normal promise', () => {
   it('only resolves once', async () => {
@@ -13,7 +13,7 @@ describe('behaves like a normal promise', () => {
       },
     )
 
-    const beforeCallback = jest.fn()
+    const beforeCallback = vi.fn()
     promise.then(beforeCallback)
     expect(beforeCallback).not.toHaveBeenCalled()
 
@@ -24,7 +24,7 @@ describe('behaves like a normal promise', () => {
     expect(beforeCallback).toHaveBeenCalledTimes(1)
     expect(beforeCallback).toHaveBeenLastCalledWith('hi')
 
-    const afterCallback = jest.fn()
+    const afterCallback = vi.fn()
 
     promise.then(afterCallback)
 
@@ -36,7 +36,7 @@ describe('behaves like a normal promise', () => {
     reject()
 
     // Catch should not have called, since it already resolved
-    const catchCallback = jest.fn()
+    const catchCallback = vi.fn()
     promise.catch(catchCallback)
     await nextTick()
     expect(catchCallback).not.toHaveBeenCalled()
@@ -55,11 +55,11 @@ describe('behaves like a normal promise', () => {
       },
     )
 
-    const onResolve = jest.fn()
-    const onReject = jest.fn(
+    const onResolve = vi.fn()
+    const onReject = vi.fn(
       (_: any) => new Promise<number>((resolve) => resolve(30)),
     )
-    const onResolve2 = jest.fn()
+    const onResolve2 = vi.fn()
 
     const p1 = promise
     const p2 = p1.then(onResolve)
@@ -75,12 +75,9 @@ describe('behaves like a normal promise', () => {
     expect(p4).toBeInstanceOf(CancellablePromise)
 
     await nextTick()
-    await nextTick()
     expect(onResolve).not.toHaveBeenCalled()
     expect(onReject).toHaveBeenCalledTimes(1)
     expect(onReject).toHaveBeenCalledWith('bad')
-    await nextTick()
-    await nextTick()
     await nextTick()
     expect(onResolve2).toHaveBeenCalledTimes(1)
     expect(onResolve2).toHaveBeenCalledWith(30)
@@ -91,14 +88,14 @@ describe('cancellable functionality', () => {
   it('cancelling prevents .then and .catch callbacks from being called', async () => {
     let resolve: (value: string | PromiseLike<string>) => void = () => {}
     let reject: (reason?: any) => void = () => {}
-    const cancelCallback = jest.fn()
+    const cancelCallback = vi.fn()
     const promise = new CancellablePromise<string>((res, rej, onCanceled) => {
       resolve = res
       reject = rej
       onCanceled(cancelCallback)
     })
 
-    const thenCallback = jest.fn()
+    const thenCallback = vi.fn()
     promise.then(thenCallback)
 
     expect(cancelCallback).not.toHaveBeenCalled()
@@ -120,8 +117,8 @@ describe('cancellable functionality', () => {
   })
 
   it('cancels subpromises with Promise.all', async () => {
-    const onP1Cancel = jest.fn()
-    const onP2Cancel = jest.fn()
+    const onP1Cancel = vi.fn()
+    const onP2Cancel = vi.fn()
     const p1 = new CancellablePromise<string>((_res, _rej, onCanceled) => {
       onCanceled(onP1Cancel)
     })
@@ -135,8 +132,6 @@ describe('cancellable functionality', () => {
     expect(onP1Cancel).not.toHaveBeenCalled()
     expect(onP2Cancel).not.toHaveBeenCalled()
     all.cancel()
-    await nextTick()
-    await nextTick()
     await nextTick()
     expect(onP1Cancel).toHaveBeenCalledTimes(1)
     expect(onP2Cancel).toHaveBeenCalledTimes(1)

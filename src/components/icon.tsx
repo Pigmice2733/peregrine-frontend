@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 
 interface Props extends JSX.HTMLAttributes<SVGSVGElement> {
   icon: string

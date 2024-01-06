@@ -1,6 +1,6 @@
 import { getSavedReports } from '@/api/report/submit-report'
 import Page from '@/components/page'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useState, useEffect } from 'preact/hooks'
 import { Report } from '@/api/report'
 import Card from '@/components/card'

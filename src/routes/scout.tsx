@@ -3,7 +3,7 @@ import Authenticated from '@/components/authenticated'
 import { ReportEditor } from '@/components/report-editor'
 import { route } from '@/router'
 import { AlertType } from '@/components/alert'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { updateUrl } from '@/url-manager'
 
 interface Props {
