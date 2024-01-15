@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'short',
