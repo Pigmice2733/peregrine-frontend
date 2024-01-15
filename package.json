@@ -102,7 +102,7 @@
           ]
         }
       ],
-      "no-warning-comments": "warn"
+      "no-warning-comments": "off"
     }
   },
   "prettier": {
