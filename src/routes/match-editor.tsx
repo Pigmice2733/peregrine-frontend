@@ -13,7 +13,7 @@ import {
   formatTime,
 } from '@/utils/get-time-from-parts'
 import { css } from '@linaria/core'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 
 const cardStyle = css`
   margin: 1.5rem;
@@ -37,15 +37,20 @@ const EditorForm = ({
   const [isLoading, setIsLoading] = useState(false)
   const emitError = useErrorEmitter()
   const match = useMatchInfo(eventKey, matchKey)
-  const matchDate = match?.time || new Date(Date.now())
 
-  const [day, setDay] = useState(formatDate(matchDate))
-  const [time, setTime] = useState(formatTime(matchDate))
+  const [day, setDay] = useState('')
+  const [time, setTime] = useState('')
   const [teamList, setTeamList] = useState(
     match?.redAlliance.concat(match.blueAlliance) || [''],
   )
   const [redScore, setRedScore] = useState(match?.redScore || 0)
   const [blueScore, setBlueScore] = useState(match?.blueScore || 0)
+
+  useEffect(() => {
+    const matchDate = match?.time || new Date(Date.now())
+    setDay(formatDate(matchDate))
+    setTime(formatTime(matchDate))
+  }, [match])
 
   const formatTeams = () => {
     let output = ''

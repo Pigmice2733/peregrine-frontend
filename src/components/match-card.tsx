@@ -26,7 +26,7 @@ const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
   display: grid;
-  grid-template-columns: auto auto 10rem;
+  grid-template-columns: auto auto auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
@@ -43,14 +43,19 @@ const matchCardStyle = css`
 const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
+  grid-column: 1;
   white-space: nowrap;
-  margin: 0.3rem 0.6rem;
-  display: flex;
+  margin: 0.3rem 0rem 0.3rem 0.6rem;
   align-items: center;
 
   & > * {
     margin: 0.3rem 0;
   }
+`
+
+const pencilStyle = css`
+  grid-column: 2;
+  grid-row: span 2;
 `
 
 const matchNumStyle = css`
@@ -64,7 +69,7 @@ const matchNumStyle = css`
 
 const allianceStyle = css`
   white-space: nowrap;
-  grid-column: 3;
+  grid-column: 4;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
@@ -121,6 +126,8 @@ export const MatchDetailsCard = memo(
           {matchName.num && (
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
+        </div>
+        <div class={pencilStyle}>
           {isAdmin && (
             <IconButton
               icon={mdiPencil}
