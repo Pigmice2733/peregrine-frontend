@@ -1,5 +1,7 @@
+import { authenticate } from '@/api/authenticate'
 import { createRealm } from '@/api/realm/create-realm'
 import { getRealms } from '@/api/realm/get-realms'
+import { createUser } from '@/api/user/create-user'
 import { AlertType } from '@/components/alert'
 import Button from '@/components/button'
 import Card from '@/components/card'
@@ -7,7 +9,13 @@ import { useErrorEmitter, ErrorBoundary } from '@/components/error-boundary'
 import { Form } from '@/components/form'
 import Page from '@/components/page'
 import TextInput from '@/components/text-input'
-import { maxRealmNameLength } from '@/constants'
+import {
+  maxPasswordLength,
+  maxRealmNameLength,
+  maxUsernameLength,
+  minPasswordLength,
+  minUsernameLength,
+} from '@/constants'
 import { createAlert, route } from '@/router'
 import { usePromise } from '@/utils/use-promise'
 import { css } from '@linaria/core'
@@ -28,9 +36,19 @@ const cardStyle = css`
   }
 `
 
+const textStyle = css`
+  font-size: 0.85rem;
+  color: var(--off-black);
+  text-align: center;
+`
+
 const CreateRealmForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [realmName, setRealmName] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const realms = usePromise(getRealms) || []
   const emitError = useErrorEmitter()
   let nameTaken = false
@@ -51,11 +69,23 @@ const CreateRealmForm = () => {
         message: 'A realm already exists with this name.',
       })
     } else {
-      createRealm({ name: realmName, shareReports: false })
+      createRealm({ name: realmName, shareReports: true })
+        .then((realm) =>
+          createUser({
+            username,
+            password,
+            firstName,
+            lastName,
+            realmId: realm,
+            roles: { isAdmin: true, isVerified: true, isSuperAdmin: false },
+            stars: [],
+          }),
+        )
+        .then(() => authenticate(username, password))
         .then(() =>
-          route('/signup', {
+          route('/', {
             type: AlertType.Success,
-            message: 'Realm was created!',
+            message: 'Realm and account were created!',
           }),
         )
         .catch(emitError)
@@ -67,12 +97,37 @@ const CreateRealmForm = () => {
     <Form onSubmit={onSubmit}>
       {(isValid) => (
         <>
+          <div class={textStyle}>
+            {
+              'Enter a name for your new realm and account details for your own account. '
+            }
+            {
+              'You will be made an admin automatically and can verify other users in your realm.'
+            }
+          </div>
           <TextInput
             label="Realm Name"
-            type="realmName"
             required
             onInput={setRealmName}
             maxLength={maxRealmNameLength}
+          />
+          <TextInput label="First Name" onInput={setFirstName} required />
+          <TextInput label="Last Name" onInput={setLastName} required />
+          <TextInput
+            label="Username"
+            required
+            onInput={setUsername}
+            minLength={minUsernameLength}
+            maxLength={maxUsernameLength}
+          />
+          <TextInput
+            name="password"
+            label="Password"
+            type="password"
+            required
+            onInput={setPassword}
+            minLength={minPasswordLength}
+            maxLength={maxPasswordLength}
           />
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Creating Realm' : 'Create New Realm'}

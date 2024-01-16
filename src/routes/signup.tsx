@@ -47,7 +47,6 @@ const dropdownClass = css`
 
 const textStyle = css`
   font-size: 0.85rem;
-  font-weight: bold;
   color: var(--off-black);
   text-align: center;
 `
@@ -115,12 +114,10 @@ const SignUpForm = () => {
               getText={(v) => v.name}
             />
             <div class={textStyle}>
-              Don&apos;t see your team? Ask a captain or mentor to make a new
-              realm.{' '}
+              {"Don't see your team? Ask a captain or mentor to "}{' '}
+              <a href={'/new-realm'}>make a new realm</a>
+              {'.'}
             </div>
-            <Button disabled={isLoading} href={'/newrealm'}>
-              New Realm
-            </Button>
           </div>
           <Button disabled={isLoading || !isValid}>
             {isLoading ? 'Signing Up' : 'Sign Up'}

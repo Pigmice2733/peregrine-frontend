@@ -44,7 +44,7 @@ const routes = [
     component: () => import('./routes/login'),
   },
   {
-    path: '/newrealm',
+    path: '/new-realm',
     component: () => import('./routes/new-realm'),
   },
   {
