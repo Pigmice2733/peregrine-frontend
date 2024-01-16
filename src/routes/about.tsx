@@ -32,7 +32,7 @@ const sourceStyle = css`
 const AboutPage = () => {
   return (
     <Page name="About" back="/" class={pageStyle}>
-      <h1 class={headerStyle}> Welcome to Peregrine! </h1>
+      <h1 class={headerStyle}>Welcome to Peregrine!</h1>
       <section class={informationStyle}>
         <p>
           <strong>
@@ -65,7 +65,7 @@ const AboutPage = () => {
         <p>
           <strong>{"It's really easy to get started with Peregrine."}</strong>
           {' Have a team captain or coach send an email to '}
-          <a href="mailto:alexv@pigmice.com"> alexv@pigmice.com </a>
+          <a href="mailto:alexv@pigmice.com">alexv@pigmice.com</a>
           {`
              and a member of the Pigmice will add your team to the dropdown on the
             signup page. They will also connect you to a Slack channel where your
@@ -84,11 +84,12 @@ const AboutPage = () => {
             }
           </strong>
           {'at '}
-          <a href="mailto:alexv@pigmice.com"> alexv@pigmice.com. </a>
+          <a href="mailto:alexv@pigmice.com">alexv@pigmice.com</a>
+          {'.'}
         </p>
       </section>
       <section class={sourceStyle}>
-        <h3> Source code repositories: </h3>
+        <h3>Source code repositories:</h3>
         <p>
           <a href="https://github.com/Pigmice2733/peregrine-frontend">
             frontend (TypeScript and Preact)
