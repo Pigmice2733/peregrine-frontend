@@ -11,6 +11,7 @@ import {
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiCloudUpload,
+  mdiInformationOutline,
 } from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
@@ -231,6 +232,9 @@ export const Menu = ({ onHide, visible }: Props) => {
                 </MenuItem>
               </>
             )}
+            <MenuItem icon={mdiInformationOutline} href="/about">
+              About Peregrine
+            </MenuItem>
           </ul>
         </nav>
       </aside>
