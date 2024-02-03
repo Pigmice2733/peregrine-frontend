@@ -26,12 +26,10 @@ import { mdiAccountCircle } from '@mdi/js'
 import { useEventMatches } from '@/cache/event-matches/use'
 import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { matchHasTeam } from '@/utils/match-has-team'
-import { request } from '@/api/base'
 import { createDialog } from './dialog'
-import { createAlert } from '@/router'
-import { AlertType } from './alert'
 import Loader from './loader'
 import Card from './card'
+import { getReports } from '@/api/report/get-reports'
 
 const reportEditorStyle = css`
   padding: 1.5rem 2rem;
@@ -161,66 +159,69 @@ export const ReportEditor = ({
   }
   const report = getReportIfValid()
 
-  const submit = (e: Event) => {
+  // eslint-disable-next-line complexity
+  const submit = async (e: Event) => {
     e.preventDefault()
+    if (isDeleting) return
     if (!report) return
     setIsSaving(true)
-    uploadReport(report)
-      .then((id) => {
-        onSaveSuccess({ ...report, id })
-      })
-      .catch(async (error: { error?: string; id?: number }) => {
-        if (error.error === 'conflicts' && error.id !== undefined) {
-          const conflictingId = error.id
-          const shouldOverride = await createDialog({
-            confirm: `Override Report ${conflictingId}`,
-            dismiss: 'Cancel',
-            description: `There is already a report with the same reporter, team, and match.`,
-            title: `This report conflicts with report ${conflictingId}`,
-          })
-          if (shouldOverride) {
-            await request<null>(
-              'PUT',
-              `reports/${report.id}`,
-              { replace: true },
-              report,
-            )
-            createAlert({
-              type: AlertType.Success,
-              message: `Report ${conflictingId} was overridden`,
-            })
-            onSaveSuccess(report as GetReport)
-          }
-          if (report.key) {
-            deleteReportLocally(report.key)
-            onDelete?.()
-          }
-        } else {
+    const matchReports = await getReports({
+      event: report.eventKey,
+      match: report.matchKey,
+    })
+    let shouldOverride = true
+    for (const conflictReport of matchReports) {
+      if (
+        conflictReport.id !== report.id &&
+        conflictReport.teamKey === report.teamKey &&
+        conflictReport.reporterId === report.reporterId
+      ) {
+        const conflictingId = conflictReport.id
+        shouldOverride = await createDialog({
+          confirm: `Override Report ${conflictingId}`,
+          dismiss: 'Cancel',
+          description: `There is already a report with the same reporter, team, and match.`,
+          title: `This report conflicts with report ${conflictingId}.`,
+        })
+      }
+    }
+    if (shouldOverride) {
+      uploadReport(report)
+        .then((id) => {
+          onSaveSuccess({ ...report, id })
+        })
+        .catch(() => {
           const reportWithKey = {
             ...report,
             key: initialReport.key || generateReportKey(),
           }
           saveReportLocally(reportWithKey)
           onSaveLocally?.(reportWithKey)
-        }
-      })
-      .finally(() => {
-        setIsSaving(false)
-      })
+        })
+      setIsSaving(false)
+    }
   }
   const handleDelete = async (e: Event) => {
-    e.preventDefault()
-    if (initialReport.key) {
-      deleteReportLocally(initialReport.key)
-    } else {
-      const reportId = initialReport.id
-      if (reportId !== undefined) {
-        setIsDeleting(true)
-        await deleteReport(reportId)
-        setIsDeleting(false)
+    setIsDeleting(true)
+    const confirmDelete = await createDialog({
+      confirm: 'Delete Report',
+      dismiss: 'Cancel',
+      description: '',
+      title: 'Confirm Delete',
+    })
+    if (confirmDelete) {
+      e.preventDefault()
+      if (initialReport.key) {
+        deleteReportLocally(initialReport.key)
+      } else {
+        const reportId = initialReport.id
+        if (reportId !== undefined) {
+          await deleteReport(reportId)
+        }
       }
+      onDelete?.()
     }
-    onDelete?.()
+    setIsDeleting(false)
   }
   const reportAlreadyExists =
     initialReport.key !== undefined || initialReport.id !== undefined
@@ -246,7 +247,7 @@ export const ReportEditor = ({
       <h2>Auto</h2>
       {visibleFields.filter(isAuto).map((stat) => (
         <FieldCard
-          key={'auto' + stat.reportReference}
+          key={`auto + ${stat.reportReference}`}
           statDescription={stat}
           value={getReportFieldValue(stat)}
           onChange={updateReportField(stat.reportReference)}
@@ -255,7 +256,7 @@ export const ReportEditor = ({
       <h2>Teleop</h2>
       {visibleFields.filter(isTeleop).map((stat) => (
         <FieldCard
-          key={'teleop' + stat.reportReference}
+          key={`teleop + ${stat.reportReference}`}
           statDescription={stat}
           value={getReportFieldValue(stat)}
           onChange={updateReportField(stat.reportReference)}
