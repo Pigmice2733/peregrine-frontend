@@ -31,7 +31,7 @@ const sourceStyle = css`
 
 const AboutPage = () => {
   return (
-    <Page name="About" back="/" class={pageStyle}>
+    <Page name="About" class={pageStyle}>
       <h1 class={headerStyle}>Welcome to Peregrine!</h1>
       <section class={informationStyle}>
         <p>
