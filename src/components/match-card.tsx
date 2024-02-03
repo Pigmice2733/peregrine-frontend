@@ -5,6 +5,8 @@ import Card from '@/components/card'
 import { css } from '@linaria/core'
 import { memo } from '@/utils/memo'
 import clsx from 'clsx'
+import IconButton from './icon-button'
+import { mdiPencil } from '@mdi/js'
 
 interface MatchCardProps {
   match: {
@@ -17,13 +19,14 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
+  isAdmin?: boolean
 }
 
 const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
   display: grid;
-  grid-template-columns: auto auto 10rem;
+  grid-template-columns: auto auto auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
@@ -40,11 +43,19 @@ const matchCardStyle = css`
 const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
+  grid-column: 1;
   white-space: nowrap;
-  margin: 0.3rem 0.6rem;
+  margin: 0.3rem 0rem 0.3rem 0.6rem;
+  align-items: center;
+
   & > * {
     margin: 0.3rem 0;
   }
+`
+
+const pencilStyle = css`
+  grid-column: 2;
+  grid-row: span 2;
 `
 
 const matchNumStyle = css`
@@ -58,7 +69,7 @@ const matchNumStyle = css`
 
 const allianceStyle = css`
   white-space: nowrap;
-  grid-column: 3;
+  grid-column: 4;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
@@ -82,8 +93,13 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
+const pencilIconStyle = css`
+  width: 1rem;
+  aspect-ratio: 1;
+`
+
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className, isAdmin }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
     const createTeamLinks = (teams: string[]) =>
@@ -109,6 +125,15 @@ export const MatchDetailsCard = memo(
           {matchName.num ? <div>{matchName.group}</div> : matchName.group}
           {matchName.num && (
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
+          )}
+        </div>
+        <div class={pencilStyle}>
+          {isAdmin && (
+            <IconButton
+              icon={mdiPencil}
+              href={`/events/${eventKey}/matches/${match.key}/editor`}
+              class={pencilIconStyle}
+            />
           )}
         </div>
         {match.time && (

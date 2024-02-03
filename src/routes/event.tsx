@@ -9,6 +9,7 @@ import { Heading } from '@/components/heading'
 import { EventMatches } from '@/components/event-matches'
 import Loader from '@/components/loader'
 import { useEventMatches } from '@/cache/event-matches/use'
+import { useJWT } from '@/jwt'
 
 interface Props {
   eventKey: string
@@ -52,6 +53,9 @@ const Event = ({ eventKey }: Props) => {
   const matches = useEventMatches(eventKey)
   const eventInfo = useEventInfo(eventKey)
   const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
+  const { jwt } = useJWT()
+  const isAdmin =
+    jwt && (jwt.peregrineRoles.isAdmin || jwt.peregrineRoles.isSuperAdmin)
 
   return (
     <Page
@@ -65,6 +69,11 @@ const Event = ({ eventKey }: Props) => {
         </Heading>
         {eventInfo && <EventInfoCard event={eventInfo} />}
         <Button href={`/events/${eventKey}/analysis`}>Analysis</Button>
+        {isAdmin && (
+          <Button href={`/events/${eventKey}/match-creator`}>
+            Create New Match
+          </Button>
+        )}
       </div>
 
       <div class={sectionStyle}>
@@ -77,11 +86,16 @@ const Event = ({ eventKey }: Props) => {
             match={newestIncompleteMatch}
             eventKey={eventKey}
             link
+            isAdmin={isAdmin || false}
           />
         )}
         {matches ? (
           matches.length > 0 ? (
-            <EventMatches matches={matches} eventKey={eventKey} />
+            <EventMatches
+              matches={matches}
+              eventKey={eventKey}
+              isAdmin={isAdmin || false}
+            />
           ) : (
             <p class={noMatchesStyle}>No matches yet</p>
           )

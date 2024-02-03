@@ -29,6 +29,7 @@ import {
   ConnectionType,
   useNetworkConnection,
 } from '@/utils/use-network-connection'
+import { useJWT } from '@/jwt'
 
 interface Props {
   eventKey: string
@@ -160,6 +161,10 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     }
   }, [match, isOnline])
 
+  const { jwt } = useJWT()
+  const isAdmin =
+    jwt && (jwt.peregrineRoles.isAdmin || jwt.peregrineRoles.isSuperAdmin)
+
   return (
     // page setup
     <Page
@@ -211,7 +216,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
                 </div>
               </Card>
             )}
-            <MatchDetailsCard match={match} eventKey={eventKey} />
+            <MatchDetailsCard
+              match={match}
+              eventKey={eventKey}
+              isAdmin={isAdmin || false}
+            />
             {reports && reports.length > 0 ? (
               <MatchReports
                 match={match}
