@@ -63,7 +63,7 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
         message:
           'Username and password may only have letters, numbers, and underscores.',
       })
-      return
+      return setIsLoading(false)
     }
     authenticate(username, password)
       .then(() => {

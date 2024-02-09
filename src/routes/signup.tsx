@@ -53,7 +53,7 @@ const SignUpForm = () => {
 
   const onSubmit = (e: Event) => {
     e.preventDefault()
-    if (realmId === undefined) return
+    if (realmId === undefined) return setIsLoading(false)
     setIsLoading(true)
     if (!validateUsernamePassword(username, password)) {
       createAlert({
@@ -61,7 +61,7 @@ const SignUpForm = () => {
         message:
           'Username and password may only have letters, numbers, and underscores.',
       })
-      return
+      return setIsLoading(false)
     }
     createUser({
       username,
