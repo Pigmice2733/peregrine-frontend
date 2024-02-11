@@ -4,6 +4,10 @@ const routes = [
     component: () => import('./routes/home'),
   },
   {
+    path: '/about',
+    component: () => import('./routes/about'),
+  },
+  {
     path: '/events/:eventKey',
     component: () => import('./routes/event'),
   },
