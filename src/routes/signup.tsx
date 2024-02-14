@@ -17,10 +17,9 @@ import { getRealms } from '@/api/realm/get-realms'
 import { usePromise } from '@/utils/use-promise'
 import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
 import { authenticate } from '@/api/authenticate'
-import { createAlert, route } from '@/router'
+import { route } from '@/router'
 import { Realm } from '@/api/realm'
 import { validateUsernamePassword } from '@/utils/validate-username-password'
-import { AlertType } from '@/components/alert'
 
 const signUpStyle = css`
   padding: 1.5rem;
@@ -55,14 +54,8 @@ const SignUpForm = () => {
     e.preventDefault()
     if (realmId === undefined) return setIsLoading(false)
     setIsLoading(true)
-    if (!validateUsernamePassword(username, password)) {
-      createAlert({
-        type: AlertType.Error,
-        message:
-          'Username and password may only have letters, numbers, and underscores.',
-      })
+    if (!validateUsernamePassword(username, password))
       return setIsLoading(false)
-    }
     createUser({
       username,
       password,

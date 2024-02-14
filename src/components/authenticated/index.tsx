@@ -15,9 +15,7 @@ import {
 } from '@/constants'
 import { Form } from '@/components/form'
 import { ErrorBoundary, useErrorEmitter } from '../error-boundary'
-import { createAlert } from '@/router'
 import { validateUsernamePassword } from '@/utils/validate-username-password'
-import { AlertType } from '../alert'
 
 const loginStyle = css`
   padding: 1.5rem;
@@ -57,14 +55,8 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const onSubmit = (e: Event) => {
     e.preventDefault()
     setIsLoading(true)
-    if (!validateUsernamePassword(username, password)) {
-      createAlert({
-        type: AlertType.Error,
-        message:
-          'Username and password may only have letters, numbers, and underscores.',
-      })
+    if (!validateUsernamePassword(username, password))
       return setIsLoading(false)
-    }
     authenticate(username, password)
       .then(() => {
         setUsername('')
