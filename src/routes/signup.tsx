@@ -19,7 +19,7 @@ import { ErrorBoundary, useErrorEmitter } from '@/components/error-boundary'
 import { authenticate } from '@/api/authenticate'
 import { route } from '@/router'
 import { Realm } from '@/api/realm'
-import { validateUsernamePassword } from '@/utils/validate-username-password'
+import { validateUsername } from '@/utils/validate-username'
 
 const signUpStyle = css`
   padding: 1.5rem;
@@ -52,10 +52,9 @@ const SignUpForm = () => {
 
   const onSubmit = (e: Event) => {
     e.preventDefault()
-    if (realmId === undefined) return setIsLoading(false)
+    if (realmId === undefined) return
     setIsLoading(true)
-    if (!validateUsernamePassword(username, password))
-      return setIsLoading(false)
+    if (validateUsername(username)) return setIsLoading(false)
     createUser({
       username,
       password,
