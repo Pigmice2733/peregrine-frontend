@@ -34,7 +34,7 @@ const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
       name={
         <>
           {'Analysis - '}
-          <a href={`/events/${eventKey}`}> {eventName} </a>
+          <a href={`/events/${eventKey}`}>{eventName}</a>
         </>
       }
       class={tablePageStyle}

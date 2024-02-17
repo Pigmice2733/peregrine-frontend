@@ -28,7 +28,7 @@ const EventTeamMatches = ({ eventKey, teamNum }: Props) => {
       name={
         <>
           {`Matches: ${teamNum} @ `}
-          <a href={`/events/${eventKey}`}> {eventName} </a>
+          <a href={`/events/${eventKey}`}>{eventName}</a>
         </>
       }
       class={eventTeamMatchesStyle}

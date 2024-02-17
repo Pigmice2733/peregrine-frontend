@@ -53,7 +53,7 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
       name={
         <>
           {`Comments: ${teamNum} @ `}
-          <a href={`/events/${eventKey}`}> {eventName} </a>
+          <a href={`/events/${eventKey}`}>{eventName}</a>
         </>
       }
       class={commentsPageStyle}

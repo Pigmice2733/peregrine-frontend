@@ -2,7 +2,7 @@ import { RenderableProps, ComponentChildren } from 'preact'
 import { ErrorBoundary } from './error-boundary'
 import { css } from '@linaria/core'
 import { createShadow } from '@/utils/create-shadow'
-import { greenOnPurple, pigmicePurple } from '@/colors'
+import { pigmicePurple } from '@/colors'
 import IconButton, { iconButtonClass } from './icon-button'
 import { mdiArrowLeft, mdiMenu } from '@mdi/js'
 import clsx from 'clsx'
@@ -51,7 +51,7 @@ const headerText = css`
     color: white;
 
     &:hover {
-      text-decoration-color: ${greenOnPurple};
+      text-decoration-color: #47d232;
     }
   }
 `
@@ -66,7 +66,7 @@ type Props = Merge<
   }
 >
 
-const Header = ({ name, showBackButton }: Omit<Props, 'class'>) => {
+const Header = ({ name, showBackButton = true }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen)
@@ -75,7 +75,7 @@ const Header = ({ name, showBackButton }: Omit<Props, 'class'>) => {
   return (
     <>
       <header class={headerStyle}>
-        {(showBackButton || showBackButton === undefined) && (
+        {showBackButton && (
           <IconButton
             icon={mdiArrowLeft}
             aria-label="Back"

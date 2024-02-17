@@ -165,8 +165,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     <Page
       name={
         <>
-          {m.group + (m.num ? ' Match ' + m.num : '') + ' - '}
-          <a href={`/events/${eventKey}`}> {event ? event.name : eventKey} </a>
+          {`${m.group}${m.num ? ` Match ${m.num}` : ''} - `}
+          <a href={`/events/${eventKey}`}>{event?.name || eventKey}</a>
         </>
       }
       class={clsx(
