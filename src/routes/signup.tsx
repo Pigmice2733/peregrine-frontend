@@ -114,7 +114,7 @@ const SignUpForm = () => {
               getText={(v) => v.name}
             />
             <div class={textStyle}>
-              {"Don't see your team? Ask a captain or mentor to "}{' '}
+              {"Don't see your team? Ask a captain or mentor to "}
               <a href={'/new-realm'}>make a new realm</a>
               {'.'}
             </div>
