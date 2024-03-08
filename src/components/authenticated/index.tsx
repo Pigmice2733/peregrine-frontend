@@ -15,6 +15,7 @@ import {
 } from '@/constants'
 import { Form } from '@/components/form'
 import { ErrorBoundary, useErrorEmitter } from '../error-boundary'
+import { validateUsername } from '@/utils/validate-username'
 
 const loginStyle = css`
   padding: 1.5rem;
@@ -54,6 +55,8 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const onSubmit = (e: Event) => {
     e.preventDefault()
     setIsLoading(true)
+    console.log(username + ' / ' + password)
+    if (validateUsername(username)) return setIsLoading(false)
     authenticate(username, password)
       .then(() => {
         setUsername('')
