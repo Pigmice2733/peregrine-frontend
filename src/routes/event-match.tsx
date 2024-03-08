@@ -23,12 +23,21 @@ import { cleanYoutubeUrl } from '@/utils/clean-youtube-url'
 import { MatchReports } from '@/components/match-reports'
 import { getReports } from '@/api/report/get-reports'
 import Icon from '@/components/icon'
-import { mdiCloudOffOutline, mdiPlus } from '@mdi/js'
+import {
+  mdiArrowLeft,
+  mdiArrowRight,
+  mdiCloudOffOutline,
+  mdiPlus,
+} from '@mdi/js'
 import { createShadow } from '@/utils/create-shadow'
 import {
   ConnectionType,
   useNetworkConnection,
 } from '@/utils/use-network-connection'
+import { useEventMatches } from '@/cache/event-matches/use'
+import { compareMatches } from '@/utils/compare-matches'
+import { route } from '@/router'
+import IconButton from '@/components/icon-button'
 
 interface Props {
   eventKey: string
@@ -58,12 +67,14 @@ const loadedMatchStyle = css`
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-areas:
+    'matchLinks matchLinks matchLinks'
     '. leftColumn .'
     'analysisTable analysisTable analysisTable';
   padding: 0.75rem;
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
+      'matchLinks'
       'leftColumn'
       'analysisTable';
   }
@@ -76,11 +87,13 @@ const matchWithVideoStyle = css`
   grid-template-columns: 1fr auto 30rem 1fr;
   align-items: start;
   grid-template-areas:
+    'matchLinks matchLinks matchLinks matchLinks'
     '. leftColumn rightColumn .'
     'analysisTable analysisTable analysisTable analysisTable';
   @media (max-width: 930px) {
     grid-template-columns: 1fr;
     grid-template-areas:
+      'matchLinks'
       'leftColumn'
       'analysisTable'
       'rightColumn';
@@ -112,6 +125,37 @@ const offlineDisplayInfo = css`
   }
 `
 
+const matchLinksStyle = css`
+  font-weight: bold;
+  grid-area: matchLinks;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: 'previous next';
+  align-items: center;
+`
+
+const previousMatchStyle = css`
+  display: grid;
+  justify-items: left;
+  text-align: left;
+  grid-area: previous;
+  align-items: center;
+  grid-template-columns: 1fr;
+`
+
+const nextMatchStyle = css`
+  justify-items: right;
+  grid-area: next;
+  display: grid;
+  align-items: center;
+  text-align: right;
+  grid-template-columns: 1fr;
+`
+
+const matchLinkItemsStyle = css`
+  grid-row: 1;
+`
+
 const showMatchResults = 'Match Results'
 const showEventResults = 'Event Results'
 
@@ -123,7 +167,6 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   const netConn = useNetworkConnection()
   const isOnline = netConn !== ConnectionType.Offline
 
-  const m = formatMatchKey(matchKey)
   const event = useEventInfo(eventKey)
   const match = useMatchInfo(eventKey, matchKey)
   const reports = usePromise(() => {
@@ -160,16 +203,47 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     }
   }, [match, isOnline])
 
+  const sortedMatches = useEventMatches(eventKey)?.sort(compareMatches)
+  const matchIndex = sortedMatches?.findIndex((m) => m.key === matchKey)
+  let previousMatch:
+      | {
+          redAlliance: string[]
+          blueAlliance: string[]
+          time?: Date | undefined
+          key: string
+          videos?: string[] | null | undefined
+          redScore?: number | undefined
+          blueScore?: number | undefined
+          scheduledTime?: Date | undefined
+        }
+      | undefined,
+    nextMatch:
+      | {
+          redAlliance: string[]
+          blueAlliance: string[]
+          time?: Date | undefined
+          key: string
+          videos?: string[] | null | undefined
+          redScore?: number | undefined
+          blueScore?: number | undefined
+          scheduledTime?: Date | undefined
+        }
+      | undefined
+  if (matchIndex) {
+    previousMatch = sortedMatches ? sortedMatches[matchIndex - 1] : undefined
+    nextMatch = sortedMatches ? sortedMatches[matchIndex + 1] : undefined
+  }
+
+  const getMatchName = (key: string) => {
+    const props = formatMatchKey(key)
+    return props.group + (props.num ? ' Match ' + props.num : '')
+  }
+
   return (
     // page setup
     <Page
       back={`/events/${eventKey}`}
-      name={
-        m.group +
-        (m.num ? ' Match ' + m.num : '') +
-        ' - ' +
-        (event ? event.name : eventKey)
-      }
+      name={getMatchName(matchKey) + ' - ' + (event ? event.name : eventKey)}
       class={clsx(
         matchStyle,
         match && loadedMatchStyle,
@@ -181,6 +255,42 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
     >
       {match ? (
         <>
+          <div class={matchLinksStyle}>
+            <div class={previousMatchStyle}>
+              {previousMatch && (
+                <>
+                  <IconButton
+                    icon={mdiArrowLeft}
+                    aria-label="Previous Match"
+                    onClick={() =>
+                      route(`/events/${eventKey}/matches/${previousMatch?.key}`)
+                    }
+                    class={matchLinkItemsStyle}
+                  />
+                  <span class={matchLinkItemsStyle}>
+                    Previous Match: {getMatchName(previousMatch.key)}
+                  </span>
+                </>
+              )}
+            </div>
+            <div class={nextMatchStyle}>
+              {nextMatch && (
+                <>
+                  <span class={matchLinkItemsStyle}>
+                    Next Match: {getMatchName(nextMatch.key)}
+                  </span>
+                  <IconButton
+                    icon={mdiArrowRight}
+                    aria-label="Next Match"
+                    onClick={() =>
+                      route(`/events/${eventKey}/matches/${nextMatch?.key}`)
+                    }
+                    class={matchLinkItemsStyle}
+                  />
+                </>
+              )}
+            </div>
+          </div>
           <div class={leftColumnStyle}>
             {!isOnline && (
               <Card class={offlineDisplayInfo}>
