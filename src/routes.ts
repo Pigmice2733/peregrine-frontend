@@ -48,6 +48,10 @@ const routes = [
     component: () => import('./routes/login'),
   },
   {
+    path: '/new-realm',
+    component: () => import('./routes/new-realm'),
+  },
+  {
     path: '/leaderboard',
     component: () => import('./routes/leaderboard'),
   },
