@@ -162,6 +162,8 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     () => getEventTeamInfo(eventKey, 'frc' + teamNum).catch(() => undefined),
     [eventKey, teamNum],
   )
+  const eventName = eventInfo?.name || eventKey
+
   const schema = useSchema(eventInfo?.schemaId)
   const teamMatches = useEventMatches(eventKey, 'frc' + teamNum)?.sort(
     compareMatches,
@@ -178,9 +180,10 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
     <Page
       name={
         <span class={pageHeadingStyle}>
-          <span class={teamHeadingSpanStyle}>{`${teamNum} @ ${
-            eventInfo ? eventInfo.name : eventKey
-          }`}</span>
+          <span class={teamHeadingSpanStyle}>
+            {`${teamNum} @ `}
+            <a href={`/events/${eventKey}`}>{eventName}</a>
+          </span>
           <IconButton
             icon={isTeamSaved ? mdiStar : mdiStarOutline}
             onClick={() =>
@@ -192,7 +195,6 @@ const EventTeam = ({ eventKey, teamNum }: Props) => {
           />
         </span>
       }
-      back={`/events/${eventKey}`}
       class={eventTeamStyle}
     >
       {nextMatch && (

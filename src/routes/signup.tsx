@@ -110,7 +110,7 @@ const SignUpForm = () => {
 }
 
 const SignUp = () => (
-  <Page name="Sign Up" back={() => window.history.back()}>
+  <Page name="Sign Up">
     <div class={signUpStyle}>
       <Card class={cardStyle}>
         <ErrorBoundary>

@@ -24,7 +24,7 @@ const ScoutPage = ({ eventKey, matchKey }: Props) => {
     <Authenticated
       label="Log In to Scout"
       render={() => (
-        <Page name="Scout" back={matchUrl} class={scoutPageStyle}>
+        <Page name="Scout" class={scoutPageStyle}>
           <ReportEditor
             initialReport={{ eventKey, matchKey }}
             onMatchSelect={(newMatchKey) => {

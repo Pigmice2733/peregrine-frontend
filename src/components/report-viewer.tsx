@@ -15,7 +15,7 @@ import { ProfileLink } from './profile-link'
 
 interface Props {
   report: Report
-  onEditClick?: () => void
+  reportEditorLink?: string
 }
 
 const nameTypeSeparatorStyle = css`
@@ -62,7 +62,10 @@ const fieldValuesStyle = css`
 `
 
 // viewing a report on the report page
-export const ReportViewer = ({ report, onEditClick }: Props) => {
+export const ReportViewer = ({
+  report,
+  reportEditorLink: onEditClick,
+}: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
   const matchInfo = useMatchInfo(report.eventKey, report.matchKey)
@@ -130,7 +133,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
 
       {/* links to the author of the report */}
       <ProfileLink reporterId={reporterId} />
-      {onEditClick && <Button onClick={onEditClick}>Edit</Button>}
+      {onEditClick && <Button href={onEditClick}>Edit</Button>}
     </>
   )
 }

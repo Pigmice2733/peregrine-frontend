@@ -25,13 +25,18 @@ const teamStyle = css`
 const EventAnalysis: FunctionComponent<Props> = ({ eventKey }) => {
   const eventStats = usePromise(() => getEventStats(eventKey), [eventKey])
   const eventInfo = useEventInfo(eventKey)
+  const eventName = eventInfo?.name || eventKey
 
   const schema = useSchema(eventInfo?.schemaId)
 
   return (
     <Page
-      name={`Analysis - ${eventInfo ? eventInfo.name : eventKey}`}
-      back={`/events/${eventKey}`}
+      name={
+        <>
+          {'Analysis - '}
+          <a href={`/events/${eventKey}`}>{eventName}</a>
+        </>
+      }
       class={tablePageStyle}
       wrapperClass={tablePageWrapperStyle}
     >

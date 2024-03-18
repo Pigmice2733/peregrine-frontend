@@ -52,7 +52,7 @@ const Home = () => {
   const events = useEvents(year)
 
   return (
-    <Page name="Home" back={false} class={homeStyle}>
+    <Page name="Home" class={homeStyle} showBackButton={false}>
       <div class={filterStyle}>
         <Dropdown options={years} onChange={setYear} value={year} />
         <TextInput onInput={setQuery} label="Search for Events" />

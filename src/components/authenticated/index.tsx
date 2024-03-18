@@ -104,7 +104,7 @@ const Authenticated = ({ label, render }: Props) => {
 
   if (!jwt) {
     return (
-      <Page name={label || 'Log In'} back={() => window.history.back()}>
+      <Page name={label || 'Log In'}>
         {/* Don't flash the login page if we don't yet know if there is a jwt */}
         {jwt === null ? (
           <div class={loginStyle}>
