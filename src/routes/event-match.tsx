@@ -126,34 +126,12 @@ const offlineDisplayInfo = css`
 `
 
 const matchLinksStyle = css`
+  display: grid;
   font-weight: bold;
   grid-area: matchLinks;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas: 'previous next';
+  grid-template-columns: 2.5em 20em auto 20em 2.5em;
   align-items: center;
-`
-
-const previousMatchStyle = css`
-  display: grid;
-  justify-items: left;
-  text-align: left;
-  grid-area: previous;
-  align-items: center;
-  grid-template-columns: 1fr;
-`
-
-const nextMatchStyle = css`
-  justify-items: right;
-  grid-area: next;
-  display: grid;
-  align-items: center;
-  text-align: right;
-  grid-template-columns: 1fr;
-`
-
-const matchLinkItemsStyle = css`
-  grid-row: 1;
+  justify-items: center;
 `
 
 const showMatchResults = 'Match Results'
@@ -204,7 +182,6 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   }, [match, isOnline])
 
   const sortedMatches = useEventMatches(eventKey)?.sort(compareMatches)
-  const matchIndex = sortedMatches?.findIndex((m) => m.key === matchKey)
   let previousMatch:
       | {
           redAlliance: string[]
@@ -229,7 +206,8 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
           scheduledTime?: Date | undefined
         }
       | undefined
-  if (matchIndex) {
+  const matchIndex = sortedMatches?.findIndex((m) => m.key === matchKey)
+  if (matchIndex || matchIndex === 0) {
     previousMatch = sortedMatches ? sortedMatches[matchIndex - 1] : undefined
     nextMatch = sortedMatches ? sortedMatches[matchIndex + 1] : undefined
   }
@@ -256,40 +234,56 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
       {match ? (
         <>
           <div class={matchLinksStyle}>
-            <div class={previousMatchStyle}>
-              {previousMatch && (
-                <>
-                  <IconButton
-                    icon={mdiArrowLeft}
-                    aria-label="Previous Match"
-                    onClick={() =>
-                      route(`/events/${eventKey}/matches/${previousMatch?.key}`)
-                    }
-                    class={matchLinkItemsStyle}
-                  />
-                  <span class={matchLinkItemsStyle}>
-                    Previous Match: {getMatchName(previousMatch.key)}
-                  </span>
-                </>
-              )}
-            </div>
-            <div class={nextMatchStyle}>
-              {nextMatch && (
-                <>
-                  <span class={matchLinkItemsStyle}>
-                    Next Match: {getMatchName(nextMatch.key)}
-                  </span>
-                  <IconButton
-                    icon={mdiArrowRight}
-                    aria-label="Next Match"
-                    onClick={() =>
-                      route(`/events/${eventKey}/matches/${nextMatch?.key}`)
-                    }
-                    class={matchLinkItemsStyle}
-                  />
-                </>
-              )}
-            </div>
+            {previousMatch && (
+              <>
+                <IconButton
+                  icon={mdiArrowLeft}
+                  aria-label="Previous Match"
+                  onClick={() =>
+                    route(`/events/${eventKey}/matches/${previousMatch?.key}`)
+                  }
+                  class={css`
+                    grid-row: 1;
+                    grid-column: 1;
+                    justify-self: start;
+                  `}
+                />
+                <span
+                  class={css`
+                    grid-row: 1;
+                    grid-column: 2;
+                    justify-self: start;
+                  `}
+                >
+                  Previous Match: {getMatchName(previousMatch.key)}
+                </span>
+              </>
+            )}
+            {nextMatch && (
+              <>
+                <span
+                  class={css`
+                    grid-row: 1;
+                    grid-column: 4;
+                    justify-self: end;
+                  `}
+                >
+                  Next Match: {getMatchName(nextMatch.key)}
+                </span>
+                <IconButton
+                  icon={mdiArrowRight}
+                  aria-label="Next Match"
+                  onClick={() =>
+                    route(`/events/${eventKey}/matches/${nextMatch?.key}`)
+                  }
+                  class={css`
+                    grid-row: 1;
+                    grid-column: 5;
+                    justify-self: end;
+                  `}
+                />
+              </>
+            )}
           </div>
           <div class={leftColumnStyle}>
             {!isOnline && (
