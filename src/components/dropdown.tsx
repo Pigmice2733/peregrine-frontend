@@ -10,6 +10,11 @@ const dropdownStyle = css`
   color: var(--off-black);
   font-weight: bold;
   appearance: menulist;
+  -webkit-appearance: menulist;
+
+  & select::-ms-expand {
+    display: block;
+  }
 
   & option {
     text-transform: none;
