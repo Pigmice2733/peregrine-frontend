@@ -9,6 +9,7 @@ const dropdownStyle = css`
   font-size: 0.8rem;
   color: var(--off-black);
   font-weight: bold;
+  appearance: menulist;
 
   & option {
     text-transform: none;
