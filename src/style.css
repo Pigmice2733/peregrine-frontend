@@ -36,9 +36,14 @@ body {
   background: #e5e5e5;
 
   @media (prefers-color-scheme: dark) {
-    background: black;
+    background: #000;
     color: #eee;
   }
+}
+
+body.dark {
+  background: #000;
+  color: #eee;
 }
 
 /* The font-loading code below is copied from https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto:wght@400;500;700&display=swap */

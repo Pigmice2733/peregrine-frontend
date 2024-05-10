@@ -12,6 +12,8 @@ import {
   mdiLogoutVariant,
   mdiCloudUpload,
   mdiInformationOutline,
+  mdiBrightness2,
+  mdiBrightness7,
 } from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
@@ -25,6 +27,8 @@ import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
+import { useState } from 'preact/hooks'
+import { useTheme } from '@/utils/use-theme'
 
 const spacing = '0.3rem'
 
@@ -170,6 +174,8 @@ export const Menu = ({ onHide, visible }: Props) => {
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
   const savedTeams = useSavedTeams()
+  const [darkTheme, setDarkTheme] = useState(useTheme())
+
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
       <aside class={menuStyle}>
@@ -217,7 +223,7 @@ export const Menu = ({ onHide, visible }: Props) => {
             )}
             {isLoggedIn ? (
               <MenuItem icon={mdiLogoutVariant} onClick={logoutHandler}>
-                Log out
+                Log Out
               </MenuItem>
             ) : (
               <>
@@ -225,12 +231,27 @@ export const Menu = ({ onHide, visible }: Props) => {
                   icon={mdiLoginVariant}
                   href={`/login?from=${encodeURIComponent(location.pathname)}`}
                 >
-                  Log in
+                  Log In
                 </MenuItem>
                 <MenuItem icon={mdiAccountPlus} href="/signup">
                   Sign Up
                 </MenuItem>
               </>
+            )}
+            {darkTheme ? (
+              <MenuItem
+                icon={mdiBrightness7}
+                onClick={() => setDarkTheme(true)}
+              >
+                Switch to Light Theme
+              </MenuItem>
+            ) : (
+              <MenuItem
+                icon={mdiBrightness2}
+                onClick={() => setDarkTheme(false)}
+              >
+                Switch to Dark Theme
+              </MenuItem>
             )}
             <MenuItem icon={mdiInformationOutline} href="/about">
               About Peregrine
