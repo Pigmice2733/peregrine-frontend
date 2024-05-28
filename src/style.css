@@ -31,18 +31,16 @@ html {
 
 body {
   margin: 0;
-  color: var(--off-black);
   font-family: 'Roboto', sans-serif;
-  background: #e5e5e5;
+}
 
-  @media (prefers-color-scheme: dark) {
-    background: #000;
-    color: #eee;
-  }
+body.light {
+  color: var(--off-black);
+  background: #e5e5e5;
 }
 
 body.dark {
-  background: #000;
+  background: var(--off-black);
   color: #eee;
 }
 

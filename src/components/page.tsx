@@ -94,6 +94,19 @@ const Page = ({
   back,
   ...rest
 }: RenderableProps<Props>) => {
+  const localTheme = localStorage.getItem('theme')
+  const darkTheme = localTheme
+    ? localTheme === 'true'
+    : window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (darkTheme) {
+    document.body.classList.add('dark-theme')
+    document.body.classList.remove('light-theme')
+  } else {
+    document.body.classList.add('light-theme')
+    document.body.classList.remove('dark-theme')
+  }
+  localStorage.setItem('theme', darkTheme.toString())
+
   return (
     <ErrorBoundary>
       <div class={clsx(wrapperClass)} {...rest}>

@@ -27,8 +27,6 @@ import IconButton from './icon-button'
 import { useSavedReports } from '@/api/report/submit-report'
 import { useSavedTeams } from '@/api/save-teams'
 import { useEventInfo } from '@/cache/event-info/use'
-import { useState } from 'preact/hooks'
-import { useTheme } from '@/utils/use-theme'
 
 const spacing = '0.3rem'
 
@@ -174,7 +172,16 @@ export const Menu = ({ onHide, visible }: Props) => {
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
   const savedTeams = useSavedTeams()
-  const [darkTheme, setDarkTheme] = useState(useTheme())
+
+  let darkTheme = localStorage.getItem('theme') === 'true'
+
+  const switchTheme = () => {
+    document.body.classList.toggle('dark-theme')
+    document.body.classList.toggle('light-theme')
+    darkTheme = !darkTheme
+
+    localStorage.setItem('theme', darkTheme.toString())
+  }
 
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
@@ -239,17 +246,11 @@ export const Menu = ({ onHide, visible }: Props) => {
               </>
             )}
             {darkTheme ? (
-              <MenuItem
-                icon={mdiBrightness7}
-                onClick={() => setDarkTheme(true)}
-              >
+              <MenuItem icon={mdiBrightness7} onClick={() => switchTheme()}>
                 Switch to Light Theme
               </MenuItem>
             ) : (
-              <MenuItem
-                icon={mdiBrightness2}
-                onClick={() => setDarkTheme(false)}
-              >
+              <MenuItem icon={mdiBrightness2} onClick={() => switchTheme()}>
                 Switch to Dark Theme
               </MenuItem>
             )}
