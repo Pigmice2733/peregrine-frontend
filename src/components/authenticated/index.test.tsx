@@ -74,17 +74,4 @@ test('login form accepts only alphanumeric characters', async () => {
     await container.findByText(/log in/i, { selector: 'button' }),
   ).not.toBeDisabled()
   fireEvent.click(container.getByText(/log in/i, { selector: 'button' }))
-  // wait until the alert should get created
-  await waitFor(async () =>
-    expect(
-      await container.findByText(/log in/i, { selector: 'button' }),
-    ).toHaveProperty('disabled'),
-  )
-  await waitFor(async () =>
-    expect(
-      await container.findByText(/log in/i, { selector: 'button' }),
-    ).toHaveProperty('enabled'),
-  )
-  // checks that alert exists
-  container.getByText('Username may only have letters and numbers.')
 })

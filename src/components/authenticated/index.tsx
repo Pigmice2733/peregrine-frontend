@@ -16,6 +16,8 @@ import {
 import { Form } from '@/components/form'
 import { ErrorBoundary, useErrorEmitter } from '../error-boundary'
 import { validateUsername } from '@/utils/validate-username'
+import { createAlert } from '@/router'
+import { AlertType } from '../alert'
 
 const loginStyle = css`
   padding: 1.5rem;
@@ -56,7 +58,13 @@ const LoginForm = ({ onSuccess }: { onSuccess: () => void }) => {
     e.preventDefault()
     setIsLoading(true)
     console.log(username + ' / ' + password)
-    if (validateUsername(username)) return setIsLoading(false)
+    if (validateUsername(username)) {
+      createAlert({
+        type: AlertType.Error,
+        message: 'Username may only have letters and numbers.',
+      })
+      return setIsLoading(false)
+    }
     authenticate(username, password)
       .then(() => {
         setUsername('')
