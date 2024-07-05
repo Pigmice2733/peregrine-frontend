@@ -77,7 +77,7 @@ const CreateRealmForm = () => {
             firstName,
             lastName,
             realmId: realm,
-            roles: { isAdmin: true, isVerified: true, isSuperAdmin: false },
+            roles: { isAdmin: false, isVerified: true, isSuperAdmin: false },
             stars: [],
           }),
         )
@@ -89,8 +89,8 @@ const CreateRealmForm = () => {
           }),
         )
         .catch(emitError)
-        .finally(() => setIsLoading(false))
     }
+    setIsLoading(false)
   }
 
   return (
