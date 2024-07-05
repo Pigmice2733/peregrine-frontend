@@ -27,12 +27,17 @@ const contentStyle = css`
 
 const cardStyle = css`
   padding: 1.5rem 2rem;
-  width: 20rem;
+  width: 30rem;
   margin-left: auto;
   margin-right: auto;
+
   & > * {
     margin-left: 0;
     margin-right: 0;
+  }
+
+  @media (max-width: 550px) {
+    width: 20rem;
   }
 `
 
@@ -76,8 +81,8 @@ const CreateRealmForm = () => {
             password,
             firstName,
             lastName,
-            realmId: realm,
-            roles: { isAdmin: false, isVerified: true, isSuperAdmin: false },
+            realmId: realm.id,
+            roles: { isAdmin: false, isVerified: false, isSuperAdmin: false },
             stars: [],
           }),
         )
@@ -85,7 +90,8 @@ const CreateRealmForm = () => {
         .then(() =>
           route('/', {
             type: AlertType.Success,
-            message: 'Realm and account were created!',
+            message:
+              'Realm and account were created! Remember to email alexv@pigmice.com to finish setting up your realm.',
           }),
         )
         .catch(emitError)
@@ -98,12 +104,12 @@ const CreateRealmForm = () => {
       {(isValid) => (
         <>
           <div class={textStyle}>
-            {
-              'Enter a name for your new realm and account details for your own account. '
-            }
-            {
-              'You will be made an admin automatically and can verify other users in your realm.'
-            }
+            {`Enter a name for your new realm and account details for your own account. `}
+            {`After you submit this form, you will need to finish setting up your realm so
+              that you can add and verify your teammates. Send an email to `}
+            <a href="mailto:alexv@pigmice.com">alexv@pigmice.com</a>
+            {` and include the name of your realm and your username. You will be invited to
+              a Slack channel where you can ask questions and get feedback.`}
           </div>
           <TextInput
             label="Realm Name"
