@@ -1,45 +1,10 @@
-import { Report, OfflineReport } from '@/api/report'
+import { Report } from '@/api/report'
 import { getReport } from '@/api/report/get-report'
 import { AlertType } from '@/components/alert'
 import Loader from '@/components/loader'
-import Page from '@/components/page'
-import { ReportEditor } from '@/components/report-editor'
+import { ReportEditPage } from '@/components/report-pages'
 import { route } from '@/router'
-import { css } from '@linaria/core'
 import { useEffect, useState } from 'preact/hooks'
-
-const reportPageStyle = css`
-  display: flex;
-  padding: 2rem;
-  justify-content: center;
-`
-
-const ReportEditPage = ({
-  report,
-  onSaveSuccess,
-  onSaveLocally,
-  onDelete,
-}: {
-  report: Report
-  onSaveSuccess: (report: Report) => void
-  onSaveLocally: (report: OfflineReport) => void
-  onDelete: () => void
-}) => {
-  return (
-    <Page name="Edit Report" class={reportPageStyle}>
-      <ReportEditor
-        initialReport={report}
-        onSaveSuccess={(report) => {
-          onSaveSuccess(report)
-        }}
-        onSaveLocally={(report) => {
-          onSaveLocally(report)
-        }}
-        onDelete={onDelete}
-      />
-    </Page>
-  )
-}
 
 const ReportEditorRoute = ({ reportId }: { reportId: number }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)

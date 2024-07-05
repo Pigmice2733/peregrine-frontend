@@ -62,10 +62,7 @@ const fieldValuesStyle = css`
 `
 
 // viewing a report on the report page
-export const ReportViewer = ({
-  report,
-  reportEditorLink: onEditClick,
-}: Props) => {
+export const ReportViewer = ({ report, reportEditorLink }: Props) => {
   const reporterId = report.reporterId
   const eventInfo = useEventInfo(report.eventKey)
   const matchInfo = useMatchInfo(report.eventKey, report.matchKey)
@@ -133,7 +130,7 @@ export const ReportViewer = ({
 
       {/* links to the author of the report */}
       <ProfileLink reporterId={reporterId} />
-      {onEditClick && <Button href={onEditClick}>Edit</Button>}
+      {reportEditorLink && <Button href={reportEditorLink}>Edit</Button>}
     </>
   )
 }

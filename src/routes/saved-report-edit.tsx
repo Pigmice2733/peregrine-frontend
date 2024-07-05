@@ -1,43 +1,12 @@
-import { Report, OfflineReport } from '@/api/report'
+import { Report } from '@/api/report'
 import { getSavedReports } from '@/api/report/submit-report'
 import { AlertType } from '@/components/alert'
 import Loader from '@/components/loader'
-import Page from '@/components/page'
-import { ReportEditor } from '@/components/report-editor'
+import { ReportEditPage } from '@/components/report-pages'
 import { route } from '@/router'
-import { css } from '@linaria/core'
 import { useEffect, useState } from 'preact/hooks'
 
-const reportPageStyle = css`
-  display: flex;
-  padding: 2rem;
-  justify-content: center;
-`
-
-const ReportEditPage = ({
-  report,
-  onSaveSuccess,
-  onSaveLocally,
-  onDelete,
-}: {
-  report: Report
-  onSaveSuccess: (report: Report) => void
-  onSaveLocally: (report: OfflineReport) => void
-  onDelete: () => void
-}) => {
-  return (
-    <Page name="Edit Report" class={reportPageStyle}>
-      <ReportEditor
-        initialReport={report}
-        onSaveSuccess={onSaveSuccess}
-        onSaveLocally={onSaveLocally}
-        onDelete={onDelete}
-      />
-    </Page>
-  )
-}
-
-const LocalReportEditorRoute = ({ reportKey }: { reportKey: string }) => {
+const SavedReportEditorRoute = ({ reportKey }: { reportKey: string }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
 
   useEffect(() => {
@@ -74,4 +43,4 @@ const LocalReportEditorRoute = ({ reportKey }: { reportKey: string }) => {
   )
 }
 
-export default LocalReportEditorRoute
+export default SavedReportEditorRoute

@@ -1,45 +1,8 @@
-import Page from '@/components/page'
-import { ReportViewer } from '@/components/report-viewer'
-import Card from '@/components/card'
-import { css } from '@linaria/core'
 import { getReport } from '@/api/report/get-report'
 import Loader from '@/components/loader'
 import { useState, useEffect } from 'preact/hooks'
-import { useJWT } from '@/jwt'
 import { Report } from '@/api/report'
-
-const reportPageStyle = css`
-  display: flex;
-  padding: 2rem;
-  justify-content: center;
-`
-
-const reportViewerCardStyle = css`
-  padding: 2rem;
-  display: grid;
-  justify-items: center;
-  grid-gap: 1rem;
-  max-width: 30rem;
-`
-
-const ReportPage = ({ report }: { report: Report }) => {
-  const { jwt } = useJWT()
-  const canEdit =
-    jwt &&
-    (report.reporterId === Number.parseInt(jwt.sub) ||
-      (jwt.peregrineRoles.isAdmin && report.realmId === jwt.peregrineRealm) ||
-      jwt.peregrineRoles.isSuperAdmin)
-  return (
-    <Page name="Report" class={reportPageStyle}>
-      <Card class={reportViewerCardStyle}>
-        <ReportViewer
-          report={report}
-          reportEditorLink={canEdit ? `/reports/${report.id}/edit` : undefined}
-        />
-      </Card>
-    </Page>
-  )
-}
+import { ReportPage } from '@/components/report-pages'
 
 const ReportRoute = ({ reportId }: { reportId: number }) => {
   const [report, setReport] = useState<Report | undefined>(undefined)
