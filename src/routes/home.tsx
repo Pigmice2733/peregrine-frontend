@@ -41,6 +41,12 @@ const filterStyle = css`
   }
 `
 
+const dropdownStyle = css`
+  .dark & {
+    background: #333;
+  }
+`
+
 const now = new Date()
 const Home = () => {
   const [location, prompt] = useGeoLocation()
@@ -54,7 +60,12 @@ const Home = () => {
   return (
     <Page name="Home" back={false} class={homeStyle}>
       <div class={filterStyle}>
-        <Dropdown options={years} onChange={setYear} value={year} />
+        <Dropdown
+          options={years}
+          onChange={setYear}
+          value={year}
+          class={dropdownStyle}
+        />
         <TextInput onInput={setQuery} label="Search for Events" />
         {prompt && (
           <IconButton

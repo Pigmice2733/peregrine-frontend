@@ -425,13 +425,25 @@ const displayModeSelectorStyle = css`
     outline: none;
     cursor: pointer;
 
+    .dark & {
+      color: #e8e8e8;
+    }
+
     &:hover,
     &:focus {
       background: ${faintGrey};
+
+      .dark & {
+        background: #444;
+      }
     }
 
     &.${activeDisplayModeStyle} {
       box-shadow: inset 0 -0.15rem ${pigmicePurple};
+
+      .dark & {
+        box-shadow: inset 0 -0.15rem #c000c0;
+      }
     }
   }
 `

@@ -2,7 +2,7 @@ import { RenderableProps, ComponentChildren } from 'preact'
 import { ErrorBoundary } from './error-boundary'
 import { css } from '@linaria/core'
 import { createShadow } from '@/utils/create-shadow'
-import { pigmicePurple } from '@/colors'
+import { lightGrey, pigmicePurple } from '@/colors'
 import IconButton, { iconButtonClass } from './icon-button'
 import { mdiArrowLeft, mdiMenu } from '@mdi/js'
 import clsx from 'clsx'
@@ -17,7 +17,7 @@ const headerStyle = css`
   position: sticky;
   top: 0;
   background: ${pigmicePurple};
-  color: white;
+  color: ${lightGrey};
   padding: ${spacing};
   display: flex;
   justify-content: flex-start;
@@ -99,11 +99,11 @@ const Page = ({
     ? localTheme === 'true'
     : window.matchMedia('(prefers-color-scheme: dark)').matches
   if (darkTheme) {
-    document.body.classList.add('dark-theme')
-    document.body.classList.remove('light-theme')
+    document.body.classList.add('dark')
+    document.body.classList.remove('light')
   } else {
-    document.body.classList.add('light-theme')
-    document.body.classList.remove('dark-theme')
+    document.body.classList.add('light')
+    document.body.classList.remove('dark')
   }
   localStorage.setItem('theme', darkTheme.toString())
 

@@ -23,6 +23,10 @@ const labelStyle = css`
   color: white;
   font-weight: bold;
   flex-grow: 1;
+
+  .dark & {
+    color: black;
+  }
 `
 
 const checkedTeamStyle = css`
@@ -95,10 +99,18 @@ const allianceStyle = css`
 
 const redStyle = css`
   background-color: var(--alliance-red);
+
+  .dark & {
+    background: #d33;
+  }
 `
 
 const blueStyle = css`
   background-color: var(--alliance-blue);
+
+  .dark & {
+    background: #56f;
+  }
 `
 
 const TeamPicker = ({

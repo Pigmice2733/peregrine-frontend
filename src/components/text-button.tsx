@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { PropsOf } from '@/type-utils'
 import { pxToRem } from '@/utils/px-to-rem'
 import { rgba, darken } from 'polished'
+import { pigmicePurple } from '@/colors'
 
 const style = css`
   background: transparent;
@@ -27,6 +28,19 @@ const style = css`
   &:focus {
     outline: none;
     background: ${rgba('purple', 0.18)};
+  }
+
+  .dark & {
+    color: #c000c0;
+
+    &:hover {
+      background: ${rgba(pigmicePurple, 0.4)};
+    }
+
+    &:active,
+    &:focus {
+      background: ${rgba(pigmicePurple, 0.6)};
+    }
   }
 `
 

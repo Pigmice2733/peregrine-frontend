@@ -61,6 +61,16 @@ const fieldValuesStyle = css`
   }
 `
 
+const linksStyle = css`
+  .dark & a:link {
+    color: #66f;
+  }
+
+  .dark & a:visited {
+    color: #a070c0;
+  }
+`
+
 // viewing a report on the report page
 export const ReportViewer = ({ report, onEditClick }: Props) => {
   const reporterId = report.reporterId
@@ -79,7 +89,7 @@ export const ReportViewer = ({ report, onEditClick }: Props) => {
   return (
     <>
       {/* links to team, match, and event pages */}
-      <div>
+      <div class={linksStyle}>
         <a
           href={`/events/${report.eventKey}/teams/${formatTeamNumber(
             report.teamKey,

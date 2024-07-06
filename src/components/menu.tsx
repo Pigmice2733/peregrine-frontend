@@ -60,12 +60,25 @@ const menuItemStyle = css`
     border: none;
     width: 100%;
     cursor: pointer;
+
+    .dark & {
+      color: #ccc;
+      &:hover,
+      &:focus {
+        background: ${rgba('black', 0.13)};
+      }
+    }
   }
 `
 
 const activeStyle = css`
   color: ${darken(0.06, pigmicePurple)};
   background: ${rgba(pigmicePurple, 0.15)};
+
+  .dark & {
+    color: #c000c0;
+    background: #90009040;
+  }
 `
 
 const textStyle = css`
@@ -114,6 +127,10 @@ const menuStyle = css`
   .${scrimHiddenClass} & {
     transform: translateX(100%);
     box-shadow: none;
+  }
+
+  .dark & {
+    background: var(--off-black);
   }
 `
 
@@ -176,8 +193,8 @@ export const Menu = ({ onHide, visible }: Props) => {
   let darkTheme = localStorage.getItem('theme') === 'true'
 
   const switchTheme = () => {
-    document.body.classList.toggle('dark-theme')
-    document.body.classList.toggle('light-theme')
+    document.body.classList.toggle('dark')
+    document.body.classList.toggle('light')
     darkTheme = !darkTheme
 
     localStorage.setItem('theme', darkTheme.toString())

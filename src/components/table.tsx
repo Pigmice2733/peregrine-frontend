@@ -1,15 +1,19 @@
 import { RenderableProps } from 'preact'
 import { useState } from 'preact/hooks'
 import { css } from '@linaria/core'
-import { lightGrey, faintGrey, pigmicePurple } from '@/colors'
+import { lightGrey, faintGrey, pigmicePurple, textGrey } from '@/colors'
 import clsx from 'clsx'
 import { BooleanDisplay } from './boolean-display'
 
-const borderBottomAndRight = `box-shadow: inset -1px -1px ${lightGrey}`
+const darkTheme = localStorage.getItem('theme') === 'true'
+const lightGray = darkTheme ? lightGrey : textGrey
+const borderBottomAndRight = `box-shadow: inset -1px -1px ${lightGray}`
 // the 2nd shadow covers a tiny gap between the cells I couldn't otherwise remove
-export const borderRightOnly = `box-shadow: inset -1px 0 ${lightGrey}, 0 1px 0 white`
-const borderBottomOnly = `box-shadow: inset 0 -1px ${lightGrey}`
-const activeBorderBottomOnly = `box-shadow: inset 0 -0.15rem ${pigmicePurple}`
+export const borderRightOnly = `box-shadow: inset -1px 0 ${lightGray}, 0 1px 0 white`
+const borderBottomOnly = `box-shadow: inset 0 -1px ${lightGray}`
+const activeBorderBottomOnly = `box-shadow: inset 0 -0.15rem ${
+  darkTheme ? pigmicePurple : '#c000c0'
+}`
 
 const tableStyle = css`
   border-collapse: collapse;
@@ -37,6 +41,10 @@ const tableHeaderCellStyle = css`
   background: white;
   ${borderBottomOnly};
 
+  .dark & {
+    background: black;
+  }
+
   &.${activeStyle}:not(:first-child) {
     ${activeBorderBottomOnly}
   }
@@ -45,6 +53,10 @@ const tableHeaderCellStyle = css`
   &:focus-within,
   &:hover {
     background: ${faintGrey};
+
+    .dark & {
+      background: #444;
+    }
   }
 
   &:first-child {
@@ -66,6 +78,10 @@ const sortButtonStyle = css`
   padding: 0.6rem 0.4rem;
   font-size: 0.78rem;
   outline: none;
+
+  .dark & {
+    color: var(--light-grey);
+  }
 `
 
 export interface Column<CellType, RowType> {
@@ -256,8 +272,16 @@ const tableRowStyle = css`
   ${borderBottomOnly};
   background: white;
 
+  .dark & {
+    background: black;
+  }
+
   &:hover {
     background: ${faintGrey};
+
+    .dark & {
+      background: #333;
+    }
   }
 
   & td,

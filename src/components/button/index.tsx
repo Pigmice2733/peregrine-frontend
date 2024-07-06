@@ -26,9 +26,18 @@ const buttonStyle = css`
   font-size: 0.9rem;
   transition: all 0.2s ease;
 
+  .dark & {
+    background: #c000c0;
+    color: black;
+  }
+
   &:hover,
   &:focus {
     background: color-mod(var(--pigmice-purple) lightness(+5%));
+
+    .dark & {
+      background: #d020d0;
+    }
   }
 
   &:hover {
@@ -45,18 +54,31 @@ const buttonStyle = css`
     color: #00000036;
     box-shadow: none;
     cursor: not-allowed;
+
+    .dark & {
+      background: #e8e8e836;
+      color: #e8e8e870;
+    }
   }
 `
 
 const flatButtonStyle = css`
-  background: none;
+  background: none !important;
   box-shadow: none;
   color: ${pigmicePurple};
+
+  .dark & {
+    color: #c000c0;
+  }
 
   &:hover,
   &:focus {
     background: ${tint(0.8, pigmicePurple)};
     box-shadow: none;
+
+    .dark & {
+      background: #400040;
+    }
   }
 `
 

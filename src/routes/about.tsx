@@ -6,6 +6,14 @@ const pageStyle = css`
   padding: 0 1rem;
   margin: auto;
   max-width: 45rem;
+
+  & a:link {
+    color: #66f;
+  }
+
+  & a:visited {
+    color: #a070c0;
+  }
 `
 
 const headerStyle = css`
