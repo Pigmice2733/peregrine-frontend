@@ -47,10 +47,18 @@ const matchStyle = css`
   /* extra selectors for specificity */
   a.${tableTeamStyle}.${redStyle} {
     color: ${red};
+
+    .dark & {
+      color: #d33;
+    }
   }
 
   a.${tableTeamStyle}.${blueStyle} {
     color: ${blue};
+
+    .dark & {
+      color: #56f;
+    }
   }
 `
 
@@ -402,14 +410,26 @@ const matchScoreStyle = css`
   & > * {
     padding: 1.5rem 0;
     color: white;
+
+    .dark & {
+      color: black;
+    }
   }
 `
 
 const redScoreStyle = css`
   background: ${red};
+
+  .dark & {
+    background: #d33;
+  }
 `
 const blueScoreStyle = css`
   background: ${blue};
+
+  .dark & {
+    background: #56f;
+  }
 `
 
 const activeDisplayModeStyle = css``

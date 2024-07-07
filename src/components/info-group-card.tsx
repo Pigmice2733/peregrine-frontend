@@ -22,7 +22,7 @@ const rowStyle = css`
   overflow: hidden;
 
   .dark & {
-    border-bottom: 0.1em solid #444;
+    border-bottom-color: #444;
   }
 
   &[href]:hover,

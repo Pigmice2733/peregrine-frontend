@@ -8,6 +8,7 @@ import {
   SortOrder,
   borderRightOnly,
   contextRowHeight,
+  borderRightOnlyDark,
 } from '@/components/table'
 import { formatPercent } from '@/utils/format-percent'
 import { useState } from 'preact/hooks'
@@ -92,6 +93,7 @@ const topLeftCellStyle = css`
 
   .dark & {
     background: black;
+    ${borderRightOnlyDark};
   }
 `
 
@@ -144,16 +146,31 @@ const contextSectionStyle = css`
 const rankStyle = css`
   box-shadow: inset 0 -0.15rem #398013;
   color: #398013;
+
+  .dark & {
+    color: #60b060;
+    box-shadow-color: #60b060;
+  }
 `
 
 const autoStyle = css`
   box-shadow: inset 0 -0.15rem ${blue};
   color: ${blue};
+
+  .dark & {
+    color: #56f;
+    box-shadow-color: #56f;
+  }
 `
 
 const teleopStyle = css`
   box-shadow: inset 0 -0.15rem ${red};
   color: ${red};
+
+  .dark & {
+    color: #d33;
+    box-shadow-color: #d33;
+  }
 `
 
 const settingsStyle = css`

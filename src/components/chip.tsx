@@ -19,7 +19,7 @@ const chipStyle = css`
 
   .dark & {
     color: black;
-    background: #60b060;
+    background: #4a964a;
   }
 `
 

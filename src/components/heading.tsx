@@ -12,6 +12,10 @@ const headingStyle = css`
   margin: 0;
   border-bottom: 0.13rem solid ${pigmicePurple};
   padding: 0 1rem 0.25rem;
+
+  .dark & {
+    border-bottom-color: #c000c0;
+  }
 `
 
 export const Heading = ({ level, ...props }: Props) => {
