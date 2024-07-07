@@ -1,7 +1,7 @@
 import { getSavedReports } from '@/api/report/submit-report'
 import { ReportPage } from './report'
 import Page from '@/components/page'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { route, createAlert } from '@/router'
 import { useState, useEffect } from 'preact/hooks'
 import { Report } from '@/api/report'

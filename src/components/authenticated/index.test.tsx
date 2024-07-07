@@ -1,4 +1,4 @@
-import { render, fireEvent, wait } from '@calebeby/preact-testing-library'
+import { render, fireEvent, waitFor } from '@testing-library/preact'
 import Authenticated from '.'
 import { mockFetch } from '@/utils/mock-fetch'
 
@@ -32,7 +32,7 @@ test('renders login form', async () => {
     await container.findByText(/log in/i, { selector: 'button' }),
   ).not.toBeDisabled()
   fireEvent.click(container.getByText(/log in/i, { selector: 'button' }))
-  await wait(() =>
+  await waitFor(() =>
     expect(window.fetch).toHaveBeenCalledWith(
       expect.stringMatching(/\/authenticate$/),
       {

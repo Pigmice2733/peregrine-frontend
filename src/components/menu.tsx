@@ -11,13 +11,14 @@ import {
   mdiLoginVariant,
   mdiLogoutVariant,
   mdiCloudUpload,
+  mdiInformationOutline,
 } from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
 import { getScrollbarWidth } from '@/utils/get-scrollbar-width'
 import { resolveUrl } from '@/utils/resolve-url'
 import clsx from 'clsx'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { darken, lighten, rgba } from 'polished'
 import { ComponentChildren } from 'preact'
 import IconButton from './icon-button'
@@ -231,6 +232,9 @@ export const Menu = ({ onHide, visible }: Props) => {
                 </MenuItem>
               </>
             )}
+            <MenuItem icon={mdiInformationOutline} href="/about">
+              About Peregrine
+            </MenuItem>
           </ul>
         </nav>
       </aside>

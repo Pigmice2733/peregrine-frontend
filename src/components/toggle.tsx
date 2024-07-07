@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { lightGrey, pigmicePurple, grey } from '@/colors'
 import { tint, shade, transparentize } from 'polished'
 import { createShadow } from '@/utils/create-shadow'

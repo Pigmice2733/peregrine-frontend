@@ -106,7 +106,7 @@ export const getWorkingJWT = async (): Promise<JWT | null> => {
 export const useJWT = () => {
   // undefined means we don't know if user has a token
   // null means user has no token
-  const [jwt, setJWT] = useState<JWT | null | undefined>(undefined)
+  const [jwt, setJWT] = useState<JWT | null | undefined>()
 
   const checkForWorkingJWT = () => {
     getWorkingJWT().then(setJWT)

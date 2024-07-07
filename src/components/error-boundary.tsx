@@ -1,6 +1,6 @@
 import { Component, RenderableProps, createContext } from 'preact'
 import Alert, { AlertType } from './alert'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { useContext } from 'preact/hooks'
 import { createAlert } from '@/router'
 

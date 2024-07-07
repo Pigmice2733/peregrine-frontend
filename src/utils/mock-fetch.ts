@@ -31,5 +31,5 @@ const createHandler = (urls: URLMap) => async (
 }
 
 export const mockFetch = (urls: URLMap) => {
-  jest.spyOn(window, 'fetch').mockImplementation(createHandler(urls) as any)
+  vi.spyOn(window, 'fetch').mockImplementation(createHandler(urls) as any)
 }

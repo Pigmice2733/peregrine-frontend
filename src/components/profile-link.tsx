@@ -1,7 +1,7 @@
 import { usePromise } from '@/utils/use-promise'
 import { formatUserName } from '@/utils/format-user-name'
 import Icon from './icon'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { mdiAccountCircle } from '@mdi/js'
 import { pigmicePurple } from '@/colors'
 import { getFastestUser } from '@/cache/users/get-fastest'

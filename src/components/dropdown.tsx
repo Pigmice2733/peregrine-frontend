@@ -1,4 +1,4 @@
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import clsx from 'clsx'
 import { createShadow } from '@/utils/create-shadow'
 import { SetRequired } from 'type-fest'

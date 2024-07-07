@@ -1,6 +1,6 @@
 import { RenderableProps, ComponentChildren } from 'preact'
 import { ErrorBoundary } from './error-boundary'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { createShadow } from '@/utils/create-shadow'
 import { pigmicePurple } from '@/colors'
 import IconButton, { iconButtonClass } from './icon-button'

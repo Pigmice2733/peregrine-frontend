@@ -1,6 +1,6 @@
 import { VNode } from 'preact'
 import clsx from 'clsx'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import { tint } from 'polished'
 import { pigmicePurple } from '@/colors'
 import { PropsOf } from '@/type-utils'

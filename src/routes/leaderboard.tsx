@@ -3,7 +3,7 @@ import { usePromise } from '@/utils/use-promise'
 import { getLeaderboard } from '@/api/get-leaderboard'
 import Loader from '@/components/loader'
 import Card from '@/components/card'
-import { css } from 'linaria'
+import { css } from '@linaria/core'
 import Authenticated from '@/components/authenticated'
 import { useQueryState } from '@/utils/use-query-state'
 import { useYears } from '@/utils/use-years'
@@ -19,11 +19,13 @@ const leaderboardCardTitleStyle = css`
 
 const LeaderboardCard = ({
   user,
+  href,
 }: {
   user: UserInfo & { reports: number }
+  href: string
 }) => {
   return (
-    <Card>
+    <Card href={href}>
       <h1 class={leaderboardCardTitleStyle}>
         {user.firstName} {user.lastName} - {user.reports}
       </h1>
@@ -39,11 +41,10 @@ const leaderboardListStyle = css`
   padding: 0.8rem;
 `
 
-const currentYear = new Date().getFullYear()
 const LeaderboardList = () => {
-  const [yearVal, setYear] = useQueryState('year', currentYear)
+  const years = useYears().sort().reverse()
+  const [yearVal, setYear] = useQueryState('year', years[0])
   const year = Number(yearVal)
-  const years = useYears()
   const leaderboard = usePromise(async () => {
     const leaderboard = await getLeaderboard(year)
     return Promise.all(
@@ -60,7 +61,11 @@ const LeaderboardList = () => {
     <div class={leaderboardListStyle}>
       <Dropdown options={years} onChange={setYear} value={year} />
       {leaderboard?.map((user) => (
-        <LeaderboardCard key={user.id} user={user} />
+        <LeaderboardCard
+          key={user.id}
+          user={user}
+          href={`/users/${user.id}/reports`}
+        />
       )) || <Loader />}
     </div>
   )
