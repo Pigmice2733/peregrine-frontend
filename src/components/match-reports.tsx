@@ -15,6 +15,10 @@ import { ProfileLink } from './profile-link'
 // has a higher priority than this
 const matchReportsStyle = css`
   background: #d5d5d5 !important;
+
+  .dark & {
+    background: black !important;
+  }
 `
 
 interface Props {

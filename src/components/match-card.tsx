@@ -34,6 +34,10 @@ const matchCardStyle = css`
     color: var(--grey-text);
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    .dark & {
+      color: #e8e8e8bb;
+    }
   }
 `
 
@@ -67,19 +71,35 @@ const allianceStyle = css`
   color: white;
   font-weight: bold;
 
+  .dark & {
+    color: black;
+  }
+
   & > * {
     color: white;
     text-decoration: none;
     padding: 0.2rem;
+
+    .dark & {
+      color: black;
+    }
   }
 `
 
 const redStyle = css`
   background-color: var(--alliance-red);
+
+  .dark & {
+    background: #d33;
+  }
 `
 
 const blueStyle = css`
   background-color: var(--alliance-blue);
+
+  .dark & {
+    background: #56f;
+  }
 `
 
 export const MatchDetailsCard = memo(

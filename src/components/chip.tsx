@@ -16,11 +16,21 @@ const chipStyle = css`
   margin: 0 0.2em;
   display: inline-block;
   white-space: nowrap;
+
+  .dark & {
+    color: black;
+    background: #4a964a;
+  }
 `
 
 const dateChipStyle = css`
   background: #00000024;
   color: black;
+
+  .dark & {
+    color: var(--light-grey);
+    background: #e8e8e824;
+  }
 `
 
 const Chip = ({ children }: { children: string }) => (

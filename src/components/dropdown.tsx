@@ -7,11 +7,15 @@ const dropdownStyle = css`
   background: transparent;
   border: none;
   font-size: 0.8rem;
-  color: var(--off-black);
   font-weight: bold;
+  color: inherit;
 
   & option {
     text-transform: none;
+  }
+
+  .dark & {
+    background: black;
   }
 `
 
@@ -33,6 +37,7 @@ interface BaseProps<T> {
   getKey?: (v: T) => string | number
   getText?: (v: T) => string | number
   emptyLabel?: string
+  onCard?: boolean
 }
 
 type Props<T> = BaseProps<T> &
@@ -67,6 +72,7 @@ export const Dropdown = <T extends any>({
     },
     {},
   )
+
   return (
     // eslint-disable-next-line caleb/jsx-a11y/no-onchange
     <select

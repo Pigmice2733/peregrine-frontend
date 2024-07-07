@@ -40,10 +40,16 @@ const reporterStyle = css`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
   &[href]:hover,
   &:focus {
     color: ${pigmicePurple};
+
+    .dark & {
+      color: #c000c0;
+    }
   }
+
   & > :first-child {
     padding-right: 0.2rem;
   }

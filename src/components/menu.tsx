@@ -12,6 +12,8 @@ import {
   mdiLogoutVariant,
   mdiCloudUpload,
   mdiInformationOutline,
+  mdiBrightness2,
+  mdiBrightness7,
 } from '@mdi/js'
 import { logout, useJWT } from '@/jwt'
 import { createShadow } from '@/utils/create-shadow'
@@ -58,12 +60,25 @@ const menuItemStyle = css`
     border: none;
     width: 100%;
     cursor: pointer;
+
+    .dark & {
+      color: #ccc;
+      &:hover,
+      &:focus {
+        background: ${rgba('black', 0.13)};
+      }
+    }
   }
 `
 
 const activeStyle = css`
   color: ${darken(0.06, pigmicePurple)};
   background: ${rgba(pigmicePurple, 0.15)};
+
+  .dark & {
+    color: #c000c0;
+    background: #90009040;
+  }
 `
 
 const textStyle = css`
@@ -112,6 +127,10 @@ const menuStyle = css`
   .${scrimHiddenClass} & {
     transform: translateX(100%);
     box-shadow: none;
+  }
+
+  .dark & {
+    background: var(--off-black);
   }
 `
 
@@ -170,6 +189,17 @@ export const Menu = ({ onHide, visible }: Props) => {
   const isLoggedIn = jwt
   const savedReports = useSavedReports()
   const savedTeams = useSavedTeams()
+
+  let darkTheme = localStorage.getItem('theme') === 'true'
+
+  const switchTheme = () => {
+    document.body.classList.toggle('dark')
+    document.body.classList.toggle('light')
+    darkTheme = !darkTheme
+
+    localStorage.setItem('theme', darkTheme.toString())
+  }
+
   return (
     <Scrim visible={visible} onClickOutside={onHide}>
       <aside class={menuStyle}>
@@ -217,7 +247,7 @@ export const Menu = ({ onHide, visible }: Props) => {
             )}
             {isLoggedIn ? (
               <MenuItem icon={mdiLogoutVariant} onClick={logoutHandler}>
-                Log out
+                Log Out
               </MenuItem>
             ) : (
               <>
@@ -225,12 +255,21 @@ export const Menu = ({ onHide, visible }: Props) => {
                   icon={mdiLoginVariant}
                   href={`/login?from=${encodeURIComponent(location.pathname)}`}
                 >
-                  Log in
+                  Log In
                 </MenuItem>
                 <MenuItem icon={mdiAccountPlus} href="/signup">
                   Sign Up
                 </MenuItem>
               </>
+            )}
+            {darkTheme ? (
+              <MenuItem icon={mdiBrightness7} onClick={() => switchTheme()}>
+                Switch to Light Theme
+              </MenuItem>
+            ) : (
+              <MenuItem icon={mdiBrightness2} onClick={() => switchTheme()}>
+                Switch to Dark Theme
+              </MenuItem>
             )}
             <MenuItem icon={mdiInformationOutline} href="/about">
               About Peregrine

@@ -23,6 +23,14 @@ const cardStyle = css`
     outline: none;
     background: #dfdfdf;
   }
+
+  .dark & {
+    background: black;
+
+    &:focus {
+      background: #444;
+    }
+  }
 `
 
 const outlinedCardStyle = css`

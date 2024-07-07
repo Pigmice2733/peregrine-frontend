@@ -31,9 +31,17 @@ html {
 
 body {
   margin: 0;
-  color: var(--off-black);
   font-family: 'Roboto', sans-serif;
-  background: #e5e5e5;
+}
+
+body.light {
+  color: var(--off-black);
+  background: var(--light-grey);
+}
+
+body.dark {
+  background: var(--off-black);
+  color: var(--light-grey);
 }
 
 /* The font-loading code below is copied from https://fonts.googleapis.com/css2?family=Roboto+Condensed&family=Roboto:wght@400;500;700&display=swap */

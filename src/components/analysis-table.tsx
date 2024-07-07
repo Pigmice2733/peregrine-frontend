@@ -8,6 +8,7 @@ import {
   SortOrder,
   borderRightOnly,
   contextRowHeight,
+  borderRightOnlyDark,
 } from '@/components/table'
 import { formatPercent } from '@/utils/format-percent'
 import { useState } from 'preact/hooks'
@@ -89,6 +90,11 @@ const topLeftCellStyle = css`
   min-width: ${firstColumnWidth};
   padding: 0;
   height: ${contextRowHeight};
+
+  .dark & {
+    background: black;
+    ${borderRightOnlyDark};
+  }
 `
 
 const iconStyle = css`
@@ -112,6 +118,10 @@ const iconButtonStyle = css`
 
   &:hover .${iconStyle}, &:focus .${iconStyle} {
     background: ${lightGrey};
+
+    .dark & {
+      background: #444;
+    }
   }
 `
 
@@ -120,6 +130,10 @@ const contextSectionStyle = css`
   background: white;
   text-align: left;
   padding: 0;
+
+  .dark & {
+    background: black;
+  }
 
   & span {
     position: sticky;
@@ -132,16 +146,31 @@ const contextSectionStyle = css`
 const rankStyle = css`
   box-shadow: inset 0 -0.15rem #398013;
   color: #398013;
+
+  .dark & {
+    color: #60b060;
+    box-shadow-color: #60b060;
+  }
 `
 
 const autoStyle = css`
   box-shadow: inset 0 -0.15rem ${blue};
   color: ${blue};
+
+  .dark & {
+    color: #56f;
+    box-shadow-color: #56f;
+  }
 `
 
 const teleopStyle = css`
   box-shadow: inset 0 -0.15rem ${red};
   color: ${red};
+
+  .dark & {
+    color: #d33;
+    box-shadow-color: #d33;
+  }
 `
 
 const settingsStyle = css`
@@ -152,6 +181,10 @@ const settingsStyle = css`
 
 const dropdownStyle = css`
   padding: 0.2rem;
+
+  .dark & {
+    background: #333;
+  }
 `
 
 const teamNumCellStyle = css`
@@ -218,6 +251,10 @@ const AnalysisTable = ({
       padding-left: 0.25rem;
       font-size: 0.7rem;
       color: ${textGrey};
+
+      .dark & {
+        color: #ccc;
+      }
     }
   `
 

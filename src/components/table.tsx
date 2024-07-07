@@ -1,15 +1,16 @@
 import { RenderableProps } from 'preact'
 import { useState } from 'preact/hooks'
 import { css } from '@linaria/core'
-import { lightGrey, faintGrey, pigmicePurple } from '@/colors'
+import { lightGrey, faintGrey, pigmicePurple, textGrey } from '@/colors'
 import clsx from 'clsx'
 import { BooleanDisplay } from './boolean-display'
 
-const borderBottomAndRight = `box-shadow: inset -1px -1px ${lightGrey}`
+const borderBottomAndRight = 'box-shadow: inset -1px -1px'
 // the 2nd shadow covers a tiny gap between the cells I couldn't otherwise remove
 export const borderRightOnly = `box-shadow: inset -1px 0 ${lightGrey}, 0 1px 0 white`
-const borderBottomOnly = `box-shadow: inset 0 -1px ${lightGrey}`
-const activeBorderBottomOnly = `box-shadow: inset 0 -0.15rem ${pigmicePurple}`
+export const borderRightOnlyDark = `box-shadow: inset -1px 0 ${textGrey}, 0 1px 0 white`
+const borderBottomOnly = 'box-shadow: inset 0 -1px'
+const activeBorderBottomOnly = 'box-shadow: inset 0 -0.15rem'
 
 const tableStyle = css`
   border-collapse: collapse;
@@ -35,22 +36,39 @@ const tableHeaderCellStyle = css`
   padding: 0;
   top: 0;
   background: white;
-  ${borderBottomOnly};
+  ${borderBottomOnly} ${lightGrey};
+
+  .dark & {
+    background: black;
+    ${borderBottomOnly} ${textGrey};
+  }
 
   &.${activeStyle}:not(:first-child) {
-    ${activeBorderBottomOnly}
+    ${activeBorderBottomOnly} ${pigmicePurple};
+
+    .dark & {
+      ${activeBorderBottomOnly} #c000c0;
+    }
   }
 
   &.${activeStyle}:not(:first-child),
   &:focus-within,
   &:hover {
     background: ${faintGrey};
+
+    .dark & {
+      background: #444;
+    }
   }
 
   &:first-child {
     left: 0;
     z-index: 1;
-    ${borderBottomAndRight};
+    ${borderBottomAndRight} ${lightGrey};
+
+    .dark & {
+      ${borderBottomAndRight} ${textGrey};
+    }
   }
 `
 
@@ -66,6 +84,10 @@ const sortButtonStyle = css`
   padding: 0.6rem 0.4rem;
   font-size: 0.78rem;
   outline: none;
+
+  .dark & {
+    color: var(--light-grey);
+  }
 `
 
 export interface Column<CellType, RowType> {
@@ -253,11 +275,20 @@ export const Table = <RowType extends any>({
 }
 
 const tableRowStyle = css`
-  ${borderBottomOnly};
+  ${borderBottomOnly} ${lightGrey};
   background: white;
+
+  .dark & {
+    background: black;
+    ${borderBottomOnly} ${textGrey};
+  }
 
   &:hover {
     background: ${faintGrey};
+
+    .dark & {
+      background: #333;
+    }
   }
 
   & td,
@@ -268,14 +299,22 @@ const tableRowStyle = css`
 
   & td {
     padding: 0.8rem 0.6rem;
-    ${borderBottomOnly};
+    ${borderBottomOnly} ${lightGrey};
+
+    .dark & {
+      ${borderBottomOnly} ${textGrey};
+    }
   }
 
   & th:last-of-type {
     position: sticky;
     left: 0;
     background: inherit;
-    ${borderBottomAndRight}
+    ${borderBottomAndRight} ${lightGrey};
+
+    .dark & {
+      ${borderBottomAndRight} ${textGrey};
+    }
   }
 `
 

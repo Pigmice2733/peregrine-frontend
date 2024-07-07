@@ -28,6 +28,10 @@ const dialogStyle = css`
   transition-timing-function: cubic-bezier(0.15, 0.24, 0.13, 1.42);
   will-change: transform, opacity;
 
+  .dark & {
+    background: #333;
+  }
+
   .${scrimHiddenClass} & {
     transform: scale(0.7);
     opacity: 0;

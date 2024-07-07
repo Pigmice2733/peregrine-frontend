@@ -41,6 +41,12 @@ const leaderboardListStyle = css`
   padding: 0.8rem;
 `
 
+const dropdownStyle = css`
+  .dark & {
+    background: #333;
+  }
+`
+
 const LeaderboardList = () => {
   const years = useYears().sort().reverse()
   const [yearVal, setYear] = useQueryState('year', years[0])
@@ -59,7 +65,12 @@ const LeaderboardList = () => {
 
   return (
     <div class={leaderboardListStyle}>
-      <Dropdown options={years} onChange={setYear} value={year} />
+      <Dropdown
+        options={years}
+        onChange={setYear}
+        value={year}
+        class={dropdownStyle}
+      />
       {leaderboard?.map((user) => (
         <LeaderboardCard
           key={user.id}

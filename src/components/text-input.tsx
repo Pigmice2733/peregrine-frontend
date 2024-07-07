@@ -17,6 +17,15 @@ const innerClass = css`
   background: transparent;
   font-family: inherit;
 
+  .dark & {
+    color: var(--light-grey);
+    border-bottom-color: rgba(232, 232, 232, 0.3);
+
+    &:focus {
+      border-bottom-color: #c000c0;
+    }
+  }
+
   &:focus {
     border-bottom-color: var(--pigmice-purple);
     outline: none;
@@ -45,7 +54,6 @@ export const InnerTextInput = (props: PropsOf<'input'>) => {
 const labeledInputClass = css`
   background: transparent;
   font-size: 0.85rem;
-  color: #666;
 
   & input {
     max-width: 100%;

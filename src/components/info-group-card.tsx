@@ -21,10 +21,18 @@ const rowStyle = css`
   max-height: 3rem;
   overflow: hidden;
 
+  .dark & {
+    border-bottom-color: #444;
+  }
+
   &[href]:hover,
   &:focus {
     background: #f1f1f1;
     outline: none;
+
+    .dark & {
+      background: #444;
+    }
   }
 
   &:last-child {
