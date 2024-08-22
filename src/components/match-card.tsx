@@ -5,6 +5,8 @@ import Card from '@/components/card'
 import { css } from '@linaria/core'
 import { memo } from '@/utils/memo'
 import clsx from 'clsx'
+import Icon from './icon'
+import { mdiCheckCircle } from '@mdi/js'
 
 interface MatchCardProps {
   match: {
@@ -12,23 +14,26 @@ interface MatchCardProps {
     redAlliance: string[]
     blueAlliance: string[]
     time?: Date
+    redScore?: number | undefined
   }
   key?: string | number
   eventKey: string
   link?: boolean
   class?: string
+  checkmark?: boolean
 }
 
 const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
   display: grid;
-  grid-template-columns: auto auto 10rem;
+  grid-template-columns: auto 1rem auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
   & > time {
     grid-row: span 2;
+    grid-column: 3;
     place-self: center end;
     font-size: 0.85rem;
     color: var(--grey-text);
@@ -42,6 +47,9 @@ const matchTitleStyle = css`
   grid-row: span 2;
   white-space: nowrap;
   margin: 0.3rem 0.6rem;
+  align-content: end;
+  text-align: right;
+
   & > * {
     margin: 0.3rem 0;
   }
@@ -58,7 +66,7 @@ const matchNumStyle = css`
 
 const allianceStyle = css`
   white-space: nowrap;
-  grid-column: 3;
+  grid-column: 4;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
@@ -82,8 +90,13 @@ const blueStyle = css`
   background-color: var(--alliance-blue);
 `
 
+const checkmarkStyle = css`
+  align-self: center;
+  grid-row: span 2;
+`
+
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className, checkmark }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
     const createTeamLinks = (teams: string[]) =>
@@ -111,6 +124,9 @@ export const MatchDetailsCard = memo(
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
         </div>
+        {typeof match.redScore === 'number' && checkmark && (
+          <Icon icon={mdiCheckCircle} class={checkmarkStyle} />
+        )}
         {match.time && (
           <time dateTime={match.time.toISOString()}>
             {formatTime(match.time)}
