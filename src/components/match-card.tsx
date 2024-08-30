@@ -20,7 +20,6 @@ interface MatchCardProps {
   eventKey: string
   link?: boolean
   class?: string
-  checkmark?: boolean
 }
 
 const matchCardStyle = css`
@@ -34,11 +33,12 @@ const matchCardStyle = css`
   & > time {
     grid-row: span 2;
     grid-column: 3;
-    place-self: center end;
+    place-self: center center;
     font-size: 0.85rem;
     color: var(--grey-text);
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-left: 0.3rem;
   }
 `
 
@@ -46,9 +46,9 @@ const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
   white-space: nowrap;
-  margin: 0.3rem 0.6rem;
-  align-content: end;
-  text-align: right;
+  margin: 0.3rem 0.3rem;
+  align-content: center;
+  text-align: center;
 
   & > * {
     margin: 0.3rem 0;
@@ -96,7 +96,7 @@ const checkmarkStyle = css`
 `
 
 export const MatchDetailsCard = memo(
-  ({ match, eventKey, link, class: className, checkmark }: MatchCardProps) => {
+  ({ match, eventKey, link, class: className }: MatchCardProps) => {
     const matchName = formatMatchKey(match.key)
 
     const createTeamLinks = (teams: string[]) =>
@@ -124,7 +124,7 @@ export const MatchDetailsCard = memo(
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
         </div>
-        {typeof match.redScore === 'number' && checkmark && (
+        {typeof match.redScore === 'number' && (
           <Icon icon={mdiCheckCircle} class={checkmarkStyle} />
         )}
         {match.time && (

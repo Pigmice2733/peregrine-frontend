@@ -77,7 +77,6 @@ const Event = ({ eventKey }: Props) => {
             match={newestIncompleteMatch}
             eventKey={eventKey}
             link
-            checkmark
           />
         )}
         {matches ? (
