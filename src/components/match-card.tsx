@@ -93,6 +93,7 @@ const blueStyle = css`
 const checkmarkStyle = css`
   align-self: center;
   grid-row: span 2;
+  filter: opacity(60%);
 `
 
 export const MatchDetailsCard = memo(
