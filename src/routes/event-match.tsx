@@ -163,12 +163,11 @@ const EventMatch = ({ eventKey, matchKey }: Props) => {
   return (
     // page setup
     <Page
-      back={`/events/${eventKey}`}
       name={
-        m.group +
-        (m.num ? ' Match ' + m.num : '') +
-        ' - ' +
-        (event ? event.name : eventKey)
+        <>
+          {`${m.group}${m.num ? ` Match ${m.num}` : ''} - `}
+          <a href={`/events/${eventKey}`}>{event?.name || eventKey}</a>
+        </>
       }
       class={clsx(
         matchStyle,

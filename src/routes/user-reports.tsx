@@ -38,7 +38,6 @@ const UserReports = ({ userId }: Props) => {
       name={`${
         user ? `${user.firstName} ${user.lastName}` : `User ${userId}`
       }: Reports`}
-      back={`/users/${userId}`}
       class={userReportsStyle}
     >
       {reports ? (

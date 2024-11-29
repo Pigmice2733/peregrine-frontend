@@ -46,19 +46,27 @@ const headerText = css`
   flex-shrink: 1;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  & a {
+    color: white;
+
+    &:hover {
+      text-decoration-color: #47d232;
+    }
+  }
 `
 
 type Props = Merge<
   JSX.HTMLAttributes,
   {
     name: ComponentChildren
-    back: string | (() => void) | false
+    showBackButton?: boolean
     class?: string
     wrapperClass?: string
   }
 >
 
-const Header = ({ back, name }: Omit<Props, 'class'>) => {
+const Header = ({ name, showBackButton = true }: Omit<Props, 'class'>) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen((isOpen) => !isOpen)
@@ -67,11 +75,11 @@ const Header = ({ back, name }: Omit<Props, 'class'>) => {
   return (
     <>
       <header class={headerStyle}>
-        {back && (
+        {showBackButton && (
           <IconButton
             icon={mdiArrowLeft}
             aria-label="Back"
-            {...{ [typeof back === 'string' ? 'href' : 'onClick']: back }}
+            onClick={() => window.history.back()}
           />
         )}
         <h1 class={headerText}>{name}</h1>
@@ -91,13 +99,13 @@ const Page = ({
   class: className,
   wrapperClass,
   name,
-  back,
+  showBackButton,
   ...rest
 }: RenderableProps<Props>) => {
   return (
     <ErrorBoundary>
       <div class={clsx(wrapperClass)} {...rest}>
-        <Header name={name} back={back} />
+        <Header name={name} showBackButton={showBackButton} />
         <main class={clsx(className)}>{children}</main>
       </div>
     </ErrorBoundary>

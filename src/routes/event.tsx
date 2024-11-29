@@ -54,11 +54,7 @@ const Event = ({ eventKey }: Props) => {
   const newestIncompleteMatch = matches && nextIncompleteMatch(matches)
 
   return (
-    <Page
-      name={eventInfo?.name || <code>{eventKey}</code>}
-      back="/"
-      class={eventStyle}
-    >
+    <Page name={eventInfo?.name || <code>{eventKey}</code>} class={eventStyle}>
       <div class={sectionStyle}>
         <Heading level={2} class={headingStyle}>
           Information
@@ -73,7 +69,6 @@ const Event = ({ eventKey }: Props) => {
         </Heading>
         {newestIncompleteMatch && (
           <MatchDetailsCard
-            key={newestIncompleteMatch.key}
             match={newestIncompleteMatch}
             eventKey={eventKey}
             link

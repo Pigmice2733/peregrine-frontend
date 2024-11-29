@@ -1,6 +1,6 @@
 /* eslint-disable max-nested-callbacks */
+
 import Page from '@/components/page'
-import { useEventInfo } from '@/cache/event-info/use'
 import { css } from '@linaria/core'
 import Card from '@/components/card'
 import Loader from '@/components/loader'
@@ -10,6 +10,7 @@ import { formatMatchKeyShort } from '@/utils/format-match-key-short'
 import { compareMatchKeys } from '@/utils/compare-matches'
 import { GetReport } from '@/api/report'
 import { getReports } from '@/api/report/get-reports'
+import { useEventInfo } from '@/cache/event-info/use'
 
 interface Props {
   eventKey: string
@@ -27,12 +28,15 @@ const matchListStyle = css`
 `
 
 const EventTeamComments = ({ eventKey, teamNum }: Props) => {
-  const eventInfo = useEventInfo(eventKey)
   const team = 'frc' + teamNum
   const reports = usePromise(() => getReports({ team, event: eventKey }), [
     team,
     eventKey,
   ])
+
+  const eventInfo = useEventInfo(eventKey)
+  const eventName = eventInfo?.name || eventKey
+
   const commentsByMatch = reports?.reduce<{ [matchKey: string]: GetReport[] }>(
     (acc, report) => {
       if (report.comment) {
@@ -46,8 +50,12 @@ const EventTeamComments = ({ eventKey, teamNum }: Props) => {
 
   return (
     <Page
-      name={`Comments: ${teamNum} @ ${eventInfo ? eventInfo.name : eventKey}`}
-      back={`/events/${eventKey}/teams/${teamNum}`}
+      name={
+        <>
+          {`Comments: ${teamNum} @ `}
+          <a href={`/events/${eventKey}`}>{eventName}</a>
+        </>
+      }
       class={commentsPageStyle}
     >
       <Card class={matchListStyle}>

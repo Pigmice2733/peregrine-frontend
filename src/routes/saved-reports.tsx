@@ -38,7 +38,7 @@ const savedReportsPageStyle = css`
 const SavedReportsPage = () => {
   const savedReports = useSavedReports()
   return (
-    <Page name="Offline Saved Reports" back="/" class={savedReportsPageStyle}>
+    <Page name="Offline Saved Reports" class={savedReportsPageStyle}>
       {savedReports.length > 0 ? (
         <>
           {savedReports.map((report) => (
