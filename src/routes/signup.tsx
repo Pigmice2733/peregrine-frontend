@@ -49,8 +49,6 @@ const SignUpForm = () => {
   const realms = usePromise(getRealms) || []
   const emitError = useErrorEmitter()
 
-  realms.sort((a, b) => a.name.localeCompare(b.name))
-
   const onSubmit = (e: Event) => {
     e.preventDefault()
     if (realmId === undefined) return
