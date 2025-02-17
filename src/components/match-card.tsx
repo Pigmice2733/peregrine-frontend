@@ -5,6 +5,8 @@ import Card from '@/components/card'
 import { css } from '@linaria/core'
 import { memo } from '@/utils/memo'
 import clsx from 'clsx'
+import Icon from './icon'
+import { mdiCheckCircle } from '@mdi/js'
 
 interface MatchCardProps {
   match: {
@@ -12,6 +14,7 @@ interface MatchCardProps {
     redAlliance: string[]
     blueAlliance: string[]
     time?: Date
+    redScore?: number | undefined
   }
   key?: string | number
   eventKey: string
@@ -23,17 +26,19 @@ const matchCardStyle = css`
   font-size: 0.93rem;
   align-items: center;
   display: grid;
-  grid-template-columns: auto auto 10rem;
+  grid-template-columns: auto 1rem auto 10rem;
   overflow: hidden;
   text-decoration: none;
 
   & > time {
     grid-row: span 2;
-    place-self: center end;
+    grid-column: 3;
+    place-self: center center;
     font-size: 0.85rem;
     color: var(--grey-text);
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-left: 0.3rem;
   }
 `
 
@@ -41,7 +46,10 @@ const matchTitleStyle = css`
   font-weight: bold;
   grid-row: span 2;
   white-space: nowrap;
-  margin: 0.3rem 0.6rem;
+  margin: 0.3rem 0.3rem;
+  align-content: center;
+  text-align: center;
+
   & > * {
     margin: 0.3rem 0;
   }
@@ -58,7 +66,7 @@ const matchNumStyle = css`
 
 const allianceStyle = css`
   white-space: nowrap;
-  grid-column: 3;
+  grid-column: 4;
   align-self: stretch;
   margin-left: 0.3rem;
   padding: 0.35rem 0.8rem;
@@ -80,6 +88,12 @@ const redStyle = css`
 
 const blueStyle = css`
   background-color: var(--alliance-blue);
+`
+
+const checkmarkStyle = css`
+  align-self: center;
+  grid-row: span 2;
+  filter: opacity(60%);
 `
 
 export const MatchDetailsCard = memo(
@@ -111,6 +125,9 @@ export const MatchDetailsCard = memo(
             <div class={matchNumStyle}>{`Match ${matchName.num}`}</div>
           )}
         </div>
+        {typeof match.redScore === 'number' && (
+          <Icon icon={mdiCheckCircle} class={checkmarkStyle} />
+        )}
         {match.time && (
           <time dateTime={match.time.toISOString()}>
             {formatTime(match.time)}
