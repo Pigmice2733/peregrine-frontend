@@ -9,6 +9,12 @@ const dropdownStyle = css`
   font-size: 0.8rem;
   color: var(--off-black);
   font-weight: bold;
+  appearance: menulist;
+  -webkit-appearance: menulist;
+
+  & select::-ms-expand {
+    display: block;
+  }
 
   & option {
     text-transform: none;
