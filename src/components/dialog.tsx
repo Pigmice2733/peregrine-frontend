@@ -100,7 +100,13 @@ export const DialogDisplayer = () => {
       <div tabIndex={0} class={dialogStyle} aria-modal="true" role="dialog">
         {dialog.title && <h1>{dialog.title}</h1>}
         {typeof dialog.description === 'string' ? (
-          <p>{dialog.description}</p>
+          <p
+            class={css`
+              font-weight: 500;
+            `}
+          >
+            {dialog.description}
+          </p>
         ) : (
           dialog.description
         )}
